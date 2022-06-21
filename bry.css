@@ -1,0 +1,53 @@
+@font-face { 
+    font-family: "SkyTextRegular";
+    font-style: normal; 
+    font-weight: normal;
+    src: url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_reg-webfont.eot");
+    src: local("sky_reg-webfont"), url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_reg-webfont.woff") format("woff"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_reg-webfont.ttf") format("truetype"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_reg-webfont.svg##SkyTextRegular") format("svg"); }
+@font-face { 
+    font-family: "SkyTextBold";
+    font-style: normal; 
+    font-weight: normal; 
+    src: url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_bold-webfont.eot");
+    src: local("sky_bold-webfont"), url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_bold-webfont.woff") format("woff"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_bold-webfont.ttf") format("truetype"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_bold-webfont.svg#SkyTextBold") format("svg"); }
+@font-face { 
+    font-family: "SkyTextItalic"; 
+    font-style: normal; 
+    font-weight: normal;
+    src: url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_italic-webfont.eot");
+    src: local("sky_italic-webfont"), url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_italic-webfont.woff") format("woff"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_italic-webfont.ttf") format("truetype"), 
+	    url("/web/20191203110834im_/https://nst.sky.it/etc/designs/skycommon/fonts/sky_italic-webfont.svg#SkyTextItalic") format("svg"); }
+@font-face { 
+    font-family: "SkyTextMedium"; 
+    font-style: normal; font-weight: normal; 
+    src: url("/etc/designs/skycommon/fonts/sky_med-webfont.eot");
+    src: local("sky_med-webfont"), 
+        url("/etc/designs/skycommon/fonts/sky_med-webfont.woff") format("woff"), 
+        url("/etc/designs/skycommon/fonts/sky_med-webfont.ttf") format("truetype"),
+        url("/etc/designs/skycommon/fonts/sky_med-webfont.svg#SkyTextMedium") format("svg");
+/*
+     FILE ARCHIVED ON 11:08:34 Dec 03, 2019 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 22:05:19 Jun 21, 2022.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 345.079
+  exclusion.robots: 0.196
+  exclusion.robots.policy: 0.189
+  cdx.remote: 0.065
+  esindex: 0.009
+  LoadShardBlock: 111.818 (3)
+  PetaboxLoader3.datanode: 832.253 (5)
+  CDXLines.iter: 16.971 (3)
+  load_resource: 1358.755 (2)
+  PetaboxLoader3.resolve: 52.527 (2)
+*/
