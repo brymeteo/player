@@ -1,0 +1,38 @@
+.news_container_brick_home{min-height:125px}
+h4.news_item_title{min-height:40px}
+.col-cta.central{margin:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.tag-management .header{padding-bottom:20px}
+.tag-management .form-upload form{width:60%;padding:30px 30px}
+.tag-management .logo-header{text-align:left;border-bottom:1px solid #f2f3f5;padding:20px 20px 20px 30px}
+.tag-management .title-header{text-align:center;font-size:27px;font-weight:bold;padding:20px 0 20px 0;border-bottom:1px solid #f2f3f5}
+.tag-management .logo-header img{width:56px}
+.tag-management .form-upload form .field{float:left;display:inline}
+.tag-management .form-upload form input[type="submit"]{border-radius:3px;font-size:12px;text-transform:uppercase;line-height:20px;padding:2px 30px;background-color:#3752a0;border:1px solid #3752a0;color:white}
+.tag-management .form-upload span.file-name{font-size:20px;font-weight:bold;text-transform:uppercase;margin-left:3px}
+.tag-management .form-upload span.file-name,.tag-management .form-upload form input,.tag-management .title-header,.tag-management .form-upload form .info{font-family:SkyTextRegular!important}
+.tag-management .form-upload form .uploadFile{float:right}
+.tag-management .form-upload form select.selected-upload-option{border-radius:3px;font-size:12px;line-height:20px;padding:2px 30px;color:black}
+.tag-management .form-upload form .info{color:#31708f;background-color:#d9edf7;border-color:#bce8f1;padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px;margin-top:20px;line-height:22px;width:800px}
+.tag-management .form-upload form .info.error{color:#a94442;background-color:#f2dede}
+.tag-management .form-upload form .info.success{color:#3c763d;background-color:#dff0d8;border-color:#d6e9c6}
+/*
+     FILE ARCHIVED ON 11:08:32 Dec 03, 2019 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 22:02:18 Jun 21, 2022.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 1315.48
+  exclusion.robots: 0.229
+  exclusion.robots.policy: 0.219
+  cdx.remote: 0.075
+  esindex: 0.01
+  LoadShardBlock: 128.902 (3)
+  PetaboxLoader3.datanode: 130.668 (5)
+  CDXLines.iter: 14.027 (3)
+  load_resource: 223.981 (2)
+  PetaboxLoader3.resolve: 129.532 (2)
+*/
