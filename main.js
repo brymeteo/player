@@ -1096,7 +1096,7 @@ if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; re
 		 * Update one ore more scene(s) according to the scroll position of the container.  
 		 * This is the equivalent to `Scene.update()`.  
 		 * The update method calculates the scene's start and end position (based on the trigger element, trigger hook, duration and offset) and checks it against the current scroll position of the container.  
-		 * It then updates the current scene state accordingly (or does nothing, if the state is already correct) – Pins will be set to their correct position and tweens will be updated to their correct progress.  
+		 * It then updates the current scene state accordingly (or does nothing, if the state is already correct) â€“ Pins will be set to their correct position and tweens will be updated to their correct progress.  
 		 * _**Note:** This method gets called constantly whenever Controller detects a change. The only application for you is if you change something outside of the realm of ScrollMagic, like moving the trigger or changing tween parameters._
 		 * @public
 		 * @example
@@ -1221,7 +1221,7 @@ if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; re
 		 *  It may also optionally receive an optional additional parameter (see below)  
 		 *  _**NOTE:**  
 		 *  All other options will still work as expected, using the new function to scroll._
-		 * @param {mixed} [additionalParameter] - If a custom scroll function was defined (see above 4.), you may want to supply additional parameters to it, when calling it. You can do this using this parameter – see examples for details. Please note, that this parameter will have no effect, if you use the default scrolling function.
+		 * @param {mixed} [additionalParameter] - If a custom scroll function was defined (see above 4.), you may want to supply additional parameters to it, when calling it. You can do this using this parameter â€“ see examples for details. Please note, that this parameter will have no effect, if you use the default scrolling function.
 		 * @returns {Controller} Parent object for chaining.
 		 */
 		this.scrollTo = function (scrollTarget, additionalParameter) {
@@ -2035,7 +2035,7 @@ if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; re
 		 * Updates the Scene to reflect the current state.  
 		 * This is the equivalent to `Controller.updateScene(scene, immediately)`.  
 		 * The update method calculates the scene's start and end position (based on the trigger element, trigger hook, duration and offset) and checks it against the current scroll position of the container.  
-		 * It then updates the current scene state accordingly (or does nothing, if the state is already correct) – Pins will be set to their correct position and tweens will be updated to their correct progress.
+		 * It then updates the current scene state accordingly (or does nothing, if the state is already correct) â€“ Pins will be set to their correct position and tweens will be updated to their correct progress.
 		 * This means an update doesn't necessarily result in a progress change. The `progress` event will be fired if the progress has indeed changed between this update and the last.  
 		 * _**NOTE:** This method gets called constantly whenever ScrollMagic detects a change. The only application for you is if you change something outside of the realm of ScrollMagic, like moving the trigger or changing tween parameters._
 		 * @method ScrollMagic.Scene#update
@@ -3247,7 +3247,7 @@ if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; re
 		 * ------------------------------
 		 */
 
-		// extend obj – same as jQuery.extend({}, objA, objB)
+		// extend obj â€“ same as jQuery.extend({}, objA, objB)
 		U.extend = function (obj) {
 			obj = obj || {};
 			for (i = 1; i < arguments.length; i++) {
@@ -6348,23 +6348,23 @@ $(function(){
 
 }
 /*
-     FILE ARCHIVED ON 14:25:36 Nov 23, 2017 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 22:56:32 Jun 21, 2022.
-     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+     FILE ARCHIVED ON 22:06:22 Nov 01, 2017 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:50:27 Jul 14, 2022.
+     JAVASCRIPT APPENDED BY BRYTV, COPYRIGHT INTERNET ARCHIVE.
 
      ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
      SECTION 108(a)(3)).
 */
 /*
 playback timings (ms):
-  captures_list: 147.49
-  exclusion.robots: 0.222
-  exclusion.robots.policy: 0.214
-  cdx.remote: 0.071
-  esindex: 0.031
-  LoadShardBlock: 108.969 (3)
-  PetaboxLoader3.datanode: 94.599 (4)
-  CDXLines.iter: 19.384 (3)
-  load_resource: 47.595
-  PetaboxLoader3.resolve: 20.396
+  captures_list: 318.482
+  exclusion.robots: 0.193
+  exclusion.robots.policy: 0.186
+  cdx.remote: 0.06
+  esindex: 0.007
+  LoadShardBlock: 288.771 (3)
+  PetaboxLoader3.resolve: 210.507 (5)
+  PetaboxLoader3.datanode: 178.774 (5)
+  CDXLines.iter: 19.609 (3)
+  load_resource: 109.707 (2)
 */
