@@ -1,0 +1,372 @@
+body{
+	background: #151515;
+}
+
+*{
+	padding: 0px;
+	margin: 0px;
+	color: white;
+	font-family: arial;
+}
+
+#loading{
+	position: fixed;
+	top: 0;
+	left: 0;
+	transform: scale(0.5);
+	width: 100%;
+	height: 100%;
+	transition: 0.4s;
+}
+
+#loading #header h1{
+	z-index: 1000000;
+	position: relative;
+}
+
+#loading .spinner{
+	position: fixed;
+	top: 40%;
+	left: 47%;
+	animation: spinner .6s linear infinite;
+	z-index: 10000000;
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+#loading #header{
+	position: relative;
+	width: 100%;
+	margin: 0px auto;
+	padding: 3vw;
+}
+
+.bg{
+	position: fixed;
+	top: 0;
+	height: 100%;
+	left: 0;
+	width: 100%;
+	background-size: cover;
+	transition: 0.4;
+}
+
+#loading .opa{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.40);
+	top: 0;
+	left: 0;
+	z-index: 1000000;
+}
+
+svg {
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+}
+svg > circle {
+    stroke: black;
+    fill: white;
+}
+svg > path {
+    stroke: black;
+}
+svg:hover > circle {
+    fill: red;
+}
+svg:hover > path {
+    stroke: white;
+}
+
+.close{
+	position: fixed;
+	right: 40px;
+	transform: scale(1.7);
+	top: 40px;
+	z-index: 10000000;
+}
+
+
+.player{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: #000;
+}
+
+.icon{
+	width: 57px;
+    height: 86px;
+	background-image: url("https://raw.githubusercontent.com/Gregiss/Netflix-Player/master/icons.png");
+	position: relative;
+	display: inline-block;
+	margin-left: 20px;
+	cursor: pointer;
+	transition: 0.5s;
+	margin-top: 10px;
+}
+
+.play{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -72px 5px;
+    position: relative;
+    left: 40px;
+    transition: 0.1s;
+}
+
+.back{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -14px 10px;
+    cursor: pointer;
+    position: relative;
+    left: 50px;
+    top: 30px;
+    transition: 0.8s;
+    z-index: 10000000000000;
+}
+
+.icon:hover{
+	transform: scale(1.2);
+}
+
+#player .bottom{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 6vw;
+	background: linear-gradient(to bottom, rgba(0,0,0,.40), transparent);
+	padding: 30px;
+	z-index: 10000000000000;
+}
+
+.back1{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -253px 5px;
+    position: relative;
+    left: 70px;
+}
+
+.back2{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -355px 5px;
+    position: relative;
+    left: 90px;
+}
+
+.help{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: 4px -75px;
+    position: absolute;
+    right: 26vw;
+    float: right;
+}
+
+.legenda{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -109px -75px;
+    position: absolute;
+    right: 20vw;
+    float: right;
+}
+
+.screen{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -210px -75px;
+    position: absolute;
+    right: 14vw;
+    float: right;
+}
+
+.volume{
+	background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -526px 5px;
+    position: relative;
+    left: 120px;
+    transition: 0.3s;
+}
+
+#player{
+	z-index: 10000000;
+	background: transparent;
+}
+
+#player .progress{
+	width: 90vw;
+	height: 0.5vw;
+	background: #5b5b5b;
+	left: -1vw;
+	position: relative;
+	bottom: 0.18vw;
+	border-radius: 5px;
+	transform: scale(0.90);
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+#player .progress .subprogress{
+	width: 10%;
+	height: 0.5vw;
+	background: #7c7c7c;
+	position: absolute;
+	border-radius: 0.5vw;
+	left: 0px;
+}
+
+#player .progress .subprogress .toggle{
+	position: absolute;
+	width: 1vw;
+	height: 1vw;
+	background: red;
+	border-radius: 50%;
+	bottom: -0.2vw;
+	box-shadow: 0.1vw 0.2vw rgba(0,0,0,.40)
+	left: 0;
+	transition: 1s;
+	cursor: pointer;
+}
+
+#player #info{
+	position: relative;
+	bottom: 0vw;
+	left: 2vw;
+	padding: 1vw;
+}
+
+#player .time{
+	position: absolute;
+	right: 13vw;
+	font-size: 1.3vw;
+	bottom: 7vw;
+}
+
+#player .bottom{
+	transform: scale(1.05);
+	left: 2.5vw;
+	height: 5vw;
+}
+
+#player #video{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100000000;
+}
+
+#player #video video{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+input{
+	background: transparent !important;
+}
+
+input[type=range] {
+  height: 25px;
+  -webkit-appearance: none;
+  width: 100%;
+  left: -5vw;
+  position: absolute;
+  transform: scale(0.85);
+  z-index: 100000000000;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #2497E3;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #2497E3;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #A1D0FF;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -7px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #2497E3;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #2497E3;
+  border-radius: 1px;
+  border: 0px solid #000000;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #2497E3;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #A1D0FF;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #2497E3;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range]::-ms-fill-upper {
+  background: #2497E3;
+  border: 0px solid #000000;
+  border-radius: 2px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #2497E3;
+  height: 18px;
+  width: 18px;
+  border-radius: 25px;
+  background: #A1D0FF;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #2497E3;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #2497E3;
+}
