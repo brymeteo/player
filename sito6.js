@@ -1,0 +1,1 @@
+var pushComponentElement=document.querySelector("push-component");retrieveUserData().then(function(a){a&&pushComponentElement.setAttribute("userdata",a)});pushComponentElement.setAttribute("is-user-recognized",checkCookieExt());pushComponentElement.setAttribute("pathname",window.location.pathname);function checkCookieExt(){return getCookie("ext")?!0:!1};
