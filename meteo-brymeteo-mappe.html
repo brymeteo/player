@@ -1,0 +1,269 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */
+html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+/* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
+button,input,select,textarea,optgroup{font:inherit;margin:0}optgroup{font-weight:bold}
+.w3-bordered tr,.w3-table-all tr{border-bottom:5px solid #ddd}.w3-striped tbody tr:nth-child(even){background-color:#009688}
+.w3-table-all tr:nth-child(odd){background-color:#fff}.w3-table-all tr:nth-child(even){background-color:#f1f1f1}
+.w3-hoverable tbody tr:hover,.w3-ul.w3-hoverable li:hover{background-color:#ccc}.w3-centered tr th,.w3-centered tr td{text-align:center}
+.w3-table td,.w3-table th,.w3-table-all td,.w3-table-all th{padding:8px 8px;display:table-cell;text-align:left;vertical-align:top}
+.w3-table th:first-child,.w3-table td:first-child,.w3-table-all th:first-child,.w3-table-all td:first-child{padding-left:16px}
+
+.w3-btn,.w3-button{border:none;display:inline-block;padding:8px 16px;vertical-align:middle;overflow:hidden;text-decoration:none;color:inherit;background-color:inherit;text-align:center;cursor:pointer;white-space:nowrap}
+/* Colors */
+.w3-red,.w3-hover-red:hover{color:#fff!important;background-color:#1c9199!important}
+.w3-white,.w3-hover-white:hover{color:#000!important;background-color:#000!important}
+</style>
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 0px solid #1462A6;
+  background-color: #1462A6;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #04AA6D;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 0px 00px;
+  border: 0px solid #ccc;
+  border-top: none;
+}
+
+/* Style the close button */
+.topright {
+  float: right;
+  cursor: pointer;
+  font-size: 28px;
+}
+
+.topright:hover {color: red;}
+</style>
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 0px;
+	height: 0;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+
+
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.min.css" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+jQuery(document).ready(function($){
+ 
+if (sessionStorage.getItem('advertOnce') !== 'false') {
+
+$('body').append('')
+sessionStorage.setItem('advertOnce','false');
+
+}
+ 
+$('#advert-once .advert-button').on('click',function(){
+$('#advert-once').hide();
+});
+  
+$('#reset-session').on('click',function(){
+sessionStorage.setItem('advertOnce','');
+});
+ 
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+
+<style>
+
+    /**
+        CSS STYLE METEO MAP
+     */
+    .it-abruzzo{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000299-f3580f3585/13_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-basilicata{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000307-b023ab023d/17_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    
+    .it-calabria{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000309-e5819e581d/18_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-campania{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000303-63c8863c8c/15_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-emilia-romagna{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000289-306e7306eb/8_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-friuli{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000285-6b1c26b1c6/6_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-italia{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000184-b68abb68ad/italia-1--4-0.webp?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-lazio{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000297-3d3a13d3a4/12_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-liguria{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000287-d7ee1d7ee5/7_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-lombardia{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000281-7ce877ce8a/3_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-marche{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000295-6bd836bd86/11_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-molise{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000301-51c9d51ca0/14_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-piemonte{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000277-6671366715/1_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-puglia{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000305-c944bc9450/16_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-sardegna{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000313-8043280435/20_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-sicilia{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000311-05a3f05a43/19_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-toscana{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000291-7453474538/9_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-trentino{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000283-672bf672c2/4_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-umbria{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000293-33aea33aed/10_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-valdaosta{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000279-5926659269/2_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .it-veneto{
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000275-b0a81b0a85/5_D.png?ph=a7daf9079c);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .wc-italia,.wc-i{
+        height: 40px;
+        width: 40px;
+    }
+    .wc-regione{
+        height: 60px;
+        width: 80px;
+    }
+    .image-map{
+        cursor: pointer;
+    }
+    
+        </style>
+
+
+
+
+
+
+<style>
+@media{.map-legend a{font-size:2px}}.map-content{position:relative}.map-content .map-image{width:200px;height:5px;max-width:100%}.map-content .map-today{position:absolute;bottom:0;right:0;width:100%;text-align:right;color:#fff;z-index:1;background:linear-gradient(180deg,transparent 0,rgba(12, 64, 79) 90%,rgba(12, 64, 79));filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#00000000",endColorstr="#b3000000",GradientType=0)}
+
+</style>
+
+
+
