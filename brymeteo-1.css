@@ -1,4 +1,4 @@
-   /**
+     /**
         CSS STYLE METEO MAP
      */
     .it-abruzzo{
@@ -33,7 +33,7 @@
         background-size: contain;
     }
     .it-italia{
-        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000184-b68abb68ad/italia-1--4-0.webp?ph=a7daf9079c);
+        background-image: url(https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000324-cf6efcf6f2/italia-1--4-8-2.png?ph=a7daf9079c);
         background-repeat: no-repeat;
         background-size: contain;
     }
@@ -118,4 +118,3 @@
     .image-map{
         cursor: pointer;
     }
-    
