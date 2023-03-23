@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="70px" height="70px" viewBox="10 25 160 160">
+  <defs>
+    <linearGradient id="nuvGradG2" gradientUnits="userSpaceOnUse" x1="21.4624" y1="61.6909" x2="137.5488" y2="61.6909">
+      <stop offset="0" style="stop-color:#FCFBF9;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#FFFEFD;stop-opacity:0.6"/>
+    </linearGradient>
+    <symbol id="drop" >
+      <path fill="#4990CD" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M90.599,108.347c-2.736,5.944-8.836,8.983-13.626,6.779c-4.789-2.202-6.455-8.81-3.721-14.755 c2.735-5.946,19.675-19.939,19.675-19.939S93.332,102.397,90.599,108.347z"/>
+    </symbol>
+  </defs>
+
+  <g id="Nuvola" class="nuvMoG2">
+    <path fill="url(#nuvGradG2)" d="M119.97,91.699c0,0-88.119,0-90.368,0c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906s16.573,0.48,17.534,14.999C138.136,82.152,132.109,89.426,119.97,91.699z"/>
+    <path fill="none" stroke="#d3d1cf" stroke-width="6" stroke-miterlimit="10" d="M119.97,91.699c0,0-88.119,0-90.368,0c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906s16.573,0.48,17.534,14.999C138.136,82.152,132.109,89.426,119.97,91.699z"/>
+  </g>
+ 
+  <g id="goccia1" class="nuvMoG2">
+    <g class="drop1AphG2" > 
+      <use xlink:href="#drop" class="drop1MoG2" x="-20" y="-15"/>
+    </g>
+  </g>
+  <g id="goccia2" class="nuvMoG2">
+    <g class="drop2AphG2" > 
+      <use xlink:href="#drop" class="drop2MoG2" x="10" y="-25"/>
+    </g>
+  </g>
+
+  <style>
+    .nuvMoG2 {
+      animation-name: nuvMovesG2;
+      animation-duration: 1320ms;
+      animation-iteration-count: infinite;
+    }
+    @keyframes nuvMovesG2 {
+      0%   { transform: translate(-2px, 0); animation-timing-function: ease-in; }
+      52%  { transform: translate(5px, 0); animation-timing-function: ease-out; }
+      100% { transform: translate(-2px, 0); animation-timing-function: ease-in; }
+    }
+    .drop1MoG2 {
+      animation-name: drop1MovesG2;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes drop1MovesG2 {
+      0%  { transform: translate(0px,0px); }
+      30%  { transform: translate(-3.4px,9px); }
+      80%  { transform: translate(2.5px,-6px); }
+      100%  { transform: translate(0px,0px); }
+    }
+    .drop1AphG2 {
+      animation-name: drop1AlphaG2;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes drop1AlphaG2 {
+      0%   { opacity: 1; }
+      28%  { opacity: 1; }
+      30%  { opacity: 0; }
+      80%  { opacity: 0; }
+      82%  { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    .drop2MoG2 {
+      animation-name: drop2MovesG2;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes drop2MovesG2 {
+      0%   { transform: translate(0px,0px); }
+      40%  { transform: translate(-6.5px,14.76px); }
+      100% { transform: translate(0px,0px); }
+    }
+    .drop2AphG2 {
+      animation-name: drop2AlphaG2;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes drop2AlphaG2 {
+      0%   { opacity: 1; }
+      38%  { opacity: 1; }
+      40%  { opacity: 0; }
+      98%  { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</svg>
