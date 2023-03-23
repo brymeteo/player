@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="70px" height="60px" viewBox="10 25 160 160">
+  <defs>
+    <linearGradient id="nuvGradV2" gradientUnits="userSpaceOnUse" x1="21.4624" y1="61.6909" x2="137.5488" y2="61.6909">
+      <stop offset="0" style="stop-color:#FCFBF9;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#FFFEFD;stop-opacity:0.6"/>
+    </linearGradient>
+    <symbol id="flake" >
+      <path stroke="#A1D7E3" fill="#FFFFFF" stroke-miterlimit="10" d="M107.344,70.868c-0.266,0.458-0.85,0.614-1.307,0.35l-2.902-1.676l0.039,3.319c0.008,0.538-0.383,0.981-0.871,0.986c-0.488,0.007-0.893-0.426-0.898-0.965l-0.055-4.37l-5.098-2.943v6.017l3.791,2.251c0.465,0.276,0.639,0.842,0.389,1.263c-0.248,0.418-0.828,0.537-1.293,0.262l-2.887-1.717v3.338c0,0.527-0.428,0.956-0.955,0.956s-0.955-0.429-0.955-0.956v-3.352l-2.854,1.695c-0.463,0.274-1.043,0.157-1.291-0.264c-0.25-0.42-0.078-0.984,0.387-1.262l3.758-2.231v-6.063l-5.222,3.017l-0.056,4.37c-0.007,0.539-0.409,0.971-0.897,0.965c-0.49-0.004-0.881-0.449-0.873-0.989l0.041-3.316l-2.897,1.673c-0.458,0.266-1.042,0.106-1.306-0.35c-0.265-0.457-0.108-1.042,0.35-1.306l2.885-1.666l-2.93-1.643c-0.471-0.264-0.657-0.823-0.421-1.248c0.241-0.428,0.817-0.561,1.288-0.297l3.846,2.158l5.183-2.992L88.13,60.88l-3.812,2.139c-0.471,0.264-1.047,0.132-1.285-0.296c-0.239-0.426-0.052-0.984,0.421-1.249l2.894-1.623l-2.899-1.674c-0.458-0.266-0.613-0.849-0.349-1.307c0.263-0.457,0.848-0.611,1.305-0.348l2.885,1.664l-0.042-3.357c-0.007-0.539,0.384-0.982,0.871-0.988c0.491-0.006,0.893,0.428,0.9,0.966l0.054,4.409l5.27,3.043v-5.954l-3.758-2.233c-0.465-0.275-0.637-0.84-0.387-1.258c0.248-0.422,0.828-0.539,1.291-0.263l2.854,1.694v-3.347c0-0.528,0.428-0.955,0.955-0.955s0.955,0.427,0.955,0.955v3.329l2.887-1.713c0.465-0.276,1.045-0.159,1.293,0.262c0.25,0.42,0.076,0.984-0.389,1.26l-3.791,2.254v5.905l5.143-2.969l0.057-4.412c0.006-0.538,0.41-0.97,0.898-0.964s0.879,0.447,0.873,0.988l-0.043,3.356l2.891-1.669c0.457-0.263,1.041-0.106,1.305,0.351c0.264,0.456,0.107,1.042-0.35,1.307l-2.902,1.676l2.893,1.622c0.471,0.264,0.66,0.824,0.422,1.252c-0.24,0.426-0.816,0.558-1.287,0.293l-3.814-2.136l-5.18,2.991l5.164,2.983l3.846-2.157c0.471-0.265,1.045-0.132,1.285,0.293c0.24,0.429,0.051,0.988-0.418,1.252l-2.932,1.643l2.891,1.667C107.451,69.826,107.605,70.411,107.344,70.868z" />
+    </symbol>
+  </defs>
+  <g id="Nuvola" class="nuvMoV2">
+    <path fill="url(#nuvGradV2)" d="M119.97,91.699c0,0-88.119,0-90.368,0c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906s16.573,0.48,17.534,14.999C138.136,82.152,132.109,89.426,119.97,91.699z"/>
+    <path fill="none" stroke="#d3d1cf" stroke-width="6" stroke-miterlimit="10" d="M119.97,91.699c0,0-88.119,0-90.368,0c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906s16.573,0.48,17.534,14.999C138.136,82.152,132.109,89.426,119.97,91.699z"/>
+  </g>
+  <g id="fiocco1" class="nuvMoV2">
+    <g class="fioc1AphV2" > 
+      <use xlink:href="#flake" class="fioc1MoV2" x="5"/>
+    </g>
+  </g>
+  <g id="fiocco2" class="nuvMoV2">
+    <g class="fioc2AphV2" > 
+      <use xlink:href="#flake" class="fioc2MoV2" x="-30" y="5"/>
+    </g>
+  </g>
+  
+  <style>
+    .nuvMoV2 {
+      animation-name: nuvMovesV2;
+      animation-duration: 1320ms;
+      animation-iteration-count: infinite;
+    }
+    @keyframes nuvMovesV2 {
+      0%   { transform: translate(-2px, 0); }
+      52%  { transform: translate(5px, 0); }
+      100% { transform: translate(-2px, 0); }
+    }
+    .nuvMo3V2 {
+      animation-name: nuvMoves3V2;
+      animation-duration: 1320ms;
+      animation-iteration-count: infinite;
+    }
+    @keyframes nuvMoves3V2 {
+      0%   { transform: translate(-12px, -10px); }
+      52%  { transform: translate(-5px, -10px); }
+      100% { transform: translate(-12px, -10px); }
+    }
+    .fioc1MoV2 {
+      animation-name: fioc1MovesV2;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes fioc1MovesV2 {
+      0%  { transform: translate(-8px,16px); }
+      9.5%  { transform: translate(-6px,24px); }
+      16.7%  { transform: translate(-4px,30px); }
+      21.9%  { transform: translate(-2px,34px); }
+      26%  { transform: translate(0px,37px); }
+      29.3%  { transform: translate(2px,39px); }
+      31.8%  { transform: translate(4px,40px); }
+      34.1%  { transform: translate(6px,40px); }
+      44.7%  { transform: translate(4px,49px); }
+      53.1%  { transform: translate(2px,56px); }
+      59.3%  { transform: translate(0px,61px); }
+      62.5%  { transform: translate(-2px,63px); }
+      65.1%  { transform: translate(-4px,64px); }
+      67.7%  { transform: translate(-6px,65px); }
+      68%  { transform: translate(-6px,95px); }
+      77%  { transform: translate(0px,-30px); }
+      77.7%   { transform: translate(0px,0px); }
+      88.3%  { transform: translate(-2px,9px); }
+      94.5%  { transform: translate(-4px,14px); }
+      97.7%  { transform: translate(-6px,16px); }
+      100%  { transform: translate(-8px,16px); }
+    }
+    .fioc1AphV2 {
+      animation-name: fioc1AlphaV2;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes fioc1AlphaV2 {
+      0%     { opacity: 1; }
+      40%  { opacity: 1; }
+      50%  { opacity: 0; }
+      77.7%  { opacity: 0; }
+      87.7%  { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    .fioc2MoV2 {
+      animation-name: fioc2MovesV2;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes fioc2MovesV2 {
+      0%    { transform: translate(0px,37px); }
+      3.2%  { transform: translate(2px,39px); }
+      5.8%  { transform: translate(4px,40px); }
+      8.1%  { transform: translate(6px,40px); }
+      18.7%  { transform: translate(4px,49px); }
+      27.1%  { transform: translate(2px,56px); }
+      33.3%  { transform: translate(0px,61px); }
+      36.5%  { transform: translate(-2px,63px); }
+      39.1%  { transform: translate(-4px,64px); }
+      41.6%  { transform: translate(-6px,65px); }
+      42%   { transform: translate(-6px,95px); }
+      51%   { transform: translate(0px,-30px); }
+      51.6%   { transform: translate(0px,0px); }
+      62.2%  { transform: translate(-2px,9px); }
+      68.4%  { transform: translate(-4px,14px); }
+      71.7%  { transform: translate(-6px,16px); }
+      74%   { transform: translate(-8px,16px); }
+      83.5%  { transform: translate(-6px,24px); }
+      90.7%  { transform: translate(-4px,30px); }
+      95.9%  { transform: translate(-2px,34px); }
+      100%  { transform: translate(0px,37px); }
+    }
+    .fioc2AphV2 {
+      animation-name: fioc2AlphaV2;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes fioc2AlphaV2 {
+      0%     { opacity: 1; }
+      10%    { opacity: 1; }
+      20%    { opacity: 0; }
+      35%    { opacity: 0; }
+      51.6%  { opacity: 0; }
+      61.6%  { opacity: 1; }
+      100%   { opacity: 1; }
+    }
+   
+  </style>
+</svg>
