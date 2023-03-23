@@ -158,7 +158,10 @@ var WeatherForecastDisplay=(function() {
                             "<div class='days noselect'>"+
                             "</div>"+
                             "<svg class='chart'></svg>"+
-                            
+                            "<div class='footer'>"+
+                                (me.config.showInstallLink?"<a href='https://www.visualcrossing.com/weather-widgets' title='Install this weather widget' target='_blank'>Install</a>":"")+
+                                
+                            "</div>"
                             );
                 //react to the window being resized
                 if (window["ResizeObserver"]) {           
