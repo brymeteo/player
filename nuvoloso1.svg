@@ -1,0 +1,42 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="70px" height="60px" viewBox="10 25 160 160">
+  <defs>
+    <linearGradient id="nuvGradC" gradientUnits="userSpaceOnUse" x1="21.4624" y1="61.6909" x2="137.5488" y2="61.6909">
+      <stop offset="0" style="stop-color:#FCFBF9;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#FFFEFD;stop-opacity:0.6"/>
+    </linearGradient>
+  </defs>
+
+  <g id="Nuvola" class="nuvMoC">
+    <path fill="url(#nuvGradC)" d="M124.97,102.699c0,0-88.119,0-90.368,0 c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726 c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906 s16.573,0.48,17.534,14.999C143.136,93.152,137.109,100.426,124.97,102.699z"/>
+    <path fill="none" stroke="#d3d1cf" stroke-width="6" stroke-miterlimit="10" d=" M124.97,102.699c0,0-88.119,0-90.368,0c-2.71,0-8.139-3.278-8.139-10.237c0-13.166,14.885-11.579,14.885-11.579s-2.991-9.746,5.396-17.726c10.799-10.279,25.625-2.727,25.625-2.727s7.208-18.492,26.975-17.725c23.415,0.91,25.627,25.906,25.627,25.906s16.573,0.48,17.534,14.999C143.136,93.152,137.109,100.426,124.97,102.699z"/>
+  </g>
+  <g id="Nuvola" class="nuv2MoC">
+    <path fill="url(#nuvGradC)" d="M86.45,72.033c0,0-60.222,0-61.759,0c-1.852,0-5.563-2.24-5.563-6.996c0-8.997,10.172-7.914,10.172-7.914s-2.044-6.659,3.688-12.113 c7.38-7.024,17.512-1.863,17.512-1.863s4.927-12.638,18.436-12.114C84.938,31.654,86.45,48.737,86.45,48.737 s11.326,0.328,11.983,10.251C98.865,65.508,94.747,70.479,86.45,72.033z"/>
+    <path fill="none" stroke="#d3d1cf" stroke-width="4" stroke-miterlimit="10" d=" M86.45,72.033c0,0-60.222,0-61.759,0c-1.852,0-5.563-2.24-5.563-6.996c0-8.997,10.172-7.914,10.172-7.914s-2.044-6.659,3.688-12.113c7.38-7.024,17.512-1.863,17.512-1.863s4.927-12.638,18.436-12.114C84.938,31.654,86.45,48.737,86.45,48.737s11.326,0.328,11.983,10.251C98.865,65.508,94.747,70.479,86.45,72.033z"/>
+  </g>
+ 
+
+  <style>
+    .nuvMoC {
+      animation-name: nuvMovesC;
+      animation-duration: 1320ms;
+      animation-iteration-count: infinite;
+    }
+    @keyframes nuvMovesC {
+      0%   { transform: translate(-2px, 0); animation-timing-function: ease-in; }
+      52%  { transform: translate(5px, 0); animation-timing-function: ease-out; }
+      100% { transform: translate(-2px, 0); animation-timing-function: ease-in; }
+    }
+    .nuv2MoC {
+      animation-name: nuv2MovesC;
+      animation-duration: 1320ms;
+      animation-iteration-count: infinite;
+    }
+    @keyframes nuv2MovesC {
+      0%   { transform: translate(5px, 0); animation-timing-function: ease-in; }
+      52%  { transform: translate(-6px, 0); animation-timing-function: ease-out; }
+      100% { transform: translate(5px, 0); animation-timing-function: ease-in; }
+    }
+ </style>
+</svg>
