@@ -160,7 +160,7 @@ var WeatherForecastDisplay=(function() {
                             "<svg class='chart'></svg>"+
                             "<div class='footer'>"+
                                 (me.config.showInstallLink?"<a href='https://www.visualcrossing.com/weather-widgets' title='Install this weather widget' target='_blank'>Install</a>":"")+
-                                
+                                "<a href='https://www.visualcrossing.com/weather-api' title='Powered by the Visual Crossing Weather API' target='_blank'></a>"+
                             "</div>"
                             );
                 //react to the window being resized
