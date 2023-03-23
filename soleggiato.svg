@@ -1,0 +1,46 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="70px" height="70px" viewBox="10 25 160 160">
+  <defs>
+    <linearGradient id="solGradS" x1="0" x2="1" y1="0.05" y2="0">
+      <stop offset="0%" stop-color="#fbc224"/>
+      <stop offset="14%" stop-color="#fbc224"/>
+      <stop offset="42%" stop-color="#FA9C2E"/>
+      <stop offset="58%" stop-color="#FA9C2E"/>
+      <stop offset="86%" stop-color="#fbc224"/>
+      <stop offset="100%" stop-color="#fbc224"/>
+    </linearGradient>
+    <clipPath id="solDiscoS">
+      <circle cx="81.3" cy="77.3" r="42.2"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#solDiscoS)"> 
+    <rect class="solDiscMoS" x="10" y="35" width="640" height="85" fill="url(#solGradS)" />
+  </g>
+  <g class="ghieraMoS ghieraS" > 
+    <path opacity="0.8" d="M127.406,77.329c0-25.481-20.662-46.14-46.139-46.14c-25.483,0-46.143,20.658-46.143,46.14c0,25.482,20.66,46.138,46.143,46.138C106.744,123.467,127.406,102.811,127.406,77.329z"/>
+    <path opacity="0.3" d="M132.021,77.329c0-28.03-22.729-50.754-50.753-50.754c-28.031,0-50.757,22.724-50.757,50.754c0,28.029,22.726,50.751,50.757,50.751C109.292,128.08,132.021,105.357,132.021,77.329z"/>
+    <path opacity="0.05" d="M137.097,77.329c0-30.834-25.002-55.829-55.829-55.829c-30.834,0-55.832,24.995-55.832,55.829c0,30.831,24.998,55.825,55.832,55.825C112.095,133.154,137.097,108.16,137.097,77.329z"/>
+  </g>
+  <style>
+    .solDiscMoS {
+      animation-name: solDiscMovesS;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes solDiscMovesS {
+      0%   { transform: translate(28px); }
+      100% { transform: translate(-516.5px); }
+    }
+    .ghieraS {display: inline; fill: none; stroke: #ED6E30; stroke-width: 2.5; stroke-miterlimit: 10;}
+    .ghieraMoS {
+      animation-name: ghieraMovesS;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+    }
+    @keyframes ghieraMovesS {
+      0%   { opacity: 0; }
+      10%   { opacity: 0; }
+      45%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</svg>
