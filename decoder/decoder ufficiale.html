@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TV Decoder Interface</title>
+    <link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000006-8be578be59/vox.ico?ph=9366d4fd19" type="image/x-icon">
+    <link rel="shortcut icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000006-8be578be59/vox.ico?ph=9366d4fd19">
+        <style>
+            body {
+            zoom: 110%;
+   
+                font-family: Arial, sans-serif;
+                background-color: #041530;
+                margin: 0;
+                padding: 0;
+            }
+    
+         header {
+            background-color: #061F40;
+            background-image:  url('');
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-size: 100% auto;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 22px;
+            position: relative;
+            top: 0; /* Posiziona l'header in alto */
+            
+        }
+                
+                
+           
+    
+            #logo {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+    
+            #time {
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 18px;
+            }
+    
+            #menu {
+                background-color: #061F40;
+                height: 100vh;
+                box-sizing: border-box;
+                padding: 20px;
+                position: fixed;
+            }
+    
+            button {
+                display: block;
+                width: 158px;
+                height: 50px;
+                margin-bottom: 10px;
+                background-color: #061F40;
+                background-image: url('https://i.ibb.co/7n3jNqh/lv-guidatv-stasera-off.png');
+                background-size: cover;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                text-align: center;
+                transition: background-image 0.3s;
+            }
+    
+            button:hover {
+                background-image: url('https://i.ibb.co/7n3jNqh/lv-guidatv-stasera-off.png');
+            }
+    
+            button.active {
+                background-image: url('https://i.ibb.co/Gkz897k/lv-guidatv-stasera-on.png');
+            }
+    
+            #content {
+                margin-left: 20%;
+                width: 70%;
+                padding: 20px;
+                box-sizing: border-box;
+                margin-top: 40px;
+            }
+        </style>
+        
+        
+        
+        
+        
+        
+        
+            
+    
+   
+        <style>
+            body1 {
+                font-family: Arial, sans-serif;
+                margin: 20;
+                padding: 0;
+            }
+    
+            #scroll-to-top {
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 145px; /* Larghezza del pulsante */
+                color: #fff;
+                border: none;
+                border-radius: 5%;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 10px;
+                transition: background-color 0.3s;
+            }
+    
+            #scroll-to-top:hover {
+                background-color: #0056b3;
+            }
+        </style>
+
+   
+     <!-- Contenuto della pagina -->
+    
+    <!-- Freccia che Torna Su -->
+    <button id="scroll-to-top" onclick="scrollToTop()">Torna in alto</button>
+  
+ 
+ 
+ 
+ 
+ 
+ <style>
+        /* ... Altri stili esistenti ... */
+
+        /* Nuovi stili per la sezione di caricamento */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 1.9); /* Sfondo bianco semi-trasparente */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #loading-icon-container {
+            position: relative;
+        }
+
+        #loading-icon {
+            width: 150px; /* Regola la dimensione dell'icona a tuo piacimento */
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        #loading-circle {
+            position: absolute;
+            top: -130%;
+            left: -20%;
+            transform: translate(-50%, -50%);
+            width: 190px; /* Dimensioni del cerchio */
+            height: 190px;
+            border: 8px solid transparent;
+            border-top-color: #3498db; /* Colore del cerchio (usa il tuo colore preferito) */
+            border-radius: 50%;
+            animation: rotate 1.5s linear infinite; /* Aggiungi animazione di rotazione */
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Nuovi stili per l'abbonamento scaduto */
+        #expired-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 1.9); /* Sfondo bianco semi-trasparente */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #expired-icon {
+            width: 150px; /* Regola la dimensione dell'icona a tuo piacimento */
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        #expired-text {
+            font-size: 18px;
+        }
+    </style>
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    
+        <header>
+            <img id="logo" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Logo TV Decoder" width="140" height="40">
+     &nbsp &nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp &nbsp &nbsp &nbsp &nbspSchermata di controllo Decoder
+            <div id="time"></div>
+        </header>
+    
+    
+    
+         <!-- Sezione di caricamento -->
+    <div id="loading-overlay">
+        <div id="loading-icon-container">
+            <img id="loading-icon" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Icona di caricamento">
+            <div id="loading-circle"></div>
+        </div>
+        <p>Caricamento...</p>
+    </div>
+    
+    
+    <!-- Sezione di abbonamento scaduto -->
+    <div id="expired-overlay">
+        <img id="expired-icon" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Abbonamento scaduto">
+        
+        
+        <p id="expired-text">&nbsp; &nbsp; &nbsp; &nbsp; Abbonamento scaduto. Visita il sito: <a href="https://vox-tv.webnode.it">vox-tv.webnode.it</a></p><p id="expired-text">Per maggiori informazioni, contattaci sul pulsante in basso a destra.</p>
+        
+        
+        
+    </div>
+    
+     
+
+    
+        <div id="menu">
+           
+           
+   
+
+           
+           
+           <button onclick="showNewContent()" style="position: relative;">
+        <img src="https://i.ibb.co/s3SQYxX/calendar-clock-icon-34472.png" alt="Logo Nuovo Contenuto" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">In Programma</div>
+    </button>
+    
+           
+           
+           
+           
+           
+         
+             <button onclick="showGuide()" style="position: relative;">
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_movie_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Programmazione</div></button>
+           
+           
+            
+            
+            <button onclick="showInfo()" style="position: relative;">
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_accesstime_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Guida Tv oraria</div></button>
+       
+            
+            
+            
+            
+            
+             <button onclick="showSettings()" style="position: relative;">
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Test della diretta</div></button>
+            
+            
+            
+            
+            
+           
+            
+            <button onclick="openSettings()" style="position: relative;">
+      &nbsp  <img src="https://i.ibb.co/f9mvCZT/GGG1.png" alt="Logo Impostazioni" style="height: 30px; margin-right: 5px;"></button>
+        
+        <button onclick="openAltSettings()" style="position: relative;">
+       &nbsp&nbsp <img src="https://i.ibb.co/nkKkDhw/GGG1.png" alt="Logo Altre Impostazioni" style="height: 30px; margin-right: 5px;">
+        
+    </button>
+        
+        
+        
+        <button onclick="openYetAnotherSettings()" style="position: relative;">
+        &nbsp&nbsp<img src="https://i.ibb.co/HpKmph0/GGG1.png" alt="Logo Altre Impostazioni" style="height: 30px; margin-right: 5px;">
+        
+    </button>
+        
+        
+        
+        
+        <button onclick="openMoreSettings()" style="position: relative;">
+        &nbsp&nbsp<img src="https://i.ibb.co/WkrWwQt/GGG1.png" alt="Logo Ulteriori Impostazioni" style="height: 30px; margin-right: 5px;">
+        
+    </button>
+        
+        
+        
+        
+        
+        
+        <button onclick="openEvenMoreSettings()" style="position: relative;">
+        &nbsp&nbsp<img src="https://i.ibb.co/jzGbkHQ/GGG1.png" alt="Logo Ancora più Impostazioni" style="height: 30px; margin-right: 5px;">&nbsp&nbsp&nbsp
+        
+    </button>
+        
+        
+        
+        
+        
+        
+        
+        <button onclick="openYetEvenMoreSettings()" style="position: relative;">
+        &nbsp&nbsp<img src="https://i.ibb.co/vZMfYLN/GGG1.png" alt="Logo Ancora più Impostazioni" style="height: 30px; margin-right: 5px;">
+       
+    </button>
+        
+        <button onclick="showInfoAndSubscription()" style="position: relative;">
+        <img src="https://i.ibb.co/8KGFy6k/info-15260.png" alt="Logo Info e Abbonamento" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Info e Abbonamento&nbsp</div>
+    </button>
+    
+        
+            <button onclick="goBack()">Torna Indietro</button>
+           
+    
+        </div>
+    
+        <div id="content">
+            <!-- Contenuto dinamico verrà visualizzato qui in base ai pulsanti premuti -->
+        </div>
+    
+    
+    
+    
+    
+    <script>
+    function showNewContent() {
+        document.getElementById('content').innerHTML = `
+            <main id="polaris" data-tracking-module="page" data-channel="prospect">
+                <div class="prospect-homepage" data-reactroot="" data-reactid="1" data-react-checksum="1647279556">
+                   
+                   
+                   
+                   
+                          
+    <br>	
+                    
+     <iframe
+    src="https://brymeteo.github.io/tv/programmazione-decoder.html"
+    width="100%"
+    height="600px"
+    frameborder="0"
+    scrolling="no"
+></iframe>       
+                   
+             
+            
+    
+         
+     <br>	<br><br>
+                    
+     <iframe
+    src="https://brymeteo.github.io/tv/programmazione-decoder2.html"
+    width="100%"
+    height="600px"
+    frameborder="0"
+    scrolling="no"
+></iframe>    
+                
+                    
+    
+                
+
+                
+                    
+    
+        
+                  
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                </div>
+            </main>
+      
+    
+      `;
+    
+        // Rimuovi la classe 'active' da tutti i pulsanti nel menu
+        document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+    
+        // Imposta il pulsante 'Nuovo Contenuto' come attivo
+        document.querySelector('#menu button:nth-child(1)').classList.add('active');
+    }
+    
+    
+    window.onload = function() {
+    showNewContent(); // Cambiato da showGuide() a showInfo()
+    updateTime();
+};
+
+    
+    
+    
+    
+    </script>
+    
+    
+    
+        <script>
+           
+    
+            function showGuide() {
+                document.getElementById('content').innerHTML = '';
+                var script = document.createElement('script');
+                script.src = 'https://static.elfsight.com/platform/platform.js';
+                script.setAttribute('data-use-service-core', '');
+                script.defer = true;
+                var div = document.createElement('div');
+                div.classList.add('elfsight-app-e0687321-129b-4b22-ac3b-c595536c16b6');
+                div.setAttribute('data-elfsight-app-lazy', '');
+                document.getElementById('content').appendChild(script);
+                document.getElementById('content').appendChild(div);
+                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('#menu button:nth-child(2)').classList.add('active');
+            }
+    
+            function updateTime() {
+                var timeElement = document.getElementById('time');
+                setInterval(function() {
+                    var now = new Date();
+                    var hours = now.getHours();
+                    var minutes = now.getMinutes();
+                    var seconds = now.getSeconds();
+                    var formattedTime = padZero(hours) + ':' + padZero(minutes) + ':' + padZero(seconds);
+                    timeElement.innerText = formattedTime;
+                }, 1000);
+            }
+    
+            function padZero(num) {
+                return num < 10 ? '0' + num : num;
+            }
+    
+            function showInfo() {
+                document.getElementById('content').innerHTML = '';
+                var script = document.createElement('script');
+                script.src = 'https://static.elfsight.com/platform/platform.js';
+                script.setAttribute('data-use-service-core', '');
+                script.defer = true;
+                var div = document.createElement('div');
+                div.classList.add('elfsight-app-52fe12b3-3f11-4b60-bbe6-a4ef945895b4');
+                div.setAttribute('data-elfsight-app-lazy', '');
+                document.getElementById('content').appendChild(script);
+                document.getElementById('content').appendChild(div);
+                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('#menu button:nth-child(3)').classList.add('active');
+            }
+    
+            function showSettings() {
+                var settingsContent = "";
+                settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+                settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/b73a29201e34d99ccdd0e471fe56c567?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+                settingsContent += "</div>";
+                document.getElementById('content').innerHTML = settingsContent;
+                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('#menu button:nth-child(4)').classList.add('active');
+            }
+            
+            
+            
+            
+         function openExternalLink() {
+            // Specifica l'URL che desideri aprire in una nuova finestra
+            var externalLink = 'https://www.example.com';
+    
+            // Chiudi la finestra corrente
+            window.close();
+    
+            // Apri l'URL in una nuova finestra
+            window.open(externalLink, '_blank');
+        }
+        
+        
+            
+            
+    
+            function goBack() {
+                window.close();
+            }
+        </script>
+        
+        
+    
+    
+        
+       <script>
+        function openSettings() {
+            var settingsContent = "";
+            settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            settingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            settingsContent += "</div>";
+            settingsContent += "<img src='https://i.ibb.co/PDx5s7R/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            settingsContent += "</div>";
+            document.getElementById('content').innerHTML = settingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(5)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    
+    
+    
+    <script>
+        function openAltSettings() {
+            var altSettingsContent = "";
+            altSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            altSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            altSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/9535cce5e5217b466c25ac584cabdc18?autoplay=0&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            altSettingsContent += "</div>";
+            altSettingsContent += "<img src='https://i.ibb.co/3mkC7VL/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            
+            altSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = altSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(6)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    
+    
+    <script>
+        function openYetAnotherSettings() {
+            var yetAnotherSettingsContent = "";
+           yetAnotherSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            yetAnotherSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            yetAnotherSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/b73a29201e34d99ccdd0e471fe56c567?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+              yetAnotherSettingsContent += "</div>";
+            yetAnotherSettingsContent += "<img src='https://i.ibb.co/Xx5Qmjw/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            yetAnotherSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = yetAnotherSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(7)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    <script>
+        function openMoreSettings() {
+            var moreSettingsContent = "";
+            moreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            moreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            moreSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/877df71844e339730477202cbe4698e7?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+               moreSettingsContent += "</div>";
+            moreSettingsContent += "<img src='https://i.ibb.co/1L8fMN9/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            moreSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = moreSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(8)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    
+    
+    <script>
+        function openEvenMoreSettings() {
+            var evenMoreSettingsContent = "";
+             evenMoreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            evenMoreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            evenMoreSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/38d11ad7bfb329ec553edfefcacb4c7f?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+             evenMoreSettingsContent += "</div>";
+            evenMoreSettingsContent += "<img src='https://i.ibb.co/jWm5VJR/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            evenMoreSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = evenMoreSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(9)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    
+    
+    
+    <script>
+        function openYetEvenMoreSettings() {
+            var yetEvenMoreSettingsContent = "";
+            yetEvenMoreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            yetEvenMoreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            yetEvenMoreSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/77ac0f9ad0fa25112abfcd458f43f614?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+             yetEvenMoreSettingsContent += "</div>";
+            yetEvenMoreSettingsContent += "<img src='https://i.ibb.co/vHMcFtZ/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            yetEvenMoreSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = yetEvenMoreSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(10)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    <script>
+        function showInfoAndSubscription() {
+            document.getElementById('content').innerHTML = '';
+    
+            // Creazione di un div con informazioni di abbonamento e altro
+            var infoDiv = document.createElement('div');
+            infoDiv.innerHTML = `
+                <div style="background-image: url('https://i.ibb.co/phtc2bb/television-background.png'); background-size: cover; padding: 20px; border-radius: 15px; color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); position: relative;">
+                    <h2 style="font-size: 28px; margin-bottom: 20px;">Dettagli Abbonamento</h2>
+                    <div style="font-size: 16px; text-align: left;">
+                        <p><strong>ID Utente:</strong> UTENTE123</p>
+                        <p><strong>Nome Utente:</strong> Bryan</p>
+                        <p><strong>Tipo di Abbonamento:</strong> Premium</p>
+                        <p><strong>Data di Scadenza:</strong> 01/02/2024</p>
+                        <p><strong>ID Personale:</strong> XYZ567</p>
+                        <p><strong>Dettagli Contrattuali:</strong> Contratto XYZ12345</p>
+                        <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
+                    </div>
+                    <img src="https://i.ibb.co/k4Dgd5W/logos.png" alt="Logo" style="position: absolute; top: 50%; right: 50px; transform: translateY(-50%); height: 50px; width: auto;">
+                </div>
+            `;
+            infoDiv.style.margin = '20px auto';
+            infoDiv.style.width = '80%';
+    
+            // Aggiunta del div al contenuto
+            document.getElementById('content').appendChild(infoDiv);
+    
+            // Aggiornamento degli stili dei pulsanti nel menu
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(11)').classList.add('active'); // Sostituisci X con l'indice corretto
+        }
+    </script>
+    
+    
+    
+      <script>
+        // Funzione per far tornare su la pagina
+        function scrollToTop() {
+            document.body.scrollTop = 0; // Per Safari
+            document.documentElement.scrollTop = 0; // Per altri browser
+        }
+    
+        // Mostra/nascondi la freccia in base alla posizione della pagina
+        window.onscroll = function() {
+            var scrollButton = document.getElementById("scroll-to-top");
+    
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollButton.style.display = "block";
+            } else {
+                scrollButton.style.display = "none";
+            }
+        };
+    </script>
+    
+    
+  
+
+
+
+<!-- Script esistenti -->
+   <script>
+    // Aggiorna la funzione showLoading per nascondere il caricamento dopo 5 secondi
+    function showLoading() {
+        document.getElementById('loading-overlay').style.display = 'flex';
+        setTimeout(hideLoading, 5000); // Nasconde il caricamento dopo 5 secondi
+    }
+
+    function hideLoading() {
+        document.getElementById('loading-overlay').style.display = 'none';
+    }
+
+    // Funzione per controllare lo stato dell'abbonamento
+    function checkSubscriptionStatus() {
+        // Sostituisci questa data con la data di scadenza del tuo abbonamento (formato: 'YYYY-MM-DDTHH:mm:ss')
+        var expirationDate = new Date('2023-11-19T00:30:00');
+
+        // Ottieni la data corrente
+        var currentDate = new Date();
+
+        // Controlla se l'abbonamento è scaduto
+        if (currentDate > expirationDate) {
+            showExpiredMessage();
+            loadUserlikeScript(); // Carica il secondo script solo se l'abbonamento è scaduto
+        }
+    }
+
+    // Funzione per mostrare il messaggio di abbonamento scaduto
+    function showExpiredMessage() {
+        document.getElementById('expired-overlay').style.display = 'flex';
+    }
+
+    // Funzione per caricare il secondo script (Userlike) dinamicamente
+    function loadUserlikeScript() {
+        var userlikeScript = document.createElement('script');
+        userlikeScript.type = 'text/javascript';
+        userlikeScript.src = 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/a379d7a3731d48639eb79e6ade0d4cccc84d4552b3ef417da7db0717ecf7af35.js';
+        document.head.appendChild(userlikeScript);
+    }
+
+    // Chiamata iniziale per mostrare il caricamento all'avvio della pagina
+    showLoading();
+
+    // Controlla lo stato dell'abbonamento al caricamento della pagina
+    checkSubscriptionStatus();
+
+    // Resto del tuo codice JavaScript...
+    // ...
+
+</script>
+
+
+
+
+
+
+
+
+
+    </body>
+    </html>
+    
