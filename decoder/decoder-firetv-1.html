@@ -738,13 +738,7 @@
         document.getElementById('expired-overlay').style.display = 'flex';
     }
 
-    // Funzione per caricare il secondo script (Userlike) dinamicamente
-    function loadUserlikeScript() {
-        var userlikeScript = document.createElement('script');
-        userlikeScript.type = 'text/javascript';
-        userlikeScript.src = 'https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/a379d7a3731d48639eb79e6ade0d4cccc84d4552b3ef417da7db0717ecf7af35.js';
-        document.head.appendChild(userlikeScript);
-    }
+    
 
     // Chiamata iniziale per mostrare il caricamento all'avvio della pagina
     showLoading();
