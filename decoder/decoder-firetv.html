@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vox TV Decoder - Bryan</title>
+        <title>Vox OSDecoder - Bryan</title>
         
         
-        <link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000072-46c4f46c50/vox%20stream.svg?ph=9366d4fd19" type="image/svg+xml" sizes="any"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000072-46c4f46c50/vox%20stream.svg?ph=9366d4fd19" type="image/svg+xml" sizes="16x16"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000071-0e2660e268/1j3767.ico?ph=9366d4fd19"><link rel="apple-touch-icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000071-0e2660e268/1j3767.ico?ph=9366d4fd19"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000071-0e2660e268/1j3767.ico?ph=9366d4fd19">
+        <link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000106-be05dbe05e/vox%20stream.svg?ph=9366d4fd19" type="image/svg+xml" sizes="any"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000106-be05dbe05e/vox%20stream.svg?ph=9366d4fd19" type="image/svg+xml" sizes="16x16"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000107-24ab224ab3/1j3767.ico?ph=9366d4fd19"><link rel="apple-touch-icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000107-24ab224ab3/1j3767.ico?ph=9366d4fd19"><link rel="icon" href="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000107-24ab224ab3/1j3767.ico?ph=9366d4fd19">
         
   
         <style>
@@ -168,18 +168,18 @@
         }
 
         #loading-icon {
-            width: 150px; /* Regola la dimensione dell'icona a tuo piacimento */
+            
             height: 40px;
             margin-bottom: 10px;
         }
 
         #loading-circle {
             position: absolute;
-            top: -125%;
-            left: -20%;
+            top: -155%;
+            left: -9%;
             transform: translate(-50%, -50%);
-            width: 190px; /* Dimensioni del cerchio */
-            height: 190px;
+            width: 220px; /* Dimensioni del cerchio */
+            height: 220px;
             border: 8px solid transparent;
             border-top-color: #3498db; /* Colore del cerchio (usa il tuo colore preferito) */
             border-radius: 50%;
@@ -224,7 +224,7 @@
         }
 
         #expired-icon {
-            width: 150px; /* Regola la dimensione dell'icona a tuo piacimento */
+            
             height: 40px;
             margin-bottom: 10px;
         }
@@ -244,7 +244,6 @@
 
 
 
-
  
  
  
@@ -257,7 +256,7 @@
  
     
         <header>
-            <img id="logo" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Logo TV Decoder" width="138" height="38">
+            <img id="logo" src="https://i.ibb.co/kQ43xfr/Vox-OS-TV-logo.png" alt="Logo TV Decoder" width="142" height="31">
      &nbsp &nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp &nbsp &nbsp &nbsp &nbspSchermata di controllo Decoder
             <div id="time"></div>
         </header>
@@ -267,7 +266,7 @@
          <!-- Sezione di caricamento -->
     <div id="loading-overlay">
         <div id="loading-icon-container">
-            <img id="loading-icon" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Icona di caricamento">
+            <img id="loading-icon" src="https://i.ibb.co/kQ43xfr/Vox-OS-TV-logo.png" alt="Icona di caricamento">
             <div id="loading-circle"></div>
         </div>
         <span style="color: #cccccc;"><p>Caricamento</p>
@@ -276,7 +275,7 @@
     
     <!-- Sezione di abbonamento scaduto -->
     <div id="expired-overlay">
-        <img id="expired-icon" src="https://9366d4fd19.cbaul-cdnwnd.com/c22efc51aafc1c85856219ee74222d4d/200000005-43f4543f46/450/logocasatv.webp?ph=9366d4fd19" alt="Abbonamento scaduto">
+        <img id="expired-icon" src="https://i.ibb.co/kQ43xfr/Vox-OS-TV-logo.png" alt="Abbonamento scaduto">
         
         
        
@@ -323,11 +322,12 @@
             
             
              <button onclick="showSettings()" style="position: relative;">
-        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Test della diretta</div></button>
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Guida Replay</div></button>
             
             
             
-            
+                 <button onclick="openreplaySettings()" style="position: relative;">
+        <img src="https://i.ibb.co/NVn5yjz/GGG1.png" alt="vox replay" style="height: 30px; margin-right: 5px;"></button>
             
            
             
@@ -402,13 +402,12 @@
                    
                    
                    
-                          
-    <br>	
+  	
                     
      <iframe
     src="https://brymeteo.github.io/tv/programmazione-decoder.html"
     width="100%"
-    height="650px"
+    height="630px"
     frameborder="0"
     scrolling="no"
 ></iframe>       
@@ -416,18 +415,7 @@
              
             
     
-         
-     <br>	<br><br>
-                    
-     <iframe
-    src="https://brymeteo.github.io/tv/programmazione-decoder2.html"
-    width="100%"
-    height="650px"
-    frameborder="0"
-    scrolling="no"
-></iframe>    
-                
-                    
+       
     
                 
 
@@ -524,15 +512,31 @@
             
             
             
-function showSettings() {
-    var settingsContent = "";
-    settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
-    settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/b73a29201e34d99ccdd0e471fe56c567?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 165%; height: 167%; transform: scale(0.6); transform-origin: 0 0;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
-    settingsContent += "</div>";
-    document.getElementById('content').innerHTML = settingsContent;
-    document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-    document.querySelector('#menu button:nth-child(4)').classList.add('active');
-}
+            
+            
+              function showSettings() {
+                document.getElementById('content').innerHTML = '';
+                var script = document.createElement('script');
+                script.src = 'https://static.elfsight.com/platform/platform.js';
+                script.setAttribute('data-use-service-core', '');
+                script.defer = true;
+                var div = document.createElement('div');
+                div.classList.add('elfsight-app-34de66bf-98e0-4413-a3df-48c4ec39d170');
+                div.setAttribute('data-elfsight-app-lazy', '');
+                document.getElementById('content').appendChild(script);
+                document.getElementById('content').appendChild(div);
+                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('#menu button:nth-child(4)').classList.add('active');
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+
 
 
 
@@ -564,6 +568,29 @@ function showSettings() {
         </script>
         
         
+        
+        
+<script>
+    function openreplaySettings() {
+        var settingsContent = "";
+        settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+        settingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+        settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/0bbde2e8e05f3eab04bd4309ae7002df?autoplay=0&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 165%; height: 167%; transform: scale(0.6); transform-origin: 0 0;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+        settingsContent += "</div>";
+        settingsContent += "<img src='https://i.ibb.co/1RsxgLB/GGG-1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>";
+        settingsContent += "<p style='position: absolute; bottom: 7px; left: 200px; color: white; margin-bottom: 0;'>&nbsp&nbspI contenuti on-demand possono essere fruibili per un periodo di un mese, a seconda dell'abbonamento.</p>"; // Modificato il margine inferiore
+        settingsContent += "</div>";
+        document.getElementById('content').innerHTML = settingsContent;
+        document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('#menu button:nth-child(5)').classList.add('active'); // Modificato l'indice del pulsante
+    }
+</script>
+
+
+    
+    
+    
+    
     
     
         
@@ -578,7 +605,7 @@ function showSettings() {
             settingsContent += "</div>";
             document.getElementById('content').innerHTML = settingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(5)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(6)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -599,7 +626,7 @@ function showSettings() {
             altSettingsContent += "</div>";
             document.getElementById('content').innerHTML = altSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(6)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(7)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -618,7 +645,7 @@ function showSettings() {
             yetAnotherSettingsContent += "</div>";
             document.getElementById('content').innerHTML = yetAnotherSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(7)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(8)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -635,7 +662,7 @@ function showSettings() {
             moreSettingsContent += "</div>";
             document.getElementById('content').innerHTML = moreSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(8)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(9)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -654,7 +681,7 @@ function showSettings() {
             evenMoreSettingsContent += "</div>";
             document.getElementById('content').innerHTML = evenMoreSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(9)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(10)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -674,7 +701,7 @@ function showSettings() {
             yetEvenMoreSettingsContent += "</div>";
             document.getElementById('content').innerHTML = yetEvenMoreSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(10)').classList.add('active'); // Modificato l'indice del pulsante
+            document.querySelector('#menu button:nth-child(11)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
     
@@ -693,12 +720,12 @@ function showSettings() {
                         <p><strong>ID Utente:</strong> UTENTE123</p>
                         <p><strong>Nome Utente:</strong> Bryan</p>
                         <p><strong>Tipo di Abbonamento:</strong> Premium</p>
-                        <p><strong>Data di Scadenza:</strong> 01/02/2024</p>
+                        <p><strong>Data di Scadenza:</strong> 10/01/2024</p>
                         <p><strong>ID Personale:</strong> XYZ567</p>
                         <p><strong>Dettagli Contrattuali:</strong> Contratto XYZ12345</p>
                         <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
                     </div>
-                    <img src="https://i.ibb.co/k4Dgd5W/logos.png" alt="Logo" style="position: absolute; top: 50%; right: 50px; transform: translateY(-50%); height: 50px; width: auto;">
+                    <img src="https://i.ibb.co/nMSy9j9/Vox-OSdecoder-logo.png" alt="Logo" style="position: absolute; top: 50%; right: 50px; transform: translateY(-50%); height: 50px; width: auto;">
                 </div>
             `;
             infoDiv.style.margin = '20px auto';
@@ -709,7 +736,7 @@ function showSettings() {
     
             // Aggiornamento degli stili dei pulsanti nel menu
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('#menu button:nth-child(11)').classList.add('active'); // Sostituisci X con l'indice corretto
+            document.querySelector('#menu button:nth-child(12)').classList.add('active'); // Sostituisci X con l'indice corretto
         }
     </script>
     
@@ -754,7 +781,7 @@ function showSettings() {
     // Funzione per controllare lo stato dell'abbonamento
     function checkSubscriptionStatus() {
         // Sostituisci questa data con la data di scadenza del tuo abbonamento (formato: 'YYYY-MM-DDTHH:mm:ss')
-        var expirationDate = new Date('2023-12-19T00:30:00');
+        var expirationDate = new Date('2024-01-10T00:30:00');
 
         // Ottieni la data corrente
         var currentDate = new Date();
@@ -785,7 +812,6 @@ function showSettings() {
     // ...
 
 </script>
-
 
 
 
