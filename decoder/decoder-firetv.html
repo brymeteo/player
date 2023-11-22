@@ -245,7 +245,39 @@
 
 
  
+ <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet"/>
  
+      </head>
+      
+      <body translate="no" >
+        
+    
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     
+      
+      <script>
+      jQuery(document).ready(function($){
+       
+      if (sessionStorage.getItem('advertOnce') !== 'false') {
+      
+      $('body').append('')
+      sessionStorage.setItem('advertOnce','false');
+      }
+       
+      $('#advert-once .advert-button').on('click',function(){
+      $('#advert-once').hide();
+      });
+        
+      $('#reset-session').on('click',function(){
+      sessionStorage.setItem('advertOnce','');
+      });
+       
+      });
+      </script>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
  
  
  
