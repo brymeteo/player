@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VOX HD</title>
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet">
-    <style>
+ <style>
         body {
             margin: 0;
             padding: 0;
@@ -79,7 +79,7 @@
                 supporti HTML5 video</p>
         </video>
         <img id="logo-top-left"
-            src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000551-8e6cd8e6ce/TITOLO-4.webp?ph=7e11bb4538"
+            src=""
             alt="Logo Top Left">
         <img id="second-logo-top-left" src="" alt="">
     </div>
@@ -114,7 +114,7 @@
                 var currentMinute = now.getMinutes();
 
                 // Orario di inizio per mostrare il primo logo (ad esempio, 8:00 AM)
-                var startHourLogo1 = 6;
+                var startHourLogo1 = 1;
                 var startMinuteLogo1 = 0;
 
                 // Orario di fine per nascondere il primo logo (ad esempio, 6:00 PM)
@@ -148,8 +148,20 @@
                 }
             }
 
+            // Funzione per controllare se il video è in pausa e ricaricarlo
+            function checkVideoWaiting() {
+                if (myPlayer.waiting()) {
+                    // Il video è in pausa a causa di buffering o altre ragioni
+                    myPlayer.load(); // Ricarica il video
+                    myPlayer.play(); // Avvia la riproduzione
+                }
+            }
+
             // Intervallo di controllo ogni (1 secondo) per i loghi
             setInterval(checkLogos, 1000);
+
+            // Intervallo di controllo ogni (1 secondo) per il video in pausa
+            setInterval(checkVideoWaiting, 1000);
         });
     </script>
 </body>
