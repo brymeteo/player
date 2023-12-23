@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Cinema HD</title>
+    <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        #logo-top-left,
+        #logo-bottom-right,
+        #second-logo-top-left,
+        .new-logo {
+            position: absolute;
+            transition: transform 0.5s;
+        }
+
+        #logo-top-left {
+            top: 7%;
+            right: 75%;
+            max-width: 20%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+            opacity: 0;
+        }
+
+        #logo-bottom-right {
+            top: 3%;
+            right: 3%;
+            max-width: 12%;
+            width: auto;
+            height: auto;
+            opacity: 90%;
+        }
+
+        #second-logo-top-left {
+            top: 7%;
+            right: 75%;
+            max-width: 20%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+            opacity: 0;
+        }
+
+        .new-logo {
+             top: 7%;
+            right: 75%;
+            max-width: 20%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+            opacity: 0;
+        }
+
+        @media (max-width: 367px) {
+            #logo-top-left,
+            #logo-bottom-right,
+            #second-logo-top-left,
+            .new-logo {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" playsinline>
+            <source id="video-source" src="https://app.viloud.tv/hls/channel/sep/308dce3481dec72f6643d0859f2f9f1a/high.m3u8"
+                type="application/x-mpegURL">
+            <p class="vjs-no-js">Per vedere questo video, abilita JavaScript e considera l'aggiornamento a un browser web che
+                supporti HTML5 video</p>
+        </video>
+        
+        
+        
+        
+        <img id="logo-top-left"
+            src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000633-f1a8af1a8c/TITOLO3.webp?ph=7e11bb4538"
+            alt="Logo Top Left">
+            
+            
+            
+            
+            
+            
+            
+        <img id="second-logo-top-left" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000623-3f54f3f551/TITOLO-92.webp?ph=7e11bb4538" alt="">
+        
+        
+        
+        
+        
+        
+        
+        <!-- Nuovi loghi -->
+        <img class="new-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000635-2043c2043e/TITOLO4.webp?ph=7e11bb4538" alt="Nuovo Logo 1">
+        
+        
+        
+        
+        <!-- Aggiungi altri loghi con ID e URL unici -->
+    </div>
+    <img id="logo-bottom-right"
+        src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000621-05c8005c82/_Christmas5.webp?ph=7e11bb4538"
+        alt="Logo uno casa tv in basso">
+        
+        
+        
+        
+        
+        
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myPlayer = videojs('my-video');
+            var logoTopLeft = document.getElementById('logo-top-left');
+            var logoBottomRight = document.getElementById('logo-bottom-right');
+            var secondLogoTopLeft = document.getElementById('second-logo-top-left');
+            var newLogos = document.querySelectorAll('.new-logo');
+
+            myPlayer.el().appendChild(logoTopLeft);
+            myPlayer.el().appendChild(logoBottomRight);
+            myPlayer.el().appendChild(secondLogoTopLeft);
+            newLogos.forEach(function (newLogo) {
+                myPlayer.el().appendChild(newLogo);
+            });
+
+            // Funzione per mostrare il secondo logo
+            function showSecondLogo() {
+                secondLogoTopLeft.style.opacity = '1';
+            }
+
+            // Funzione per nascondere il secondo logo
+            function hideSecondLogo() {
+                secondLogoTopLeft.style.opacity = '0';
+            }
+
+            // Funzione per mostrare i nuovi loghi
+            function showNewLogos() {
+                newLogos.forEach(function (newLogo) {
+                    newLogo.style.opacity = '1';
+                });
+            }
+
+            // Funzione per nascondere i nuovi loghi
+            function hideNewLogos() {
+                newLogos.forEach(function (newLogo) {
+                    newLogo.style.opacity = '0';
+                });
+            }
+
+            // Funzione per controllare l'orario e mostrare/nascondere i loghi
+            function checkLogos() {
+                 var now = new Date();
+    var currentHour = now.getHours();
+    var currentMinute = now.getMinutes();
+
+                // Orario di inizio per mostrare il primo logo (ad esempio, 8:00 AM)
+                var startHourLogo1 = 20;
+                var startMinuteLogo1 = 35;
+
+                // Orario di fine per nascondere il primo logo (ad esempio, 6:00 PM)
+                var endHourLogo1 = 22;
+                var endMinuteLogo1 = 9;
+
+                // Orario di inizio per mostrare il secondo logo (ad esempio, 9:00 AM)
+                var startHourLogo2 = 22;
+                var startMinuteLogo2 = 20;
+
+                // Orario di fine per nascondere il secondo logo (ad esempio, 5:00 PM)
+                var endHourLogo2 = 23;
+                var endMinuteLogo2 = 58;
+
+                // Orario di inizio per mostrare i nuovi loghi
+                 var startHourNewLogos = 2;
+                 var startMinuteNewLogos = 9;
+
+                 var endHourNewLogos = 3;
+                 var endMinuteNewLogos = 56;
+
+                var showTimeLogo1 = currentHour >= startHourLogo1 && currentMinute >= startMinuteLogo1;
+                var hideTimeLogo1 = currentHour >= endHourLogo1 && currentMinute >= endMinuteLogo1;
+
+                var showTimeLogo2 = currentHour >= startHourLogo2 && currentMinute >= startMinuteLogo2;
+                var hideTimeLogo2 = currentHour >= endHourLogo2 && currentMinute >= endMinuteLogo2;
+
+                 var showTimeNewLogos = currentHour > startHourNewLogos || (currentHour === startHourNewLogos && currentMinute >= startMinuteNewLogos);
+    var hideTimeNewLogos = currentHour > endHourNewLogos || (currentHour === endHourNewLogos && currentMinute >= endMinuteNewLogos);
+
+
+                if (showTimeLogo1 && !hideTimeLogo1) {
+                    logoTopLeft.style.opacity = '1';
+                } else {
+                    logoTopLeft.style.opacity = '0';
+                }
+
+                if (showTimeLogo2 && !hideTimeLogo2) {
+                    showSecondLogo();
+                } else {
+                    hideSecondLogo();
+                }
+
+                if (showTimeNewLogos && !hideTimeNewLogos) {
+        showNewLogos();
+    } else {
+        hideNewLogos();
+    }
+}
+
+            // Funzione per controllare se il video è in pausa e ricaricarlo
+            function checkVideoWaiting() {
+                if (myPlayer.waiting()) {
+                    myPlayer.load();
+                    myPlayer.play();
+                }
+            }
+
+            // Intervallo di controllo ogni (1 secondo) per i loghi
+            setInterval(checkLogos, 1000);
+
+            // Intervallo di controllo ogni (1 secondo) per il video in pausa
+            setInterval(checkVideoWaiting, 1000);
+        });
+    </script>
+</body>
+</html>
