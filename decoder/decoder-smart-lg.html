@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -281,7 +280,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
  
  
- 
+
  
  
  
@@ -346,16 +345,12 @@
            
             
             
-            <button onclick="showInfo()" style="position: relative;">
+         <button onclick="showInfo()" style="position: relative;">
         <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_accesstime_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Guida Tv oraria</div></button>
-       
-            
-            
-            
             
             
              <button onclick="showSettings()" style="position: relative;">
-        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Catalogo Replay</div></button>
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Catalogo App</div></button>
             
             
             
@@ -413,7 +408,7 @@
     </button>
     
         
-           
+          
            
     
         </div>
@@ -494,20 +489,7 @@
         <script>
            
     
-            function showGuide() {
-                document.getElementById('content').innerHTML = '';
-                var script = document.createElement('script');
-                script.src = 'https://static.elfsight.com/platform/platform.js';
-                script.setAttribute('data-use-service-core', '');
-                script.defer = true;
-                var div = document.createElement('div');
-                div.classList.add('elfsight-app-e0687321-129b-4b22-ac3b-c595536c16b6');
-                div.setAttribute('data-elfsight-app-lazy', '');
-                document.getElementById('content').appendChild(script);
-                document.getElementById('content').appendChild(div);
-                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-                document.querySelector('#menu button:nth-child(2)').classList.add('active');
-            }
+            
     
             function updateTime() {
                 var timeElement = document.getElementById('time');
@@ -525,20 +507,46 @@
                 return num < 10 ? '0' + num : num;
             }
     
-            function showInfo() {
-                document.getElementById('content').innerHTML = '';
-                var script = document.createElement('script');
-                script.src = 'https://static.elfsight.com/platform/platform.js';
-                script.setAttribute('data-use-service-core', '');
-                script.defer = true;
-                var div = document.createElement('div');
-                div.classList.add('elfsight-app-52fe12b3-3f11-4b60-bbe6-a4ef945895b4');
-                div.setAttribute('data-elfsight-app-lazy', '');
-                document.getElementById('content').appendChild(script);
-                document.getElementById('content').appendChild(div);
-                document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-                document.querySelector('#menu button:nth-child(3)').classList.add('active');
-            }
+    
+    
+    
+    
+    
+    
+    
+      function showGuide() {
+        // Crea un iframe con il link desiderato
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://34de66bf98e04413a3df48c4ec39d170.elf.site';
+        iframe.style.width = '1200px'; // Regola la larghezza dell'iframe
+        iframe.style.height = '800px'; // Regola l'altezza dell'iframe
+        iframe.style.border = 'none';
+
+        // Apri l'iframe con Lity
+        lity(iframe).open();
+
+        // Aggiorna la classe dei pulsanti nel menu
+        document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('#menu button:nth-child(2)').classList.add('active');
+    }
+    
+    
+    
+           function showInfo() {
+        // Crea un iframe con il link desiderato
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://52fe12b33f114b60bbe6a4ef945895b4.elf.site/';
+        iframe.style.width = '1200px'; // Regola la larghezza dell'iframe
+        iframe.style.height = '800px'; // Regola l'altezza dell'iframe
+        iframe.style.border = 'none';
+
+        // Apri l'iframe con Lity
+        lity(iframe).open();
+
+        // Aggiorna la classe dei pulsanti nel menu
+        document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('#menu button:nth-child(3)').classList.add('active');
+    }
     
           
             
@@ -582,6 +590,101 @@
              
              
           <link rel="stylesheet" href="https://brymeteo.github.io/player/decoder/style-film-ondemand.css" data-n-g="">
+
+
+
+
+
+
+<div style="/* background-image: url('https://i.ibb.co/phtc2bb/television-background.png'); */background-size: cover;/* padding: 20px; */border-radius: 15px;color: white;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);position: relative;">
+                    <h2 style="font-size: 28px; margin-bottom: 20px;">App</h2>
+                    <div style="font-size: 16px; text-align: left;">
+                                <img src="https://i.ibb.co/Bc4CfGZ/GGG1.png" alt="Logo" style="position: absolute;top: 3%;right: 50px;transform: translateY(-50%);height: 50px;width: auto;">
+                        <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
+                    </div>
+                  
+                    
+             
+                    
+                   
+    <section class="cp_tile-grid">
+    <div class="cp_tile-grid__items">
+        <a class="cp_link" tabindex="0" href="https://brymeteo.github.io/tv/youtube.html" data-lity>
+            <article class="cp_tile cp_tile--grid-standard" aria-label="YouTube è una piattaforma di contenuti multimediali.">
+                <div class="cp_tile__body-wrapper">
+                    <picture class="cp_picture">
+                        <img alt="" class="cp_picture__img" src="https://www.smartiani.com/wp-content/uploads/2022/08/diventare-famoso-su-youtube_9n8s.jpg">
+                    </picture>
+                    <div class="cp_tile__body cp_tile__body--without-progress cp_tile__body--without-title-art" aria-hidden="true">
+                        <div class="cp_tile__overlay">
+                            <h2 class="cp_tile__title-text cp_tile__title-text--body">Un gioco da tavolo misterioso porta due giovani fratelli a viaggiare nello spazio e a vivere una serie di avventure emozionanti.</h2>
+                            <p class="cp_tile__info cp_tile__info--body">
+                                <strong class="content-info cp_tile__info--body__content-info">YouTube</strong>
+                                <span class="description cp_tile__info--body__description">
+                                    <span class="separator cp_tile__info--body__separator"> • </span>YouTube è una piattaforma di contenuti multimediali.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <footer class="cp_tile__footer" aria-hidden="true">
+                        <h2 class="cp_tile__title-text cp_tile__title-text--footer">Un gioco da tavolo misterioso porta due giovani fratelli a viaggiare nello spazio e a vivere una serie di avventure emozionanti.</h2>
+                        <p class="cp_tile__info cp_tile__info--footer">
+                            <strong class="content-info cp_tile__info--footer__content-info">YouTube</strong>
+                            <span class="description cp_tile__info--footer__description">
+                                <span class="separator cp_tile__info--footer__separator"> • </span>YouTube è una piattaforma di contenuti multimediali.
+                            </span>
+                        </p>
+                    </footer>
+                </div>
+            </article>
+        </a>
+
+
+
+
+
+
+        <a class="cp_link" tabindex="0" href="https://www.meteoblue.com/en/weather/meteotv/show?slide=today&code=48a370" data-lity>
+            <article class="cp_tile cp_tile--grid-standard" aria-label="Le previsioni meteo per oggi, domani e i prossimi giorni.">
+                <div class="cp_tile__body-wrapper">
+                    <picture class="cp_picture">
+                        <img alt="" class="cp_picture__img" src="https://www.meteoeradar.it/assets/logos/preview-teaser/it-IT_logo-isobars_16x9.png">
+                    </picture>
+                    <div class="cp_tile__body cp_tile__body--without-progress cp_tile__body--without-title-art" aria-hidden="true">
+                        <div class="cp_tile__overlay">
+                            <h2 class="cp_tile__title-text cp_tile__title-text--body">Le previsioni meteo per oggi, domani e i prossimi giorni.</h2>
+                            <p class="cp_tile__info cp_tile__info--body">
+                                <strong class="content-info cp_tile__info--body__content-info">Previsioni Meteo</strong>
+                                <span class="description cp_tile__info--body__description">
+                                    <span class="separator cp_tile__info--body__separator"> • </span>Le previsioni meteo per oggi, domani e i prossimi giorni.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <footer class="cp_tile__footer" aria-hidden="true">
+                        <h2 class="cp_tile__title-text cp_tile__title-text--footer">Le previsioni meteo per oggi, domani e i prossimi giorni.</h2>
+                        <p class="cp_tile__info cp_tile__info--footer">
+                            <strong class="content-info cp_tile__info--footer__content-info">Previsioni Meteo</strong>
+                            <span class="description cp_tile__info--footer__description">
+                                <span class="separator cp_tile__info--footer__separator"> • </span>Le previsioni meteo per oggi, domani e i prossimi giorni.
+                            </span>
+                        </p>
+                    </footer>
+                </div>
+            </article>
+        </a>
+
+
+
+
+
+
+
+ </div>
+</section>
+
+
+
 
 
 
@@ -994,7 +1097,7 @@
             var settingsContent = "";
             settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
             settingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-            settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=1&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            settingsContent += "<iframe src='https://brymeteo.github.io/player/Canali/Christmas%20Cinema%20HD.html' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
             settingsContent += "</div>";
             settingsContent += "<img src='https://i.ibb.co/PDx5s7R/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
             settingsContent += "</div>";
