@@ -330,7 +330,7 @@
            
            
            <button onclick="showNewContent()" style="position: relative;">
-        <img src="https://i.ibb.co/s3SQYxX/calendar-clock-icon-34472.png" alt="Logo Nuovo Contenuto" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">In Programma</div>
+        <img src="https://i.ibb.co/s3SQYxX/calendar-clock-icon-34472.png" alt="Logo Nuovo Contenuto" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">In Programma&nbsp&nbsp</div>
     </button>
     
            
@@ -340,17 +340,17 @@
            
          
              <button onclick="showGuide()" style="position: relative;">
-        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_movie_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Programmazione</div></button>
+        <img src="https://i.ibb.co/h1BKy8s/3721679-youtube-108064.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">YouTube&nbsp&nbsp</div></button>
            
            
             
             
          <button onclick="showInfo()" style="position: relative;">
-        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_accesstime_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Guida Tv oraria</div></button>
+        <img src="https://i.ibb.co/6N3WvHW/if-weather-2-2682849-90781.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Previsioni Meteo&nbsp&nbsp</div></button>
             
             
              <button onclick="showSettings()" style="position: relative;">
-        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_canali_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Catalogo Film</div></button>
+        <img src="https://www.superguidatv.it/wp-content/themes/SGTV-Newspaper/img/ic_movie_56px.png" alt="Logo Impostazioni" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Catalogo Film&nbsp&nbsp</div></button>
             
             
             
@@ -404,7 +404,7 @@
     </button>
         
         <button onclick="showInfoAndSubscription()" style="position: relative;">
-        <img src="https://i.ibb.co/8KGFy6k/info-15260.png" alt="Logo Info e Abbonamento" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Info e Abbonamento&nbsp</div>
+        <img src="https://i.ibb.co/8KGFy6k/info-15260.png" alt="Logo Info e Abbonamento" style="height: 20px; margin-right: 5px;">&nbsp<div style="text-align: center;">Info e Abbonamento&nbsp&nbsp</div>
     </button>
     
         
@@ -517,7 +517,7 @@
       function showGuide() {
         // Crea un iframe con il link desiderato
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://34de66bf98e04413a3df48c4ec39d170.elf.site';
+        iframe.src = 'https://brymeteo.github.io/tv/youtube.html';
         iframe.style.width = '1200px'; // Regola la larghezza dell'iframe
         iframe.style.height = '800px'; // Regola l'altezza dell'iframe
         iframe.style.border = 'none';
@@ -535,9 +535,9 @@
            function showInfo() {
         // Crea un iframe con il link desiderato
         var iframe = document.createElement('iframe');
-        iframe.src = 'https://52fe12b33f114b60bbe6a4ef945895b4.elf.site/';
+        iframe.src = 'https://www.meteoblue.com/en/weather/meteotv/show?slide=today&code=48a370';
         iframe.style.width = '1200px'; // Regola la larghezza dell'iframe
-        iframe.style.height = '800px'; // Regola l'altezza dell'iframe
+        iframe.style.height = '700px'; // Regola l'altezza dell'iframe
         iframe.style.border = 'none';
 
         // Apri l'iframe con Lity
@@ -1111,7 +1111,7 @@
         var settingsContent = "";
         settingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
         settingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-        settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/0bbde2e8e05f3eab04bd4309ae7002df?autoplay=0&volume=1&controls=1&title=1&share=0&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+        settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/0bbde2e8e05f3eab04bd4309ae7002df?autoplay=0&volume=1&controls=1&title=1&share=0&open_playlist=1&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
         settingsContent += "</div>";
         settingsContent += "<img src='https://i.ibb.co/1RsxgLB/GGG-1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>";
         settingsContent += "<p style='position: absolute; bottom: 7px; left: 200px; color: white; margin-bottom: 0;'>&nbsp&nbspI contenuti on-demand possono essere fruibili per un periodo di un mese, a seconda dell'abbonamento.</p>"; // Modificato il margine inferiore
@@ -1138,6 +1138,7 @@
             settingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=0&volume=1&controls=1&title=1&share=1&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
             settingsContent += "</div>";
             settingsContent += "<img src='https://i.ibb.co/PDx5s7R/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            settingsContent += "<a href='#' data-lity target='_blank'><img src='https://i.ibb.co/1M84PQn/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 18%; width: 190px; height: 40px;'>";
             settingsContent += "</div>";
             document.getElementById('content').innerHTML = settingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
@@ -1150,15 +1151,16 @@
     
     
     
-    <script>
+    
+      <script>
         function openAltSettings() {
             var altSettingsContent = "";
             altSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
             altSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-            altSettingsContent += "<iframe src='https://brymeteo.github.io/player/Canali/Cinemax%202%20HD.html' style='position: absolute; top: 0; left: 0; width: 100%; height: 115%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            altSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=0&volume=1&controls=1&title=1&share=1&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
             altSettingsContent += "</div>";
-            altSettingsContent += ""; // Modifica le dimensioni e la posizione del logo
-            
+            altSettingsContent += "<img src='https://i.ibb.co/3mkC7VL/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            altSettingsContent += "<a href='#' data-lity target='_blank'><img src='https://i.ibb.co/1M84PQn/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 18%; width: 190px; height: 40px;'>";
             altSettingsContent += "</div>";
             document.getElementById('content').innerHTML = altSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
@@ -1170,14 +1172,21 @@
     
     
     
-    <script>
+    
+    
+    
+    
+    
+    
+       <script>
         function openYetAnotherSettings() {
             var yetAnotherSettingsContent = "";
-           yetAnotherSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            yetAnotherSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
             yetAnotherSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-            yetAnotherSettingsContent += "<iframe src='https://brymeteo.github.io/player/Canali/Geo%20HD.html' style='position: absolute; top: 0; left: 0; width: 100%; height: 115%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
-              yetAnotherSettingsContent += "</div>";
-            yetAnotherSettingsContent += ""; // Modifica le dimensioni e la posizione del logo
+            yetAnotherSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=0&volume=1&controls=1&title=1&share=1&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            yetAnotherSettingsContent += "</div>";
+            yetAnotherSettingsContent += "<img src='https://i.ibb.co/Xx5Qmjw/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            yetAnotherSettingsContent += "<a href='#' data-lity target='_blank'><img src='https://i.ibb.co/1M84PQn/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 18%; width: 190px; height: 40px;'>";
             yetAnotherSettingsContent += "</div>";
             document.getElementById('content').innerHTML = yetAnotherSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
@@ -1187,20 +1196,43 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
     <script>
         function openMoreSettings() {
             var moreSettingsContent = "";
             moreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
             moreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-            moreSettingsContent += "<iframe src='https://brymeteo.github.io/player/Canali/Tre%20HD.html' style='position: absolute; top: 0; left: 0; width: 100%; height: 115%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
-               moreSettingsContent += "</div>";
-            moreSettingsContent += ""; // Modifica le dimensioni e la posizione del logo
+            moreSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=0&volume=1&controls=1&title=1&share=1&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            moreSettingsContent += "</div>";
+            moreSettingsContent += "<img src='https://i.ibb.co/1L8fMN9/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            moreSettingsContent += "<a href='#' data-lity target='_blank'><img src='https://i.ibb.co/1M84PQn/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 18%; width: 190px; height: 40px;'>";
             moreSettingsContent += "</div>";
             document.getElementById('content').innerHTML = moreSettingsContent;
             document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
             document.querySelector('#menu button:nth-child(9)').classList.add('active'); // Modificato l'indice del pulsante
         }
     </script>
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
     
     
     
@@ -1226,20 +1258,38 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
     <script>
-    function openYetEvenMoreSettings() {
-        var yetEvenMoreSettingsContent = "";
-        yetEvenMoreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
-        yetEvenMoreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
-        yetEvenMoreSettingsContent += "<iframe src='https://brymeteo.github.io/player/Canali/Vox%20HD.html' style='position: absolute; top: 0; left: 0; width: 100%; height: 115%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
-         yetEvenMoreSettingsContent += "</div>";
-        yetEvenMoreSettingsContent += ""; // Modifica le dimensioni e la posizione del logo
-        yetEvenMoreSettingsContent += "</div>";
-        document.getElementById('content').innerHTML = yetEvenMoreSettingsContent;
-        document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
-        document.querySelector('#menu button:nth-child(11)').classList.add('active'); // Modificato l'indice del pulsante
-    }
-</script>
+        function openYetEvenMoreSettings() {
+            var yetEvenMoreSettingsContent = "";
+            yetEvenMoreSettingsContent += "<div style='position: relative; padding-bottom: 56.25%; height: 0;'>";
+            yetEvenMoreSettingsContent += "<div style='position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 60px);'>";
+            yetEvenMoreSettingsContent += "<iframe src='https://player.viloud.tv/embed/channel/e7aa6c6a918b139f76d207ee0d428005?autoplay=0&volume=1&controls=1&title=1&share=1&open_playlist=0&random=0' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%;' frameborder='0' allow='autoplay' allowfullscreen></iframe>";
+            yetEvenMoreSettingsContent += "</div>";
+            yetEvenMoreSettingsContent += "<img src='https://i.ibb.co/BtKcGQZ/GGG1.png' alt='Logo' style='position: absolute; bottom: 0; left: 0; width: 190px; height: 40px;'>"; // Modifica le dimensioni e la posizione del logo
+            yetEvenMoreSettingsContent += "<a href='#' data-lity target='_blank'><img src='https://i.ibb.co/1M84PQn/GGG.png' alt='Logo' style='position: absolute; bottom: 0; left: 18%; width: 190px; height: 40px;'>";
+            yetEvenMoreSettingsContent += "</div>";
+            document.getElementById('content').innerHTML = yetEvenMoreSettingsContent;
+            document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('#menu button:nth-child(11)').classList.add('active'); // Modificato l'indice del pulsante
+        }
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     
     
@@ -1257,7 +1307,7 @@
                         <p><strong>ID Utente:</strong> UTENTE123</p>
                         <p><strong>Nome Utente:</strong> Bryan</p>
                         <p><strong>Tipo di Abbonamento:</strong> Premium</p>
-                        <p><strong>Data di Scadenza:</strong> 10/01/2024</p>
+                        <p><strong>Data di Scadenza:</strong> 10/03/2024</p>
                         <p><strong>ID Personale:</strong> XYZ567</p>
                         <p><strong>Dettagli Contrattuali:</strong> Contratto XYZ12345</p>
                         <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
