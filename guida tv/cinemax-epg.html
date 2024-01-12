@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida TV</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #041530;
+            color: #fff;
+        }
+
+        #tv-guide {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: #061F40;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .tv-card {
+            border-bottom: 1px solid #061F40;
+            padding: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tv-card img {
+            max-width: 140px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .background-bar {
+            height: 100%;
+            background-color: rgba(221, 221, 221, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: width 1s linear;
+            background-color: #ddd;
+        }
+
+        .program-details {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        h3, p {
+            margin: 0;
+        }
+
+        .date-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .date-selector button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logo {
+            max-width: 20px;
+            margin-top: 20px;
+        }
+
+        .in-onda {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #e74c3c; /* Sfondo rosso */
+            color: #fff; /* Testo bianco */
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="tv-guide">
+        <div class="date-selector">
+            <button onclick="showGuide('today')">Oggi</button>
+            <button onclick="showGuide('tomorrow')">Domani</button>
+            <button onclick="showGuide('dayAfterTomorrow')">Dopodomani</button>
+        </div>
+        <!-- Content will be dynamically added here using JavaScript -->
+    </div>
+
+    <script>
+        var tvData = [
+            { title: 'Retribution', description: 'Tutte le strade portano alla verità.', genre: 'Thriller', image: 'https://www.themoviedb.org/t/p/w1280/oUmmY7QWWn7OhKlcPOnirHJpP1F.jpg', start: '2024-01-13T00:00', end: '2024-01-13T02:00' },
+            { title: 'Mamma, ho perso laereo', description: 'Una commedia divertente.', genre: 'Commedia', image: 'https://www.themoviedb.org/t/p/w1280/6XG37rotwNtaQ5sKBRFZILqIri0.jpg', start: '2024-01-13T02:00', end: '2024-01-13T03:00' },
+        ];
+
+        function generateTVGuide(selectedDate) {
+            var tvGuide = document.getElementById('tv-guide');
+            tvGuide.innerHTML = '';  // Pulisce il contenuto precedente
+
+            var today = new Date();
+            var tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            var dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            var selectedDateString = '';
+            var selectedDateObj;
+            switch (selectedDate) {
+                case 'today':
+                    selectedDateString = formatDate(today);
+                    selectedDateObj = today;
+                    break;
+                case 'tomorrow':
+                    selectedDateString = formatDate(tomorrow);
+                    selectedDateObj = tomorrow;
+                    break;
+                case 'dayAfterTomorrow':
+                    selectedDateString = formatDate(dayAfterTomorrow);
+                    selectedDateObj = dayAfterTomorrow;
+                    break;
+            }
+
+            var dateElement = document.createElement('h2');
+            dateElement.textContent = 'Guida TV ' + selectedDateString;
+            tvGuide.appendChild(dateElement);
+
+            tvData.forEach(function(program) {
+                var card = document.createElement('div');
+                card.className = 'tv-card';
+
+                var img = document.createElement('img');
+                img.src = program.image;
+                card.appendChild(img);
+
+                var details = document.createElement('div');
+                details.className = 'program-details';
+
+                var inOndaText = document.createElement('div');
+                inOndaText.className = 'in-onda';
+                inOndaText.textContent = 'In onda';
+
+                if (isProgramCurrentlyOnAir(program)) {
+                    card.appendChild(inOndaText);
+                }
+
+                var title = document.createElement('h3');
+                title.textContent = program.title;
+                details.appendChild(title);
+
+                var description = document.createElement('p');
+                description.textContent = program.description;
+                details.appendChild(description);
+
+                var genre = document.createElement('p');
+                genre.textContent = 'Genere: ' + program.genre;
+                details.appendChild(genre);
+
+                var time = document.createElement('p');
+                time.textContent = program.start.split('T')[1] + ' - ' + program.end.split('T')[1];
+                details.appendChild(time);
+
+                var startLogo = document.createElement('img');
+                startLogo.src = 'https://i.ibb.co/f9mvCZT/GGG1.png';
+                startLogo.className = 'logo';
+                startLogo.style.maxWidth = '60px';
+                details.appendChild(startLogo);
+
+                if (new Date(program.end) < selectedDateObj) {
+                    card.style.display = 'none';
+                }
+
+                var progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+
+                var backgroundBar = document.createElement('div');
+                backgroundBar.className = 'background-bar';
+                progressBar.appendChild(backgroundBar);
+
+                var progressFill = document.createElement('div');
+                progressFill.className = 'progress-fill';
+                backgroundBar.appendChild(progressFill);
+
+                card.appendChild(progressBar);
+                card.appendChild(details);
+
+                tvGuide.appendChild(card);
+            });
+
+            setInterval(function () {
+                updateProgressBar(selectedDateObj);
+            }, 1000);
+        }
+
+        function updateProgressBar(selectedDate) {
+            var now = new Date();
+
+            tvData.forEach(function(program, index) {
+                var start = new Date(program.start);
+                var end = new Date(program.end);
+
+                if (end < now && isSameDay(end, selectedDate)) {
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    card.style.display = 'none';
+                } else if (start <= now && end >= now && isSameDay(end, selectedDate)) {
+                    var progressPercentage = ((now - start) / (end - start)) * 100;
+
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    var progressBar = card.querySelector('.progress-fill');
+                    progressBar.style.width = progressPercentage + '%';
+                } else {
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    var progressBar = card.querySelector('.progress-fill');
+                    progressBar.style.width = '0%';
+                }
+            });
+        }
+
+        function formatDate(date) {
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('it-IT', options);
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate();
+        }
+
+        function isProgramCurrentlyOnAir(program) {
+            var now = new Date();
+            var start = new Date(program.start);
+            var end = new Date(program.end);
+
+            return start <= now && end >= now;
+        }
+
+        function showGuide(selectedDate) {
+            generateTVGuide(selectedDate);
+        }
+
+        generateTVGuide('today');
+    </script>
+</body>
+</html>
