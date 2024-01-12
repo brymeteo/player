@@ -83,7 +83,7 @@
 
         #interactive-image {
             max-width: 20%;
-            top: 89%;
+            top: 87%;
             width: auto;
             height: auto;
             cursor: pointer;
@@ -98,7 +98,7 @@
 <body>
     <div id="video-container">
         <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" playsinline>
-            <source id="video-source" src="https://live02-seg.msf.cdn.mediaset.net/live/ch-i1/i1-clr.isml/index.m3u8"
+            <source id="video-source" src="https://app.viloud.tv/hls/channel/sep/308dce3481dec72f6643d0859f2f9f1a/high.m3u8"
                 type="application/x-mpegURL">
             <p class="vjs-no-js">Per vedere questo video, abilita JavaScript e considera l'aggiornamento a un browser web che
                 supporti HTML5 video</p>
@@ -144,14 +144,11 @@
             var interactiveImage = document.getElementById('interactive-image');
             var interactionTimeout;
 
-            
+            myPlayer.el().appendChild(logoTopLeft);
             myPlayer.el().appendChild(logoBottomRight);
             myPlayer.el().appendChild(secondLogoTopLeft);
-            myPlayer.el().appendChild(interactiveImage); // Cambiato da InteractiveImage a interactiveImage
             newLogos.forEach(function (newLogo) {
                 myPlayer.el().appendChild(newLogo);
-                
-                
             });
 
             function showSecondLogo() {
