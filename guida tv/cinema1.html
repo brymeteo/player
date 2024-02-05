@@ -82,11 +82,10 @@
         }
 
         #interactive-image {
-            max-width: 40%;
-            top: 58%;
+            max-width: 20%;
+            top: 87%;
             width: auto;
             height: auto;
-            opacity: 80%;
             cursor: pointer;
             z-index: 1000;
             display: none;
@@ -99,7 +98,7 @@
 <body>
     <div id="video-container">
         <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" playsinline>
-            <source id="video-source" src="https://ms-017.host-cdn.net/hls/llzeos5hqehnmttc2r7mpn6xrscey42vqrvc4hxdzp5firhslpmgppsxjghq/index-v1-a1.m3u8"
+            <source id="video-source" src="https://app.viloud.tv/hls/channel/sep/4feb16694749e13acaae724faa8d8009/high.m3u8"
                 type="application/x-mpegURL">
             <p class="vjs-no-js">Per vedere questo video, abilita JavaScript e considera l'aggiornamento a un browser web che
                 supporti HTML5 video</p>
@@ -125,7 +124,7 @@
 
     <!-- Immagine interattiva fuori da #video-container -->
     <img id="interactive-image"
-        src="https://i.ibb.co/NLy4spf/GUIDA.png"
+        src="https://i.ibb.co/1M84PQn/GGG.png"
         alt="Interactive Image"
         data-lity
         data-lity-target="https://brymeteo.github.io/player/guida%20tv/cinemax-epg.html">
@@ -236,7 +235,7 @@
                 clearTimeout(interactionTimeout);
                 interactionTimeout = setTimeout(function () {
                     interactiveImage.style.display = 'none';
-                }, 10000);  // 20 secondi
+                }, 20000);  // 20 secondi
             }
 
             document.addEventListener('mousemove', showImageOnMousemove);
