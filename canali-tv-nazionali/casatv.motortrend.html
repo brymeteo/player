@@ -1,0 +1,71 @@
+<head>
+   <title>DIRETTA TV</title>
+   <meta charset="UTF-8">
+   <!-- Player -->
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+   <!-- Video resolution switcher -->
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+ </head>
+ 
+  
+   <style>
+   .player-poster[data-poster] .play-wrapper[data-poster] {
+       width: 100%;
+       height: 9%;
+       margin: 0 auto;
+       opacity: .75;
+       transition: opacity .1s ease;
+   }
+   
+   
+   
+   [data-player] div {
+       display: block;
+      
+      
+      [data-watermark-top-right] {
+       top: 88%;
+       right: 77px;
+       width: 32%;
+       max-width: 15%;
+       opacity: 70%;
+   }
+         
+   }
+   
+   </style>
+ 
+ 
+ 
+ 
+ 
+ <body>
+   <div id="player"></div>
+   <script>
+     var player = new Clappr.Player({
+       source: "https://amg16146-wbdi-amg16146c10-samsung-it-1843.playouts.now.amagi.tv/playlist/amg16146-warnerbrosdiscoveryitalia-motortrend-samsungit/playlist.m3u8",
+       parentId: "#player",
+       width: '100%',
+         height: '100vh',
+       plugins: {
+         core: [LevelSelector]
+       },
+       levelSelectorConfig: {
+         //Optional : custom labels
+         title: 'QUALITÀ VOX REPLAY',
+         labels: {
+           0: 'Molto Bassa 360p',
+           1: 'Bassa 360p ',
+           2: 'Media 480p ',
+           3: 'Standard 520p',
+           4: 'Medio Alta 720p',
+           5: 'Alta 720p',
+           6: 'Molto Alta 1080p',
+           7: 'Super Qualità 1080p '
+         },
+       },
+     });
+   </script>
+ </body>
+ 
+ 
