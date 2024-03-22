@@ -1,0 +1,12 @@
+#EXTM3U
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=NO,FORCED=NO,URI="subtitle/en/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel",LANGUAGE="en"
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=997452,SUBTITLES="subs"
+997452/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1539795,SUBTITLES="subs"
+1539795/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2142297,SUBTITLES="subs"
+2142297/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3063648,SUBTITLES="subs"
+3063648/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=572723,SUBTITLES="subs"
+572723/playlist.m3u8?terminate=false&sid=ROKUCHANNEL-091d5cb9-537f-4f81-8ae5-f3036bf83ea0&deviceDNT=1&advertisingId=channel&deviceModel=web&deviceVersion=1.0&embedPartner=rokuChannel&serverSideAds=true&appName=rokuchannel&deviceId=channel&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel
