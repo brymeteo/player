@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOX HD</title>
+    <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black; /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        #logo-top-left,
+        #logo-bottom-right,
+        #second-logo-top-left {
+            position: absolute;
+            transition: transform 0.5s;
+        }
+
+        #logo-top-left {
+            position: absolute;
+            top: 5%;
+            right: 77%;
+            max-width: 20%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+            opacity: 0; /* Inizialmente nascosto */
+        }
+
+        #logo-bottom-right {
+            position: absolute;
+            top: 5%;
+            right: 2%;
+            max-width: 10%;
+            width: auto;
+            height: auto;
+        }
+
+        #second-logo-top-left {
+            top: 2vw;
+            left: 2vw;
+            max-width: 20vw;
+            transition: opacity 1s, transform 33s;
+            opacity: 0; /* Inizialmente nascosto */
+        }
+
+        @media (max-width: 367px) {
+            #logo-top-left,
+            #logo-bottom-right,
+            #second-logo-top-left {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="my-video" class="video-js vjs-default-skin" controls preload="auto" playsinline>
+            <source id="video-source" src="https://live02-seg.msf.cdn.mediaset.net/live/ch-lb/lb-clr.isml/index.m3u8"
+                type="application/x-mpegURL">
+            <p class="vjs-no-js">Per vedere questo video, abilita JavaScript e considera l'aggiornamento a un browser web che
+                supporti HTML5 video</p>
+        </video>
+        <img id="logo-top-left"
+            src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000345-b93d5b93d8/TITOLO-9.webp?ph=7e11bb4538"
+            alt="Logo Top Left">
+        <img id="second-logo-top-left" src="" alt="">
+    </div>
+    <img id="logo-bottom-right"
+        src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000546-3da1b3da1c/vox_HD.png?ph=7e11bb4538"
+        alt="Logo uno casa tv in basso">
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myPlayer = videojs('my-video');
+            var logoTopLeft = document.getElementById('logo-top-left');
+            var logoBottomRight = document.getElementById('logo-bottom-right');
+            var secondLogoTopLeft = document.getElementById('second-logo-top-left');
+            myPlayer.el().appendChild(logoTopLeft);
+            myPlayer.el().appendChild(logoBottomRight);
+            myPlayer.el().appendChild(secondLogoTopLeft);
+
+            // Funzione per mostrare il secondo logo
+            function showSecondLogo() {
+                secondLogoTopLeft.style.opacity = '1';
+            }
+
+            // Funzione per nascondere il secondo logo
+            function hideSecondLogo() {
+                secondLogoTopLeft.style.opacity = '0';
+            }
+
+            // Funzione per controllare l'orario e mostrare/nascondere i loghi
+            function checkLogos() {
+                var now = new Date();
+                var currentHour = now.getHours();
+                var currentMinute = now.getMinutes();
+
+                // Orario di inizio per mostrare il primo logo (ad esempio, 8:00 AM)
+                var startHourLogo1 = 6;
+                var startMinuteLogo1 = 0;
+
+                // Orario di fine per nascondere il primo logo (ad esempio, 6:00 PM)
+                var endHourLogo1 = 23;
+                var endMinuteLogo1 = 0;
+
+                // Orario di inizio per mostrare il secondo logo (ad esempio, 9:00 AM)
+                var startHourLogo2 = 3;
+                var startMinuteLogo2 = 0;
+
+                // Orario di fine per nascondere il secondo logo (ad esempio, 5:00 PM)
+                var endHourLogo2 = 17;
+                var endMinuteLogo2 = 0;
+
+                var showTimeLogo1 = currentHour >= startHourLogo1 && currentMinute >= startMinuteLogo1;
+                var hideTimeLogo1 = currentHour >= endHourLogo1 && currentMinute >= endMinuteLogo1;
+
+                var showTimeLogo2 = currentHour >= startHourLogo2 && currentMinute >= startMinuteLogo2;
+                var hideTimeLogo2 = currentHour >= endHourLogo2 && currentMinute >= endMinuteLogo2;
+
+                if (showTimeLogo1 && !hideTimeLogo1) {
+                    logoTopLeft.style.opacity = '1';
+                } else {
+                    logoTopLeft.style.opacity = '0';
+                }
+
+                if (showTimeLogo2 && !hideTimeLogo2) {
+                    showSecondLogo();
+                } else {
+                    hideSecondLogo();
+                }
+            }
+
+            // Intervallo di controllo ogni (1 secondo) per i loghi
+            setInterval(checkLogos, 1000);
+        });
+    </script>
+</body>
+</html>
