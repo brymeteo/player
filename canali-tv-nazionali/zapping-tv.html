@@ -44,17 +44,19 @@
     }
 
     .controls {
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     button {
+    flex-direction: column;
+      align-items: center;
       padding: 10px 20px;
-      font-size: 18px;
+      font-size: 20px;
       background-color: transparent;
       border: 2px solid #ffffff26 ;
       color: white;
       cursor: pointer;
-      margin: 0 10px;
+    
       transition: background-color 0.3s, color 0.3s;
        box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
     background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
@@ -84,8 +86,8 @@
       </div>
     </div>
     <div class="controls">
-      <button onclick="previousChannel()">Indietro</button>
-      <button onclick="nextChannel()">Avanti</button>
+      <button onclick="previousChannel()">- Indietro</button>
+      <button onclick="nextChannel()">+ Avanti</button>
     </div>
   </div>
 
