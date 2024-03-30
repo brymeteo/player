@@ -9,32 +9,87 @@
  
   
    <style>
-   .player-poster[data-poster] .play-wrapper[data-poster] {
-       width: 100%;
-       height: 9%;
-       margin: 0 auto;
-       opacity: .75;
-       transition: opacity .1s ease;
-   }
-   
-   
-   
-   [data-player] div {
-       display: block;
-      
-      
-      [data-watermark-top-right] {
-       top: 88%;
-       right: 77px;
-       width: 32%;
-       max-width: 15%;
-       opacity: 70%;
-   }
-         
-   }
-   
-   </style>
- 
+    .player-poster[data-poster] .play-wrapper[data-poster] {
+        width: 100%;
+        height: 9%;
+        margin: 0 auto;
+        opacity: .75;
+        transition: opacity .1s ease;
+    }javascript:void(0)
+
+    [data-player] div {
+        display: block;
+    }
+
+    [data-watermark-top-right] {
+        position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            
+            width: auto;
+            height: auto;
+            
+            width: 18.5%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
+
+    #logo {
+        position: absolute;
+        top: 71%;
+        left: 21%;
+        width: 57%; /* Personalizza dimensioni */
+        height: auto; /* Personalizza dimensioni */
+        display: none;
+        opacity: 90%;
+        cursor: pointer;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+</style>
+
+
+   <style>
+        body {
+            margin: 0;
+            padding: 0;
+            
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black; /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+     
+
+    </style>
+
  
  
  
@@ -52,7 +107,7 @@
        },
        levelSelectorConfig: {
          //Optional : custom labels
-         title: 'QUALITÀ VOX REPLAY',
+         title: 'QUALITÀ VOX OS',
          labels: {
            0: 'Molto Bassa 360p',
            1: 'Bassa 360p ',
