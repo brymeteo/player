@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Zapping</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      font-family: Arial, sans-serif;
+    }
+
+    .tv-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .channel-frame {
+      width: 100vw;
+      height: 90vh;
+      overflow: hidden;
+      position: relative; /* Per consentire il posizionamento dell'icona a schermo intero */
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    .fullscreen-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: transparent;
+      border: 2px solid #ffffff26 ;
+      color: white;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: background-color 0.3s, color 0.3s;
+       box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+    background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+    
+    /* Effetto luccichio sui bordi */
+    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+      
+    }
+
+    button:hover {
+      background-color: ;
+      color: rgba(255 255 255 / 63%);
+      
+       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="tv-container">
+    <div class="channel-frame">
+      <iframe id="channel" src="https://brymeteo.github.io/player/canali-tv-nazionali/casatv.rete4.html" frameborder="0"></iframe>
+      <div class="fullscreen-icon" onclick="toggleFullscreen()">
+        <i class="fas fa-expand"></i>
+      </div>
+    </div>
+    <div class="controls">
+      <button onclick="previousChannel()">Indietro</button>
+      <button onclick="nextChannel()">Avanti</button>
+    </div>
+  </div>
+
+  <script>
+    const channels = [
+      "https://brymeteo.github.io/player/canali-tv-nazionali/casatv.rete4.html",
+      "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=2606803&output=16",
+      "URL_CANALE_3",
+      // Aggiungi gli URL dei canali desiderati
+    ];
+    let currentChannelIndex = 0;
+
+    function showChannel(url) {
+      const iframe = document.getElementById("channel");
+      iframe.src = url;
+    }
+
+    function nextChannel() {
+      currentChannelIndex = (currentChannelIndex + 1) % channels.length;
+      showChannel(channels[currentChannelIndex]);
+    }
+
+    function previousChannel() {
+      currentChannelIndex = (currentChannelIndex - 1 + channels.length) % channels.length;
+      showChannel(channels[currentChannelIndex]);
+    }
+
+    function toggleFullscreen() {
+      const iframe = document.getElementById("channel");
+
+      if (!document.fullscreenElement) {
+        if (iframe.requestFullscreen) {
+          iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) { /* Safari */
+          iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) { /* IE11 */
+          iframe.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+          document.msExitFullscreen();
+        }
+      }
+    }
+
+    // Mostra il primo canale all'avvio
+    showChannel(channels[currentChannelIndex]);
+  </script>
+</body>
+</html>
