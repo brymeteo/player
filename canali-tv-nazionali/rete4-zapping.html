@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
    <title>DIRETTA TV</title>
    <meta charset="UTF-8">
@@ -5,8 +7,6 @@
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
    <!-- Video resolution switcher -->
    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
- </head>
-   <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
   
    <style>
     .player-poster[data-poster] .play-wrapper[data-poster] {
@@ -39,9 +39,6 @@
             z-index: 1000;
     pointer-events: none;
     background: 0 0 !important;
-            
-            
-            
           }
 
     #logo {
@@ -50,103 +47,89 @@
         left: 21%;
         width: 57%; /* Personalizza dimensioni */
         height: auto; /* Personalizza dimensioni */
-        display: none;
         opacity: 90%;
         cursor: pointer;
+        display: block; /* Rendere il logo visibile immediatamente */
     }
     
-    
-    
-    
-    
-    
-    
-    
-</style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
 
+    #video-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black; /* Colore di sfondo nero per il video */
+    }
 
-   <style>
-        body {
-            margin: 0;
-            padding: 0;
-            
-        }
+    #my-video {
+        width: 100%;
+        height: 100%;
+    }
+   </style>
+</head>
 
-        #video-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black; /* Colore di sfondo nero per il video */
-        }
+<body>
+  <div id="player"></div>
+  <img id="logo" src="https://i.ibb.co/FBDM6c4/Untitledtt.png" alt="Logo" data-lity="" data-lity-target="https://brymeteo.github.io/player/guida%20tv/cinemax-epg.html">
 
-        #my-video {
-            width: 100%;
-            height: 100%;
-        }
+  <script>
+    var player = new Clappr.Player({
+      source: "https://live02-seg.msf.cdn.mediaset.net/live/ch-r4/r4-clr.isml/index.m3u8",
+      parentId: "#player",
+      width: '100%',
+      height: '100vh',
+      plugins: {
+        core: [LevelSelector]
+      },
+      levelSelectorConfig: {
+        //Optional : custom labels
+        title: 'QUALITÀ VOX REPLAY',
+        labels: {
+          0: 'Molto Bassa 360p',
+          1: 'Bassa 360p ',
+          2: 'Media 480p ',
+          3: 'Standard 520p',
+          4: 'Medio Alta 720p',
+          5: 'Alta 720p',
+          6: 'Molto Alta 1080p',
+          7: 'Super Qualità 1080p '
+        },
+      },
+    });
 
-     
+    var logo = document.getElementById("logo");
+    var timer;
 
-    </style>
+    function hideLogo() {
+      logo.style.display = "none";
+    }
 
- 
- 
- 
- 
- <body>
-   <div id="player"></div>
-   
-   <img id="logo" src="https://i.ibb.co/FBDM6c4/Untitledtt.png" alt="Logo" data-lity="" data-lity-target="https://brymeteo.github.io/player/guida%20tv/cinemax-epg.html">
-   
-   
-   
-   
-   <script>
-     var player = new Clappr.Player({
-       source: "https://live02-seg.msf.cdn.mediaset.net/live/ch-r4/r4-clr.isml/index.m3u8",
-       parentId: "#player",
-       width: '100%',
-         height: '100vh',
-       plugins: {
-         core: [LevelSelector]
-       },
-       levelSelectorConfig: {
-         //Optional : custom labels
-         title: 'QUALITÀ VOX REPLAY',
-         labels: {
-           0: 'Molto Bassa 360p',
-           1: 'Bassa 360p ',
-           2: 'Media 480p ',
-           3: 'Standard 520p',
-           4: 'Medio Alta 720p',
-           5: 'Alta 720p',
-           6: 'Molto Alta 1080p',
-           7: 'Super Qualità 1080p '
-         },
-       },
-     });
-   </script>
-   
-   
-   
-   <script>
-   var logo = document.getElementById("logo");
-var timer;
+    function resetTimer() {
+      logo.style.display = "block"; // Riappare il logo
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 10000); // Nascondi il logo dopo 10 secondi di inattività
+    }
 
-document.addEventListener("mousemove", function () {
-    logo.style.display = "block";
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        logo.style.display = "none";
-    }, 10000); // Hide logo after 10 seconds
-});
-   </script>
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+
+    resetTimer(); // Avvia il timer all'avvio della pagina
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      player.play();
+    });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
 </body>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
-
-
- 
+</html>
