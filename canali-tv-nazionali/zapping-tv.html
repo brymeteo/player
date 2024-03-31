@@ -43,12 +43,51 @@
       cursor: pointer;
     }
 
+    .search-bar {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #121D69;
+      padding: 10px;
+      border-radius: 10px;
+      opacity: 90%;
+      
+      /* Effetto luccichio sui bordi */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 8%) inset; /* Luce riflessa sotto */
+    }
+
+    .search-bar input[type="text"] {
+      padding: 8px;
+      font-size: 16px;
+      width: 150px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      background-color: #121D69;
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 8%) inset; /* Luce riflessa sotto */
+    }
+
+    .search-bar input[type="submit"] {
+      padding: 8px 15px;
+      font-size: 16px;
+      background-color: #121D69;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 20%) inset; /* Luce riflessa sotto */
+    }
+
     .controls {
       margin-top: 10px;
     }
 
     button {
-    flex-direction: column;
+      flex-direction: column;
       align-items: center;
       padding: 10px 20px;
       font-size: 20px;
@@ -56,23 +95,19 @@
       border: 2px solid #ffffff26 ;
       color: white;
       cursor: pointer;
-    
       transition: background-color 0.3s, color 0.3s;
-       box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
-    background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
-    
-    /* Effetto luccichio sui bordi */
-    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
-                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
-      
+      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+      background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+      /* Effetto luccichio sui bordi */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
     }
 
     button:hover {
       background-color: ;
       color: rgba(255 255 255 / 63%);
-      
-       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
-                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
     }
 
   </style>
@@ -85,6 +120,12 @@
         <i class="fas fa-expand"></i>
       </div>
     </div>
+    <div class="search-bar">
+      <form onsubmit="return submitNumber()">
+        <input type="text" id="channelNumber" placeholder="Numero canale">
+        <input type="submit" value="Cerca">
+      </form>
+    </div>
     <div class="controls">
       <button onclick="previousChannel()">- Indietro</button>
       <button onclick="nextChannel()">+ Avanti</button>
@@ -92,12 +133,11 @@
   </div>
 
   <script>
-    const channels = [
-      "https://brymeteo.github.io/player/canali-tv-nazionali/rete4-zapping.html",
-      "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=2606803&output=16",
-      "URL_CANALE_3",
-      // Aggiungi gli URL dei canali desiderati
-    ];
+    const channelMappings = {
+      "100": "https://brymeteo.github.io/player/canali-tv-nazionali/rete4-zapping.html",
+      "200": "https://mediapolis.rai.it/relinker/relinkerServlet.htm?cont=2606803&output=16",
+      // Aggiungi altri mapping di canali
+    };
     let currentChannelIndex = 0;
 
     function showChannel(url) {
@@ -106,13 +146,21 @@
     }
 
     function nextChannel() {
-      currentChannelIndex = (currentChannelIndex + 1) % channels.length;
-      showChannel(channels[currentChannelIndex]);
+      currentChannelIndex = (currentChannelIndex + 1) % Object.keys(channelMappings).length;
+      showChannel(Object.values(channelMappings)[currentChannelIndex]);
     }
 
     function previousChannel() {
-      currentChannelIndex = (currentChannelIndex - 1 + channels.length) % channels.length;
-      showChannel(channels[currentChannelIndex]);
+      currentChannelIndex = (currentChannelIndex - 1 + Object.keys(channelMappings).length) % Object.keys(channelMappings).length;
+      showChannel(Object.values(channelMappings)[currentChannelIndex]);
+    }
+
+    function submitNumber() {
+      const channelNumber = document.getElementById("channelNumber").value.trim();
+      if (channelMappings[channelNumber]) {
+        showChannel(channelMappings[channelNumber]);
+      }
+      return false; // Per evitare il ricaricamento della pagina
     }
 
     function toggleFullscreen() {
@@ -138,7 +186,7 @@
     }
 
     // Mostra il primo canale all'avvio
-    showChannel(channels[currentChannelIndex]);
+    showChannel(Object.values(channelMappings)[currentChannelIndex]);
   </script>
 </body>
 </html>
