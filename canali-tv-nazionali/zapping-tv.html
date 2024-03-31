@@ -20,13 +20,14 @@
       justify-content: center;
       height: 100vh;
       color: white;
+      position: relative; /* Aggiunto */
     }
 
     .channel-frame {
       width: 100vw;
       height: 90vh;
       overflow: hidden;
-      position: relative; /* Per consentire il posizionamento dell'icona a schermo intero */
+      position: relative;
     }
 
     iframe {
@@ -52,6 +53,8 @@
       padding: 10px;
       border-radius: 10px;
       opacity: 90%;
+      display: none;
+      z-index: 999; /* Aggiunto */
       
       /* Effetto luccichio sui bordi */
       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
@@ -113,9 +116,9 @@
   </style>
 </head>
 <body>
-  <div class="tv-container">
+  <div class="tv-container" onmouseenter="showSearchBar()" onmouseleave="hideSearchBar()">
     <div class="channel-frame">
-      <iframe id="channel" src="https://brymeteo.github.io/player/canali-tv-nazionali/casatv.rete4.html" frameborder="0"></iframe>
+      <iframe id="channel" src="https://brymeteo.github.io/player/canali-tv-nazionali/rete4-zapping.html" frameborder="0"></iframe>
       <div class="fullscreen-icon" onclick="toggleFullscreen()">
         <i class="fas fa-expand"></i>
       </div>
@@ -139,6 +142,18 @@
       // Aggiungi altri mapping di canali
     };
     let currentChannelIndex = 0;
+    let searchBarTimeout;
+
+    function showSearchBar() {
+      clearTimeout(searchBarTimeout);
+      document.querySelector('.search-bar').style.display = 'block';
+    }
+
+    function hideSearchBar() {
+      searchBarTimeout = setTimeout(function() {
+        document.querySelector('.search-bar').style.display = 'none';
+      }, 10000); // Nasconde la barra dopo 10 secondi
+    }
 
     function showChannel(url) {
       const iframe = document.getElementById("channel");
@@ -185,8 +200,35 @@
       }
     }
 
-    // Mostra il primo canale all'avvio
-    showChannel(Object.values(channelMappings)[currentChannelIndex]);
+    // Gestione degli eventi della tastiera per il cambio canale
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'ArrowRight') {
+        nextChannel();
+      } else if (event.key === 'ArrowLeft') {
+        previousChannel();
+      }
+    });
+
+    // Gestione degli eventi per i pulsanti del telecomando
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'y') { // Simulazione del pulsante giallo
+        changeChannelYellow();
+      } else if (event.key === 'g') { // Simulazione del pulsante verde
+        changeChannelGreen();
+      }
+    });
+
+    function changeChannelYellow() {
+      // Qui inserisci il codice per il cambiamento del canale quando viene premuto il pulsante giallo del telecomando
+      // Per esempio:
+      nextChannel();
+    }
+
+    function changeChannelGreen() {
+      // Qui inserisci il codice per il cambiamento del canale quando viene premuto il pulsante verde del telecomando
+      // Per esempio:
+      previousChannel();
+    }
   </script>
 </body>
 </html>
