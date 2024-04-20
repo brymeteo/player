@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida TV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('#');
+            color: #fff;
+        }
+
+        #tv-guide {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            
+        }
+
+        .tv-card {
+            padding: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(134, 95, 172,0.3);
+            background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+            background-color: rgba(0, 0, 0, 0.29); /* Sfondo trasparente */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Ombra leggera */
+            
+        }
+
+        .tv-card img {
+            max-width: 140px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .favorite-icon,
+        .reminder-icon {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .background-bar {
+            height: 100%;
+            background-color: rgba(255 255 255 / 11%);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: width 1s linear;
+            background-color: #ddd;
+        }
+
+        .program-details {
+            flex: 1;
+            margin-right: 10px;
+            color: #b3b3b3;
+        }
+
+        h3, p {
+            margin: 8px;
+        }
+
+        .date-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .date-selector button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logo {
+            max-width: 20px;
+            margin-top: -10px;
+            position: relative; /* Aggiungiamo questa proprietà */
+            left: 8px; /* Modifica questo valore per spostare il logo verso destra */
+            
+        }
+
+        .in-onda {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .time-icon {
+            color: #3498db;
+            margin-right: 5px;
+        }
+
+        .day-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3c4263;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 0;
+            left: 0%;
+            background-color: #27ae60;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+            display: none;
+        }
+
+        .tv-card:hover .coming-soon {
+            display: block;
+        }
+
+        .tv-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="tv-guide">
+        <div class="date-selector">
+            <button onclick="showGuide('today')">Oggi</button>
+            <button onclick="showGuide('tomorrow')">Domani</button>
+            <button onclick="showGuide('dayAfterTomorrow')">Dopodomani</button>
+        </div>
+        <!-- Content will be dynamically added here using JavaScript -->
+    </div>
+
+    <script>
+           var tvData = [
+          
+            { 
+                title: 'Gantz revolution', 
+                description: 'I morti sono riportati in vita da una misteriosa sfera nera che ordina loro di combattere contro strane creature per riscattare la loro libertà. Ogni partecipante può vincere la propria resurrezione o decidere di resuscitare una persona cara.', 
+                genre: '2011 ‧ Azione/Sci-fi ‧ 2h 21m', 
+                image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyBaxWXUH8T3ud7oUzYgNFhvI6fNVmEouAOYFxaBqy5ahfnYgX', 
+                start: '2024-04-20T20:10', 
+                end: '2024-04-20T22:35',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+              { 
+                title: 'La Vendetta di Viktor', 
+                description: 'Dopo aver scontato sette anni di prigione in Francia per una rapina finita male, Viktor Lambert ritorna a Mosca, determinato a scoprire i colpevoli del brutale omicidio di suo figlio Jeremy, avvenuto tre mesi prima, e proseguire nel proprio disegno di vendetta.', 
+                genre: '2014 ‧ Thriller/Azione ‧ 2h 14m', 
+                image: 'https://pad.mymovies.it/filmclub/2019/02/133/locandina.jpg', 
+                start: '2024-04-20T22:35', 
+                end: '2024-04-21T00:25',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+            
+            
+            
+                 { 
+                title: 'Cold War 2', 
+                description: 'Dopo un operazione portata a termine con successo, Sean Lau (Aaron Kwok) è stato nominato commissario di polizia. Tuttavia, per lui, le cose si mettono male quando la moglie e la figlia vengono rapite. Per salvarle dalla follia di uno psicopatico, Sean è costretto a cercare laiuto del rivale Waise Lee, poliziotto ormai ritiratosi in pensione.', 
+                genre: 'T 2016 ‧ Giallo/Azione ‧ 1h 50m', 
+                image: 'https://upload.wikimedia.org/wikipedia/en/c/cd/ColdWar2.jpg', 
+                start: '2024-04-20T00:25', 
+                end: '2024-04-21T02:25',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+            
+            
+                   { 
+                title: 'Io sono vendetta', 
+                description: 'John Travolta è protagonista di un adrenalinico action-thriller con al centro la storia di un ex agente della CIA che, dopo l assassinio della moglie, decide di farsi giustizia da solo trovandosi a fronteggiare temibili nemici, anche all interno delle alte sfere governative.', 
+                genre: 'T 2016 ‧ Azione/Giallo ‧ 1h 32m', 
+                image: 'https://pad.mymovies.it/filmclub/2016/04/291/locandina.jpg', 
+                start: '2024-04-21T20:15', 
+                end: '2024-04-21T21:50',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+            
+            
+            
+               { 
+                title: 'Una bionda tutta oro', 
+                description: 'Uscita dal carcere Karen McCoy, un abile ladra di Atlanta, cerca di ricostruirsi una vita normale. Viene invece costretta a partecipare a una rapina in una banca superprotetta.', 
+                genre: 'T 1993 ‧ Thriller/Azione ‧ 1h 46m', 
+                image: 'https://m.media-amazon.com/images/S/pv-target-images/c2147cee272f54d688e79e178dc91c8d2e7d33f3d24ab08f4221139cabdf0d0e.jpg', 
+                start: '2024-04-21T21:50', 
+                end: '2024-04-21T23:45',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+            
+            
+            
+           
+            
+            
+           
+           
+           
+           
+              
+               { 
+                title: 'Red Surf - Giovani iene', 
+                description: 'Mark Remar e John Atilla decidono di entrare in affari con un potente spacciatore di Los Angeles, al quale forniscono grossi carichi di droga. Questo gioco si rivela rischioso per i due giovani surfisti, i quali si ritrovano in situazioni pericolose.', 
+                genre: '1990 ‧ Azione/Thriller ‧ 1h 44m', 
+                image: 'https://movieplayer.net-cdn.it/t/images/2009/08/29/la-locandina-di-giovani-iene-128919_jpg_400x0_crop_q85.jpg', 
+                start: '2024-04-21T23:45', 
+                end: '2024-04-22T01:30',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+           
+           
+           
+            
+            
+            
+            
+             { 
+                title: 'Plus One', 
+                description: 'La caduta di un meteorite causa la manifestazione di oscuri fenomeni durante una festa di liceali; i ragazzi si trovano ad affrontare esatte copie di se stessi.', 
+                genre: '2013 ‧ Sci-fi/Thriller ‧ 1h 45m', 
+                image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSfRtARmkGfXwHYffEGeLTrmyrA6_oRa1kwWr8CC2Q4ouedANvV', 
+                start: '2024-04-22T01:30', 
+                end: '2024-04-22T03:25',
+                channel: 'Bry Cinema Uno' // Aggiunta dell'informazione sul canale
+            },
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // Aggiungi altri elementi dell'array tvData con informazioni sui programmi successivi
+        ];
+
+        var favorites = []; // Array per tenere traccia dei programmi preferiti
+
+        function generateTVGuide(selectedDate) {
+            var tvGuide = document.getElementById('tv-guide');
+            tvGuide.innerHTML = '';
+
+            var today = new Date();
+            var tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            var dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            var selectedDateString = '';
+            var selectedDateObj;
+            switch (selectedDate) {
+                case 'today':
+                    selectedDateString = formatDate(today);
+                    selectedDateObj = today;
+                    break;
+                case 'tomorrow':
+                    selectedDateString = formatDate(tomorrow);
+                    selectedDateObj = tomorrow;
+                    break;
+                case 'dayAfterTomorrow':
+                    selectedDateString = formatDate(dayAfterTomorrow);
+                    selectedDateObj = dayAfterTomorrow;
+                    break;
+            }
+
+            var dateElement = document.createElement('h2');
+            dateElement.textContent = 'Programmazione ' + selectedDateString;
+            tvGuide.appendChild(dateElement);
+
+            tvData.forEach(function(program, index) {
+                var card = document.createElement('div');
+                card.className = 'tv-card';
+
+                var img = document.createElement('img');
+                img.src = program.image;
+                card.appendChild(img);
+
+                var details = document.createElement('div');
+                details.className = 'program-details';
+
+                var inOndaText = document.createElement('div');
+                inOndaText.className = 'in-onda';
+                inOndaText.textContent = 'In onda';
+
+                if (isProgramCurrentlyOnAir(program)) {
+                    card.appendChild(inOndaText);
+                }
+
+                var title = document.createElement('h3');
+                title.textContent = program.title;
+                details.appendChild(title);
+
+                var description = document.createElement('p');
+                description.textContent = program.description;
+                details.appendChild(description);
+
+                var genre = document.createElement('p');
+                genre.textContent = 'Genere: ' + program.genre;
+                details.appendChild(genre);
+
+                var time = document.createElement('p');
+                time.innerHTML = '<i class="far fa-clock time-icon"></i>' + program.start.split('T')[1] + ' - ' + program.end.split('T')[1];
+                details.appendChild(time);
+
+                var startLogo = document.createElement('img');
+                startLogo.src = 'https://i.ibb.co/HXR9p1y/suspense.png';
+                startLogo.className = 'logo';
+                startLogo.style.maxWidth = '130px';
+                details.appendChild(startLogo);
+
+                var dayIndicator = document.createElement('div');
+                dayIndicator.className = 'day-indicator';
+                dayIndicator.textContent = getDayIndicator(program, selectedDateObj);
+                card.appendChild(dayIndicator);
+
+                var comingSoon = document.createElement('div');
+                comingSoon.className = 'coming-soon';
+                comingSoon.textContent = 'A seguire';
+                card.appendChild(comingSoon);
+
+                if (isProgramComingSoon(program)) {
+                    comingSoon.style.display = 'block';
+                }
+
+                if (new Date(program.end) < selectedDateObj) {
+                    card.style.display = 'none';
+                }
+
+                var progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+
+                var backgroundBar = document.createElement('div');
+                backgroundBar.className = 'background-bar';
+                progressBar.appendChild(backgroundBar);
+
+                var progressFill = document.createElement('div');
+                progressFill.className = 'progress-fill';
+                backgroundBar.appendChild(progressFill);
+
+                card.appendChild(progressBar);
+                card.appendChild(details);
+
+                var favoriteIcon = document.createElement('div');
+                favoriteIcon.className = 'favorite-icon';
+                favoriteIcon.innerHTML = '<i class="far fa-heart"></i>';
+                favoriteIcon.addEventListener('click', function() {
+                    toggleFavorite(index);
+                });
+                card.appendChild(favoriteIcon);
+
+                var reminderIcon = document.createElement('div');
+                reminderIcon.className = 'reminder-icon';
+                reminderIcon.innerHTML = '<i class="far fa-bell"></i>';
+                reminderIcon.addEventListener('click', function() {
+                    setReminder(index);
+                });
+                card.appendChild(reminderIcon);
+
+                tvGuide.appendChild(card);
+            });
+
+            setInterval(function () {
+                updateProgressBar(selectedDateObj);
+            }, 1000);
+        }
+
+        function toggleFavorite(index) {
+            var program = tvData[index];
+            var favoriteIndex = favorites.indexOf(program);
+            if (favoriteIndex === -1) {
+                favorites.push(program);
+                alert('Programma aggiunto ai preferiti!');
+            } else {
+                favorites.splice(favoriteIndex, 1);
+                alert('Programma rimosso dai preferiti!');
+            }
+        }
+
+        function setReminder(index) {
+            var program = tvData[index];
+            var reminderTime = new Date(program.start);
+            alert('Promemoria impostato per ' + program.title + ' alle ' + reminderTime.toLocaleTimeString());
+        }
+
+        function showGuide(selectedDate) {
+            generateTVGuide(selectedDate);
+        }
+
+        function updateProgressBar(selectedDate) {
+            var now = new Date();
+
+            tvData.forEach(function(program, index) {
+                var start = new Date(program.start);
+                var end = new Date(program.end);
+
+                if (end < now && isSameDay(end, selectedDate)) {
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    card.style.display = 'none';
+                } else if (start <= now && end >= now && isSameDay(end, selectedDate)) {
+                    var progressPercentage = ((now - start) / (end - start)) * 100;
+
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    var progressBar = card.querySelector('.progress-fill');
+                    progressBar.style.width = progressPercentage + '%';
+                } else {
+                    var card = document.querySelectorAll('.tv-card')[index];
+                    var progressBar = card.querySelector('.progress-fill');
+                    progressBar.style.width = '0%';
+                }
+            });
+        }
+
+        function formatDate(date) {
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('it-IT', options);
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate();
+        }
+
+        function isProgramCurrentlyOnAir(program) {
+            var now = new Date();
+            var start = new Date(program.start);
+            var end = new Date(program.end);
+
+            return start <= now && end >= now;
+        }
+
+        function isProgramComingSoon(program) {
+            var now = new Date();
+            var start = new Date(program.start);
+            var end = new Date(program.end);
+
+            return start > now && isSameDay(start, now);
+        }
+
+        function getDayIndicator(program, selectedDate) {
+            var programDate = new Date(program.start);
+
+            if (isNaN(programDate.getTime())) {
+                return 'Data non valida';
+            }
+
+            if (isSameDay(programDate, selectedDate)) {
+                return 'In onda oggi';
+            } else {
+                var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                return 'In programmazione ' + programDate.toLocaleDateString('it-IT', options);
+            }
+        }
+
+        generateTVGuide('today');
+    </script>
+</body>
+</html>
