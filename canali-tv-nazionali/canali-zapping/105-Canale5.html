@@ -61,6 +61,20 @@
             height: 100%;
         }
     </style>
+    
+    <style>
+    .player-controls {
+        display: none !important; /* Nasconde i controlli del player */
+    }
+
+    .media-control .media-control-layer {
+        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
+    }
+
+    /* Altri stili esistenti... */
+</style>
+
+    
 </head>
 
 <body>
@@ -75,6 +89,7 @@
             parentId: "#player",
             width: '100%',
             height: '100vh',
+            controls: false, // Disabilita tutti i controlli del player
             plugins: {
                 core: [LevelSelector]
             },
