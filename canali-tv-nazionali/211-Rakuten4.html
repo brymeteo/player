@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <!-- Player -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+
+    <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            background: #171a45;
+            
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            /* Personalizza dimensioni */
+            height: auto;
+            /* Personalizza dimensioni */
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            /* Rendere il logo visibile immediatamente */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    
+    
+    
+      <style>
+    .player-controls {
+        display: none !important; /* Nasconde i controlli del player */
+    }
+
+    .media-control .media-control-layer {
+        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
+    }
+
+    /* Altri stili esistenti... */
+</style>
+    
+    
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="player" class="hidden"></div>
+    <img id="logo" src="https://i.ibb.co/bWC3dw6/Untitledtt-1.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+
+    <script>
+        var player = new Clappr.Player({
+            source: "https://rakuten-TVShows-6-eu.rakuten.wurl.tv/playlist.m3u8",
+            parentId: "#player",
+            width: '100%',
+            height: '100vh',
+            controls: false,
+            plugins: {
+                core: [LevelSelector]
+            },
+            levelSelectorConfig: {
+                //Optional : custom labels
+                title: 'QUALITÀ VOX OS',
+                labels: {
+                    0: 'Molto Bassa 360p',
+                    1: 'Bassa 360p ',
+                    2: 'Media 480p ',
+                    3: 'Standard 520p',
+                    4: 'Medio Alta 720p',
+                    5: 'Alta 720p',
+                    6: 'Molto Alta 1080p',
+                    7: 'Super Qualità 1080p '
+                },
+            },
+        });
+        
+        
+        var logo = document.getElementById("logo");
+    var timer;
+
+    function hideLogo() {
+      logo.style.display = "none";
+    }
+
+    function resetTimer() {
+      logo.style.display = "block"; // Riappare il logo
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
+    }
+
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+
+    resetTimer(); // Avvia il timer all'avvio della pagina
+        
+   
+    </script>
+
+ <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
