@@ -29,7 +29,7 @@
         
              [data-watermark-top-right] {
         position: absolute;
-            top: 7%;
+            top: 6%;
             right: 5%;
             max-width: 26%;
             
@@ -120,11 +120,11 @@
 
     <script>
     var player = new Clappr.Player({
-    source: "https://app.viloud.tv/hls/channel/sep/7c1271c4f195149218f66ad36f16ca18/normal.m3u8",
+    source: "https://73e5474be2ae422487b18295a9782482.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-4548/../../../manifest/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-4548/37ef594e-bc66-4ff8-8f17-f31b41c0a600/4.m3u8",
     parentId: "#player",
     width: '100%',
     height: '100vh',
-    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000781-7f3cf7f3d2/bry%20cinema%20action2-6.webp?ph=7e11bb4538",
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000919-1b0281b02a/bry%20cinema%20action1-6.webp?ph=7e11bb4538",
     position: 'top-right',
     
 });
@@ -147,7 +147,7 @@
     function resetTimer() {
       logo.style.display = "block"; // Riappare il logo
       clearTimeout(timer);
-      timer = setTimeout(hideLogo, 10000); // Nascondi il logo dopo 10 secondi di inattività
+      timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
     }
 
     document.addEventListener("mousemove", resetTimer);
