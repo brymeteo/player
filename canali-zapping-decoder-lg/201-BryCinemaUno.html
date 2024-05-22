@@ -18,19 +18,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            z-index: -1;
             background: #171a45;
-            
         }
         
-        
-        
-        
-        
-        
-             [data-watermark-top-right] {
+        [data-watermark-top-right] {
         position: absolute;
-            top: 7%;
+            top: 6%;
             right: 5%;
             max-width: 19.5%;
             
@@ -50,25 +44,15 @@
             
             
           }
-        
-        
-        
-        
-        
-        
-
         #logo {
             position: absolute;
             top: 71%;
             left: 21%;
             width: 57%;
-            /* Personalizza dimensioni */
             height: auto;
-            /* Personalizza dimensioni */
             opacity: 90%;
             cursor: pointer;
             display: block;
-            /* Rendere il logo visibile immediatamente */
         }
 
         .hidden {
@@ -87,24 +71,43 @@
             width: 100%;
             height: 100%;
             background: black;
-            /* Colore di sfondo nero per il video */
         }
 
         #my-video {
             width: 100%;
             height: 100%;
         }
-        
-        
-          /* Stile per l'immagine di fallback */
+
         #fallback-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
-            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+            object-fit: cover;
+            display: none;
         }
-        
-        
+
+        #retry-button {
+            position: absolute;
+            top: 9.1%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #212121bf;
+            border: 6px;
+            cursor: pointer;
+            display: none;
+            border-radius: 5px; /* Arrotonda i bordi del pulsante */
+           
+    
+    /* Effetto luccichio sui bordi */
+    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+
+            
+            
+            
+        }
     </style>
 </head>
 
@@ -113,56 +116,73 @@
     <div id="player" class="hidden"></div>
     <img id="logo" src="https://i.ibb.co/3vhfMCp/Untitledtt.png" alt="Logo" data-lity=""
         data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
-        
-        
-        
-         <!-- Immagine di fallback già caricata sotto -->
     <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
-        
+    
 
     <script>
-    var player = new Clappr.Player({
-    source: "https://app.viloud.tv/hls/channel/sep/8e87c30b38ab25a4bfebfb6168d75fe5/normal.m3u8",
-    parentId: "#player",
-    width: '100%',
-    height: '100vh',
-    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000753-17fa917fab/bry%20cinema%20uno1-2.webp?ph=7e11bb4538",
-    position: 'top-right',
-    
-});
-        
-      
-         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
-            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
-            document.getElementById("fallback-image").style.display = "block";
-            document.getElementById("player").style.display = "none";
+        var primarySource = "https://app.viloud.tv/hls/channel/sep/8e87c30b38ab25a4bfebfb6168d75fe5/high.m3u8";
+        var backupSource = "https://73e5474be2ae422487b18295a9782482.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-4548/../../../manifest/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-4548/37ef594e-bc66-4ff8-8f17-f31b41c0a600/4.m3u8";
+        var player = new Clappr.Player({
+            source: primarySource,
+            parentId: "#player",
+            width: '100%',
+            height: '100vh',
+            watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000909-40e3e40e3f/bry%20cinema%20uno1-9.webp?ph=7e11bb4538",
+            position: 'top-right',
         });
-        
-        
+
+        player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            console.log("Primary source failed, switching to backup.");
+            player.load(backupSource);
+            player.play();
+            document.getElementById('retry-button').style.display = 'block';
+        });
+
+        document.getElementById('retry-button').addEventListener('click', function () {
+            document.getElementById('retry-button').style.display = 'none';
+            player.load(primarySource);
+            player.play();
+        });
+
         var logo = document.getElementById("logo");
-    var timer;
+        var timer;
 
-    function hideLogo() {
-      logo.style.display = "none";
-    }
+        function hideLogo() {
+            logo.style.display = "none";
+        }
 
-    function resetTimer() {
-      logo.style.display = "block"; // Riappare il logo
-      clearTimeout(timer);
-      timer = setTimeout(hideLogo, 10000); // Nascondi il logo dopo 10 secondi di inattività
-    }
+        function resetTimer() {
+            logo.style.display = "block";
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 10000);
+        }
 
-    document.addEventListener("mousemove", resetTimer);
-    document.addEventListener("keypress", resetTimer);
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keypress", resetTimer);
 
-    resetTimer(); // Avvia il timer all'avvio della pagina
+        resetTimer();
         
-   
+        function resetToPrimaryAtSpecificTime() {
+        var now = new Date();
+        var targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 3, 27, 0);
+        if (now >= targetTime && now < new Date(targetTime.getTime() + 60000)) { // check for one minute interval
+            player.load(primarySource);
+            player.play();
+            document.getElementById('retry-button').style.display = 'none'; // Nascondi il pulsante
+        }
+    }
+
+    setInterval(resetToPrimaryAtSpecificTime, 60000); // check every minute
+
+    document.addEventListener("DOMContentLoaded", function () {
+        resetToPrimaryAtSpecificTime(); // also check when the document is ready
+    });
+        
+        
+        
     </script>
 
- <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
-
-
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
