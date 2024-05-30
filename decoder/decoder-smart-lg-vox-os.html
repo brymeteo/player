@@ -2905,223 +2905,175 @@
 
         
   
-        <style>
-          body {
-          zoom: 105%;
- 
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 0;
-          }
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caricamento</title>
+    <style>
+        body {
+            zoom: 105%;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* ... Altri stili esistenti ... */
 
-        </style>
-      
-      
+        /* Nuovi stili per la sezione di caricamento */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
 
-<style>
-      /* ... Altri stili esistenti ... */
+        #loading-overlay video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Assicura che il video sia dietro il contenuto */
+        }
 
-      /* Nuovi stili per la sezione di caricamento */
-      #loading-overlay {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-image: url('https://i.ibb.co/bKLVB6W/up-web-desktop-07-footer-feb23-2560x1280.png');
-          background-size: cover; /* Imposta la dimensione dell'immagine per coprire l'intero sfondo */
-  background-position: center; /* Imposta la posizione dell'immagine al centro */
-  background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
-          
-          z-index: 1000;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          text-align: center;
-      }
+        #loading-icon-container {
+            position: relative;
+        }
 
-      #loading-icon-container {
-          position: relative;
-      }
+        #loading-icon {
+            height: 40px;
+            margin-bottom: 10px;
+        }
 
-      #loading-icon {
-          
-          height: 40px;
-          margin-bottom: 10px;
-          
-      }
+        #loading-circle {
+            position: absolute;
+            top: -140%;
+            left: -6%;
+            transform: translate(-50%, -50%);
+            width: 220px; /* Dimensioni del cerchio */
+            height: 220px;
+            border: 8px solid transparent;
+            border-top-color: #3498db; /* Colore del cerchio (usa il tuo colore preferito) */
+            border-radius: 50%;
+            animation: rotate 1.5s linear infinite; /* Aggiungi animazione di rotazione */
+        }
 
-      #loading-circle {
-          position: absolute;
-          top: -140%;
-          left: -6%;
-          transform: translate(-50%, -50%);
-          width: 220px; /* Dimensioni del cerchio */
-          height: 220px;
-          border: 8px solid transparent;
-          border-top-color: #3498db; /* Colore del cerchio (usa il tuo colore preferito) */
-          border-radius: 50%;
-          animation: rotate 1.5s linear infinite; /* Aggiungi animazione di rotazione */
-      }
+        p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
 
-      p {
-          margin-top: 10px;
-          font-size: 18px;
-      }
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-      @keyframes rotate {
-          0% {
-              transform: rotate(0deg);
-          }
-          100% {
-              transform: rotate(360deg);
-          }
-      }
+        /* Nuovi stili per l'abbonamento scaduto */
+        #expired-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.ibb.co/hZLT04Z/1234.png');
+            background-size: cover; /* Imposta la dimensione dell'immagine per coprire l'intero sfondo */
+            background-position: center; /* Imposta la posizione dell'immagine al centro */
+            background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
 
-      /* Nuovi stili per l'abbonamento scaduto */
-      #expired-overlay {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-image: url('https://i.ibb.co/hZLT04Z/1234.png');
-          background-size: cover; /* Imposta la dimensione dell'immagine per coprire l'intero sfondo */
-  background-position: center; /* Imposta la posizione dell'immagine al centro */
-  background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
-          
-          
-          
-          
-          z-index: 1000;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          text-align: center;
-      }
+        #expired-icon {
+            height: 50px;
+            margin-bottom: 10px;
+        }
 
-      #expired-icon {
-          
-          height: 50px;
-          margin-bottom: 10px;
-          
-      }
+        #expired-text {
+            font-size: 18px;
+        }
 
-      #expired-text {
-          font-size: 18px;
-      }
-      
-      a {
-  text-decoration: none; /* Rimuove la sottolineatura del link */
-  color: #3d85c6; /* Imposta il colore del testo del link */
-}
+        a {
+            text-decoration: none; /* Rimuove la sottolineatura del link */
+            color: #3d85c6; /* Imposta il colore del testo del link */
+        }
+    </style>
+</head>
+<body>
 
-      
-      
-  </style>
+    <!-- Sezione di caricamento -->
+    <div id="loading-overlay">
+        <video autoplay muted loop>
+            <source src="https://brymeteo.github.io/tv/brillantini.mp4" type="video/mp4">
+            Il tuo browser non supporta il tag video.
+        </video>
+        <div id="loading-icon-container">
+            <img id="loading-icon" src="https://i.ibb.co/59y7XmH/Vox-OS-TV-logo.png" alt="Icona di caricamento">
+            <div id="loading-circle"></div>
+        </div>
+        <span style="color: #cccccc;"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caricamento in corso</p></span>
+    </div>
 
+    <!-- Sezione di abbonamento scaduto -->
+    <div id="expired-overlay">
+        <img id="expired-icon" src="https://i.ibb.co/ftxVwHL/Vox-OSdecoder-logo.png" alt="Abbonamento scaduto">
+        <p id="expired-text">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #cccccc;">Abbonamento scaduto. Visita il sito:</span> <a href="https://vox-tv.webnode.it"><span style="color: #3d85c6;">vox-tv.webnode.it</span></a></p>
+        <p id="expired-text">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #cccccc;">Per maggiori informazioni <a href="https://vox-tv.webnode.it/assistenza"><span style="color: #3d85c6;">contattaci</span></a></p>
+    </div>
 
+    <script>
+        // Aggiorna la funzione showLoading per nascondere il caricamento dopo 5 secondi
+        function showLoading() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+            setTimeout(hideLoading, 5000); // Nasconde il caricamento dopo 5 secondi
+        }
 
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
 
+        // Funzione per controllare lo stato dell'abbonamento
+        function checkSubscriptionStatus() {
+            // Sostituisci questa data con la data di scadenza del tuo abbonamento (formato: 'YYYY-MM-DDTHH:mm:ss')
+            var expirationDate = new Date('2024-06-10T00:30:00');
 
+            // Ottieni la data corrente
+            var currentDate = new Date();
 
+            // Controlla se l'abbonamento è scaduto
+            if (currentDate > expirationDate) {
+                showExpiredMessage();
+                loadUserlikeScript(); // Carica il secondo script solo se l'abbonamento è scaduto
+            }
+        }
 
+        // Funzione per mostrare il messaggio di abbonamento scaduto
+        function showExpiredMessage() {
+            document.getElementById('expired-overlay').style.display = 'flex';
+        }
 
-  
-      
-  
-  
-       <!-- Sezione di caricamento -->
-  <div id="loading-overlay">
-      <div id="loading-icon-container">
-          <img id="loading-icon" src="https://i.ibb.co/59y7XmH/Vox-OS-TV-logo.png" alt="Icona di caricamento">
-          <div id="loading-circle"></div>
-      </div>
-    <span style="color: #cccccc;"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caricamento in corso</p>
-  </div>
-  
-  
-  <!-- Sezione di abbonamento scaduto -->
-  <div id="expired-overlay">
-      <img id="expired-icon" src="https://i.ibb.co/ftxVwHL/Vox-OSdecoder-logo.png" alt="Abbonamento scaduto">
-      
-      
-     
-      <p id="expired-text">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #cccccc;">Abbonamento scaduto. Visita il sito:</span> <a href="https://vox-tv.webnode.it"><span style="color: #3d85c6;">vox-tv.webnode.it</span></a></p>
-      
-      
-      
-       <p id="expired-text">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #cccccc;">Per maggiori informazioni  <a href="https://vox-tv.webnode.it/assistenza"><span style="color: #3d85c6;">contattaci</span></a></p>
-      
-      
-    
-      
-  </div>
-  
+        // Chiamata iniziale per mostrare il caricamento all'avvio della pagina
+        showLoading();
 
+        // Controlla lo stato dell'abbonamento al caricamento della pagina
+        checkSubscriptionStatus();
+    </script>
 
-
-
-
-
-
-
-
-<!-- Script esistenti -->
- <script>
-  // Aggiorna la funzione showLoading per nascondere il caricamento dopo 5 secondi
-  function showLoading() {
-      document.getElementById('loading-overlay').style.display = 'flex';
-      setTimeout(hideLoading, 5000); // Nasconde il caricamento dopo 5 secondi
-  }
-
-  function hideLoading() {
-      document.getElementById('loading-overlay').style.display = 'none';
-  }
-
-  // Funzione per controllare lo stato dell'abbonamento
-  function checkSubscriptionStatus() {
-      // Sostituisci questa data con la data di scadenza del tuo abbonamento (formato: 'YYYY-MM-DDTHH:mm:ss')
-      var expirationDate = new Date('2024-06-10T00:30:00');
-
-      // Ottieni la data corrente
-      var currentDate = new Date();
-
-      // Controlla se l'abbonamento è scaduto
-      if (currentDate > expirationDate) {
-          showExpiredMessage();
-          loadUserlikeScript(); // Carica il secondo script solo se l'abbonamento è scaduto
-      }
-  }
-
-  // Funzione per mostrare il messaggio di abbonamento scaduto
-  function showExpiredMessage() {
-      document.getElementById('expired-overlay').style.display = 'flex';
-  }
-
-
-
-
-
-  // Chiamata iniziale per mostrare il caricamento all'avvio della pagina
-  showLoading();
-
-  // Controlla lo stato dell'abbonamento al caricamento della pagina
-  checkSubscriptionStatus();
-
-  // Resto del tuo codice JavaScript...
-  // ...
-
-</script>
-
-
-
-
-
-
-
-
-  </body>
-  </html>
+</body>
+</html>
