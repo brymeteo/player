@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -23,6 +24,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      width: 100vw;
       color: white;
       position: relative;
     }
@@ -30,7 +32,7 @@
     /* Cornice del canale */
     .channel-frame {
       width: 100vw;
-      height: 90vh;
+      height: 100vh;
       overflow: hidden;
       position: relative;
     }
@@ -39,6 +41,7 @@
     iframe {
       width: 100%;
       height: 100%;
+      border: none;
     }
 
     /* Icona per il fullscreen */
@@ -49,6 +52,7 @@
       color: white;
       font-size: 24px;
       cursor: pointer;
+      z-index: 999; /* Aggiunto */
     }
 
     /* Barra di ricerca */
@@ -62,7 +66,7 @@
       border-radius: 10px;
       opacity: 90%;
       display: none;
-      z-index: 999; /* Aggiunto */
+      z-index: 999;
 
       /* Effetto luccichio sui bordi */
       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
@@ -101,7 +105,7 @@
     }
 
     /* Pulsante di controllo */
-   button {
+    button {
       flex-direction: column;
       align-items: center;
       padding: 10px 20px;
@@ -124,20 +128,33 @@
       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
                   0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
     }
-    
 
-    /* Overlay per il numero del canale */
     .number-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 5rem;
-      color: white;
-      z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
-      display: none; /* Nascosto di default */
-    }
+    position: fixed;
+    top: 80%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    color: #121d699c;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 1000;
+}
 
+    /* Nascondi tutti gli elementi tranne l'overlay in modalità fullscreen */
+    .fullscreen .fullscreen-icon,
+    .fullscreen .search-bar,
+    .fullscreen .controls {
+      display: none !important;
+    }
+    
+    
+    
+    
+    
+ 
   </style>
 </head>
 <body>
@@ -298,29 +315,7 @@
       return false; // Per evitare il ricaricamento della pagina
     }
 
-    // Funzione per abilitare/disabilitare il fullscreen
-    function toggleFullscreen() {
-      const iframe = document.getElementById("channel");
-
-      if (!document.fullscreenElement) {
-        if (iframe.requestFullscreen) {
-          iframe.requestFullscreen();
-        } else if (iframe.webkitRequestFullscreen) { /* Safari */
-          iframe.webkitRequestFullscreen();
-        } else if (iframe.msRequestFullscreen) { /* IE11 */
-          iframe.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { /* Safari */
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE11 */
-          document.msExitFullscreen();
-        }
-      }
-    }
-
+  
     // Gestione degli eventi della tastiera per la ricerca del canale
     document.body.onkeydown = function(event) {
       const key = event.key;
@@ -372,6 +367,108 @@
       // Qui inserisci il codice per il cambiamento del canale quando viene premuto il pulsante verde del telecomando
       previousChannel();
     }
+    
+    
+    // Funzione per mostrare l'overlay del numero
+    function displayNumberOverlay(number) {
+      const overlay = document.getElementById("numberOverlay");
+      overlay.textContent = number;
+      overlay.style.display = "block";
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 2000); // Nascondi l'overlay dopo 2 secondi
+    }
+    
+    
+    
+      // Funzione per il fullscreen
+function toggleFullscreen() {
+  const elem = document.documentElement;
+
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { // Firefox
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { // IE/Edge
+      elem.msRequestFullscreen();
+    }
+    document.querySelector('.tv-container').classList.add('fullscreen');
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+    document.querySelector('.tv-container').classList.remove('fullscreen');
+  }
+}
+
+// Funzione per gestire l'uscita dalla modalità fullscreen
+function handleFullscreenExit() {
+  const tvContainer = document.querySelector('.tv-container');
+  if (!document.fullscreenElement) {
+    tvContainer.classList.remove('fullscreen');
+  }
+}
+
+// Aggiungi un listener per l'evento 'fullscreenchange'
+document.addEventListener('fullscreenchange', handleFullscreenExit);
+document.addEventListener('webkitfullscreenchange', handleFullscreenExit);
+document.addEventListener('mozfullscreenchange', handleFullscreenExit);
+document.addEventListener('MSFullscreenChange', handleFullscreenExit);
+
+
+   // Aggiungi un listener per l'evento 'keydown' per il pulsante "Indietro" del telecomando LG
+document.addEventListener('keydown', function(event) {
+  // Verifica se il tasto premuto è il pulsante "Indietro" del telecomando LG
+  if (event.key === 'Backspace') {
+    // Ottieni l'ultimo numero inserito nella barra di ricerca
+    const numberOverlay = document.getElementById('numberOverlay');
+    const overlayText = numberOverlay.textContent;
+    // Cancella l'ultimo numero
+    numberOverlay.textContent = overlayText.substring(0, overlayText.length - 1);
+    // Nascondi completamente l'overlay se non ci sono più numeri
+    if (numberOverlay.textContent === '') {
+      numberOverlay.style.display = 'none';
+    }
+  }
+});
+
+
+  // Gestione degli eventi della tastiera per la ricerca del canale
+document.body.onkeydown = function(event) {
+  const key = event.key;
+  const numberOverlay = document.getElementById('numberOverlay');
+  
+  if (key >= '0' && key <= '9') { // Verifica se il tasto è un numero
+    numberOverlay.style.display = 'block'; // Mostra l'overlay
+    numberOverlay.textContent += key; // Aggiungi il numero all'overlay
+  } else if (key === 'Enter') { // Cambia il canale quando viene premuto Enter
+    const channelNumber = numberOverlay.textContent.trim();
+    const url = channelMappings[channelNumber];
+    if (url) {
+      document.getElementById('channel').src = url; // Cambia il canale
+      currentChannelIndex = Object.keys(channelMappings).indexOf(channelNumber);
+    } else {
+      alert('Canale non trovato!');
+    }
+    numberOverlay.textContent = ''; // Pulisci il numero dell'overlay
+    numberOverlay.style.display = 'none'; // Nascondi l'overlay
+  } else if (key === 'Escape') { // Pulisci e nascondi l'overlay con Escape
+    numberOverlay.textContent = '';
+    numberOverlay.style.display = 'none';
+  } else if (key === 'Backspace') { // Cancella l'ultimo numero inserito con Backspace
+    const overlayText = numberOverlay.textContent;
+    numberOverlay.textContent = overlayText.substring(0, overlayText.length - 1);
+  }
+};
+  
+    
   </script>
 </body>
 </html>
