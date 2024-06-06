@@ -440,7 +440,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 
-  // Gestione degli eventi della tastiera per la ricerca del canale
+   // Gestione degli eventi della tastiera per la ricerca del canale
 document.body.onkeydown = function(event) {
   const key = event.key;
   const numberOverlay = document.getElementById('numberOverlay');
@@ -462,9 +462,9 @@ document.body.onkeydown = function(event) {
   } else if (key === 'Escape') { // Pulisci e nascondi l'overlay con Escape
     numberOverlay.textContent = '';
     numberOverlay.style.display = 'none';
-  } else if (key === 'Backspace') { // Cancella l'ultimo numero inserito con Backspace
-    const overlayText = numberOverlay.textContent;
-    numberOverlay.textContent = overlayText.substring(0, overlayText.length - 1);
+  } else if (key === 'Backspace' || key === 'ArrowDown') { // Cancella tutto l'overlay attivo con Backspace o freccia in basso
+    numberOverlay.textContent = ''; // Pulisci tutto l'overlay
+    numberOverlay.style.display = 'none'; // Nascondi l'overlay
   }
 };
   
