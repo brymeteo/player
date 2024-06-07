@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida TV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            
+            color: #fff;
+        }
+
+        #tv-guide {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tv-card {
+            padding: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(134, 95, 172,0.3);
+            background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+            background-color: rgba(0, 0, 0, 0.29); /* Sfondo trasparente */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Ombra leggera */
+        }
+
+        .tv-card img {
+            max-width: 140px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .channel-logo {
+            max-width: 10%;
+            position: absolute;
+            bottom: 15%; /* Regola questa proprietà per spostare il logo verso il basso */
+            right: 73.5%; /* Regola questa proprietà per spostare il logo verso destra */
+        }
+
+        .favorite-icon,
+        .reminder-icon {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .background-bar {
+            height: 100%;
+            background-color: rgba(255 255 255 / 11%);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: width 1s linear;
+            background-color: #ddd;
+        }
+
+        .program-details {
+            flex: 1;
+            margin-right: 10px;
+            color: #b3b3b3;
+        }
+
+        h3, p {
+            margin: 8px;
+        }
+
+        .date-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .date-selector button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logo {
+            max-width: 20px;
+            margin-top: -10px;
+            position: relative; /* Aggiungiamo questa proprietà */
+            left: 8px; /* Modifica questo valore per spostare il logo verso destra */
+        }
+
+        .in-onda {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .time-icon {
+            color: #3498db;
+            margin-right: 5px;
+        }
+
+        .day-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3c4263;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 0;
+            left: 0%;
+            background-color: #27ae60;
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            margin-right: 5px;
+            display: none;
+        }
+
+        .tv-card:hover .coming-soon {
+            display: block;
+        }
+
+        .tv-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="tv-guide">
+        <!-- Content will be dynamically added here using JavaScript -->
+    </div>
+
+    <script>
+        // Funzione per ottenere i dati JSON dall'URL
+        function fetchData(url) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('There was a problem fetching the data:', error);
+                });
+        }
+
+        // URL dell'EPG JSON
+        var epgUrl = 'https://deliver.viloud.tv/channel/8df2465f99c182b1c77376f36230f20c/epg';
+
+        // Funzione per generare la Guida TV
+        function generateTVGuide() {
+            var tvGuide = document.getElementById('tv-guide');
+
+            // Recupera i dati dall'URL dell'EPG JSON
+            fetchData(epgUrl).then(data => {
+                // Estrai i programmi dall'EPG
+                var programs = data.content;
+
+                // Loop attraverso i programmi e crea gli elementi HTML corrispondenti
+                programs.forEach(program => {
+                    var card = document.createElement('div');
+                    card.className = 'tv-card';
+
+                    var img = document.createElement('img');
+                    img.src = program.thumbnail;
+                    card.appendChild(img);
+
+                    // Aggiungi manualmente l'URL del logo del canale
+                    var logo = document.createElement('img');
+                    logo.src = 'https://i.ibb.co/c33LxL2/Cinema-Disney.png'; // Sostituisci con l'URL reale del logo
+                    logo.className = 'channel-logo';
+                    card.appendChild(logo);
+
+                    var details = document.createElement('div');
+                    details.className = 'program-details';
+
+                    var title = document.createElement('h3');
+                    title.textContent = program.name;
+                    details.appendChild(title);
+
+                    var description = document.createElement('p');
+                    description.textContent = program.description;
+                    details.appendChild(description);
+
+                    var time = document.createElement('p');
+                    var startTime = new Date((program.start - 3600) * 1000); // Rimuove un'ora
+                    time.textContent = 'Orario: ' + startTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); // Mostra solo l'orario di inizio senza minuti e secondi
+                    details.appendChild(time);
+
+                    var progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+
+                    var backgroundBar = document.createElement('div');
+                    backgroundBar.className = 'background-bar';
+                    progressBar.appendChild(backgroundBar);
+
+                    var progressFill = document.createElement('div');
+                    progressFill.className = 'progress-fill';
+                    progressBar.appendChild(progressFill);
+
+                    card.appendChild(progressBar);
+
+                    var currentTime = Math.floor(Date.now() / 1000);
+                    if (program.start <= currentTime && program.end >= currentTime) {
+                        var inOndaText = document.createElement('div');
+                        inOndaText.className = 'in-onda';
+                        inOndaText.textContent = 'In onda';
+                        card.appendChild(inOndaText);
+                    } else if (program.start > currentTime) {
+                        var comingSoon = document.createElement('div');
+                        comingSoon.className = 'coming-soon';
+                        comingSoon.textContent = 'A seguire';
+                        card.appendChild(comingSoon);
+                    }
+
+                    var dayIndicator = document.createElement('div');
+                    dayIndicator.className = 'day-indicator';
+                    dayIndicator.textContent = 'In onda questa sera';
+                    card.appendChild(dayIndicator);
+
+                    card.appendChild(details);
+                    tvGuide.appendChild(card);
+
+                    // Calcola e aggiorna dinamicamente la larghezza della barra di avanzamento
+                    var duration = program.end - program.start; // Durata del programma in secondi
+                    var currentTime = Date.now() / 1000; // Tempo attuale in secondi
+                    var elapsedTime = currentTime - program.start; // Tempo trascorso dal programma in secondi
+                    var progressPercentage = (elapsedTime / duration) * 100; // Percentuale di progresso
+
+                    // Limita la percentuale di avanzamento tra 0 e 100
+                    progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+
+                    // Aggiorna la larghezza della barra di avanzamento
+                    progressFill.style.width = progressPercentage + '%';
+                });
+            });
+        }
+
+        // Genera la Guida TV al caricamento della pagina
+        generateTVGuide();
+    </script>
+</body>
+</html>
