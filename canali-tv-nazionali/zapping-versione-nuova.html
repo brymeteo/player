@@ -146,6 +146,12 @@
     z-index: 1000;
 }
 
+ .error {
+      background-color: red;
+      color: white;
+      font-size: 2rem;
+    }
+
     /* Nascondi tutti gli elementi tranne l'overlay in modalità fullscreen */
     .fullscreen .fullscreen-icon,
     .fullscreen .search-bar,
@@ -641,33 +647,40 @@ document.addEventListener('keydown', function(event) {
 });
 
 
-   // Gestione degli eventi della tastiera per la ricerca del canale
 document.body.onkeydown = function(event) {
-  const key = event.key;
-  const numberOverlay = document.getElementById('numberOverlay');
-  
-  if (key >= '0' && key <= '9') { // Verifica se il tasto è un numero
-    numberOverlay.style.display = 'block'; // Mostra l'overlay
-    numberOverlay.textContent += key; // Aggiungi il numero all'overlay
-  } else if (key === 'Enter') { // Cambia il canale quando viene premuto Enter
-    const channelNumber = numberOverlay.textContent.trim();
-    const url = channelMappings[channelNumber];
-    if (url) {
-      document.getElementById('channel').src = url; // Cambia il canale
-      currentChannelIndex = Object.keys(channelMappings).indexOf(channelNumber);
-    } else {
-      alert('Canale non trovato!');
-    }
-    numberOverlay.textContent = ''; // Pulisci il numero dell'overlay
-    numberOverlay.style.display = 'none'; // Nascondi l'overlay
-  } else if (key === 'Escape') { // Pulisci e nascondi l'overlay con Escape
-    numberOverlay.textContent = '';
-    numberOverlay.style.display = 'none';
-  } else if (key === 'Backspace' || key === 'ArrowDown') { // Cancella tutto l'overlay attivo con Backspace o freccia in basso
-    numberOverlay.textContent = ''; // Pulisci tutto l'overlay
-    numberOverlay.style.display = 'none'; // Nascondi l'overlay
-  }
-};
+      const key = event.key;
+      const numberOverlay = document.getElementById('numberOverlay');
+      
+      if (key >= '0' && key <= '9') { // Verifica se il tasto è un numero
+        numberOverlay.style.display = 'block'; // Mostra l'overlay
+        numberOverlay.classList.remove('error'); // Rimuove la classe 'error' se presente
+        numberOverlay.textContent += key; // Aggiungi il numero all'overlay
+      } else if (key === 'Enter') { // Cambia il canale quando viene premuto Enter
+        const channelNumber = numberOverlay.textContent.trim();
+        const url = channelMappings[channelNumber];
+        if (url) {
+          document.getElementById('channel').src = url; // Cambia il canale
+          currentChannelIndex = Object.keys(channelMappings).indexOf(channelNumber);
+          numberOverlay.textContent = ''; // Pulisci il numero dell'overlay
+          numberOverlay.style.display = 'none'; // Nascondi l'overlay
+        } else {
+          numberOverlay.textContent = 'Canale non trovato!'; // Aggiungi il messaggio direttamente sull'overlay
+          numberOverlay.classList.add('error'); // Aggiunge la classe 'error'
+          setTimeout(() => {
+            numberOverlay.textContent = ''; // Pulisci il numero dell'overlay dopo un certo intervallo
+            numberOverlay.style.display = 'none'; // Nascondi l'overlay dopo un certo intervallo
+            numberOverlay.classList.remove('error'); // Rimuove la classe 'error' quando l'avviso scompare
+          }, 7000); // Intervallo di 2000 millisecondi (2 secondi)
+        }
+      } else if (key === 'Escape') { // Pulisci e nascondi l'overlay con Escape
+        numberOverlay.textContent = '';
+        numberOverlay.style.display = 'none';
+      } else if (key === 'Backspace' || key === 'ArrowDown') { // Cancella tutto l'overlay attivo con Backspace o freccia in basso
+        numberOverlay.textContent = ''; // Pulisci tutto l'overlay
+        numberOverlay.style.display = 'none'; // Nascondi l'overlay
+      }
+    };
+
   
   
   
