@@ -1,0 +1,212 @@
+
+  <title>Guida TV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://i.ibb.co/02BC7q3/hhhh.png');
+      
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .tv-guide {
+    
+         background-color: rgb(0 0 0 / 13%); /* Sfondo trasparente */
+      
+       
+      
+      width: 100%;
+     
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      color: #fff;
+      padding: 10px;
+      
+               background-color: rgb(0 0 0 / 32%); /* Sfondo trasparente */
+      
+      
+      
+    }
+
+    .header button {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .channels {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .channel {
+      display: flex;
+      align-items: center;
+      border-bottom: 0.1px solid #ffffff38;
+      color: #ffffff96;
+     font-weight: bold;
+      
+             background-color: rgb(94 78 144 / 50%); /* Sfondo trasparente */
+         
+            box-shadow: 0 0 80px rgb(60 45 108 / 38%); /* Ombra leggera */
+    }
+      
+      
+      
+      
+    
+
+    .channel-info {
+      width: 30%;
+      padding: 22px;
+      font-weight: bold;
+      color: #ffffff96;
+      font-size: 18px;
+     
+      background-color: rgb(94 78 144 / 50%); /* Sfondo trasparente */
+               box-shadow: 0 0 80px rgb(60 45 108 / 38%); /* Ombra leggera */
+       
+         
+    }
+
+    .program-info {
+      width: 80%;
+      padding: 10px;
+    }
+    
+    
+
+    .channel-number {
+  margin-left: 33%; /* Sposta il numero del canale tutto a destra */
+  padding-left: 10px; /* Spazio a sinistra del numero del canale */
+  font-size: 16px;
+}
+    
+    
+  </style>
+</head>
+<body>
+  <div class="tv-guide">
+    <div class="header">
+      <button onclick="prevHour()">&#9664;</button>
+     
+      Programmazione<span id="current-time"></span>
+      <button onclick="nextHour()">&#9654;</button>
+    </div>
+    <div class="channels" id="channels-list">
+      <!-- I canali saranno aggiunti dinamicamente qui -->
+    </div>
+  </div>
+
+  <script>
+    let currentHour = new Date().getHours();
+    let currentMinute = new Date().getMinutes();
+
+    const channels = [
+    { id: 1, name: "Vox HD ", number: "", url: "https://deliver.viloud.tv/channel/62887c340e96cfd8340487c1fb202edc/epg" },
+      { id: 2, name: "Bry Serien & Shows HD ", number: "", url: "https://deliver.viloud.tv/channel/272f7c9b8bb496fb46e39b8602ed1f6f/epg" },
+      { id: 3, name: "Bry Cinema Uno HD ", number: "", url: "https://deliver.viloud.tv/channel/8e87c30b38ab25a4bfebfb6168d75fe5/epg" },
+      { id: 4, name: "Bry Cinema Due HD", number: "", url: "https://deliver.viloud.tv/channel/7d84e34386be126b08beb0fe155b1e95/epg" },
+      { id: 5, name: "Bry Cinema Max HD ", number: "", url: "https://deliver.viloud.tv/channel/1a00ce8dca2774dec8ff5d4ae3c695ff/epg" },
+      { id: 6, name: "Bry Cinema Family HD ", number: "", url: "https://deliver.viloud.tv/channel/ab32f3f5e6fc6f05f88bab9c4eec219b/epg" },
+      { id: 7, name: "Bry Cinema Action HD ", number: "", url: "https://deliver.viloud.tv/channel/7c1271c4f195149218f66ad36f16ca18/epg" },
+      { id: 8, name: "Bry Cinema Comedy HD ", number: "", url: "https://deliver.viloud.tv/channel/ab3c28fd55dfe93fb3e6cb722bd19e69/epg" },
+      { id: 9, name: "Bry Cinema Collection HD ", number: "", url: "https://deliver.viloud.tv/channel/7917c9a86a568500c99c4ac128a9c026/epg" },
+      { id: 10, name: "Bry Cinema Suspense HD ", number: "", url: "https://deliver.viloud.tv/channel/f195d64985db1a43d5fd962cefa2f5c1/epg" },
+      { id: 11, name: "Bry Cinema Disney HD ", number: "", url: "https://deliver.viloud.tv/channel/8df2465f99c182b1c77376f36230f20c/epg" },
+      { id: 12, name: "Bry Cinema Uno+24 HD ", number: "", url: "https://deliver.viloud.tv/channel/c809102652a85d9436c757c8458aef64/epg" },
+      { id: 13, name: "Bry Cinema Due+24 HD ", number: "", url: "https://deliver.viloud.tv/channel/d862ae4e7c94c8a7f7b724828bc80f8e/epg" },
+      // Aggiungi altri canali qui...
+    ];
+
+    function prevHour() {
+      if (currentHour > 0) {
+        currentHour -= 1;
+        updateTime();
+      }
+    }
+
+    function nextHour() {
+      if (currentHour < 23) {
+        currentHour += 1;
+        updateTime();
+      }
+    }
+
+    function updateTime() {
+      const timeElement = document.getElementById('current-time');
+      let hour = currentHour % 24;
+      if (hour < 10) hour = '0' + hour;
+      timeElement.innerText = `${hour}:00`;
+      fetchAndUpdateGuide();
+    }
+
+    async function fetchAndUpdateGuide() {
+      for (const channel of channels) {
+        const response = await fetch(channel.url);
+        const data = await response.json();
+
+        const programElement = document.getElementById(`program-${channel.id}`);
+        const currentTimestamp = (currentHour * 3600) + (currentMinute * 60);
+
+        const currentProgram = data.content.find(schedule => {
+          const startTimestamp = schedule.start;
+          const endTimestamp = schedule.start + schedule.duration;
+          return startTimestamp <= currentTimestamp && endTimestamp > currentTimestamp;
+        });
+
+        if (currentProgram) {
+          programElement.innerText = `${currentProgram.name} (${formatTime(currentProgram.start)} - ${formatTime(currentProgram.start + currentProgram.duration)})`;
+        } else {
+          programElement.innerText = 'Nessun Programma';
+        }
+      }
+    }
+
+    function formatTime(seconds) {
+      let date = new Date(seconds * 1000);
+      let hours = date.getUTCHours();
+      let minutes = date.getUTCMinutes();
+      if (minutes < 10) minutes = '0' + minutes;
+      return `${hours}:${minutes}`;
+    }
+
+    function createChannelElements() {
+      const channelsList = document.getElementById('channels-list');
+      channels.forEach(channel => {
+        const channelElement = document.createElement('div');
+        channelElement.className = 'channel';
+
+        const channelInfo = document.createElement('div');
+        channelInfo.className = 'channel-info';
+        channelInfo.innerText = `${channel.number} ${channel.name}`;
+
+        const programInfo = document.createElement('div');
+        programInfo.className = 'program-info';
+        programInfo.id = `program-${channel.id}`;
+
+        channelElement.appendChild(channelInfo);
+        channelElement.appendChild(programInfo);
+
+        channelsList.appendChild(channelElement);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      createChannelElements();
+      updateTime();
+      setInterval(updateTime, 60000); // Aggiorna l'orario ogni minuto
+    });
+  </script>
+
