@@ -1,10 +1,13 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guida TV</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-image: url('https://i.ibb.co/02BC7q3/hhhh.png');
-      
+     
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -12,13 +15,7 @@
     }
 
     .tv-guide {
-    
-        
-      
-       
-      
       width: 100%;
-     
       border-radius: 2px;
       overflow: hidden;
     }
@@ -27,14 +24,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
       color: #fff;
       padding: 10px;
-      
-               background-color: rgb(37 45 99 / 51%); /* Sfondo trasparente */
-      
-      
-      
+      background-color: rgb(37 45 99 / 51%);
     }
 
     .header button {
@@ -55,43 +47,121 @@
       align-items: center;
       border-bottom: 0.1px solid #ffffff38;
       color: #fff;
-     font-weight: bold;
-      
-            
-         
-            
+      font-weight: bold;
     }
-      
-      
-      
-      
-    
 
     .channel-info {
-      width: 30%;
-      padding: 22px;
-      font-weight: bold;
-      color: #cecece;
-      font-size: 18px;
+  display: flex;
+  align-items: center;
+  width: 40vh;
+  padding: 22px;
+  font-weight: bold;
+  color: #cecece;
+  font-size: 22px;
+  /* Remove border-bottom from channel-info */
+
+       box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+    background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+ 
      
-      background-color: rgb(94 78 144 / 50%); /* Sfondo trasparente */
-              
-       
-         
+        /* Effetto luccichio sui bordi */
+    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+      
+      
+ 
+   
     }
 
     .program-info {
-      width: 80%;
+      width: 70%;
       padding: 10px;
+    }
+
+    .channel-logo {
+      margin-right: 10px;
+      width: 22vh;
+    }
+
+    .channel-logo.first-channel {
+      width: 17vh; /* Dimensione ridotta per il primo logo */
     }
     
     
+    .channel:hover  {
+  background-color: rgba(255, 255, 255, 0.2);
+  
+  box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+    background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+    
+    /* Effetto luccichio sui bordi */
+    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
 
-    .channel-number {
-  margin-left: 33%; /* Sposta il numero del canale tutto a destra */
-  padding-left: 10px; /* Spazio a sinistra del numero del canale */
-  font-size: 16px;
+  
+  
+  transition: background-color 0.3s ease;
 }
+    
+    
+    
+      .popup {
+      display: none;
+      position: fixed;
+      position: center;
+      font-size: 18px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(44 49 109);
+      z-index: 999;
+      padding: 20px;
+      border-radius: 5px;
+      color: white;
+      width: 60%;
+      padding: 10px;
+         
+            align-items: center;
+            margin-bottom: 20px;
+      
+      overflow-y: auto;
+        box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+    background-color: rgb(59 51 109); /* Aggiungi colore di sfondo trasparente */
+    
+    /* Effetto luccichio sui bordi */
+    box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                0 0 20px rgba(255 255 255 / 26%) inset; /* Luce riflessa sotto */
+
+    }
+
+    .popup-content {
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #popup-channel-logo img {
+      max-width: 200px;
+      height: auto;
+    }
+
+    #popup-details {
+      padding-left: 10px;
+    }
+    
+     #popup-thumbnail img {
+       max-width: 140px;
+            margin-right: 10px;
+            border-radius: 2px;
+    }
+    
     
     
   </style>
@@ -100,12 +170,28 @@
   <div class="tv-guide">
     <div class="header">
       <button onclick="prevHour()">&#9664;</button>
-     
-      Ora in onda<span id="current-time"></span>
+      Programmazione<span id="current-time"></span>
       <button onclick="nextHour()">&#9654;</button>
     </div>
     <div class="channels" id="channels-list">
       <!-- I canali saranno aggiunti dinamicamente qui -->
+    </div>
+  </div>
+
+  <div class="popup" id="program-popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+     <div id="popup-thumbnail"></div> <h2 id="popup-title"></h2>
+      <div id="popup-info">
+        <div id="popup-channel-logo"></div>
+        <div id="popup-details">
+          <p><strong>Orario:</strong> <span id="popup-time"></span></p>
+          <p><strong>Trama:</strong> <span id="popup-description"></span></p>
+          
+
+
+        </div>
+      </div>
     </div>
   </div>
 
@@ -114,19 +200,19 @@
     let currentMinute = new Date().getMinutes();
 
     const channels = [
-    { id: 1, name: "Vox HD ", number: "", url: "https://deliver.viloud.tv/channel/62887c340e96cfd8340487c1fb202edc/epg" },
-      { id: 2, name: "Bry Serien & Shows HD ", number: "", url: "https://deliver.viloud.tv/channel/272f7c9b8bb496fb46e39b8602ed1f6f/epg" },
-      { id: 3, name: "Bry Cinema Uno HD ", number: "", url: "https://deliver.viloud.tv/channel/8e87c30b38ab25a4bfebfb6168d75fe5/epg" },
-      { id: 4, name: "Bry Cinema Due HD", number: "", url: "https://deliver.viloud.tv/channel/7d84e34386be126b08beb0fe155b1e95/epg" },
-      { id: 5, name: "Bry Cinema Max HD ", number: "", url: "https://deliver.viloud.tv/channel/1a00ce8dca2774dec8ff5d4ae3c695ff/epg" },
-      { id: 6, name: "Bry Cinema Family HD ", number: "", url: "https://deliver.viloud.tv/channel/ab32f3f5e6fc6f05f88bab9c4eec219b/epg" },
-      { id: 7, name: "Bry Cinema Action HD ", number: "", url: "https://deliver.viloud.tv/channel/7c1271c4f195149218f66ad36f16ca18/epg" },
-      { id: 8, name: "Bry Cinema Comedy HD ", number: "", url: "https://deliver.viloud.tv/channel/ab3c28fd55dfe93fb3e6cb722bd19e69/epg" },
-      { id: 9, name: "Bry Cinema Collection HD ", number: "", url: "https://deliver.viloud.tv/channel/7917c9a86a568500c99c4ac128a9c026/epg" },
-      { id: 10, name: "Bry Cinema Suspense HD ", number: "", url: "https://deliver.viloud.tv/channel/f195d64985db1a43d5fd962cefa2f5c1/epg" },
-      { id: 11, name: "Bry Cinema Disney HD ", number: "", url: "https://deliver.viloud.tv/channel/8df2465f99c182b1c77376f36230f20c/epg" },
-      { id: 12, name: "Bry Cinema Uno+24 HD ", number: "", url: "https://deliver.viloud.tv/channel/c809102652a85d9436c757c8458aef64/epg" },
-      { id: 13, name: "Bry Cinema Due+24 HD ", number: "", url: "https://deliver.viloud.tv/channel/d862ae4e7c94c8a7f7b724828bc80f8e/epg" },
+     { id: 1, name: "108", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000703-375393753b/700/g7-3.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/62887c340e96cfd8340487c1fb202edc/epg" },
+      { id: 2, name: "129", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000978-7fd0f7fd10/bry%20serienshows1.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/272f7c9b8bb496fb46e39b8602ed1f6f/epg" },
+      { id: 3, name: "201", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000753-17fa917fab/bry%20cinema%20uno1-2.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/8e87c30b38ab25a4bfebfb6168d75fe5/epg" },
+      { id: 4, name: "202", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000757-4c7d24c7d4/bry%20cinema%20due1-5.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/7d84e34386be126b08beb0fe155b1e95/epg" },
+      { id: 5, name: "203", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000765-d0671d0673/bry%20cinema%20maxofficial1-4.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/1a00ce8dca2774dec8ff5d4ae3c695ff/epg" },
+      { id: 6, name: "204", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000773-d870bd870d/bry%20cinema%20family2-4.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/ab32f3f5e6fc6f05f88bab9c4eec219b/epg" },
+      { id: 7, name: "205", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000781-7f3cf7f3d2/bry%20cinema%20action2-6.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/7c1271c4f195149218f66ad36f16ca18/epg" },
+      { id: 8, name: "206", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000877-1060210605/bry%20cinema%20comedy1-2.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/ab3c28fd55dfe93fb3e6cb722bd19e69/epg" },
+      { id: 9, name: "207", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000811-5f1045f106/bry%20cinema%20collection1-9.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/7917c9a86a568500c99c4ac128a9c026/epg" },
+      { id: 10, name: "208", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000815-b269db269e/bry%20cinema%20suspense1-4.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/f195d64985db1a43d5fd962cefa2f5c1/epg" },
+      { id: 11, name: "209", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000867-3038c3038e/bry%20cinema%20disney3-4.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/8df2465f99c182b1c77376f36230f20c/epg" },
+      { id: 12, name: "210", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000894-c3ab4c3ab6/bry%20cinema%20uno-241-2.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/c809102652a85d9436c757c8458aef64/epg" },
+      { id: 13, name: "211", number: "", logo: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000898-bac47bac49/bry%20cinema%20due-24-4.webp?ph=7e11bb4538", url: "https://deliver.viloud.tv/channel/d862ae4e7c94c8a7f7b724828bc80f8e/epg" },
       // Aggiungi altri canali qui...
     ];
 
@@ -168,8 +254,16 @@
 
         if (currentProgram) {
           programElement.innerText = `${currentProgram.name} (${formatTime(currentProgram.start)} - ${formatTime(currentProgram.start + currentProgram.duration)})`;
+          channel.currentProgram = {
+            title: currentProgram.name,
+            description: currentProgram.description,
+            start: currentProgram.start,
+            end: currentProgram.start + currentProgram.duration,
+            logo: channel.logo // Assume che l'URL del logo sia lo stesso del canale
+          };
         } else {
           programElement.innerText = 'Nessun Programma';
+          channel.currentProgram = null;
         }
       }
     }
@@ -182,15 +276,113 @@
       return `${hours}:${minutes}`;
     }
 
+   async function fetchAndUpdateGuide() {
+  for (const channel of channels) {
+    const response = await fetch(channel.url);
+    const data = await response.json();
+
+    const programElement = document.getElementById(`program-${channel.id}`);
+    const currentTimestamp = (currentHour * 3600) + (currentMinute * 60);
+
+    const currentProgram = data.content.find(schedule => {
+      const startTimestamp = schedule.start;
+      const endTimestamp = schedule.start + schedule.duration;
+      return startTimestamp <= currentTimestamp && endTimestamp > currentTimestamp;
+    });
+
+    if (currentProgram) {
+      programElement.innerText = `${currentProgram.name} (${formatTime(currentProgram.start)} - ${formatTime(currentProgram.start + currentProgram.duration)})`;
+      channel.currentProgram = {
+        title: currentProgram.name,
+        description: currentProgram.description,
+        start: currentProgram.start,
+        end: currentProgram.start + currentProgram.duration,
+        logo: channel.logo, // Assume che l'URL del logo sia lo stesso del canale
+        thumbnail: currentProgram.thumbnail // Aggiungi il thumbnail se disponibile
+      };
+    } else {
+      programElement.innerText = 'Nessun Programma';
+      channel.currentProgram = null;
+    }
+  }
+}
+
+function openPopup(channel) {
+  if (!channel.currentProgram) return;
+
+  const popup = document.getElementById('program-popup');
+  const titleElement = document.getElementById('popup-title');
+  const channelLogoElement = document.getElementById('popup-channel-logo');
+  const descriptionElement = document.getElementById('popup-description');
+  const timeElement = document.getElementById('popup-time');
+  const thumbnailElement = document.getElementById('popup-thumbnail');
+
+  titleElement.innerText = channel.currentProgram.title;
+  channelLogoElement.innerHTML = `<img src="${channel.currentProgram.logo}" alt="${channel.name} Logo">`;
+  descriptionElement.innerText = channel.currentProgram.description;
+  timeElement.innerText = `${formatTime(channel.currentProgram.start)} - ${formatTime(channel.currentProgram.end)}`;
+
+  if (channel.currentProgram.thumbnail) {
+    thumbnailElement.innerHTML = `<img src="${channel.currentProgram.thumbnail}" alt="Program Thumbnail">`;
+    console.log('Thumbnail URL:', channel.currentProgram.thumbnail);
+  } else {
+    thumbnailElement.innerHTML = '';
+    console.log('No thumbnail available for:', channel.currentProgram.title);
+  }
+
+  popup.style.display = 'block';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function closePopup() {
+      const popup = document.getElementById('program-popup');
+      popup.style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      createChannelElements();
+      updateTime();
+      setInterval(updateTime, 60000); // Aggiorna l'orario ogni minuto
+
+      const channelElements = document.querySelectorAll('.channel');
+      channelElements.forEach((channelElement, index) => {
+        channelElement.addEventListener('click', () => {
+          const channel = channels[index]; // Assume che l'indice nel NodeList corrisponda all'indice nel tuo array 'channels'
+          openPopup(channel);
+        });
+      });
+    });
+
     function createChannelElements() {
       const channelsList = document.getElementById('channels-list');
-      channels.forEach(channel => {
+      channels.forEach((channel, index) => {
         const channelElement = document.createElement('div');
         channelElement.className = 'channel';
 
         const channelInfo = document.createElement('div');
         channelInfo.className = 'channel-info';
-        channelInfo.innerText = `${channel.number} ${channel.name}`;
+
+        const channelLogo = document.createElement('img');
+        channelLogo.src = channel.logo;
+        channelLogo.alt = `${channel.name} logo`;
+        channelLogo.className = 'channel-logo';
+        if (index === 0) {
+          channelLogo.classList.add('first-channel');
+        }
+
+        channelInfo.appendChild(channelLogo);
+        channelInfo.appendChild(document.createTextNode(`${channel.number} ${channel.name}`));
 
         const programInfo = document.createElement('div');
         programInfo.className = 'program-info';
@@ -202,11 +394,6 @@
         channelsList.appendChild(channelElement);
       });
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      createChannelElements();
-      updateTime();
-      setInterval(updateTime, 60000); // Aggiorna l'orario ogni minuto
-    });
   </script>
-
+</body>
+</html>
