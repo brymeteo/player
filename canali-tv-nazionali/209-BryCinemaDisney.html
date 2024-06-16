@@ -27,9 +27,9 @@
         
         
         
-             [data-watermark-top-right] {
+            [data-watermark-top-right] {
         position: absolute;
-            top: 6%;
+            top: 7%;
             right: 5%;
             max-width: 26%;
             
@@ -142,9 +142,17 @@
     height: '100vh',
     controls: false,
     autoPlay: true, // Abilita l'auto-play
-    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000905-7f0117f014/bry%20cinema%20disney3-6.webp?ph=7e11bb4538",
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538",
     position: 'top-right',
     
+    playback: {
+        levelSelectorConfig: {
+            labels: {
+                2: '1080p', // Assegna etichetta alla qualità 2 (potrebbe variare a seconda del sorgente HLS)
+            },
+            defaultLevel: 2, // Imposta la qualità predefinita su 1080p
+        },
+    },
 });
         
       
