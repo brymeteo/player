@@ -22,10 +22,11 @@
             background: #171a45;
             
         }
-
-
-
-[data-watermark-top-right] {
+        
+        
+        
+        
+         [data-watermark-top-right] {
         position: absolute;
             top: 7%;
             right: 5%;
@@ -47,13 +48,11 @@
             
             
           }
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
 
         #logo {
             position: absolute;
@@ -92,9 +91,21 @@
             width: 100%;
             height: 100%;
         }
+        
+        
+          /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
+        
+        
     </style>
     
-    <style>
+    
+      <style>
     .player-controls {
         display: none !important; /* Nasconde i controlli del player */
     }
@@ -105,7 +116,8 @@
 
     /* Altri stili esistenti... */
 </style>
-
+    
+    
     
 </head>
 
@@ -113,68 +125,55 @@
     <div id="background-overlay"></div>
     <div id="player" class="hidden"></div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
-        data-lity-target="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png">
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+        
+        
+        
+         <!-- Immagine di fallback già caricata sotto -->
+    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
+        
 
-  <script>
+    <script>
     var player = new Clappr.Player({
-        source: "https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/high.m3u8",
-        parentId: "#player",
-        width: '100%',
-        height: '100vh',
-        controls: false,
-        autoPlay: true, // Abilita l'auto-play
-          watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538",
+    source: "https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8",
+    parentId: "#player",
+    width: '100%',
+    height: '100vh',
+    controls: false,
+    autoPlay: true, // Abilita l'auto-play
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538",
     position: 'top-right',
-        plugins: {
-            core: [LevelSelector]
-        },
-        levelSelectorConfig: {
-            title: 'QUALITÀ VOX OS',
-            labels: {
-                0: 'Molto Bassa 360p',
-                1: 'Bassa 360p ',
-                2: 'Media 480p ',
-                3: 'Standard 520p',
-                4: 'Medio Alta 720p',
-                5: 'Alta 720p',
-                6: 'Molto Alta 1080p',
-                7: 'Super Qualità 1080p '
-            },
-        },
-    });
-
-    var logo = document.getElementById("logo");
+    
+});
+        
+      
+         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        });
+        
+        
+        var logo = document.getElementById("logo");
     var timer;
-    var popupInstance = null;
 
     function hideLogo() {
-        logo.style.display = "none";
+      logo.style.display = "none";
     }
 
     function resetTimer() {
-        logo.style.display = "block";
-        clearTimeout(timer);
-        timer = setTimeout(hideLogo, 15000);
+      logo.style.display = "block"; // Riappare il logo
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
     }
 
     document.addEventListener("mousemove", resetTimer);
     document.addEventListener("keypress", resetTimer);
-    resetTimer();
 
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode === 38) { // Freccia su
-            if (!popupInstance) {
-                popupInstance = lity(document.getElementById('logo').getAttribute('data-lity-target'));
-            } else {
-                popupInstance.close();
-                popupInstance = null;
-            }
-        }
-    });
-</script>
-
-
-
+    resetTimer(); // Avvia il timer all'avvio della pagina
+        
+   
+    </script>
 
  <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
 
