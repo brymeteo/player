@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
-    <script src="https://cdn.fluidplayer.com/v2/current/fluidplayer.min.js"></script>
+    <script src="https://cdn.fluidplayer.com/2.2.0/fluidplayer.min.js"></script>
 
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
 
@@ -109,11 +109,7 @@
         }
         
         
-        /* Nasconde i controlli del player fluid */
-.fluid_controls_container {
-    display: none !important;
-}
-
+        
         
         
     </style>
@@ -135,13 +131,10 @@
         var player = fluidPlayer('hls-video', {
     layoutControls: {
         controlBar: {
-            autoHide: false, // Assicurati che autoHide sia impostato su false
-            autoHideTimeout: 3,
-            animated: true
+          
         },
-        hideControls: true, // Aggiungi questa opzione per nascondere i controlli del player
-        controlForward: false,
-        controlBackward: false,
+        
+        
         autoPlay: true,
         mute: false,
         fillToContainer: true,
