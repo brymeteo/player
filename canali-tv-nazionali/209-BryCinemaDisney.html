@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
-    <script src="https://cdn.fluidplayer.com/2.2.0/fluidplayer.min.js"></script>
+    <script src="https://cdn.fluidplayer.com/v2/current/fluidplayer.min.js"></script>
 
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
 
@@ -71,7 +71,14 @@
             z-index: 500; /* Assicurati che il contenitore del video sia sopra lo sfondo */
         }
 
-   
+        #hls-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+        }
 
         #fallback-image {
             width: 100%;
