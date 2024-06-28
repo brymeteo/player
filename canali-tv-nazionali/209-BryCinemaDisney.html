@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +7,7 @@
     <meta charset="UTF-8">
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
-    <script src="https://cdn.fluidplayer.com/2.4.0/fluidplayer.min.js"></script>
+    <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
 
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
 
@@ -76,8 +77,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Assicurati che il video riempia l'area senza deformarsi */
-            aspect-ratio: 16/9; /* Mantiene il rapporto d'aspetto */
+            object-fit: cover; /* Assicurati che il video riempia l'area senza deformarsi */
         }
 
         #fallback-image {
@@ -107,11 +107,15 @@
             background: 0 0 !important;
             display: none;
         }
-
+        
+        
         /* Nasconde i controlli del player fluid */
-        .fluid_controls_container {
-            display: none !important;
-        }
+.fluid_controls_container {
+    display: none !important;
+}
+
+        
+        
     </style>
 </head>
 
@@ -119,7 +123,7 @@
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
         <video id="hls-video">
-            <source src="https://app.viloud.tv/hls/channel/8df2465f99c182b1c77376f36230f20c.m3u8" type="application/x-mpegURL">
+            <source src="https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8" type="application/x-mpegURL">
         </video>
     </div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
@@ -129,20 +133,29 @@
 
     <script>
         var player = fluidPlayer('hls-video', {
-            layoutControls: {
-                fillToContainer: true, // Riempie il contenitore
-                controlBar: {
-                    autoHide: false, // Assicurati che autoHide sia impostato su false
-                    autoHideTimeout: 3,
-                    animated: true
-                },
-                hideControls: true, // Aggiungi questa opzione per nascondere i controlli del player
-                controlForward: false,
-                controlBackward: false,
-                autoPlay: true,
-                mute: false
-            }
-        });
+    layoutControls: {
+        controlBar: {
+            autoHide: false, // Assicurati che autoHide sia impostato su false
+            autoHideTimeout: 3,
+            animated: true
+        },
+        hideControls: true, // Aggiungi questa opzione per nascondere i controlli del player
+        controlForward: false,
+        controlBackward: false,
+        autoPlay: true,
+        mute: false,
+        fillToContainer: true,
+        allowTheatre: false,
+        allowFullscreen: false,
+        allowDownload: false,
+        allowCasting: false,
+        playPauseAnimation: false,
+        playbackRateEnabled: false,
+        allowContextMenu: false,
+        doubleclickFullscreen: false
+    }
+});
+
 
         // Gestisci l'errore del player
         player.on('error', function(err) {
