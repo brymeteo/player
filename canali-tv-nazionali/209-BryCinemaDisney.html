@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
-    <script src="https://cdn.fluidplayer.com/3.22.0/fluidplayer.min.js" defer></script>
+    <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js" defer></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
@@ -108,7 +108,7 @@
 <body>
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
-        <video id="hls-video">
+        <video id="hls-video" preload="auto" controls>
             <source id="video-source" type="application/x-mpegURL">
         </video>
     </div>
@@ -170,8 +170,16 @@
             });
 
             player.on('error', function(err) {
+                console.error('Video error:', err);
                 document.getElementById("fallback-image").style.display = "block";
                 document.getElementById("video-container").style.display = "none";
+
+                // Tentativo di ricaricare il video
+                setTimeout(() => {
+                    document.getElementById("video-container").style.display = "block";
+                    document.getElementById("fallback-image").style.display = "none";
+                    player.play();
+                }, 5000); // Riprova dopo 5 secondi
             });
 
             saveVideoURL(videoURL);  // Salva l'URL nel localStorage
