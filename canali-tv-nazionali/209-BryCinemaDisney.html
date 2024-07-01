@@ -127,54 +127,117 @@
             return localStorage.getItem('videoURL') || videoSourceURL;
         }
 
+        function saveCurrentTime(time) {
+            localStorage.setItem('currentTime', time);
+        }
+
+        function getCurrentTime() {
+            return parseFloat(localStorage.getItem('currentTime')) || 0;
+        }
+
+        function checkStreamAvailability(url, callback) {
+            fetch(url, { method: 'HEAD' })
+                .then(function(response) {
+                    if (response.ok) {
+                        callback(true);
+                    } else {
+                        callback(false);
+                    }
+                })
+                .catch(function() {
+                    callback(false);
+                });
+        }
+
+        function handlePlayerError(player) {
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("video-container").style.display = "none";
+
+            // Riconnessione automatica dopo 5 secondi
+            setTimeout(function() {
+                const currentTime = getCurrentTime();
+                document.getElementById("video-container").style.display = "block";
+                document.getElementById("fallback-image").style.display = "none";
+                player.load({ src: getVideoURL(), type: 'application/x-mpegURL' });
+                player.on('ready', function() {
+                    player.currentTime = currentTime;
+                    player.play();
+                });
+            }, 5000);
+        }
+
         window.onload = function() {
-            // Non cancellare localStorage, usiamo localStorage per memorizzare l'URL del video
             sessionStorage.clear();
         };
 
         document.addEventListener("DOMContentLoaded", function() {
             const videoURL = getVideoURL();
-            document.getElementById("video-source").src = videoURL;
 
-            setTimeout(function() {
-                document.getElementById("video-container").classList.remove("hidden");
-                document.getElementById("second-logo").style.display = "block";
-            }, 3000);
+            checkStreamAvailability(videoURL, function(isAvailable) {
+                if (isAvailable) {
+                    document.getElementById("video-source").src = videoURL;
 
-            setTimeout(function() {
-                document.getElementById("background-overlay").style.display = "none";
-            }, 3000);
+                    setTimeout(function() {
+                        document.getElementById("video-container").classList.remove("hidden");
+                        document.getElementById("second-logo").style.display = "block";
+                    }, 3000);
 
-            var player = fluidPlayer('hls-video', {
-                layoutControls: {
-                    controlBar: {
-                        autoHide: false,
-                        autoHideTimeout: 3,
-                        animated: true
-                    },
-                    hideControls: true,
-                    controlForward: false,
-                    controlBackward: false,
-                    autoPlay: true,
-                    mute: false,
-                    fillToContainer: true,
-                    allowTheatre: false,
-                    allowFullscreen: false,
-                    allowDownload: false,
-                    allowCasting: false,
-                    playPauseAnimation: false,
-                    playbackRateEnabled: false,
-                    allowContextMenu: false,
-                    doubleclickFullscreen: false
+                    setTimeout(function() {
+                        document.getElementById("background-overlay").style.display = "none";
+                    }, 3000);
+
+                    var player = fluidPlayer('hls-video', {
+                        layoutControls: {
+                            controlBar: {
+                                autoHide: false,
+                                autoHideTimeout: 3,
+                                animated: true
+                            },
+                            hideControls: true,
+                            controlForward: false,
+                            controlBackward: false,
+                            autoPlay: true,
+                            mute: false,
+                            fillToContainer: true,
+                            allowTheatre: false,
+                            allowFullscreen: false,
+                            allowDownload: false,
+                            allowCasting: false,
+                            playPauseAnimation: false,
+                            playbackRateEnabled: false,
+                            allowContextMenu: false,
+                            doubleclickFullscreen: false
+                        }
+                    });
+
+                    player.on('error', function(err) {
+                        handlePlayerError(player);
+                    });
+
+                    player.on('buffering', function() {
+                        console.log("Buffering...");
+                    });
+
+                    player.on('playing', function() {
+                        // Salva il tempo corrente ogni 5 secondi
+                        setInterval(function() {
+                            saveCurrentTime(player.currentTime);
+                        }, 5000);
+                    });
+
+                    player.on('pause', function() {
+                        console.log("Paused");
+                    });
+
+                    player.on('play', function() {
+                        console.log("Playing");
+                    });
+
+                    saveVideoURL(videoURL);  // Salva l'URL nel localStorage
+                } else {
+                    document.getElementById("fallback-image").style.display = "block";
                 }
             });
-
-            player.on('error', function(err) {
-                document.getElementById("fallback-image").style.display = "block";
-                document.getElementById("video-container").style.display = "none";
-            });
-
-            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
         });
 
         var logo = document.getElementById("logo");
