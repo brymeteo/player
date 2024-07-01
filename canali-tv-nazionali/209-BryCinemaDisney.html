@@ -5,9 +5,8 @@
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Video.js CSS and JS -->
-    <link href="https://vjs.zencdn.net/7.14.3/video-js.css" rel="stylesheet">
-    <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+    <!-- Player -->
+    <script src="https://cdn.fluidplayer.com/3.22.0/fluidplayer.min.js" defer></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
@@ -99,13 +98,18 @@
             background: 0 0 !important;
             display: none;
         }
+
+        .fluid_controls_container {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
-        <video id="hls-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="100%">
-            <source id="video-source" src="https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8" type="application/x-mpegURL">
+        <video id="hls-video">
+            <source id="video-source" type="application/x-mpegURL">
         </video>
     </div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
@@ -141,36 +145,33 @@
                 document.getElementById("background-overlay").style.display = "none";
             }, 3000);
 
-            var player = videojs('hls-video', {
-                controls: false,
-                autoplay: true,
-                preload: 'auto',
-                errorDisplay: false,
-                controlBar: {
-                    volumePanel: { inline: false },
-                    muteToggle: true,
-                    fullscreenToggle: false,
-                    pictureInPictureToggle: false,
-                    remainingTimeDisplay: false,
-                    durationDisplay: false
-                },
-                userActions: {
-                    hotkeys: true
+            var player = fluidPlayer('hls-video', {
+                layoutControls: {
+                    controlBar: {
+                        autoHide: false,
+                        autoHideTimeout: 3,
+                        animated: true
+                    },
+                    hideControls: true,
+                    controlForward: false,
+                    controlBackward: false,
+                    autoPlay: true,
+                    mute: false,
+                    fillToContainer: true,
+                    allowTheatre: false,
+                    allowFullscreen: false,
+                    allowDownload: false,
+                    allowCasting: false,
+                    playPauseAnimation: false,
+                    playbackRateEnabled: false,
+                    allowContextMenu: false,
+                    doubleclickFullscreen: false
                 }
             });
 
-            player.on('error', function() {
-                console.error('Video error:', player.error());
+            player.on('error', function(err) {
                 document.getElementById("fallback-image").style.display = "block";
                 document.getElementById("video-container").style.display = "none";
-
-                // Tentativo di ricaricare il video
-                setTimeout(() => {
-                    document.getElementById("video-container").style.display = "block";
-                    document.getElementById("fallback-image").style.display = "none";
-                    player.src({ type: 'application/x-mpegURL', src: videoURL });
-                    player.play();
-                }, 5000); // Riprova dopo 5 secondi
             });
 
             saveVideoURL(videoURL);  // Salva l'URL nel localStorage
