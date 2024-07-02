@@ -4,10 +4,13 @@
 <head>
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
-    <script src="https://cdn.fluidplayer.com/3.33.0/fluidplayer.min.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+
     <style>
         #background-overlay {
             position: fixed;
@@ -15,7 +18,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 100;
+            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
             background: #171a45;
         }
 
@@ -24,10 +27,12 @@
             top: 7%;
             right: 5%;
             max-width: 26%;
+            width: auto;
+            height: auto;
             width: 21.5%;
             height: auto !important;
             pointer-events: none;
-            z-index: 40;
+            z-index: 1000;
             background: 0 0 !important;
         }
 
@@ -40,7 +45,6 @@
             opacity: 90%;
             cursor: pointer;
             display: block;
-            z-index: 1000;
         }
 
         .hidden {
@@ -62,7 +66,7 @@
             z-index: 500;
         }
 
-        #hls-video {
+        #player video {
             position: absolute;
             top: 0;
             left: 0;
@@ -79,127 +83,64 @@
         }
 
         .player-controls {
-            display: none !important;
+            display: none !important; /* Nasconde i controlli del player */
         }
 
         .media-control .media-control-layer {
-            display: none !important;
-        }
-
-        #second-logo {
-            position: absolute;
-            top: 7%;
-            right: 5%;
-            max-width: 26%;
-            width: 21.5%;
-            height: auto !important;
-            pointer-events: none;
-            z-index: 1000;
-            background: 0 0 !important;
-            display: none;
-        }
-
-        .fluid_controls_container {
-            display: none !important;
+            display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
         }
     </style>
 </head>
 
 <body>
     <div id="background-overlay"></div>
-    <div id="video-container" class="hidden">
-        <video id="hls-video">
-            <source id="video-source" type="application/x-mpegURL">
-        </video>
-    </div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <div id="player" class="hidden"></div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
     <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
-    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538" alt="Secondo Logo">
 
     <script>
-        const videoSourceURL = "https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8";
+        var player = new Clappr.Player({
+            source: "https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8",
+            parentId: "#player",
+            width: '100%',
+            height: '100vh',
+            controls: false,
+            autoPlay: true,
+            watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538",
+            position: 'top-right',
+        });
 
-        function saveVideoURL(url) {
-            localStorage.setItem('videoURL', url);
-        }
-
-        function getVideoURL() {
-            return localStorage.getItem('videoURL') || videoSourceURL;
-        }
-
-        window.onload = function() {
-            // Non cancellare localStorage, usiamo localStorage per memorizzare l'URL del video
-            sessionStorage.clear();
-        };
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const videoURL = getVideoURL();
-            document.getElementById("video-source").src = videoURL;
-
-            setTimeout(function() {
-                document.getElementById("video-container").classList.remove("hidden");
-                document.getElementById("second-logo").style.display = "block";
-            }, 3000);
-
-            setTimeout(function() {
-                document.getElementById("background-overlay").style.display = "none";
-            }, 3000);
-
-            var player = fluidPlayer('hls-video', {
-                layoutControls: {
-                    controlBar: {
-                        autoHide: false,
-                        autoHideTimeout: 3,
-                        animated: true
-                    },
-                    hideControls: true,
-                    controlForward: false,
-                    controlBackward: false,
-                    autoPlay: true,
-                    mute: false,
-                    fillToContainer: true,
-                    allowTheatre: false,
-                    allowFullscreen: false,
-                    allowDownload: false,
-                    allowCasting: false,
-                    playPauseAnimation: false,
-                    playbackRateEnabled: false,
-                    allowContextMenu: false,
-                    doubleclickFullscreen: false
-                }
-            });
-
-            player.on('error', function(err) {
-                document.getElementById("fallback-image").style.display = "block";
-                document.getElementById("video-container").style.display = "none";
-            });
-
-            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
+        player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
         });
 
         var logo = document.getElementById("logo");
-        var timerLogo;
+        var timer;
 
         function hideLogo() {
             logo.style.display = "none";
         }
 
-        function resetLogoTimer() {
-            logo.style.display = "block";
-            clearTimeout(timerLogo);
-            timerLogo = setTimeout(hideLogo, 15000);
+        function resetTimer() {
+            logo.style.display = "block"; // Riappare il logo
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 15 secondi di inattività
         }
 
-        document.addEventListener("mousemove", resetLogoTimer);
-        document.addEventListener("keypress", resetLogoTimer);
-
-        resetLogoTimer();
+        document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("mousemove", resetTimer);
+            document.addEventListener("keypress", resetTimer);
+            resetTimer(); // Avvia il timer all'avvio della pagina
+        });
     </script>
 
-    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
 </body>
 
 </html>
