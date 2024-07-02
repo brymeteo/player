@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
     <!-- Video resolution switcher -->
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
 
     <style>
@@ -18,7 +16,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            z-index: -1;
             background: #171a45;
         }
 
@@ -64,6 +62,7 @@
             height: 100%;
             background: black;
             z-index: 500;
+            overflow: hidden;
         }
 
         #player video {
@@ -72,40 +71,33 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Usa contain per mantenere le proporzioni con le bande nere */
         }
 
         #fallback-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Usa contain per mantenere le proporzioni con le bande nere */
             display: none;
         }
 
-        .player-controls {
-            display: none !important; /* Nasconde i controlli del player */
-        }
-
+        .player-controls,
         .media-control .media-control-layer {
-            display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
+            display: none !important;
         }
     </style>
 </head>
-
 <body>
     <div id="background-overlay"></div>
     <div id="player" class="hidden"></div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
-        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
     <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
 
     <script>
-        // Funzione per ottenere l'URL del flusso dal localStorage o usare un URL di default
         function getStreamUrl() {
             return localStorage.getItem('streamUrl') || 'https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8';
         }
 
-        // Memorizza l'URL del flusso nel localStorage
         function setStreamUrl(url) {
             localStorage.setItem('streamUrl', url);
         }
@@ -135,14 +127,15 @@
             }
 
             function resetTimer() {
-                logo.style.display = "block"; // Riappare il logo
+                logo.style.display = "block";
                 clearTimeout(timer);
-                timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 15 secondi di inattività
+                timer = setTimeout(hideLogo, 15000);
             }
 
             document.addEventListener("mousemove", resetTimer);
             document.addEventListener("keypress", resetTimer);
-            resetTimer(); // Avvia il timer all'avvio della pagina
+
+            resetTimer();
         });
     </script>
 
@@ -150,7 +143,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
 </body>
-
 </html>
