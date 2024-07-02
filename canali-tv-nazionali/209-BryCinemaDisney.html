@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
     <!-- Video resolution switcher -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+
     <style>
         #background-overlay {
             position: fixed;
@@ -20,7 +22,18 @@
             background: #171a45;
         }
 
-        [data-watermark-top-right] {
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            opacity: 90%;
+            cursor: pointer;
+            display: none; /* Nascondi il logo inizialmente */
+            z-index: 1002;
+        }
+
+        #second-logo {
             position: absolute;
             top: 7%;
             right: 5%;
@@ -32,130 +45,115 @@
             background: 0 0 !important;
         }
 
-        #logo {
-            position: absolute;
-            top: 71%;
-            left: 21%;
-            width: 57%;
-            height: auto;
-            opacity: 90%;
-            cursor: pointer;
-            display: block;
-            z-index: 1002;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         body {
             margin: 0;
             padding: 0;
         }
 
         #video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 500;
-            overflow: hidden;
-        }
-
-        #player video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Default to cover */
+            background: black;
         }
 
-        #fallback-image {
+        #my-video {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Usa contain per mantenere le proporzioni con le bande nere */
-            display: none;
         }
 
-        .player-controls,
-        .media-control .media-control-layer {
-            display: none !important;
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0);
         }
     </style>
 </head>
+
 <body>
     <div id="background-overlay"></div>
+    
     <div id="video-container">
-        <div id="player"></div>
+        <!-- Player Twitch incorporato -->
+       <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+<iframe src="//player.viloud.tv/embed/channel/8df2465f99c182b1c77376f36230f20c?autoplay=1&amp;volume=1&amp;controls=1&amp;title=1&amp;share=1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allow="autoplay" allowfullscreen=""></iframe>
+            <div id="overlay"></div>
+        </div>
     </div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
-    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
+    
+    <div id="player" class="hidden"></div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538" alt="Secondo Logo">
 
     <script>
-        function getStreamUrl() {
-            return localStorage.getItem('streamUrl') || 'https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8';
+        var logo = document.getElementById("logo");
+        var overlay = document.getElementById("overlay");
+        var timer;
+        var overlayTimer;
+
+        function hideLogo() {
+            logo.style.display = "none";
         }
 
-        function setStreamUrl(url) {
-            localStorage.setItem('streamUrl', url);
+        function resetTimer() {
+            logo.style.display = "block"; // Riappare il logo
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 15 secondi di inattività
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            var player = new Clappr.Player({
-                source: getStreamUrl(),
-                parentId: "#player",
-                width: '100%',
-                height: '100vh',
-                controls: false,
-                autoPlay: true,
-                watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538",
-                position: 'top-right',
-            });
+        function resetOverlayTimer() {
+            clearTimeout(overlayTimer);
+            overlayTimer = setTimeout(function() {
+                overlay.style.pointerEvents = 'auto'; // Riabilita l'overlay dopo 10 secondi
+            }, 10000); // 10 secondi di inattività
+        }
 
-            player.on(Clappr.Events.PLAYER_ERROR, function (err) {
-                document.getElementById("fallback-image").style.display = "block";
-                document.getElementById("video-container").style.display = "none";
-            });
+        overlay.addEventListener("mousemove", resetTimer);
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keypress", resetTimer);
 
-            player.on(Clappr.Events.PLAYER_PLAY, function() {
-                var videoElement = player.core.getCurrentContainer().el().querySelector('video');
-                videoElement.addEventListener('loadedmetadata', function() {
-                    var videoRatio = videoElement.videoWidth / videoElement.videoHeight;
-                    var containerRatio = videoElement.parentElement.clientWidth / videoElement.parentElement.clientHeight;
-
-                    if (videoRatio > containerRatio) {
-                        videoElement.style.objectFit = 'contain';
-                    } else {
-                        videoElement.style.objectFit = 'cover';
-                    }
-                });
-            });
-
-            var logo = document.getElementById("logo");
-            var timer;
-
-            function hideLogo() {
-                logo.style.display = "none";
-            }
-
-            function resetTimer() {
-                logo.style.display = "block";
-                clearTimeout(timer);
-                timer = setTimeout(hideLogo, 15000);
-            }
-
-            document.addEventListener("mousemove", resetTimer);
-            document.addEventListener("keypress", resetTimer);
-
-            resetTimer();
+        // Aggiungi event listener per permettere l'interazione con l'iframe
+        overlay.addEventListener("mousedown", function() {
+            overlay.style.pointerEvents = 'none'; // Disabilita l'overlay per permettere il click sull'iframe
+            resetOverlayTimer(); // Avvia il timer per riabilitare l'overlay
         });
+
+        overlay.addEventListener("mouseup", function() {
+            overlay.style.pointerEvents = 'auto'; // Riabilita temporaneamente l'overlay dopo il click
+        });
+
+        resetTimer(); // Avvia il timer all'avvio della pagina
+
+        // Funzione per aggiungere e avviare l'iframe automaticamente
+        function addIframe() {
+            const player = document.getElementById("player");
+            if (!player.querySelector('iframe')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg";
+                iframe.width = "640";
+                iframe.height = "360";
+                iframe.frameBorder = "0";
+                player.appendChild(iframe);
+                player.classList.remove("hidden"); // Mostra il player
+            }
+        }
+
+        // Avvia l'iframe automaticamente all'avvio della pagina
+        addIframe();
     </script>
 
     <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
 </body>
+
 </html>
