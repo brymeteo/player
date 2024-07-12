@@ -37,7 +37,7 @@
   <div class="overlay" onclick="activateAudio()">
     <div>
       <div class="icon"><div class="separator" style="clear: both; text-align: center;"><imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" data-original-height="800" data-original-width="800" height="94" src="https://i.ibb.co/SXnp744/Speaker-Icon-svg.png" width="94" /></a></div></div>
-      <p style="text-align: center;"><span style="font-size: 23px;">Attiva l'audio premendo sullo schermo, in seguito&nbsp;</span></p><p style="text-align: center;"><span style="font-size: 23px;">clicca su <span style="color: #eeeeee;">reset impostazioni</span> per poter cambiare i canali</span></p>
+      <p style="text-align: center;"><span style="font-size: 23px;">Attiva l'audio premendo l'icona in basso sullo schermo, in seguito&nbsp;</span></p><p style="text-align: center;"><span style="font-size: 23px;">clicca su <span style="color: #eeeeee;">reset impostazioni</span> per poter cambiare i canali</span></p>
       
     </div>
   </div>
@@ -48,12 +48,7 @@
     var iframe = document.getElementById('preview');
     var overlay = document.querySelector('.overlay');
     
-    var iframeSrc = iframe.src;
-    
-    // Aggiungi volume=1 all'URL per attivare l'audio
-    if (iframeSrc.includes('volume=0')) {
-      iframe.src = iframeSrc.replace('volume=0', 'volume=1');
-    }
+
 
     // Nascondi l'overlay
     overlay.style.display = 'none';
