@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
     <script src="https://cdn.fluidplayer.com/3.22.0/fluidplayer.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- HLS.js library -->
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
@@ -109,7 +108,7 @@
 <body>
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
-        <video id="hls-video" controls>
+        <video id="hls-video">
             <source id="video-source" type="application/x-mpegURL">
         </video>
     </div>
@@ -146,32 +145,34 @@
                 document.getElementById("background-overlay").style.display = "none";
             }, 3000);
 
-            if (Hls.isSupported()) {
-                var video = document.getElementById('hls-video');
-                var hls = new Hls({
-                    maxBufferLength: 60 // Buffer 60 seconds of video
-                });
-                hls.loadSource(videoURL);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
-                });
-                hls.on(Hls.Events.ERROR, function(event, data) {
-                    if (data.fatal) {
-                        document.getElementById("fallback-image").style.display = "block";
-                        document.getElementById("video-container").style.display = "none";
-                    }
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = videoURL;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-                video.addEventListener('error', function() {
-                    document.getElementById("fallback-image").style.display = "block";
-                    document.getElementById("video-container").style.display = "none";
-                });
-            }
+            var player = fluidPlayer('hls-video', {
+                layoutControls: {
+                    controlBar: {
+                        autoHide: false,
+                        autoHideTimeout: 3,
+                        animated: true
+                    },
+                    hideControls: true,
+                    controlForward: false,
+                    controlBackward: false,
+                    autoPlay: true,
+                    mute: false,
+                    fillToContainer: true,
+                    allowTheatre: false,
+                    allowFullscreen: false,
+                    allowDownload: false,
+                    allowCasting: false,
+                    playPauseAnimation: false,
+                    playbackRateEnabled: false,
+                    allowContextMenu: false,
+                    doubleclickFullscreen: false
+                }
+            });
+
+            player.on('error', function(err) {
+                document.getElementById("fallback-image").style.display = "block";
+                document.getElementById("video-container").style.display = "none";
+            });
 
             saveVideoURL(videoURL);  // Salva l'URL nel localStorage
         });
