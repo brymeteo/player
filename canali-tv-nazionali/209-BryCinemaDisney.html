@@ -1,5 +1,8 @@
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         #background-overlay {
             position: fixed;
@@ -9,6 +12,9 @@
             height: 100%;
             z-index: 1000;
             background: #171a45;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #logo {
@@ -34,8 +40,6 @@
             background: 0 0 !important;
         }
 
-       
-
         #overlay {
             position: absolute;
             top: 0;
@@ -49,19 +53,20 @@
 </head>
 
 <body>
-   
-     <div id="background-overlay"></div>
-<div id="overlay"></div>
-        
-   <iframe id="preview"  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen="" allow="autoplay" src="https://player.viloud.tv/embed/channel/8df2465f99c182b1c77376f36230f20c?autoplay=1&volume=0&controls=0&title=1&share=0&open_playlist=0&random=0"></iframe>
+    <div id="background-overlay">
+       
+    </div>
+    <div id="overlay"></div>
     
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity=""
-        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <iframe id="preview" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen="" allow="autoplay" src="https://player.viloud.tv/embed/channel/8df2465f99c182b1c77376f36230f20c?autoplay=1&volume=0&controls=0&title=1&share=0&open_playlist=0&random=0"></iframe>
+
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
     <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538" alt="Secondo Logo">
 
     <script>
         var logo = document.getElementById("logo");
         var overlay = document.getElementById("overlay");
+        var backgroundOverlay = document.getElementById("background-overlay");
         var timer;
         var overlayTimer;
 
@@ -98,7 +103,9 @@
 
         resetTimer(); // Avvia il timer all'avvio della pagina
 
-   
+        
     </script>
 
     <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+</body>
+</html>
