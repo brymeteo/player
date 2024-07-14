@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <title>DIRETTA TV</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Player -->
+    <script src="https://cdn.fluidplayer.com/3.22.0/fluidplayer.min.js" defer></script>
+    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
             position: fixed;
@@ -10,11 +15,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000;
+            z-index: 100;
             background: #171a45;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        [data-watermark-top-right] {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 21.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 40;
+            background: 0 0 !important;
         }
 
         #logo {
@@ -22,10 +36,54 @@
             top: 71%;
             left: 21%;
             width: 57%;
+            height: auto;
             opacity: 90%;
             cursor: pointer;
-            display: none; /* Nascondi il logo inizialmente */
-            z-index: 1001;
+            display: block;
+            z-index: 2000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 500;
+        }
+
+        #hls-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .player-controls {
+            display: none !important;
+        }
+
+        .media-control .media-control-layer {
+            display: none !important;
         }
 
         #second-logo {
@@ -36,76 +94,116 @@
             width: 21.5%;
             height: auto !important;
             pointer-events: none;
-            z-index: 900;
+            z-index: 1000;
             background: 0 0 !important;
+            display: none;
         }
 
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0);
+        .fluid_controls_container {
+            display: none !important;
         }
     </style>
 </head>
 
 <body>
-    <div id="background-overlay">
-       
-    </div>
-    <div id="overlay"></div>
-    
-    <iframe id="preview" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen="" allow="autoplay" src="https://player.viloud.tv/embed/channel/8df2465f99c182b1c77376f36230f20c?autoplay=1&volume=0&controls=0&title=1&share=0&open_playlist=0&random=0"></iframe>
 
+    <style type="text/css">
+       body {width:100%;height:100%;margin:auto;;}
+    </style>
+  </head>
+  <body>
+    <div id="mse"></div>
+<link rel="stylesheet" href="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.css"/>
+<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.js"></script>
+
+<script charset="utf-8" src="https://unpkg.byted-static.com/xgplayer-hls/3.0.10/dist/index.min.js"></script>
+
+
+    <div id="background-overlay"></div>
+    <div id="video-container" class="hidden">
+        <video id="hls-video">
+            <source id="video-source" type="application/x-mpegURL">
+        </video>
+    </div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
     <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538" alt="Secondo Logo">
 
     <script>
+    
+    
+    
+         
+        const config = {
+          "id": "mse",
+          "url": "https://app.viloud.tv/hls/8df2465f99c182b1c77376f36230f20c/audio.m3u8",
+          "playsinline": true,
+          "poster": "//lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/byted-player-videos/1.0.0/poster.jpg",
+          "plugins": [],
+          "isLive": true,
+          "fluid": true,
+          "volume": 1,
+          "closeVideoClick": false,
+          "autoplay": true,
+          
+		"width": null,
+		"height": null
+        }
+        config.plugins.push(HlsPlayer)
+        let player = new Player(config)
+        
+     
+    
+
+        function saveVideoURL(url) {
+            localStorage.setItem('videoURL', url);
+        }
+
+        function getVideoURL() {
+            return localStorage.getItem('videoURL') || videoSourceURL;
+        }
+
+        window.onload = function() {
+            // Non cancellare localStorage, usiamo localStorage per memorizzare l'URL del video
+            sessionStorage.clear();
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const videoURL = getVideoURL();
+            document.getElementById("video-source").src = videoURL;
+
+        
+         
+    
+
+           
+
+            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
+        });
+
         var logo = document.getElementById("logo");
-        var overlay = document.getElementById("overlay");
-        var backgroundOverlay = document.getElementById("background-overlay");
-        var timer;
-        var overlayTimer;
+        var timerLogo;
 
         function hideLogo() {
             logo.style.display = "none";
         }
 
-        function resetTimer() {
-            logo.style.display = "block"; // Riappare il logo
-            clearTimeout(timer);
-            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 15 secondi di inattività
+        function resetLogoTimer() {
+            logo.style.display = "block";
+            clearTimeout(timerLogo);
+            timerLogo = setTimeout(hideLogo, 15000);
         }
 
-        function resetOverlayTimer() {
-            clearTimeout(overlayTimer);
-            overlayTimer = setTimeout(function() {
-                overlay.style.pointerEvents = 'auto'; // Riabilita l'overlay dopo 10 secondi
-            }, 10000); // 10 secondi di inattività
-        }
+        document.addEventListener("mousemove", resetLogoTimer);
+        document.addEventListener("keypress", resetLogoTimer);
 
-        overlay.addEventListener("mousemove", resetTimer);
-        document.addEventListener("mousemove", resetTimer);
-        document.addEventListener("keypress", resetTimer);
-
-        // Aggiungi event listener per permettere l'interazione con l'iframe
-        overlay.addEventListener("mousedown", function() {
-            overlay.style.pointerEvents = 'none'; // Disabilita l'overlay per permettere il click sull'iframe
-            resetOverlayTimer(); // Avvia il timer per riabilitare l'overlay
-        });
-
-        overlay.addEventListener("mouseup", function() {
-            overlay.style.pointerEvents = 'auto'; // Riabilita temporaneamente l'overlay dopo il click
-        });
-
-        resetTimer(); // Avvia il timer all'avvio della pagina
-
-        
+        resetLogoTimer();
     </script>
 
-    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
 </body>
+
 </html>
