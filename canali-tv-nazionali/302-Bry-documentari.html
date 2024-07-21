@@ -22,6 +22,38 @@
             background: #171a45;
             
         }
+        
+        
+        
+        
+        
+             [data-watermark-top-right] {
+        position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            
+            width: auto;
+            height: auto;
+            
+            width: 24.5%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
+        
+        
+        
+        
+        
 
         #logo {
             position: absolute;
@@ -60,11 +92,21 @@
             width: 100%;
             height: 100%;
         }
+        
+        
+          /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
+        
+        
     </style>
     
     
-    
-        <style>
+     <style>
     .player-controls {
         display: none !important; /* Nasconde i controlli del player */
     }
@@ -79,7 +121,6 @@
     
     
     
-    
 </head>
 
 <body>
@@ -87,32 +128,31 @@
     <div id="player" class="hidden"></div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/302.png" alt="Logo" data-lity=""
         data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+        
+        
+        
+         <!-- Immagine di fallback già caricata sotto -->
+    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
+        
 
     <script>
-        var player = new Clappr.Player({
-            source: "https://rakuten-Spotlight-6-eu.rakuten.wurl.tv/playlist.m3u8",
-            parentId: "#player",
-            width: '100%',
-            height: '100vh',
-            controls: false,
-            autoPlay: true, // Abilita l'auto-play
-            plugins: {
-                core: [LevelSelector]
-            },
-            levelSelectorConfig: {
-                //Optional : custom labels
-                title: 'QUALITÀ VOX OS',
-                labels: {
-                    0: 'Molto Bassa 360p',
-                    1: 'Bassa 360p ',
-                    2: 'Media 480p ',
-                    3: 'Standard 520p',
-                    4: 'Medio Alta 720p',
-                    5: 'Alta 720p',
-                    6: 'Molto Alta 1080p',
-                    7: 'Super Qualità 1080p '
-                },
-            },
+    var player = new Clappr.Player({
+    source: "https://app.viloud.tv/hls/channel/sep/d862ae4e7c94c8a7f7b724828bc80f8e/high.m3u8",
+    parentId: "#player",
+    width: '100%',
+    height: '100vh',
+    controls: false,
+    autoPlay: true, // Abilita l'auto-play
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000939-2016320165/bry%20cinema%20due-24-6.webp?ph=7e11bb4538",
+    position: 'top-right',
+    
+});
+        
+      
+         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
         });
         
         
