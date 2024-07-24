@@ -114,11 +114,12 @@
       padding: 10px 20px;
       font-size: 20px;
       background-color: transparent;
-      border: 2px solid #ffffff26 ;
+      border: 2px solid #ffffff59 ;
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s;
-      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+      
+    box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
       background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
       /* Effetto luccichio sui bordi */
       box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
@@ -128,7 +129,7 @@
     button:hover {
       background-color: ;
       color: rgba(255 255 255 / 63%);
-      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+      
                   0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
     }
 
@@ -161,7 +162,35 @@
     
     
     
+
+
     
+    
+    
+#reset-overlay button {
+
+     
+      position: absolute;
+      top: 1%;
+      right: 9%;
+        color: rgb(255 255 255 / 64%); /* Colore del testo bianco con opacità */
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 999; /* Aggiunto */
+      
+  
+  padding: 10px 20px;
+  outline: none; /* Rimuove l'outline di default */
+  transition: color 0.3s ease, transform 0.3s ease; /* Transizioni per animazioni */
+    border-radius: 4px;
+  
+    }
+     
+      
+    }
+
+
+
     
  
   </style>
@@ -169,25 +198,50 @@
 <body>
 
 
+
+
+
+
   <div class="tv-container" onmouseenter="showSearchBar()" onmouseleave="hideSearchBar()">
     <div class="number-overlay" id="numberOverlay"></div>
 
     <div class="channel-frame">
     
-      <iframe id="channel" src="https://brymeteo.github.io/player/canali-tv-nazionali/100-RaiNews24.html" frameborder="0"></iframe>
+    
+   
+
+    
+    
+      <iframe id="channel" src="https://brymeteo.github.io/player/canali-tv-nazionali/98-lista-canali.html" frameborder="0"></iframe>
       <div class="fullscreen-icon" onclick="toggleFullscreen()">
         <i class="fas fa-expand"></i>
       </div>
     </div>
+    
+    
+    
+  <div id="reset-overlay">
+    <button onclick="resetSettings()">Reset Impostazioni</button>
+  </div>
+
+    
+    
     <div class="search-bar">
       <form onsubmit="return submitNumber()">
         <input type="text" id="channelNumber" placeholder="Numero canale">
         <input type="submit" value="Cerca">
+       
       </form>
+      
+      
+      
+      
     </div>
     <div class="controls">
-      <button onclick="previousChannel()">- Indietro</button>
-      <button onclick="nextChannel()">+ Avanti</button>
+      
+      <button id="indietro-btn" onclick="previousChannel()">- Indietro</button>
+<button id="avanti-btn" onclick="nextChannel()">+ Avanti</button>
+
     </div>
   </div>
 
@@ -258,44 +312,45 @@ const guideMappings = {
     url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
+ 
   "112": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-tv8/237/",
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
   "113": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-nove/238/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-tv8/237/",
     dataLity: true
   },
   "114": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-20/443/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-nove/238/",
     dataLity: true
   },
   "115": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-rai-4/220/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-20/443/",
     dataLity: true
   },
   "116": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-rai-4/220/",
+    dataLity: true
+  },
+  "117": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-rai-premium/225/",
     dataLity: true
   },
-   "117": {
+   "118": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-twenty-seven/601/",
     dataLity: true
   },
-  "118": {
+  "119": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-la-5/190/",
     dataLity: true
   },
-  "119": {
+  "120": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-real-time/255/",
     dataLity: true
   },
-  "120": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-la7d/254/",
-    dataLity: true
-  },
   "121": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-mediaset-extra/194/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-la7d/254/",
     dataLity: true
   },
   "122": {
@@ -307,27 +362,49 @@ const guideMappings = {
     dataLity: true
   },
   "124": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-top-crime/193/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-mediaset-extra/194/",
     dataLity: true
   },
   "125": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-top-crime/193/",
+    dataLity: true
+  },
+  "126": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-warner-tv/1344181813/",
     dataLity: true
   },
-   "126": {
+   "127": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-dmax/256/",
     dataLity: true
   },
-  "127": {
+  "128": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-italia-2/191/",
     dataLity: true
   },
-  "128": {
+ 
+  "129": {
     url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
-  "129": {
-    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+  
+  "130": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-giallo/244/",
+    dataLity: true
+  },
+  
+  "131": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-cielo/239/",
+    dataLity: true
+  },
+  
+  
+  "132": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-foodnetwork/431/",
+    dataLity: true
+  },
+  
+  "133": {
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-hgtv-homegarden/575/",
     dataLity: true
   },
   "150": {
@@ -375,11 +452,11 @@ const guideMappings = {
     dataLity: true
   },
   "208": {
-    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    url: "https://brymeteo.github.io/player/Guida%20TV/207-bry-cinema-suspense.html",
     dataLity: true
   },
   "209": {
-    url: "https://brymeteo.github.io/player/Guida%20TV/207-bry-cinema-suspense.html",
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
   "210": {
@@ -411,19 +488,19 @@ const guideMappings = {
     dataLity: true
   },
   "217": {
-    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
-    dataLity: true
-  },
-  "218": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-iris/192/",
     dataLity: true
   },
-  "219": {
+  "218": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-cine34/574/",
     dataLity: true
   },
-   "220": {
+  "219": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-rai-movie/229/",
+    dataLity: true
+  },
+   "220": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
     "300": {
@@ -435,19 +512,19 @@ const guideMappings = {
     dataLity: true
   },
    "302": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-foodnetwork/431/",
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
   "303": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-hgtv-homegarden/575/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-foodnetwork/431/",
     dataLity: true
   },
   "304": {
-    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-motor-trend-hd/444/",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-hgtv-homegarden/575/",
     dataLity: true
   },
     "305": {
-    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-motor-trend-hd/444/",
     dataLity: true
   },
    "400": {
@@ -502,6 +579,10 @@ const guideMappings = {
     url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
+  "510": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    dataLity: true
+  },
   "600": {
     url: "https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-deejay-tv/162/",
     dataLity: true
@@ -522,6 +603,26 @@ const guideMappings = {
     url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
   },
+  
+  "605": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    dataLity: true
+  },
+  
+  "606": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    dataLity: true
+  }, 
+  
+  "607": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    dataLity: true
+  }, 
+  
+  "608": {
+    url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
+    dataLity: true
+  }, 
   "700": {
     url: "https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg",
     dataLity: true
@@ -541,7 +642,9 @@ const guideMappings = {
 
     // Mapping dei canali
     const channelMappings = {
-      "100": "https://brymeteo.github.io/player/canali-tv-nazionali/100-RaiNews24.html",
+      "98": "https://brymeteo.github.io/player/canali-tv-nazionali/98-lista-canali.html",
+      "99": "https://brymeteo.github.io/player/canali-tv-nazionali/99-lista-canali.html",
+      "100": "https://brymeteo.github.io/player/canali-tv-nazionali/100-lista-canali.html",
       "101": "https://brymeteo.github.io/player/canali-tv-nazionali/101-Rai1.html",
       "102": "https://brymeteo.github.io/player/canali-tv-nazionali/102-Rai2.html",
       "103": "https://brymeteo.github.io/player/canali-tv-nazionali/103-Rai3.html",
@@ -550,57 +653,61 @@ const guideMappings = {
       "106": "https://brymeteo.github.io/player/canali-tv-nazionali/106-Italia1.html",
       "107": "https://brymeteo.github.io/player/canali-tv-nazionali/107-La7.html",
       "108": "https://brymeteo.github.io/player/canali-tv-nazionali/108-Vox.html",
-      "109": "https://brymeteo.github.io/player/canali-tv-nazionali/109-Voxcrime.html",
-      "110": "https://brymeteo.github.io/player/canali-tv-nazionali/110-Voxanimation.html",
-      "111": "https://brymeteo.github.io/player/canali-tv-nazionali/111-Voxstories.html",
-      "112": "https://brymeteo.github.io/player/canali-tv-nazionali/112-Tv8.html",
-      "113": "https://brymeteo.github.io/player/canali-tv-nazionali/113-Nove.html",
-      "114": "https://brymeteo.github.io/player/canali-tv-nazionali/114-20Mediaset.html",
-      "115": "https://brymeteo.github.io/player/canali-tv-nazionali/115-Rai4.html",
-      "116": "https://brymeteo.github.io/player/canali-tv-nazionali/116-Raipremium.html",
-      "117": "https://brymeteo.github.io/player/canali-tv-nazionali/117-27Twentyseven.html",
-      "118": "https://brymeteo.github.io/player/canali-tv-nazionali/118-La5.html",
-      "119": "https://brymeteo.github.io/player/canali-tv-nazionali/119-Realtime.html",
-      "120": "https://brymeteo.github.io/player/canali-tv-nazionali/120-La7d.html",
-      "121": "https://brymeteo.github.io/player/canali-tv-nazionali/121-MediasetExtra.html",
-      "122": "https://brymeteo.github.io/player/canali-tv-nazionali/122-Grandefratello-regia1.html",
-      "123": "https://brymeteo.github.io/player/canali-tv-nazionali/123-Grandefratello-regia2.html",
-      "124": "https://brymeteo.github.io/player/canali-tv-nazionali/124-Topcrime.html",
-      "125": "https://brymeteo.github.io/player/canali-tv-nazionali/125-WarnerTV.html",
-      "126": "https://brymeteo.github.io/player/canali-tv-nazionali/126-Dmax.html",
-      "127": "https://brymeteo.github.io/player/canali-tv-nazionali/127-Italia2.html",
-      "128": "https://brymeteo.github.io/player/canali-tv-nazionali/128-Rai4k.html",
-      "129": "https://brymeteo.github.io/player/canali-tv-nazionali/129-BryAtlantic.html",
+      "109": "https://brymeteo.github.io/player/canali-tv-nazionali/109-BryUno.html",
+      "110": "https://brymeteo.github.io/player/canali-tv-nazionali/110-BryCrime.html",
+      "111": "https://brymeteo.github.io/player/canali-tv-nazionali/111-BrySerie.html",
+      "112": "https://brymeteo.github.io/player/canali-tv-nazionali/112-BrySerie+24.html",
+      "113": "https://brymeteo.github.io/player/canali-tv-nazionali/113-Tv8.html",
+      "114": "https://brymeteo.github.io/player/canali-tv-nazionali/114-Nove.html",
+      "115": "https://brymeteo.github.io/player/canali-tv-nazionali/115-20Mediaset.html",
+      "116": "https://brymeteo.github.io/player/canali-tv-nazionali/116-Rai4.html",
+      "117": "https://brymeteo.github.io/player/canali-tv-nazionali/117-Raipremium.html",
+      "118": "https://brymeteo.github.io/player/canali-tv-nazionali/118-27Twentyseven.html",
+      "119": "https://brymeteo.github.io/player/canali-tv-nazionali/119-La5.html",
+      "120": "https://brymeteo.github.io/player/canali-tv-nazionali/120-Realtime.html",
+      "121": "https://brymeteo.github.io/player/canali-tv-nazionali/121-La7d.html",
+      "122": "https://brymeteo.github.io/player/canali-tv-nazionali/122-MediasetExtra.html",
+      "123": "https://brymeteo.github.io/player/canali-tv-nazionali/123-Grandefratello-regia1.html",
+      "124": "https://brymeteo.github.io/player/canali-tv-nazionali/124-Grandefratello-regia2.html",
+      "125": "https://brymeteo.github.io/player/canali-tv-nazionali/125-Topcrime.html",
+      "126": "https://brymeteo.github.io/player/canali-tv-nazionali/126-WarnerTV.html",
+      "127": "https://brymeteo.github.io/player/canali-tv-nazionali/127-Dmax.html",
+      "128": "https://brymeteo.github.io/player/canali-tv-nazionali/128-Italia2.html",
+      "129": "https://brymeteo.github.io/player/canali-tv-nazionali/129-Rai4k.html",
+      "130": "https://brymeteo.github.io/player/canali-tv-nazionali/130-Giallo.html",
+      "131": "https://brymeteo.github.io/player/canali-tv-nazionali/131-Cielo.html",
+      "132": "https://brymeteo.github.io/player/canali-tv-nazionali/132-FoodNetwork.html",
+      "133": "https://brymeteo.github.io/player/canali-tv-nazionali/133-HGTV.html",
       "150": "https://brymeteo.github.io/player/canali-tv-nazionali/150-Brysport24.html",
       "151": "https://brymeteo.github.io/player/canali-tv-nazionali/151-Brysportuno.html",
       "152": "https://brymeteo.github.io/player/canali-tv-nazionali/152-Sportitalia.html",
       "200": "https://brymeteo.github.io/player/canali-tv-nazionali/200-BryCinemaTrailers.html",
       "201": "https://brymeteo.github.io/player/canali-tv-nazionali/201-BryCinemaUno.html",
       "202": "https://brymeteo.github.io/player/canali-tv-nazionali/202-BryCinemaDue.html",
-      "203": "https://brymeteo.github.io/player/canali-tv-nazionali/203-BryCinemaMax.html",
-      "204": "https://brymeteo.github.io/player/canali-tv-nazionali/204-BryCinemaFamily.html",
-      "205": "https://brymeteo.github.io/player/canali-tv-nazionali/205-BryCinemaAction.html",
-      "206": "https://brymeteo.github.io/player/canali-tv-nazionali/206-BryCinemaComedy.html",
+      "203": "https://brymeteo.github.io/player/canali-tv-nazionali/203-BryCinemaFamily.html",
+      "204": "https://brymeteo.github.io/player/canali-tv-nazionali/204-BryCinemaAction.html",
+      "205": "https://brymeteo.github.io/player/canali-tv-nazionali/205-BryCinemaComedy.html",
+      "206": "https://brymeteo.github.io/player/canali-tv-nazionali/206-BryCinemaDisney.html",
       "207": "https://brymeteo.github.io/player/canali-tv-nazionali/207-BryCinemaCollection.html",
       "208": "https://brymeteo.github.io/player/canali-tv-nazionali/208-BryCinemaSuspense.html",
-      "209": "https://brymeteo.github.io/player/canali-tv-nazionali/209-BryCinemaDisney.html",
-      "210": "https://brymeteo.github.io/player/canali-tv-nazionali/210-BryCinemaUno24.html",
-      "211": "https://brymeteo.github.io/player/canali-tv-nazionali/211-BryCinemaDue24.html",
-      "212": "https://brymeteo.github.io/player/canali-tv-nazionali/212-Rakuten1.html",
-      "213": "https://brymeteo.github.io/player/canali-tv-nazionali/213-Rakuten2.html",
-      "214": "https://brymeteo.github.io/player/canali-tv-nazionali/214-Rakuten3.html",
-      "215": "https://brymeteo.github.io/player/canali-tv-nazionali/215-Rakuten4.html",
-      "216": "https://brymeteo.github.io/player/canali-tv-nazionali/216-Rakuten5.html",
-      "217": "https://brymeteo.github.io/player/canali-tv-nazionali/217-Rakuten6.html",
-      "218": "https://brymeteo.github.io/player/canali-tv-nazionali/218-Iris.html",
-      "219": "https://brymeteo.github.io/player/canali-tv-nazionali/219-Cine34.html",
-      "220": "https://brymeteo.github.io/player/canali-tv-nazionali/220-RaiMovie.html",
+      "209": "https://brymeteo.github.io/player/canali-tv-nazionali/209-BryCinemaUno24.html",
+      "210": "https://brymeteo.github.io/player/canali-tv-nazionali/210-BryCinemaDue24.html",
+      "211": "https://brymeteo.github.io/player/canali-tv-nazionali/211-Rakuten1.html",
+      "212": "https://brymeteo.github.io/player/canali-tv-nazionali/212-Rakuten2.html",
+      "213": "https://brymeteo.github.io/player/canali-tv-nazionali/213-Rakuten3.html",
+      "214": "https://brymeteo.github.io/player/canali-tv-nazionali/214-Rakuten4.html",
+      "215": "https://brymeteo.github.io/player/canali-tv-nazionali/215-Rakuten5.html",
+      "216": "https://brymeteo.github.io/player/canali-tv-nazionali/216-Rakuten6.html",
+      "217": "https://brymeteo.github.io/player/canali-tv-nazionali/217-Iris.html",
+      "218": "https://brymeteo.github.io/player/canali-tv-nazionali/218-Cine34.html",
+      "219": "https://brymeteo.github.io/player/canali-tv-nazionali/219-RaiMovie.html",
+      "220": "https://brymeteo.github.io/player/canali-tv-nazionali/220-Duri-a-Morire.html",
       "300": "https://brymeteo.github.io/player/canali-tv-nazionali/300-Focus.html",
       "301": "https://brymeteo.github.io/player/canali-tv-nazionali/301-Geographic.html",
-      "302": "https://brymeteo.github.io/player/canali-tv-nazionali/302-Foodnetwork.html",
-      "303": "https://brymeteo.github.io/player/canali-tv-nazionali/303-Hgtv.html",
-      "304": "https://brymeteo.github.io/player/canali-tv-nazionali/304-Motortrend.html",
-      "305": "https://brymeteo.github.io/player/canali-tv-nazionali/305-Rakuten-documentari.html",
+      "302": "https://brymeteo.github.io/player/canali-tv-nazionali/302-Bry-documentari.html",
+      "303": "https://brymeteo.github.io/player/canali-tv-nazionali/303-Foodnetwork.html",
+      "304": "https://brymeteo.github.io/player/canali-tv-nazionali/304-Hgtv.html",
+      "305": "https://brymeteo.github.io/player/canali-tv-nazionali/305-Motortrend.html",
       "400": "https://brymeteo.github.io/player/canali-tv-nazionali/400-Skytg24.html",
       "401": "https://brymeteo.github.io/player/canali-tv-nazionali/401-Tgcom24.html",
       "402": "https://brymeteo.github.io/player/canali-tv-nazionali/402-Rainews24.html",
@@ -621,6 +728,9 @@ const guideMappings = {
       "603": "https://brymeteo.github.io/player/canali-tv-nazionali/603-R101.html",
       "604": "https://brymeteo.github.io/player/canali-tv-nazionali/604-Rds.html",
       "605": "https://brymeteo.github.io/player/canali-tv-nazionali/605-BryMusic.html",
+      "606": "https://brymeteo.github.io/player/canali-tv-nazionali/606-Radio-M2o.html",
+      "607": "https://brymeteo.github.io/player/canali-tv-nazionali/607-Radio-Freccia.html",
+      "608": "https://brymeteo.github.io/player/canali-tv-nazionali/608-Radio-Bruno.html",
       "700": "https://brymeteo.github.io/player/canali-tv-nazionali/700-Antenna-Sicilia.html",
       "701": "https://brymeteo.github.io/player/canali-tv-nazionali/701-Tris.html",
       "702": "https://brymeteo.github.io/player/canali-tv-nazionali/702-Video66.html",
@@ -883,7 +993,60 @@ function openGuide() {
   }
 }
 
+
+
   
+// Funzione per mostrare l'overlay di reset
+function showResetOverlay() {
+    var overlay = document.getElementById('reset-overlay');
+    overlay.style.display = 'flex';
+}
+
+// Funzione per nascondere l'overlay di reset
+function hideResetOverlay() {
+    var overlay = document.getElementById('reset-overlay');
+    overlay.style.display = 'none';
+}
+
+// Funzione per cambiare al prossimo canale
+function nextChannel() {
+    currentChannelIndex = (currentChannelIndex + 1) % Object.keys(channelMappings).length;
+    const nextChannelNumber = Object.keys(channelMappings)[currentChannelIndex];
+    showChannel(channelMappings[nextChannelNumber]);
+
+    // Chiamata alla funzione per mostrare l'overlay di reset
+    showResetOverlay();
+}
+
+// Funzione per cambiare al canale precedente
+function previousChannel() {
+    currentChannelIndex = (currentChannelIndex - 1 + Object.keys(channelMappings).length) % Object.keys(channelMappings).length;
+    const prevChannelNumber = Object.keys(channelMappings)[currentChannelIndex];
+    showChannel(channelMappings[prevChannelNumber]);
+
+    // Chiamata alla funzione per mostrare l'overlay di reset
+    showResetOverlay();
+}
+
+// Event listener per mostrare/nascondere l'overlay premendo la freccia giù
+document.addEventListener('keydown', function(event) {
+    var overlay = document.getElementById('reset-overlay');
+    if (event.key === 'ArrowDown') {
+        if (overlay.style.display === 'flex') {
+            hideResetOverlay();
+        } else {
+            showResetOverlay();
+        }
+    }
+});
+
+// Event listener per nascondere l'overlay al clic
+document.getElementById('reset-overlay').addEventListener('click', hideResetOverlay);
+
+
+
+
+
   
   </script>
 </body>
