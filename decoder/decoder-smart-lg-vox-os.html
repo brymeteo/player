@@ -209,21 +209,21 @@
         </div>
     
 
-<script>
+
+
+    <script>
         // Funzione per ritardare la visualizzazione della pagina
         function delayPageDisplay() {
             // Dopo 5 secondi (5000 millisecondi), nascondi l'overlay e mostra il contenuto
             setTimeout(function() {
                 document.getElementById('overlay').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
-            }, 9000); // 5000 millisecondi = 5 secondi
+            }, 5000); // 5000 millisecondi = 5 secondi
         }
 
         // Chiamare la funzione al caricamento della pagina
         window.onload = delayPageDisplay;
     </script>
-
-    
     
     
     
@@ -2617,7 +2617,6 @@
 
 
 
-
   <script>
     // Funzione per gestire l'aggiornamento
     function performUpdate() {
@@ -2651,6 +2650,7 @@
     // Eseguire l'aggiornamento ogni giorno
     setInterval(performUpdate, 24 * 60 * 60 * 1000); // 24 ore * 60 minuti * 60 secondi * 1000 millisecondi
   </script>
+
 
 
 <script>
@@ -2784,10 +2784,6 @@
 
 
 <!-- FINE CODICE DECODER -->
-
-
-
-
 
 
 
@@ -2928,7 +2924,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       function showLoading() {
         document.getElementById('loading-overlay').style.display = 'flex';
-        setTimeout(hideLoading, 10000);
+        setTimeout(hideLoading, 9000);
       }
 
       function hideLoading() {
@@ -2962,3 +2958,6 @@
 
         
   
+
+
+
