@@ -1,1 +1,59 @@
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+    }
+    #UnMutePlayer {
+         position: fixed; /* Cambiato da absolute a fixed per mantenere il pulsante fisso */
+        left: 60px;      /* Posiziona il pulsante a 10px dal bordo sinistro */
+        top: 40px;       /* Posiziona il pulsante a 10px dal bordo superiore */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    .unmute-button {
+        width: 120px;
+        height: 90px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    .unmute-button img {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 5px;
+    }
+    .unmute-button span {
+        font-size: 14px;
+        color: #000;
+    }
+</style>
+
 <iframe id="preview"  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen="" allow="autoplay" src="https://app.viloud.tv/embed/channel/8df2465f99c182b1c77376f36230f20c?autoplay=1&amp;volume=0&amp;controls=0&amp;title=1&amp;share=0&amp;open_playlist=0&amp;random=1&amp;demo=1"></iframe>
+
+<div id="UnMutePlayer">
+    <button class="unmute-button" onclick="unmuteVideo()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg" alt="Unmute">
+        <span>Attiva l'audio</span>
+    </button>
+</div>
+
+<script>
+    function unmuteVideo() {
+        var iframe = document.getElementById('preview');
+        var src = iframe.src;
+        src = src.replace("volume=0", "volume=1");
+        iframe.src = src;
+        document.getElementById('UnMutePlayer').style.display = 'none';
+    }
+</script>
