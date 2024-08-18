@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
-    <!-- Video resolution switcher -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <script src="https://cdn.fluidplayer.com/3.22.0/fluidplayer.min.js" defer></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
-
     <style>
         #background-overlay {
             position: fixed;
@@ -16,8 +15,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            z-index: 100;
             background: #171a45;
+        }
+
+        [data-watermark-top-right] {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 21.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 40;
+            background: 0 0 !important;
         }
 
         #logo {
@@ -25,13 +36,11 @@
             top: 71%;
             left: 21%;
             width: 57%;
-            /* Personalizza dimensioni */
             height: auto;
-            /* Personalizza dimensioni */
             opacity: 90%;
             cursor: pointer;
             display: block;
-            /* Rendere il logo visibile immediatamente */
+            z-index: 1000;
         }
 
         .hidden {
@@ -44,142 +53,153 @@
         }
 
         #video-container {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: black;
-            /* Colore di sfondo nero per il video */
+            z-index: 500;
         }
 
-        #my-video {
+        #hls-video {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            object-fit: cover;
+        }
+
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
         }
 
         .player-controls {
-            display: none !important; /* Nasconde i controlli del player */
+            display: none !important;
         }
 
         .media-control .media-control-layer {
-            display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
+            display: none !important;
         }
 
+        #second-logo {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 21.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 1000;
+            background: 0 0 !important;
+            display: none;
+        }
 
-       #datetime {
-    position: fixed;
-    top: calc(80.5% - 30px);
-    right: calc(63% - 150px);
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: 'Inter', Arial, sans-serif;
-    font-size: 24px;
-    font-weight: 550;
-    display: block;
-    z-index: 1000;
-}
-
+        .fluid_controls_container {
+            display: none !important;
+        }
     </style>
 </head>
 
 <body>
     <div id="background-overlay"></div>
-    <div id="player" class="hidden"></div>
-    <img id="logo" src="https://i.ibb.co/f1rwq63/202.png" alt="Logo" data-lity="" data-lity-target="https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-canale-5/187/">
-    <div id="datetime"></div> <!-- Aggiungi questo elemento per la data e l'orologio -->
+    <div id="video-container" class="hidden">
+        <video id="hls-video">
+            <source id="video-source" type="application/x-mpegURL">
+        </video>
+    </div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/209.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
+    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000850-d326dd326f/bry%20cinema%20disney2-6.webp?ph=7e11bb4538" alt="Secondo Logo">
 
     <script>
-        var player = new Clappr.Player({
-            source: "https://live02-seg.msf.cdn.mediaset.net/live/ch-c5/c5-clr.isml/index.m3u8",
-            parentId: "#player",
-            width: '100%',
-            height: '100vh',
-            controls: false,
-            autoPlay: true, // Abilita l'auto-play
-            plugins: {
-                core: [LevelSelector]
-            },
-            levelSelectorConfig: {
-                title: 'QUALITÀ VOX OS',
-                labels: {
-                    0: 'Molto Bassa 360p',
-                    1: 'Bassa 360p ',
-                    2: 'Media 480p ',
-                    3: 'Standard 520p',
-                    4: 'Medio Alta 720p',
-                    5: 'Alta 720p',
-                    6: 'Molto Alta 1080p',
-                    7: 'Super Qualità 1080p '
-                },
-            },
+        const videoSourceURL = "https://app.viloud.tv/hls/8df2465f99c182b1c77376f36230f20c/audio.m3u8";
+
+        function saveVideoURL(url) {
+            localStorage.setItem('videoURL', url);
+        }
+
+        function getVideoURL() {
+            return localStorage.getItem('videoURL') || videoSourceURL;
+        }
+
+        window.onload = function() {
+            // Non cancellare localStorage, usiamo localStorage per memorizzare l'URL del video
+            sessionStorage.clear();
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const videoURL = getVideoURL();
+            document.getElementById("video-source").src = videoURL;
+
+            setTimeout(function() {
+                document.getElementById("video-container").classList.remove("hidden");
+                document.getElementById("second-logo").style.display = "block";
+            }, 3000);
+
+            setTimeout(function() {
+                document.getElementById("background-overlay").style.display = "none";
+            }, 3000);
+
+            var player = fluidPlayer('hls-video', {
+                layoutControls: {
+                    controlBar: {
+                        autoHide: false,
+                        autoHideTimeout: 3,
+                        animated: true
+                    },
+                    hideControls: true,
+                    controlForward: false,
+                    controlBackward: false,
+                    autoPlay: true,
+                    mute: false,
+                    fillToContainer: true,
+                    allowTheatre: false,
+                    allowFullscreen: false,
+                    allowDownload: false,
+                    allowCasting: false,
+                    playPauseAnimation: false,
+                    playbackRateEnabled: false,
+                    allowContextMenu: false,
+                    doubleclickFullscreen: false
+                }
+            });
+
+            player.on('error', function(err) {
+                document.getElementById("fallback-image").style.display = "block";
+                document.getElementById("video-container").style.display = "none";
+            });
+
+            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
         });
 
         var logo = document.getElementById("logo");
-        var timer;
-        var popupInstance = null;
+        var timerLogo;
 
         function hideLogo() {
             logo.style.display = "none";
         }
 
-        function resetTimer() {
+        function resetLogoTimer() {
             logo.style.display = "block";
-            clearTimeout(timer);
-            timer = setTimeout(hideLogo, 15000);
+            clearTimeout(timerLogo);
+            timerLogo = setTimeout(hideLogo, 15000);
         }
 
-        document.addEventListener("mousemove", resetTimer);
-        document.addEventListener("keypress", resetTimer);
-        resetTimer();
+        document.addEventListener("mousemove", resetLogoTimer);
+        document.addEventListener("keypress", resetLogoTimer);
 
-        document.addEventListener('keydown', function(event) {
-            if (event.keyCode === 38) { // Freccia su
-                if (!popupInstance) {
-                    popupInstance = lity(document.getElementById('logo').getAttribute('data-lity-target'));
-                } else {
-                    popupInstance.close();
-                    popupInstance = null;
-                }
-            }
-        });
-
-      function updateDateTime() {
-    const now = new Date();
-    const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-    const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
-    const dayName = days[now.getDay()];
-    const date = `${dayName}, ${now.getDate()} ${months[now.getMonth()]}`;
-    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('datetime').textContent = `${date} ${time}`;
-}
-
-
-
-        function showDateTime() {
-            document.getElementById('datetime').style.display = 'block';
-            updateDateTime();
-            clearTimeout(window.dateTimeTimer);
-            window.dateTimeTimer = setTimeout(() => {
-                document.getElementById('datetime').style.display = 'none';
-            }, 15000);
-        }
-
-        document.addEventListener('mousemove', showDateTime);
-        document.addEventListener('keypress', showDateTime);
-        setInterval(updateDateTime, 1000); // Aggiorna l'orologio ogni secondo
-
-        // Mostra la data e l'orologio subito al caricamento della pagina
-        window.onload = function() {
-            showDateTime();
-        };
+        resetLogoTimer();
     </script>
 
-    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
 </body>
+
 </html>
