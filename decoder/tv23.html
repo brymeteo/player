@@ -108,6 +108,20 @@
             mute: false,
         });
 
+        function forceRedraw() {
+            // Simula un ridimensionamento per forzare il ridisegno
+            var playerElement = document.getElementById('player');
+            playerElement.style.width = '99%'; // Riduci leggermente la larghezza
+            setTimeout(function() {
+                playerElement.style.width = '100%'; // Ripristina la larghezza
+            }, 100);
+        }
+
+        // Forza il ridisegno ogni volta che il video cambia
+        player.on(Clappr.Events.PLAYBACK_ENDED, function() {
+            forceRedraw();
+        });
+
         // Gestione del logo
         var logo = document.getElementById("logo");
         var timer;
