@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <!-- Player -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+
+    <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            background: #171a45;
+        }
+
+        [data-watermark-top-right] {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 16%;
+            opacity: 0.8;
+            width: auto;
+            height: auto;
+            width: 14.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+            overflow: clip;
+            z-index: 1000;
+            pointer-events: none;
+            background: 0 0 !important;
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            z-index: 4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: none;
+            z-index: 1;
+            position: relative;
+        }
+
+        .player-controls {
+            display: none !important;
+        }
+
+        .media-control .media-control-layer {
+            display: none !important;
+        }
+
+        .weather-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #ffffff;
+            color: #333;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+             z-index: 0;
+        }
+
+        .logo {
+            width: 230px !important;
+            height: 40px !important;
+            margin-right: 20px;
+        }
+
+        .clock {
+            font-size: 26px;
+            margin-right: 20px;
+        }
+
+        .scrolling-wrapper {
+            flex-grow: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .scrolling {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll 40s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .weather-bar span {
+            display: inline-block;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .weather-bar img {
+            width: 70px;
+            height: 70px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="player" class="hidden"></div>
+    <div id="audio-player" class="hidden"></div> <!-- Nuovo div per l'audio di sottofondo -->
+    
+    <!-- Barra meteo posizionata sotto l'immagine di fallback -->
+    <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.png"
+        alt="Fallback Image">
+    
+    <div class="weather-bar" id="weatherBar">
+        <img src="https://i.ibb.co/rZTgQP9/brymeteo-24-copia5.png" alt="Logo Canale" class="logo">
+        <div class="clock" id="clock"></div>
+        <div class="scrolling-wrapper">
+            <div class="scrolling" id="weatherContent">
+                <!-- Il contenuto meteo verrà inserito qui dallo script -->
+            </div>
+        </div>
+    </div>
+
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/404.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+
+    <script>
+        var player = new Clappr.Player({
+            source: "https://app.viloud.tv/hls/channel/sep/19c848ba28ce7457ebc31fba7940f2bb/high.m3u8",
+            parentId: "#player",
+            width: '100%',
+            height: '100vh',
+            controls: false,
+            autoPlay: true,
+            position: 'top-right',
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        var audioPlayer = new Clappr.Player({
+            source: "https://app.viloud.tv/hls/channel/sep/19c848ba28ce7457ebc31fba7940f2bb/audio.m3u8", // URL del secondo flusso audio
+            parentId: "#audio-player",
+            width: 0,
+            height: 0,
+            autoPlay: true,
+            mute: false,
+            
+            backgroundColor: "#000000",
+        });
+
+        player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        });
+
+        // Sincronizza la pausa/ripresa tra i due player
+        player.on(Clappr.Events.PLAYER_PAUSE, function () {
+            audioPlayer.pause();
+        });
+
+        player.on(Clappr.Events.PLAYER_PLAY, function () {
+            audioPlayer.play();
+        });
+
+        audioPlayer.on(Clappr.Events.PLAYER_PAUSE, function () {
+            player.pause();
+        });
+
+        audioPlayer.on(Clappr.Events.PLAYER_PLAY, function () {
+            player.play();
+        });
+
+        var logo = document.getElementById("logo");
+        var timer;
+
+        function hideLogo() {
+            logo.style.display = "none";
+        }
+
+        function resetTimer() {
+            logo.style.display = "block";
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 15000);
+        }
+
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keypress", resetTimer);
+
+        resetTimer();
+    </script>
+    
+    
+     <script>
+       const apiKey = 'bd5e378503939ddaee76f12ad7a97608';  // Sostituisci con la tua chiave API di OpenWeatherMap
+const cities = ['Rome, IT', 'Milano', 'Napoli', 'Firenze', 'Torino', 'Mantova', 'Ferrara', 'Berra', 'Venezia', 'Genova', 'Catania', 'Bari'];
+
+// Mappatura dei codici delle icone di OpenWeatherMap agli URL delle icone personalizzate
+const iconUrls = {
+    '01d': 'https://www.iconameteo.it/Grafica/Icone/05.svg', // Cielo sereno di giorno
+    '01n': 'https://www.iconameteo.it/Grafica/Icone/02.svg', // Cielo sereno di notte
+    '02d': 'https://www.iconameteo.it/Grafica/Icone/21.svg', // Poco nuvoloso di giorno
+    '02n': 'https://www.iconameteo.it/Grafica/Icone/22.svg', // Poco nuvoloso di notte
+    '03d': 'https://www.iconameteo.it/Grafica/Icone/26.svg', // Nuvolosità variabile di giorno
+    '03n': 'https://www.iconameteo.it/Grafica/Icone/27.svg', // Nuvolosità variabile di notte
+    '04d': 'https://www.iconameteo.it/Grafica/Icone/10.svg', // Nuvoloso di giorno
+    '04n': 'https://www.iconameteo.it/Grafica/Icone/11.svg', // Nuvoloso di notte
+    '09d': 'https://www.iconameteo.it/Grafica/Icone/16.svg', // Pioggia a tratti di giorno
+    '09n': 'https://www.iconameteo.it/Grafica/Icone/13.svg', // Pioggia a tratti di notte
+    '10d': 'https://www.iconameteo.it/Grafica/Icone/19.svg', // Pioggia di giorno
+    '10n': 'https://www.iconameteo.it/Grafica/Icone/19.svg', // Pioggia di notte
+    '11d': 'https://www.iconameteo.it/Grafica/Icone/23.svg', // Temporale di giorno
+    '11n': 'https://www.iconameteo.it/Grafica/Icone/23.svg', // Temporale di notte
+    '13d': 'https://www.iconameteo.it/Grafica/Icone/08.svg', // Neve di giorno
+    '13n': 'https://www.iconameteo.it/Grafica/Icone/08.svg', // Neve di notte
+    '50d': 'https://www.iconameteo.it/Grafica/Icone/06.svg', // Nebbia di giorno
+    '50n': 'https://www.iconameteo.it/Grafica/Icone/04.svg'  // Nebbia di notte
+};
+
+async function getWeatherData(city) {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`);
+    const data = await response.json();
+    return data;
+}
+
+async function updateWeatherBar() {
+    const weatherContent = document.getElementById('weatherContent');
+    let weatherInfo = '';
+
+    for (let city of cities) {
+        const weatherData = await getWeatherData(city);
+        const temperature = Math.round(weatherData.main.temp); // Arrotonda la temperatura
+        const iconCode = weatherData.weather[0].icon;
+        const iconUrl = iconUrls[iconCode];  // Prende l'URL dell'icona personalizzata dalla mappa
+
+        // Sostituisci "Rome" con "Roma" per la visualizzazione
+        const displayCity = city === 'Rome, IT' ? 'Roma' : city;
+
+        weatherInfo += `<span><img src="${iconUrl}" alt="Weather Icon"> ${displayCity}: ${temperature}°C</span>`;
+    }
+
+    // Duplicare il contenuto per creare l'effetto di loop continuo
+    weatherContent.innerHTML = weatherInfo + weatherInfo;
+}
+
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}`;
+}
+
+updateWeatherBar();
+updateClock();
+setInterval(updateWeatherBar, 60000); // Aggiorna ogni 60 secondi
+setInterval(updateClock, 1000); // Aggiorna l'orologio ogni secondo
+
+    </script>
+    
+    
+    
+    
+
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
