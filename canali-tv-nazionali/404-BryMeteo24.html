@@ -176,60 +176,43 @@
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/404.png" alt="Logo" data-lity=""
         data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
 
-    <script>
-        var player = new Clappr.Player({
-            source: "https://app.viloud.tv/hls/channel/sep/19c848ba28ce7457ebc31fba7940f2bb/high.m3u8",
+  
+    
+    
+     <script>
+     
+      var player = new Clappr.Player({
+            source: "https://app.viloud.tv/hls/channel/19c848ba28ce7457ebc31fba7940f2bb.m3u8",
             parentId: "#player",
             width: '100%',
             height: '100vh',
             controls: false,
-            autoPlay: true,
-            position: 'top-right',
+            autoPlay: true, // Abilita l'auto-play
+            plugins: {
+                core: [LevelSelector]
+            },
+            levelSelectorConfig: {
+                //Optional : custom labels
+                title: 'QUALITÀ VOX OS',
+                labels: {
+                    0: 'Molto Bassa 360p',
+                    1: 'Bassa 360p ',
+                    2: 'Media 480p ',
+                    3: 'Standard 520p',
+                    4: 'Medio Alta 720p',
+                    5: 'Alta 720p',
+                    6: 'Molto Alta 1080p',
+                    7: 'Super Qualità 1080p '
+                },
+            },
         });
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        var audioPlayer = new Clappr.Player({
-            source: "https://app.viloud.tv/hls/channel/sep/19c848ba28ce7457ebc31fba7940f2bb/audio.m3u8", // URL del secondo flusso audio
-            parentId: "#audio-player",
-            width: 0,
-            height: 0,
-            autoPlay: true,
-            mute: false,
-            
-            backgroundColor: "#000000",
-        });
-
         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
             document.getElementById("fallback-image").style.display = "block";
             document.getElementById("player").style.display = "none";
         });
-
-        // Sincronizza la pausa/ripresa tra i due player
-        player.on(Clappr.Events.PLAYER_PAUSE, function () {
-            audioPlayer.pause();
-        });
-
-        player.on(Clappr.Events.PLAYER_PLAY, function () {
-            audioPlayer.play();
-        });
-
-        audioPlayer.on(Clappr.Events.PLAYER_PAUSE, function () {
-            player.pause();
-        });
-
-        audioPlayer.on(Clappr.Events.PLAYER_PLAY, function () {
-            player.play();
-        });
-
+        
         var logo = document.getElementById("logo");
         var timer;
 
@@ -238,19 +221,21 @@
         }
 
         function resetTimer() {
-            logo.style.display = "block";
+            logo.style.display = "block"; // Riappare il logo
             clearTimeout(timer);
-            timer = setTimeout(hideLogo, 15000);
+            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
         }
 
         document.addEventListener("mousemove", resetTimer);
         document.addEventListener("keypress", resetTimer);
 
-        resetTimer();
-    </script>
-    
-    
-     <script>
+        resetTimer(); // Avvia il timer all'avvio della pagina
+     
+     
+     
+     
+     
+     
        const apiKey = 'bd5e378503939ddaee76f12ad7a97608';  // Sostituisci con la tua chiave API di OpenWeatherMap
 const cities = ['Rome, IT', 'Milano', 'Napoli', 'Firenze', 'Torino', 'Mantova', 'Ferrara', 'Berra', 'Venezia', 'Genova', 'Catania', 'Bari'];
 
