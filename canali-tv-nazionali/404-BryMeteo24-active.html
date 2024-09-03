@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bry Meteo 24</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-image: url('https://i.ibb.co/1mWbfGh/Screenshot-2024-08-29-alle-00-55-27-copia.png'); /* Sostituisci con l'URL della tua immagine */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-image: url('https://i.ibb.co/M9hsKKb/Screenshot-2024-08-29-alle-00-55-27-copia.png'); /* Sostituisci con l'URL della tua immagine */
+        background: linear-gradient(to right, #ffffff 15%, #493c6e 40%); /* Gradiente bianco a sinistra e blu a destra */
+        color: white;
+        padding: 10px;
+    }
+
+    .logo {
+        height: 40px;
+        margin-left: 220px; /* Regola questo valore per spostare il logo verso destra */
+    }
+
+    .ilmeteo-logo {
+        height: 30px;
+        vertical-align: middle;
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        position: relative;
+        justify-content: flex-start; /* Sposta il contenuto verso l'alto */
+    }
+
+    .sidebar {
+    zoom: 117%;
+        background-color: ; /* Specifica il colore di sfondo se necessario */
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        position: absolute; /* Assicurati che la sidebar sia posizionata assolutamente */
+        top: -40px; /* Distanza dall'alto */
+        left: 50px; /* Distanza dal lato sinistro */
+        width: var(--sidebar-width, 500px); /* Imposta la larghezza della sidebar con una variabile CSS */
+        height: var(--sidebar-height, 320px); /* Imposta l'altezza della sidebar con una variabile CSS */
+        transition: all 0.3s ease; /* Aggiunge una transizione fluida per le modifiche */
+    }
+
+    .sidebar h2 {
+        margin-top: 0;
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    .sidebar ul li {
+        padding: 10px;
+        cursor: pointer;
+        color: #2e577b; /* Colore del testo */
+        font-size: large;
+        display: flex; /* Aggiunto per allineare l'icona e il testo */
+        align-items: center;
+        position: relative; /* Necessario per posizionare la riga sottostante */
+        transition: all 0.3s ease; /* Aggiunge una transizione per l'ingrandimento */
+    }
+
+    .sidebar ul li::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 3px; /* Spessore della riga sottostante */
+        background-color: #ffffff; /* Riga trasparente di default */
+        transition: background-color 0.3s ease;
+    }
+
+    .sidebar ul li.selected::after,
+    .sidebar ul li:hover::after {
+        background-color: #0000000d; /* Colore della riga sottostante quando selezionato o in hover */
+    }
+
+    .sidebar ul li .icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        visibility: hidden; /* Nascosta di default */
+    }
+
+    .sidebar ul li.selected,
+    .sidebar ul li:hover {
+        background-color: #ffffff; /* Colore di sfondo quando selezionato o in hover */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 10px rgba(255, 255, 255, 0.33) inset; /* Effetto luccichio sui bordi */
+        font-weight: bold;
+        transform: scale(1.01); /* Ingrandisce leggermente l'elemento */
+    }
+
+    .sidebar ul li.selected .icon {
+        visibility: visible; /* Mostra l'icona solo se selezionata */
+    }
+
+    .weather-video {
+        position: absolute;
+        top: -30px;
+        right: 170px;
+        padding: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        z-index: 10; /* Assicura che il video sia sopra altri elementi */
+    }
+
+    .weather-video video {
+        width: 120px;
+        height: 90px;
+    }
+
+ .weather-info {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+     margin-top: 570px; /* Spazio tra il video e le previsioni */
+    position: relative; /* Crea un contesto di posizionamento per gli elementi figli */
+   
+}
+
+.weather-period {
+    flex: 1; /* Permette che le card si allarghino e si riducano in base allo spazio disponibile */
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+   
+}
+.weather-period h3 {
+    margin-top: 0;
+}
+
+.weather-details {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.weather-details img {
+    width: 140px;
+    vertical-align: middle;
+}
+
+.weather-info-divider {
+    position: relative; /* Mantiene il posizionamento relativo */
+    bottom: 0; /* Allinea al fondo della sezione */
+    margin-top: -220px; /* Spazio tra il video e le previsioni */
+    left: 0;
+    width: 90%; /* Riduci la larghezza totale della riga (adatta questo valore come necessario) */
+    max-width: 2990px; /* Imposta una larghezza massima se necessario */
+    height: 2px; /* Spessore della riga */
+    background-color: #e7e7e7; /* Colore della riga */
+    margin-top: -220px; /* Spazio tra la riga divisoria e la barra dei pulsanti */
+ margin-left: auto; /* Margine sinistro automatico per centrare */
+    margin-right: auto; /* Margine destro automatico per centrare */
+    
+    
+    
+}
+
+
+
+.weather-buttons {
+    display: flex;
+    justify-content: center;
+    background-color: #493c6e; /* Sfondo rosso */
+    margin-top: 218px; /* Unione perfetta con la card */
+     width: 100%; /* Riduci la larghezza totale della riga (adatta questo valore come necessario) */
+    max-width: 3868px; /* Imposta una larghezza massima se necessario */
+    margin-left: auto; /* Per centrare la barra */
+    margin-right: auto; /* Per centrare la barra */
+     */
+}
+
+.weather-buttons button {
+    flex: 1;
+    border: none;
+    color: #ffffff;
+    background-color: transparent;
+    padding: 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-transform: uppercase;
+    
+}
+
+.weather-buttons button.active,
+.weather-buttons button:hover {
+    background-color: #ffffff;
+    color: #ff0000;
+    font-weight: bold;
+}
+
+
+
+
+.time-overlay {
+    position: absolute;
+    top: 450px;
+    left: 0px;
+    width: 95.3%;
+    transform: translateX(10px);
+    background-color: rgb(0 0 0 / 50%);
+    color: white;
+    text-align: left;
+    padding: 0px 10px;
+    font-size: 28px;
+    font-family: Arial, sans-serif;
+}
+
+
+
+
+    </style>
+    
+    
+    <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: #171a45;
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            opacity: 90%;
+            cursor: pointer;
+            display: none; /* Nascondi il logo inizialmente */
+            z-index: 1001;
+        }
+
+        #second-logo {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 24.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 900;
+            background: 0 0 !important;
+        }
+
+       
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0);
+        }
+    </style>
+    
+    
+    
+</head>
+<body>
+    <div class="header">
+        <img src="https://i.ibb.co/rZTgQP9/brymeteo-24-copia5.png" alt="Bry Meteo 24 Logo" class="logo">
+        <div class="meteo-source">dati: <img src="https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png" alt="Il Meteo" class="ilmeteo-logo"></div>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+           
+            <ul id="cities">
+                <!-- Aggiungi un attributo `data-city` per identificare le città -->
+                <li data-city="Lombardia" onclick="updateWeather('Berra')"><img alt="Icona Lombardia" class="icon" src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" /><span style="color: #741b47; font-size: 27px;">ITALIA / CITTÀ / EMILIA - ROMAGNA</span></li>
+                <li data-city="Berra" onclick="updateWeather('Berra')" class="selected"><img alt="Icona Bergamo" class="icon" src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" /><span style="font-size: 22px;">Berra</span></li>
+                <li data-city="Papozze" onclick="updateWeather('Papozze')"><img src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" class="icon" alt="Icona Brescia"><span style="font-size: 22px;">Serravalle</span></li>
+                <li data-city="Copparo" onclick="updateWeather('Copparo')"><img src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" class="icon" alt="Icona Como"><span style="font-size: 22px;">Copparo</span></li>
+                <li data-city="Comacchio" onclick="updateWeather('Comacchio')"><img src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" class="icon" alt="Icona Cremona"><span style="font-size: 22px;">Comacchio</span></li>
+                <li data-city="Adria" onclick="updateWeather('Adria')"><img src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" class="icon" alt="Icona Lecco"><span style="font-size: 22px;">Adria</span></li>
+                <li data-city="Ferrara" onclick="updateWeather('Ferrara')"><img src="https://cdn.icon-icons.com/icons2/3939/PNG/512/direction_gps_location_map_marker_placeholder_icon_250760.png" class="icon" alt="Icona Mantova"><span style="font-size: 22px;">Ferrara</span></li>
+            </ul>
+        </div>
+
+     <div class="weather-video">
+            <div id="videoPlayer"></div>
+            
+             <iframe src="https://brymeteo.github.io/player/canali-zapping-decoder-lg/404-Brymeteo24.html" width="841" height="473" frameborder="0" allowfullscreen></iframe>
+            
+            
+         <!-- Aggiunta della barra nera trasparente con l'orario -->
+    <div class="time-overlay">
+        <span id="current-time"></span>
+    </div>
+</div>
+
+    <div class="weather-info">
+    <div class="weather-period">
+        <h3>Mattina</h3>
+        <div class="weather-details" id="morning">
+            <!-- Meteo della mattina -->
+        </div>
+    </div>
+    <div class="weather-period">
+        <h3>Pomeriggio</h3>
+        <div class="weather-details" id="afternoon">
+            <!-- Meteo del pomeriggio -->
+        </div>
+    </div>
+    <div class="weather-period">
+        <h3>Sera</h3>
+        <div class="weather-details" id="evening">
+            <!-- Meteo della sera -->
+        </div>
+    </div>
+</div>
+<div class="weather-info-divider"></div>
+
+<!-- Barra dei pulsanti -->
+<div class="weather-buttons">
+    <button class="active" onclick="updateWeatherPeriod('today')">oggi</button>
+    <button onclick="updateWeatherPeriod('tomorrow')">domani</button>
+    <button onclick="updateWeatherPeriod('dayAfterTomorrow')">dopodomani</button>
+    
+</div>
+
+
+
+     <div id="background-overlay"></div>
+<div id="overlay"></div>
+        
+    
+    
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/405.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+   
+
+
+
+
+
+<script>
+ const apiKey = 'bd5e378503939ddaee76f12ad7a97608';
+
+const iconUrls = {
+    '01d': 'https://www.iconameteo.it/Grafica/Icone/05.svg',
+    '01n': 'https://www.iconameteo.it/Grafica/Icone/02.svg',
+    '02d': 'https://www.iconameteo.it/Grafica/Icone/21.svg',
+    '02n': 'https://www.iconameteo.it/Grafica/Icone/22.svg',
+    '03d': 'https://www.iconameteo.it/Grafica/Icone/26.svg',
+    '03n': 'https://www.iconameteo.it/Grafica/Icone/27.svg',
+    '04d': 'https://www.iconameteo.it/Grafica/Icone/10.svg',
+    '04n': 'https://www.iconameteo.it/Grafica/Icone/11.svg',
+    '09d': 'https://www.iconameteo.it/Grafica/Icone/19.svg',
+    '09n': 'https://www.iconameteo.it/Grafica/Icone/19.svg',
+    '10d': 'https://www.iconameteo.it/Grafica/Icone/16.svg',
+    '10n': 'https://www.iconameteo.it/Grafica/Icone/13.svg',
+    '11d': 'https://www.iconameteo.it/Grafica/Icone/23.svg',
+    '11n': 'https://www.iconameteo.it/Grafica/Icone/23.svg',
+    '13d': 'https://www.iconameteo.it/Grafica/Icone/08.svg',
+    '13n': 'https://www.iconameteo.it/Grafica/Icone/08.svg',
+    '50d': 'https://www.iconameteo.it/Grafica/Icone/06.svg',
+    '50n': 'https://www.iconameteo.it/Grafica/Icone/04.svg'
+};
+
+function updateWeather(city) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            // Salva i dati meteo per utilizzo successivo
+            window.weatherData = data;
+            // Carica il meteo per "oggi" di default
+            updateWeatherPeriod('today');
+            
+            // Salva la città selezionata nel localStorage
+            localStorage.setItem('selectedCity', city);
+
+            // Aggiorna la classe 'selected' per la città cliccata
+            const cityItems = document.querySelectorAll('#cities li');
+            cityItems.forEach(item => item.classList.remove('selected'));
+
+            const selectedItem = document.querySelector(`#cities li[data-city="${city}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+        })
+        .catch(error => console.error('Errore nel recuperare i dati meteo:', error));
+}
+
+function updateWeatherPeriod(period) {
+    const data = window.weatherData;
+
+    if (!data) return;  // Esci se non ci sono dati
+
+    const formatTemperature = (temp) => Math.round(temp);
+    const convertMpsToKph = (speedInMps) => (speedInMps * 3.6).toFixed(1);
+
+    // Ottieni la data corrente e le date di oggi, domani e dopodomani
+    const currentDate = new Date();
+    const today = currentDate.toISOString().split('T')[0];
+    const tomorrow = new Date(currentDate.setDate(currentDate.getDate() + 1)).toISOString().split('T')[0];
+    const dayAfterTomorrow = new Date(currentDate.setDate(currentDate.getDate() + 2)).toISOString().split('T')[0];
+
+    let periodDate;
+    switch (period) {
+        case 'today':
+            periodDate = today;
+            break;
+        case 'tomorrow':
+            periodDate = tomorrow;
+            break;
+        case 'dayAfterTomorrow':
+            periodDate = dayAfterTomorrow;
+            break;
+    }
+
+    // Filtra i dati meteo per il periodo selezionato
+    const periodWeather = data.list.filter(item => item.dt_txt.includes(periodDate));
+
+    // Nuovi filtri per le fasce orarie specifiche
+    const morningWeather = periodWeather.filter(item => {
+        const time = item.dt_txt.split(' ')[1];
+        return time >= "09:00:00" && time <= "12:00:00";
+    });
+
+    const afternoonWeather = periodWeather.filter(item => {
+        const time = item.dt_txt.split(' ')[1];
+        return time >= "15:00:00" && time <= "19:00:00";
+    });
+
+    const eveningWeather = periodWeather.filter(item => {
+        const time = item.dt_txt.split(' ')[1];
+        return time >= "21:00:00" && time <= "23:50:00";
+    });
+
+    // Aggiorna i dettagli meteo per ciascun periodo
+    const updateWeatherDetails = (elementId, weatherData) => {
+        if (weatherData.length > 0) {
+            const weather = weatherData[0]; // Prendi il primo dato della fascia oraria
+            document.getElementById(elementId).innerHTML = `
+                <img src="${iconUrls[weather.weather[0].icon]}" alt="Icona Meteo">
+                <br><strong>Temperatura:</strong> ${formatTemperature(weather.main.temp)}°C
+                <br>Umidità: ${weather.main.humidity}%
+                <br>Vento: ${convertMpsToKph(weather.wind.speed)} km/h
+            `;
+        } else {
+            document.getElementById(elementId).innerHTML = '<br>Nessun dato disponibile';
+        }
+    };
+
+    updateWeatherDetails('morning', morningWeather);
+    updateWeatherDetails('afternoon', afternoonWeather);
+    updateWeatherDetails('evening', eveningWeather);
+
+    // Evidenzia il pulsante selezionato
+    const buttons = document.querySelectorAll('.weather-buttons button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    const selectedButton = document.querySelector(`.weather-buttons button[onclick="updateWeatherPeriod('${period}')"]`);
+    if (selectedButton) {
+        selectedButton.classList.add('active');
+    }
+}
+
+function loadSelectedCity() {
+    const selectedCity = localStorage.getItem('selectedCity');
+    if (selectedCity) {
+        updateWeather(selectedCity);
+    } else {
+        // Default city to load if none is selected
+        updateWeather('Ferrara');
+    }
+}
+
+// Carica la città selezionata al caricamento della pagina
+window.onload = loadSelectedCity;
+
+
+
+</script>
+
+
+
+  <script>
+        var logo = document.getElementById("logo");
+        var overlay = document.getElementById("overlay");
+        var timer;
+        var overlayTimer;
+
+        function hideLogo() {
+            logo.style.display = "none";
+        }
+
+        function resetTimer() {
+            logo.style.display = "block"; // Riappare il logo
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 15 secondi di inattività
+        }
+
+        function resetOverlayTimer() {
+            clearTimeout(overlayTimer);
+            overlayTimer = setTimeout(function() {
+                overlay.style.pointerEvents = 'auto'; // Riabilita l'overlay dopo 10 secondi
+            }, 10000); // 10 secondi di inattività
+        }
+
+       
+        document.addEventListener("keypress", resetTimer);
+
+        // Aggiungi event listener per permettere l'interazione con l'iframe
+        overlay.addEventListener("mousedown", function() {
+            overlay.style.pointerEvents = 'none'; // Disabilita l'overlay per permettere il click sull'iframe
+            resetOverlayTimer(); // Avvia il timer per riabilitare l'overlay
+        });
+
+        overlay.addEventListener("mouseup", function() {
+            overlay.style.pointerEvents = 'auto'; // Riabilita temporaneamente l'overlay dopo il click
+        });
+
+        resetTimer(); // Avvia il timer all'avvio della pagina
+
+   
+   function updateCurrentTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('current-time').textContent = `${hours}:${minutes}`;
+}
+
+// Aggiorna l'orario ogni minuto
+setInterval(updateCurrentTime, 1000);
+
+// Imposta l'orario al caricamento della pagina
+updateCurrentTime();
+   
+   
+    </script>
+
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+
+
+
+
+
+</body>
+</html>
