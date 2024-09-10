@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +40,10 @@
     box-sizing: border-box;
     background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.13) inset; /* Effetto luccichio sui bordi */
- 
-   
+    background-image: url('https://brymeteo.github.io/player/decoder/immagini/brillante1.png'), url('https://brymeteo.github.io/player/decoder/immagini/brillante2.png');
+    background-repeat: no-repeat, no-repeat;
+    background-size: 20px, 21px; /* Imposta la dimensione dell'immagine */
+    background-position: 102% 50%, -2% 50%; /* Imposta la posizione dell'immagine */
   }
 
   #logo {
@@ -2289,7 +2290,7 @@
                         <p><strong>ID Utente:</strong> UTENTE123</p>
                         <p><strong>Nome Utente:</strong> Bryan</p>
                         <p><strong>Tipo di Abbonamento:</strong> Premium</p>
-                        <p><strong>Data di Scadenza:</strong> 10/09/2024</p>
+                        <p><strong>Data di Scadenza:</strong> 10/10/2024</p>
                         <p><strong>ID Personale:</strong> XYZ567</p>
                         <p><strong>Dettagli Contrattuali:</strong> Contratto XYZ12345</p>
                         <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
@@ -2935,7 +2936,7 @@
       }
 
       function checkSubscriptionStatus() {
-        var expirationDate = new Date('2024-09-10T00:30:00');
+        var expirationDate = new Date('2024-10-10T00:30:00');
         var currentDate = new Date();
 
         if (currentDate > expirationDate) {
