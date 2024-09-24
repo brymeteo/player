@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Player -->
-    <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js" defer></script>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js" defer></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
@@ -17,18 +18,6 @@
             height: 100%;
             z-index: 100;
             background: #171a45;
-        }
-
-        [data-watermark-top-right] {
-            position: absolute;
-            top: 7%;
-            right: 5%;
-            max-width: 19.5%;
-            width: 18.5%;
-            height: auto !important;
-            pointer-events: none;
-            z-index: 40;
-            background: 0 0 !important;
         }
 
         #logo {
@@ -62,13 +51,10 @@
             z-index: 500;
         }
 
-        #hls-video {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .vjs-tech {
+            object-fit: cover;
             width: 100%;
             height: 100%;
-            object-fit: cover;
         }
 
         #fallback-image {
@@ -76,14 +62,7 @@
             height: 100%;
             object-fit: cover;
             display: none;
-        }
-
-        .player-controls {
-            display: none !important;
-        }
-
-        .media-control .media-control-layer {
-            display: none !important;
+             z-index: 2000;
         }
 
         #second-logo {
@@ -95,19 +74,26 @@
             height: auto !important;
             pointer-events: none;
             z-index: 1000;
-            background: 0 0 !important;
             display: none;
         }
 
-        
+        /* Nascondi i controlli predefiniti di Video.js */
+        .vjs-control-bar {
+            display: none !important;
+        }
     </style>
 </head>
 
 <body>
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
-        <video id="hls-video">
-            <source id="video-source" type="application/x-mpegURL">
+        <video
+            id="my-video"
+            class="video-js"
+            controls
+            preload="auto"
+            data-setup="{}">
+            <source id="video-source" src="" type="application/x-mpegURL">
         </video>
     </div>
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/201.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
@@ -126,7 +112,6 @@
         }
 
         window.onload = function() {
-            // Non cancellare localStorage, usiamo localStorage per memorizzare l'URL del video
             sessionStorage.clear();
         };
 
@@ -143,28 +128,22 @@
                 document.getElementById("background-overlay").style.display = "none";
             }, 3000);
 
-            var player = fluidPlayer('hls-video', {
-                layoutControls: {
-                    controlBar: {
-                        autoHide: false,
-                        autoHideTimeout: 3,
-                        animated: true
-                    },
-                    hideControls: true,
-                    controlForward: false,
-                    controlBackward: false,
-                    autoPlay: true,
-                    mute: false,
-                    fillToContainer: true,
-                    allowTheatre: false,
-                    allowFullscreen: false,
-                    allowDownload: false,
-                    allowCasting: false,
-                    playPauseAnimation: false,
-                    playbackRateEnabled: false,
-                    allowContextMenu: false,
-                    doubleclickFullscreen: false
-                }
+            var player = videojs('my-video', {
+                controls: true,
+                autoplay: true,
+                preload: 'auto',
+                controlBar: {
+                    autoHide: false,
+                    autoHideTimeout: 3,
+                    animated: true,
+                    playToggle: true,
+                    volumePanel: { inline: false },
+                    playbackRateMenuButton: false,
+                    pictureInPictureToggle: false,
+                    fullscreenToggle: false,
+                    downloadButton: false,
+                    castToggle: false,
+                },
             });
 
             player.on('error', function(err) {
@@ -172,7 +151,7 @@
                 document.getElementById("video-container").style.display = "none";
             });
 
-            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
+            saveVideoURL(videoURL);
         });
 
         var logo = document.getElementById("logo");
