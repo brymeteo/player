@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DIRETTA TV</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Player -->
+    <!-- Video.js Player -->
     <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
-    <script src="https://vjs.zencdn.net/7.20.3/video.min.js" defer></script>
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
     <style>
         #background-overlay {
@@ -18,6 +17,18 @@
             height: 100%;
             z-index: 100;
             background: #171a45;
+        }
+
+        [data-watermark-top-right] {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 21.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 40;
+            background: 0 0 !important;
         }
 
         #logo {
@@ -51,10 +62,13 @@
             z-index: 500;
         }
 
-        .vjs-tech {
-            object-fit: cover;
+        .video-js {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
 
         #fallback-image {
@@ -62,24 +76,19 @@
             height: 100%;
             object-fit: cover;
             display: none;
-             z-index: 2000;
         }
 
         #second-logo {
             position: absolute;
             top: 7%;
             right: 5%;
-            max-width: 19.5%;
-            width: 18.5%;
+            max-width: 26%;
+            width: 24.5%;
             height: auto !important;
             pointer-events: none;
             z-index: 1000;
+            background: 0 0 !important;
             display: none;
-        }
-
-        /* Nascondi i controlli predefiniti di Video.js */
-        .vjs-control-bar {
-            display: none !important;
         }
     </style>
 </head>
@@ -87,21 +96,16 @@
 <body>
     <div id="background-overlay"></div>
     <div id="video-container" class="hidden">
-        <video
-            id="my-video"
-            class="video-js"
-            controls
-            preload="auto"
-            data-setup="{}">
-            <source id="video-source" src="" type="application/x-mpegURL">
+        <video id="hls-video" class="video-js vjs-default-skin" controls preload="auto" data-setup='{}'>
+            <source src="https://app.viloud.tv/hls/8df2465f99c182b1c77376f36230f20c/audio.m3u8" type="application/x-mpegURL">
         </video>
     </div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/201.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/206.png" alt="Logo">
     <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
-    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200000753-17fa917fab/bry%20cinema%20uno1-2.webp?ph=7e11bb4538" alt="Secondo Logo">
+    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001022-4eda34eda5/bry%20cinema%20Animation1-3.webp" alt="Secondo Logo">
 
     <script>
-        const videoSourceURL = "https://app.viloud.tv/hls/channel/sep/8df2465f99c182b1c77376f36230f20c/audio.m3u8";
+        const videoSourceURL = "https://app.viloud.tv/hls/8df2465f99c182b1c77376f36230f20c/audio.m3u8";
 
         function saveVideoURL(url) {
             localStorage.setItem('videoURL', url);
@@ -117,7 +121,14 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const videoURL = getVideoURL();
-            document.getElementById("video-source").src = videoURL;
+            const player = videojs('hls-video', {
+                autoplay: true,
+                controls: false,
+                muted: false,
+                fill: true,
+                preload: 'auto',
+                fluid: true
+            });
 
             setTimeout(function() {
                 document.getElementById("video-container").classList.remove("hidden");
@@ -128,30 +139,12 @@
                 document.getElementById("background-overlay").style.display = "none";
             }, 3000);
 
-            var player = videojs('my-video', {
-                controls: true,
-                autoplay: true,
-                preload: 'auto',
-                controlBar: {
-                    autoHide: false,
-                    autoHideTimeout: 3,
-                    animated: true,
-                    playToggle: true,
-                    volumePanel: { inline: false },
-                    playbackRateMenuButton: false,
-                    pictureInPictureToggle: false,
-                    fullscreenToggle: false,
-                    downloadButton: false,
-                    castToggle: false,
-                },
-            });
-
-            player.on('error', function(err) {
+            player.on('error', function() {
                 document.getElementById("fallback-image").style.display = "block";
                 document.getElementById("video-container").style.display = "none";
             });
 
-            saveVideoURL(videoURL);
+            saveVideoURL(videoURL); // Salva l'URL nel localStorage
         });
 
         var logo = document.getElementById("logo");
@@ -175,7 +168,6 @@
 
     <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
 </body>
 
