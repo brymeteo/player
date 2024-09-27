@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Player -->
+    <script src="https://cdn.fluidplayer.com/3.28.0/fluidplayer.min.js" defer></script>
+    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+    <style>
+        /* Stili personalizzati */
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            background: #171a45;
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            height: auto;
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            z-index: 1000;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 500;
+        }
+
+        #hls-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="video-container" class="hidden">
+        <video id="hls-video">
+            <source id="video-source" type="application/x-mpegURL">
+        </video>
+    </div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/206.png" alt="Logo">
+
+    <script>
+        const videoSourceURL = "https://app.viloud.tv/hls/8df2465f99c182b1c77376f36230f20c/high.m3u8";
+
+        function saveVideoURL(url) {
+            localStorage.setItem('videoURL', url);
+        }
+
+        function getVideoURL() {
+            return localStorage.getItem('videoURL') || videoSourceURL;
+        }
+
+        // Funzione per ricaricare la pagina una volta dopo 2 secondi
+        function reloadOnce() {
+            if (!localStorage.getItem('pageReloaded')) {
+                setTimeout(function () {
+                    localStorage.setItem('pageReloaded', 'true');
+                    location.reload();
+                }, 2000);
+            }
+        }
+
+        // Quando l'utente chiude la pagina, resetta il flag
+        window.onbeforeunload = function () {
+            localStorage.removeItem('pageReloaded');
+        };
+
+        window.onload = function () {
+            reloadOnce();
+
+            const videoURL = getVideoURL();
+            document.getElementById("video-source").src = videoURL;
+
+            setTimeout(function () {
+                document.getElementById("video-container").classList.remove("hidden");
+            }, 3000);
+
+            setTimeout(function () {
+                document.getElementById("background-overlay").style.display = "none";
+            }, 3000);
+
+            var player = fluidPlayer('hls-video', {
+                layoutControls: {
+                    autoPlay: true,
+                    mute: false,
+                    fillToContainer: true,
+                }
+            });
+
+            saveVideoURL(videoURL);  // Salva l'URL nel localStorage
+        };
+    </script>
+</body>
+
+</html>
