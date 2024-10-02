@@ -85,19 +85,39 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 
-  /* Stile del pulsante attivo */
-  .menu-item.active {
-    background-color: #061f408c;
-    border-color: #ffffff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-    background-image: url('https://brymeteo.github.io/player/decoder/immagini/brillante.png'), url('https://brymeteo.github.io/player/decoder/immagini/brillante-1.png');
-    background-repeat: no-repeat, no-repeat;
-    background-size: 220px, 221px;
-    background-position: 25% -59%, 93% 159%;
-    overflow: visible;
-    border: 2px solid #ffffff33;
-  }
+ /* Stile del pulsante attivo */
+.menu-item.active {
+  background-color: #061f408c;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+  overflow: visible;
+  border: 2px solid #ffffff33;
+  position: relative; /* Aggiunto per posizionare gli pseudo-elementi */
+}
+
+/* Linea sopra */
+.menu-item.active::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+    background: linear-gradient(14deg, rgb(255 255 255 / 0%) -0.02%, rgb(255 255 255 / 17%) 24.88%, rgb(255 255 255 / 66%) 49.79%, rgb(255 255 255 / 27%) 74.7%, rgba(255, 255, 255, 0) 99.6%);
+}
+
+/* Linea sotto */
+.menu-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+    background: linear-gradient(14deg, rgb(255 255 255 / 0%) -0.02%, rgb(255 255 255 / 17%) 24.88%, rgb(255 255 255 / 66%) 49.79%, rgb(255 255 255 / 27%) 74.7%, rgba(255, 255, 255, 0) 99.6%);
+}
+
 
   /* Stile del pulsante "Torna su" */
   #scroll-to-top {
@@ -2936,7 +2956,7 @@
       }
 
       function checkSubscriptionStatus() {
-        var expirationDate = new Date('2024-10-10T00:30:00');
+        var expirationDate = new Date('2024-11-10T00:30:00');
         var currentDate = new Date();
 
         if (currentDate > expirationDate) {
