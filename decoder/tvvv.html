@@ -111,14 +111,54 @@
             display: block; /* Inizialmente visibile */
             z-index: 1500; /* Sotto la lista canali ma sopra gli altri elementi */
         }
+        
+        
+              /* Versione desktop */
+        @media (min-width: 769px) {
+            /* Testo visibile, icone nascoste */
+            .icon-only {
+                display: none;
+            }
+            .text-only {
+                display: inline;
+            }
+        }
+
+        /* Versione mobile */
+        @media (max-width: 768px) {
+           
+
+           
+
+            /* Stile pulsanti mobile */
+            .scroll-buttons button {
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+
+            /* Icone visibili, testo nascosto */
+            .icon-only {
+                display: inline;
+            }
+            .text-only {
+                display: none;
+            }
+        }
+        
     </style>
 </head>
 <body>
 
 <div class="channel-list-container" id="channel-list-container">
     <div class="scroll-buttons">
-        <button id="scroll-up">▲ Scorri su</button>
-        <button id="scroll-down">▼ Scorri giù</button>
+        <button id="scroll-up">
+            <span class="icon-only">▲</span>
+            <span class="text-only">▲ Freccia su</span>
+        </button>
+        <button id="scroll-down">
+            <span class="icon-only">▼</span>
+            <span class="text-only">▼ Freccia giù</span>
+        </button>
     </div>
     <div id="channel-list" class="channel-list">
         <ul id="channels">
@@ -350,214 +390,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aggiornamento del Decoder</title>
-  <style>
-    /* Stili globali del sito */
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    /* Stili per l'overlay */
-    .overlay-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-image: url('https://i.ibb.co/16HGv3b/Screenshot-2024-07-23-alle-03-42-17.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 4000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .overlay-content {
-      text-align: center;
-      color: white;
-    }
-
-    .overlay-logo {
-      width: 150px;
-      margin-bottom: 20px;
-      
-    }
-
-    .overlay-loader {
-      width: 300px;
-      height: 20px;
-      background-color: #4770a6;
-      border-radius: 10px;
-      position: relative;
-      margin: 0 auto;
-      box-sizing: border-box;
-      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
-      background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
-      /* Effetto luccichio sui bordi */
-      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
-                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
- 
-      
-    }
-
-    .overlay-progress {
-      height: 100%;
-      background-color: #f2f2f2;
-      border-radius: 10px;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .progress-text {
-      margin-top: 10px;
-      font-size: 18px;
-    }
-
-    .overlay-message {
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    .overlay-logo-image {
-      width: 140px;
-      margin-bottom: 10px;
-      margin-left: 227px;
-    }
-
-    /* Stili per il pulsante */
-    .start-button {
-      background-color: #061F40;
-      border: none;
-      color: white;
-      padding: 15px 62px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      border-radius: 4px;
-      box-sizing: border-box;
-      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
-      background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
-      /* Effetto luccichio sui bordi */
-      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
-                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
-    }
-
-    .start-button:hover {
-      background-color: #061F40;
-      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
-      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
-    }
-    
-     #vox-logo {
-            width: 140px; /* Imposta la larghezza del logo */
-            margin-bottom: 30px ; /* Aggiunge spazio sotto il logo */
-            margin-left: 227px; /* Sposta il logo verso sinistra */
-        }
-    
-    
-  </style>
-</head>
-<body>
-  <!-- Tuo contenuto HTML qui -->
-
-  <div class="overlay-container" id="welcomeOverlay">
-    <div class="overlay-content">
-      <div class="overlay-message">
-        <p><span style="font-size: 38px;">Benvenuto in Bry OS Channels</span></p>
-        <p><span style="color: #f3f3f3;">Clicca su</span> <strong>"Inizia"</strong> <span style="color: #f3f3f3;">per avviare la configurazione e ricevere tutti i canali.</span></p>
-        <button class="start-button" onclick="startConfiguration()">Inizia</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="overlay-container" id="updateOverlay" style="display: none;">
-    <div class="overlay-content">
-      <div class="overlay-logo">
-          <img id="vox-logo" src="https://i.ibb.co/0XtvkBs/Vox-OSdecoder3-logo-TRASPARENTE.png" alt="Vox Os Logo">
-      </div>
-      <div class="overlay-loader">
-        <div class="overlay-progress" id="progressBar"></div>
-      </div>
-      <br>
-      <div class="progress-text" id="progressText">0%</div>
-      <div class="overlay-message">
-        <p>Configurazione in corso...</p>
-        <p>Il decoder si sta configurando per ricevere gli ultimi aggiornamenti e canali</p>
-      </div>
-    </div>
-  </div>
- <script>
-    function startConfiguration() {
-      var welcomeOverlay = document.querySelector('#welcomeOverlay');
-      welcomeOverlay.style.display = 'none'; // Nascondi l'overlay di benvenuto
-      var updateOverlay = document.querySelector('#updateOverlay');
-      updateOverlay.style.display = 'flex'; // Mostra l'overlay di aggiornamento
-
-      var progressBar = document.querySelector('#progressBar');
-      var progressText = document.querySelector('#progressText');
-      var width = 1;
-      var interval = setInterval(function() {
-        if (width >= 100) {
-          clearInterval(interval);
-          updateOverlay.style.display = 'none'; // Nascondi l'overlay di aggiornamento al termine del caricamento
-          localStorage.setItem('updateCompleted', true);
-        } else {
-          width++;
-          progressBar.style.width = width + '%';
-          progressText.innerHTML = width + '%';
-        }
-      }, 600); // Aggiorna la barra di avanzamento ogni 600 millisecondi
-    }
-
-    if (localStorage.getItem('updateCompleted')) {
-      document.querySelector('#welcomeOverlay').style.display = 'none'; // Nascondi l'overlay di benvenuto se l'aggiornamento è già stato completato
-    }
-  </script>
- 
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
