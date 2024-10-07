@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aggiornamento del Decoder</title>
+  <style>
+    /* Stili globali del sito */
+    body {
+      zoom: 120%;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+/* Stili per l'overlay dell'immagine */
+.fullscreen-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://brymeteo.github.io/player/decoder/immagini/nessun%20segnale%20tv.jpg'); /* Cambia questo URL con quello della tua immagine */
+  background-size: cover; /* Cambiato a cover per ricoprire tutto lo schermo */
+  background-position: center;
+  background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+  z-index: 5000;
+  cursor: pointer; /* Cambia il cursore per indicare che è cliccabile */
+}
+
+
+    /* Stili per l'overlay */
+    .overlay-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('https://i.ibb.co/16HGv3b/Screenshot-2024-07-23-alle-03-42-17.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 4000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .overlay-content {
+      text-align: center;
+      color: white;
+    }
+
+    .overlay-logo {
+      
+      margin-bottom: 20px;
+      
+    }
+
+    .overlay-loader {
+      width: 300px;
+      height: 20px;
+      background-color: #4770a6;
+      border-radius: 10px;
+      position: relative;
+      margin: 0 auto;
+      box-sizing: border-box;
+      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+      background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+      /* Effetto luccichio sui bordi */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+ 
+      
+    }
+
+    .overlay-progress {
+      height: 100%;
+      background-color: #f2f2f2;
+      border-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .progress-text {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .overlay-message {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .overlay-logo-image {
+      width: 140px;
+      margin-bottom: 10px;
+      margin-left: 227px;
+    }
+
+    /* Stili per il pulsante */
+    .start-button {
+      background-color: #061F40;
+      border: none;
+      color: white;
+      padding: 15px 62px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-sizing: border-box;
+      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+      background-color: rgba(0, 191, 255, 0.1); /* Aggiungi colore di sfondo trasparente */
+      /* Effetto luccichio sui bordi */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+                  0 0 20px rgba(255 255 255 / 13%) inset; /* Luce riflessa sotto */
+    }
+
+    .start-button:hover {
+      background-color: #061F40;
+      box-shadow: 0 0 20px rgba(134 95 172.7); /* Aggiungi ombra trasparente */
+      box-shadow: 0 0 20px rgba(0 0 0 / 10%), /* Luce riflessa sopra */
+    }
+    
+   /* Contenitore del logo */
+#logo-container {
+    display: flex;
+    justify-content: center; /* Centra il logo orizzontalmente */
+    align-items: center; /* Centra il logo verticalmente, se necessario */
+    margin-bottom: 30px; /* Aggiunge spazio sotto il contenitore */
+}
+
+/* Stili per il logo */
+#vox-logo {
+    width: 140px; /* Imposta la larghezza del logo */
+}
+
+    
+    
+    
+    
+     .category-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 20px;
+    }
+
+    .category {
+      font-size: 22px;
+    }
+
+    .category-number {
+      font-size: 30px;
+      color: yellow;
+      display: block;
+      margin-top: 5px;
+    }
+    
+  </style>
+</head>
+<body>
+
+<!-- Overlay immagine a tutto schermo -->
+<div class="fullscreen-image" id="fullscreenImage" onclick="hideFullscreenImage()"></div>
+
+<div class="overlay-container" id="welcomeOverlay">
+    <div class="overlay-content">
+      <div class="overlay-message">
+        <p><span style="font-size: 38px;">Benvenuto in Bry OS Channels</span></p>
+        <p><span style="color: #f3f3f3;">Clicca su</span> <strong>"Inizia"</strong> <span style="color: #f3f3f3;">per avviare la configurazione e ricevere tutti i canali.</span></p>
+        <button class="start-button" onclick="startConfiguration()">Inizia</button>
+      </div>
+    </div>
+</div>
+
+<div class="overlay-container" id="updateOverlay" style="display: none;">
+    <div class="overlay-content">
+      <div class="overlay-logo">
+          <img id="vox-logo" src="https://i.ibb.co/0XtvkBs/Vox-OSdecoder3-logo-TRASPARENTE.png" alt="Vox Os Logo">
+      </div>
+ 
+      <div class="overlay-loader">
+        <div class="overlay-progress" id="progressBar"></div>
+      </div>
+ 
+      <div class="progress-text" id="progressText">0%</div>
+      <div class="overlay-message">
+        <p>Configurazione in corso...</p>
+        <p>Il decoder si sta configurando per ricevere i canali dalle diverse Stazioni. <br> Non Spegnere Il dispositivo durante questa fase.</p>
+      </div>
+      <br> <br>
+      <div class="category-container">
+        <div class="category">
+          Digitale Terrestre
+          <span class="category-number" id="digitaleCount">0</span>
+        </div>
+        <div class="category">
+          Bry OS 
+          <span class="category-number" id="bryCount">0</span>
+        </div>
+        <div class="category">
+          Altre Stazioni
+          <span class="category-number" id="webCount">0</span>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    function hideFullscreenImage() {
+      var fullscreenImage = document.getElementById('fullscreenImage');
+      fullscreenImage.style.display = 'none'; // Nascondi l'immagine a tutto schermo
+    }
+
+     function startConfiguration() {
+      var welcomeOverlay = document.querySelector('#welcomeOverlay');
+      welcomeOverlay.style.display = 'none'; // Nascondi l'overlay di benvenuto
+      var updateOverlay = document.querySelector('#updateOverlay');
+      updateOverlay.style.display = 'flex'; // Mostra l'overlay di aggiornamento
+
+      var progressBar = document.querySelector('#progressBar');
+      var progressText = document.querySelector('#progressText');
+      var digitaleCount = document.querySelector('#digitaleCount');
+      var bryCount = document.querySelector('#bryCount');
+      var webCount = document.querySelector('#webCount');
+
+      var width = 0;
+      var digitale = 0, bry = 0, web = 0;
+      var categoriesStarted = false; // Flag per controllare se l'intervallo delle categorie è stato avviato
+
+      // Intervallo per la barra di progresso
+      var progressInterval = setInterval(function() {
+        if (width >= 100) {
+          clearInterval(progressInterval);
+          updateOverlay.style.display = 'none'; // Nascondi l'overlay al termine del caricamento
+          localStorage.setItem('updateCompleted', true);
+        } else {
+          width++;
+          progressBar.style.width = width + '%';
+          progressText.innerHTML = width + '%';
+
+          // Avvia l'aggiornamento delle categorie quando la barra raggiunge il 4%
+          if (width >= 4 && !categoriesStarted) {
+            categoriesStarted = true;
+            startCategoriesUpdate(); // Avvia l'aggiornamento delle categorie
+          }
+        }
+      }, 900); // Intervallo per aggiornare la barra di progresso
+
+      // Funzione per l'aggiornamento dei canali delle categorie
+      function startCategoriesUpdate() {
+        var categoriesInterval = setInterval(function() {
+          if (digitale < 46) {
+            digitale++;
+            digitaleCount.innerHTML = digitale;
+          } else if (bry < 26) {
+            bry++;
+            bryCount.innerHTML = bry;
+          } else if (web < 8) {
+            web++;
+            webCount.innerHTML = web;
+          } else {
+            clearInterval(categoriesInterval); // Interrompi l'intervallo delle categorie
+          }
+        }, 600); // Intervallo per aggiornare le categorie
+      }
+    }
+
+    // Controllo se l'aggiornamento è completato nel localStorage
+    window.onload = function() {
+      if (localStorage.getItem('updateCompleted')) {
+        // Se l'aggiornamento è già completato, nascondi gli overlay
+        document.getElementById('fullscreenImage').style.display = 'none';
+        document.getElementById('welcomeOverlay').style.display = 'none';
+        document.getElementById('updateOverlay').style.display = 'none';
+      }
+    };
+</script>
+</body>
+</html>
