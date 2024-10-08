@@ -806,13 +806,19 @@ document.addEventListener('DOMContentLoaded', () => {
   <style>
     /* Stili globali del sito */
     body {
-      zoom: 120%;
+     
       margin: 0;
       padding: 0;
       height: 100vh;
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
+
+/* Stile per applicare lo zoom solo su sezioni specifiche */
+.zoomed-section {
+  zoom: 120%;
+}
+
 
 /* Stili per l'overlay dell'immagine */
 .fullscreen-image {
@@ -972,7 +978,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- Overlay immagine a tutto schermo -->
 <div class="fullscreen-image" id="fullscreenImage" onclick="hideFullscreenImage()"></div>
-
+<div class="zoomed-section">
 <div class="overlay-container" id="welcomeOverlay">
     <div class="overlay-content">
       <div class="overlay-message">
