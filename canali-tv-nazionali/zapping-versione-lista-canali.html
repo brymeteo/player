@@ -109,7 +109,7 @@
             border-radius: 5px;
             cursor: pointer;
             display: block; /* Inizialmente visibile */
-            z-index: 5500; /* Sotto la lista canali ma sopra gli altri elementi */
+            z-index: 1500; /* Sotto la lista canali ma sopra gli altri elementi */
         }
         
         
@@ -161,8 +161,10 @@
         </button>
     </div>
     <div id="channel-list" class="channel-list">
-        <ul id="channels">
-            <li data-channel="video1.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/101-Rai1.html" data-number="101" class="selected">
+    <ul id="channels">
+        
+            
+            <li data-channel="video1.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/101-Rai1.html" data-number="101">
                 <img src="https://api.superguidatv.it/v1/channels/217/logo?width=320&theme=dark" alt="Rai 1 Logo" style="width: 96px; height: auto; object-fit: cover;margin-right: 55px;">101 - Rai 1 HD
             </li>
             <li data-channel="video2.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/102-Rai2.html" data-number="102">
@@ -607,6 +609,8 @@
             
             
             
+             <li data-channel="video1.mp4" data-url="https://brymeteo.github.io/player/decoder/immagini/cartello-configurazione-canali-completata.html" data-number="100" class="selected">
+            
         </ul>
     </div>
 </div>
@@ -775,7 +779,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         // Se non ci sono canali salvati, imposta il canale predefinito a Rai 1
-        const defaultChannel = channelList.querySelector('li[data-number="101"]'); // Rai 1
+        const defaultChannel = channelList.querySelector('li[data-number="100"]'); // Rai 1
         if (defaultChannel) {
             defaultChannel.classList.add('selected');
             iframePlayer.src = defaultChannel.dataset.url; // Carica l'URL di Rai 1
@@ -1094,6 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
