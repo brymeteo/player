@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-image: url('#');
+            background-color: #041530;
             color: #fff;
         }
 
@@ -166,7 +167,83 @@
 
 
 
-<script type="text/javascript" src="https://brymeteo.github.io/player/Guida%20TV/tv/209-BryCinemaDisney.js"></script>
+<script>
+ var tvData = [
+    {
+        title: 'Monster High 2022',
+        description: 'Un\'adolescente licantropa, e segretamente mezza umana, cerca una pozione perduta che la trasformi in un mostro a tutti gli effetti, e che possa anche salvare il suo nuovo liceo.',
+        genre: 'Cinema fantastico/Musical',
+        image: 'https://www.themoviedb.org/t/p/w1280/768OBP28OA4mjavOUAIRlVo14Xu.jpg',
+        start: '2024-10-25T19:27',
+        end: '2024-10-25T20:58'
+    },
+
+    {
+        title: 'Un fantasma per amico T 2013',
+        description: 'Un fantasmino annoiato e triste infesta la soffitta del castello di Eulenstein, ormai divenuto un museo.',
+        genre: 'Per famiglie/Commedia',
+        image: 'https://www.themoviedb.org/t/p/w1280/qfTCvXdWCnaOF7fpjirsV6huPjb.jpg',
+        start: '2024-10-25T20:59',
+        end: '2024-10-25T22:28'
+    },
+    {
+        title: 'Beetlejuice - Spiritello porcello T 1988',
+        description: 'Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.',
+        genre: 'Commedia/Horror',
+        image: 'https://www.themoviedb.org/t/p/w1280/nnl6OWkyPpuMm595hmAxNW3rZFn.jpg',
+        start: '2024-10-25T22:28',
+        end: '2024-10-25T23:59'
+    },
+    
+    
+      {
+        title: 'La nona porta T 1999 ‧ Thriller/Film di mistero ‧ 2h 13m',
+        description: 'Dean Corso, esperto di libri rari, viene incaricato dal ricco collezionista Boris Balkan di verificare se un prezioso volume dedicato all esoterismo, datato 1666 e ora parte della sua collezione, sia autentico.',
+        genre: 'Thriller/Film di mistero',
+        image: 'https://www.stardust.it/uploads/img/movie/poster/6f8242bfee8963e5db7d7bd64fb8ec6d1553123312-1000w.jpg',
+        start: '2024-10-26T00:00',
+        end: '2024-10-26T0213'
+    },
+    
+        {
+        title: 'Quella casa nel bosco VM14 2011',
+        description: 'Un gruppo di amici decide di andare in gita in una casa isolata in campagna, per trascorrere un fine settimana di divertimento sfrenato lontano dall università.',
+        genre: 'Horror/Commedia',
+        image: 'https://www.themoviedb.org/t/p/w1280/9igztf83CIFCcW2oQdBA8hy7Eln.jpg',
+        start: '2024-10-26T02:14',
+        end: '2024-10-26T03:49'
+    },
+   
+ {
+        title: 'Halloween VM14 2018',
+        description: 'Sono passati 40 anni da quando Laurie Strode è sopravvissuta agli assalti dell\'assassino Michael Myers durante la notte di Halloween. Quando questi fugge dal carcere, la donna affronta una terrificante resa dei conti.',
+        genre: 'Horror/Giallo',
+        image: 'https://www.themoviedb.org/t/p/w1280/7T5m6WeZebQctaQ1KQsUWxI9YPt.jpg',
+        start: '2024-10-26T03:49',
+        end: '2024-10-26T05:34'
+    },
+    {
+        title: 'Scary Movie 3 - Una risata vi seppellirà T 2003',
+        description: 'Una giovane giornalista, Cindy Campbell, per fare carriera si butta alla ricerca di un grosso scoop. La giornalista si imbatte in situazioni paradossali come videocassette assassine e bambini prodigio.',
+        genre: 'Commedia/Horror',
+        image: 'https://www.themoviedb.org/t/p/w1280/50tBeKRhOs4RAdNNFrxTubjRFEm.jpg',
+        start: '2024-10-26T05:34',
+        end: '2024-10-26T07:00'
+   },
+    {
+        title: 'Intervista col vampiro VM14 1994',
+        description: 'Un giovane giornalista ascolta la storia di un uomo diventato vampiro e la cui esistenza è tormentata dalla perdita della moglie e della figlia.',
+        genre: 'Horror/Cinema fantastico',
+        image: 'https://www.themoviedb.org/t/p/w1280/iFhhxzTMHEopvcoK8nROrMvmo2g.jpg',
+        start: '2024-10-26T07:00',
+        end: '2024-10-26T09:02'
+    }
+
+    
+];
+
+
+</script>
 
 
 
@@ -243,7 +320,7 @@
                 details.appendChild(time);
 
                 var startLogo = document.createElement('img');
-                startLogo.src = 'https://i.ibb.co/tpDqqcC/cinema-disney.png';
+                startLogo.src = 'https://i.ibb.co/cCTSXvr/bry-cinema-Halloween5g.png';
                 startLogo.className = 'logo';
                 startLogo.style.maxWidth = '130px';
                 details.appendChild(startLogo);
