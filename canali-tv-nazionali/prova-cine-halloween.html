@@ -187,21 +187,7 @@
                     mute: false,
                     fillToContainer: true,
                 },
-                // Aggiungi l'evento per monitorare la riproduzione del video
-                events: {
-                    onVideoStarted: function () {
-                        videoPlaying = true; // Imposta il flag a true quando il video inizia
-                    },
-                    onVideoEnded: function () {
-                        videoPlaying = false; // Imposta il flag a false quando il video finisce
-                    },
-                    onVideoPaused: function () {
-                        videoPlaying = false; // Imposta il flag a false quando il video è in pausa
-                    },
-                    onVideoResumed: function () {
-                        videoPlaying = true; // Imposta il flag a true quando il video riprende
-                    }
-                }
+               
             });
         };
     </script>
