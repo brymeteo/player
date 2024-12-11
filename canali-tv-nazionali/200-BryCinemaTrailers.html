@@ -18,7 +18,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            z-index: 2; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
             background: #171a45;
             
         }
@@ -30,14 +30,14 @@
         
               [data-watermark-top-right] {
         position: absolute;
-            top: 7%;
+            top: 85%;
             right: 5%;
             max-width: 26%;
             
             width: auto;
             height: auto;
             
-            width: 23.5%;
+            width: 16.5%;
     height: auto !important;
     pointer-events: none;
             z-index: 999;
@@ -70,6 +70,7 @@
             cursor: pointer;
             display: block;
             /* Rendere il logo visibile immediatamente */
+            z-index: 2; /* Assicurati che il logo sia in primo piano */
         }
 
         .hidden {
@@ -122,16 +123,41 @@
     /* Altri stili esistenti... */
 </style>
     
-    
+    <style>
+    /* Stile per il contenitore dell'elemento */
+    #element-container {
+       position: absolute;
+      top: 8%;
+      right: 70%;
+      max-width: 25%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+      z-index: 1; /* Assicurati che il logo sia in primo piano */
+    }
+
+    #element {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+  
 </head>
 
 <body>
     <div id="background-overlay"></div>
     <div id="player" class="hidden"></div>
+    
+    
+ 
+    
+    
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/200.png" alt="Logo" data-lity=""
         data-lity-target="https://brymeteo.github.io/player/Guida%20TV/200-bry-cinema-trailers.html">
         
-        
+          <div id="element-container">
+    <img id="element" src="https://i.ibb.co/68vY3qB/bry-cinema-christmas6.png" alt="Elemento Programmato" />
+  </div>
         
          <!-- Immagine di fallback già caricata sotto -->
     <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.png" alt="Fallback Image">
@@ -145,7 +171,7 @@
     height: '100vh',
     controls: false,
     autoPlay: true, // Abilita l'auto-play
-    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001192-013b2013b4/bry%20cinema%20trailers%20off.webp?ph=7e11bb4538",
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001196-dfe7adfe7c/Premium_Cinema%20trailers-0.webp?ph=7e11bb4538",
     position: 'top-right',
     
 });
@@ -178,6 +204,54 @@
         
    
     </script>
+    
+   <script>
+    // Array di elementi con data e orario di visualizzazione
+    const elements = [
+      { src: "https://i.ibb.co/1zH8MZk/TITOLO.png", start: "2024-12-11T04:16", end: "2024-12-11T04:19" },
+      { src: "https://i.ibb.co/1zH8MZk/TITOLO.png", start: "2024-12-09T03:40", end: "2024-12-09T03:55" },
+      { src: "element3.png", start: "2024-12-09T16:01", end: "2024-12-09T20:00" },
+      { src: "element4.png", start: "2024-12-10T08:00", end: "2024-12-10T12:00" },
+      { src: "element5.png", start: "2024-12-10T12:01", end: "2024-12-10T16:00" },
+      { src: "element6.png", start: "2024-12-10T16:01", end: "2024-12-10T20:00" },
+      { src: "element7.png", start: "2024-12-11T08:00", end: "2024-12-11T12:00" },
+      { src: "element8.png", start: "2024-12-11T12:01", end: "2024-12-11T16:00" },
+      { src: "element9.png", start: "2024-12-11T16:01", end: "2024-12-11T20:00" },
+      { src: "element10.png", start: "2024-12-12T08:00", end: "2024-12-12T12:00" },
+      { src: "element11.png", start: "2024-12-12T12:01", end: "2024-12-12T16:00" },
+      { src: "element12.png", start: "2024-12-12T16:01", end: "2024-12-12T20:00" }
+    ];
+
+    const elementNode = document.getElementById("element");
+
+    // Funzione per aggiornare l'elemento visibile
+    function updateElement() {
+      const now = new Date();
+      const activeElement = elements.find(
+        (element) =>
+          new Date(element.start) <= now && new Date(element.end) >= now
+      );
+
+      if (activeElement) {
+        elementNode.src = activeElement.src;
+        elementNode.alt = `Elemento programmato per il periodo: ${activeElement.start} - ${activeElement.end}`;
+      } else {
+        elementNode.src = ""; // Nessun elemento visibile
+        elementNode.alt = "";
+      }
+    }
+
+    // Aggiorna l'elemento ogni minuto
+    setInterval(updateElement, 3000);
+
+    // Aggiorna subito all'avvio
+    updateElement();
+  </script>
+    
+    
+    
+    
+    
 
  <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
 
