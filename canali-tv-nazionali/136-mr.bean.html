@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <!-- Player -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <link href="https://brymeteo.github.io/player/lity-popup-full-screen-zapping-canali-vox.css" rel="stylesheet">
+
+    <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            background: #171a45;
+            
+        }
+        
+        
+        
+        
+        
+          [data-watermark-top-right] {
+        position: absolute;
+            top: 7%;
+            right: 82%;
+            max-width: 16%;
+            opacity: 0.9;
+            width: auto;
+            height: auto;
+            
+            width: 12.5%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
+
+        
+        
+        
+        
+        
+        
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            /* Personalizza dimensioni */
+            height: auto;
+            /* Personalizza dimensioni */
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            /* Rendere il logo visibile immediatamente */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+        
+        
+          /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
+        
+        
+    </style>
+    
+    
+    
+     <style>
+    .player-controls {
+        display: none !important; /* Nasconde i controlli del player */
+    }
+
+    .media-control .media-control-layer {
+        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
+    }
+
+    /* Altri stili esistenti... */
+</style>
+
+    
+    
+    
+    
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="player" class="hidden"></div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/136.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+        
+        
+        
+         <!-- Immagine di fallback già caricata sotto -->
+    <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.png" alt="Fallback Image">
+        
+
+    <script>
+    var player = new Clappr.Player({
+    source: "https://amg00627-amg00627c40-rakuten-uk-5725.playouts.now.amagi.tv/playlist/amg00627-banijayfast-mrbeanpopupcc-rakutenuk/cb563d17786c608884cb3978d9f462e5a65928d80b6c852a6ab454876dbc4e0adce2b59cae13e47825c15b8b3d1a10000e77b47ace1411c6de15a9545b7b0e64ebd8f2278cfe475bc9814b352fb07d0052f81e0dab5d375ff5a55a048c36b0392216eb02611f72aeb51bf22b07da81098a612995adc361291e0b09ce1f04faa55da4e1e25b57cc6ea5b2484b912810fad314ccd501ba81810d834b8e22f5099b94a48fd21182d4926ba15eb849632823798abf7d96df54b5dfa5643698742434773f8184b6d06b0eaf64191d9287cabb76c001da9f1a826f39af05965bbb3c8b65ad1ca6e64bd2c8d1bc474f3efe9e311126a4f69f99ef2736bc6bf2aceee27a78ebb07e3c42ca6988262a3ac7b0c812dd9658c2ee72d4f96b4d6c90dc12c8c4e787bfb4d9139e7cc89d88f24f434a703b10924b9d9962d53dd876bcf11a252e2b2ec9cc0396d783265a0d4e829361d0160db0d88ebccb172bcf127e308b77dc595f15a65b6d78f612fd9f2a658a23359c303ce92a53ea26ade17ba5fda18f763ab1cdf852f36ef6b018ede10bad79342b64d9967d06171c27aa840b0c346afc50f7d6d8de631010e985a494a745311430035d1ed1a38d0a9a8ad3161e19cf47236e602f149a05c57ad60640032fdd17dca27b17ef67717797cd585c5e7fa9cdbf97f5b0a020a56ddccba77e45495867ae0c022763ecb5824bef3d477f6e52927d1529d2500a16bdc09eb2c1d5379fce3cf960386f09aaf113523656767503989557da5fe9966fd1f1ac5fc4fd821f40df47c970119ac3e37cf4ec98c25d3098af5e1e6f83a141af177c974f8471ccb81cd9b446390c334477d69744fa2dcdb5e8d7279b35a85d137fed7d8491eab7c4695aebcb385959085104405f773e07bdcea7006a19e5a87d1f3f8c9b54ad516b343b57ccbd035188fb721288479a02cf41a9a89ce35641c94fc55c9c310087760e0fc3ee11dea181d5fda64e7521f8939b4b9a8281b0edf7eb13480c6411bae87e7440f904c5ad24b58c355dceb9aac4dd4fb55cc31190a59129c53da7eae82f8cc4bcdbca563e0a7b63dde0e7cb36d89d2c159a56ea6c2c39bdd9e3d633dafee42651db7cd1d526678f1d547cecb8da29e50a82d71830d6a5665ef17a13e9f7de164ce92c8602147ad2e2864b37eeee3ab24cc3b4a42e6e94293af56676388d4cb7a6b6504dc7e8303270c81926a67ea5fdd07d4b618c904706721a2b3628fc777d16dd1f3b9038a0cdc6a97f08d906ba581eb5348dec0384a11bcba4c3d885e2194486d62d58cb2ec62a9a0bd9f8aed919850933c000901e7199cfccf7cc9e81dd8b87495b1a941dcd518521cc97abdc21075a7f930d694b7db14995095907c0c757ccf31f6edcab976dc202477a061126c61abba319455151ea8c1ccd871f08006d34fbfc14a305bd4179ec3d11ef4d3e4a4956083bc8e6cc1fcd16dd7ab0f3503fe68db6ac28e2a04dbbf6e5bfed1c3aed385426cb1e16eee1b13b57d5a0c8f41c7c80e77cc7611f5b0eb7aa6ec3a6a0bf4206edb08264bec603cd7864480746efdf5b270081bc187a7fa3550fafb42795c53c7e50a02a84c06344e96fe91701adc38f5868f813645f482186329729562961ce7c8cfda84f2b168c5e9a7c6738aed0adb4a62e12322b163b663828248d151987446964b41735acfde9aadd8d8e417b70a005e989b1ab0b07e5fcd98d9209892ae3d6b8dafd9dd5850d4b30c24323a133935f4198a237e438d1d6ab8a2b77c2e91fc01c1e2c9b427a19a6fa0c5749116084bec913c5109333a798ec80e661c9d8fb703163f4d6842ca476ce694c2e65c176f985581dc3fdd441892c2180da93e286b74bd3d5ef2976fe9f8e7e4ab7b442b3e1327d83d578b7061d96d867e2/77/1920x1080_6046040/index.m3u8",
+    parentId: "#player",
+    width: '100%',
+    height: '100vh',
+    controls: false,
+    autoPlay: true, // Abilita l'auto-play
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001288-6fd706fd72/AAAABcdNAvlhGR93-wya5nw04Vn1mifTOPzZ1OWnWt1Ea8XgSv7_fGuvRrB2KJPSpQOX-Zke-ClqvCMgKziDCoTuBvoPxaOYlo2jsTdgcOZRWHji-2.webp?ph=7e11bb4538",
+    position: 'top-right',
+    
+});
+        
+      
+         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        });
+        
+        
+        var logo = document.getElementById("logo");
+    var timer;
+
+    function hideLogo() {
+      logo.style.display = "none";
+    }
+
+    function resetTimer() {
+      logo.style.display = "block"; // Riappare il logo
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 10000); // Nascondi il logo dopo 10 secondi di inattività
+    }
+
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+
+    resetTimer(); // Avvia il timer all'avvio della pagina
+        
+   
+    </script>
+
+ <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
