@@ -15,7 +15,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            
         }
 
         /* Banner */
@@ -47,7 +46,7 @@
             overflow: hidden;
             width: 100%;
             position: relative;
-            background: linear-gradient(359deg, rgb(255 255 255 / 0%) -0.02%, rgb(34 33 78 / 0%) 24.88%, rgb(21 10 35) 49.79%, rgb(32 34 64) 74.7%, rgb(67 80 123) 99.6%);
+            background: linear-gradient(0deg, rgb(15 26 45 / 0%) -0.02%, #22214e 24.88%, #150a23 49.79%, rgb(32 34 64) 74.7%, #43507b 99.6%);
         }
 
         /* Programmi */
@@ -153,130 +152,152 @@
         </div>
     </div>
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            const formattedDate = now.toLocaleDateString('it-IT', options);
-            const formattedTime = now.toLocaleTimeString('it-IT', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: false 
-            });
-            document.getElementById('clock').innerText = `${formattedDate} | ${formattedTime}`;
-        }
+   <script>
+    function updateClock() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        const formattedDate = now.toLocaleDateString('it-IT', options);
+        const formattedTime = now.toLocaleTimeString('it-IT', { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit', 
+            hour12: false 
+        });
+        document.getElementById('clock').innerText = `${formattedDate} | ${formattedTime}`;
+    }
 
-        // Aggiorna l'orologio ogni secondo
-        setInterval(updateClock, 1000);
-        // Inizializza l'orologio all'avvio
-        updateClock();
+    // Aggiorna l'orologio ogni secondo
+    setInterval(updateClock, 1000);
+    // Inizializza l'orologio all'avvio
+    updateClock();
 
-        let data = [];
-        let currentProgramIndex = 0;
-        let attemptCount = 0;
-        let progressInterval;
+    let data = [];
+    let currentProgramIndex = 0;
+    let attemptCount = 0;
+    let progressInterval;
 
-        async function loadEPGData() {
-            try {
-                const url = "https://brymeteo.github.io/player/Guida%20TV/list.json";
-                const response = await fetch(url);
+    async function loadEPGData() {
+        try {
+            const url = "https://brymeteo.github.io/player/Guida%20TV/list.json";
+            const response = await fetch(url);
 
-                if (!response.ok) throw new Error('Errore nel caricamento dei dati');
-                const epgData = await response.json();
-                data = epgData.filter(channel => channel.name === 'Canale 5');
+            if (!response.ok) throw new Error('Errore nel caricamento dei dati');
+            const epgData = await response.json();
+            data = epgData.filter(channel => channel.name === 'Canale 5');
 
+            if (data.length === 0) {
+                showFallbackMessage();  // Se non ci sono dati per il canale, mostra il messaggio di fallback
+            } else {
                 showCurrentProgram();
-            } catch (error) {
-                console.error('Errore:', error);
             }
+        } catch (error) {
+            console.error('Errore:', error);
+            showFallbackMessage();  // In caso di errore nel caricamento dei dati
+        }
+    }
+
+    function showFallbackMessage() {
+        const programList = document.getElementById('current-program');
+        programList.innerHTML = `
+            <div class="program-item now">
+                <h3>Guida TV non disponibile</h3>
+                <p>Al momento non possiamo mostrare la guida TV. Riprova più tardi.</p>
+                <img src="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg" alt="Fallback Image">
+            </div>
+        `;
+
+        // Resetta eventuali intervalli attivi
+        clearInterval(progressInterval);
+    }
+
+    function showCurrentProgram() {
+        const currentTime = new Date();
+        const channel = data[0];
+        const currentProgram = channel.programs.find(program => currentTime >= new Date(program.start) && currentTime <= new Date(program.end));
+
+        if (currentProgram) {
+            const programList = document.getElementById('current-program');
+            programList.innerHTML = `
+                <div class="program-item now">
+                    <h3>${currentProgram.title}</h3>
+                    <p>${currentProgram.description}</p>
+                    <p class="time"><strong>Inizio Programma:</strong> ${new Date(currentProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(currentProgram.end).toLocaleString()}</p>
+                    ${currentProgram.poster ? `<img src="${currentProgram.poster}" alt="${currentProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
+                    <div class="progress-bar-container">
+                        <progress id="progress-bar" value="0" max="100"></progress>
+                        <div id="time-remaining">Tempo rimanente: --</div>
+                    </div>
+                </div>
+            `;
+            currentProgramIndex = channel.programs.indexOf(currentProgram) + 1;
+            updateProgressBar(currentProgram);
+        } else {
+            showFallbackMessage(); // Se non c'è programma corrente, mostra il fallback
+        }
+    }
+
+    function updateProgressBar(currentProgram) {
+        const currentTime = new Date();
+        const startTime = new Date(currentProgram.start);
+        const endTime = new Date(currentProgram.end);
+        const duration = endTime - startTime;
+        const elapsed = currentTime - startTime;
+
+        if (elapsed >= 0 && elapsed <= duration) {
+            const progress = (elapsed / duration) * 100;
+            const remainingTime = endTime - currentTime;
+            const remainingMinutes = Math.ceil(remainingTime / (1000 * 60));
+
+            document.getElementById('progress-bar').value = progress;
+            document.getElementById('time-remaining').innerText = `Tempo rimanente: ${remainingMinutes} min`;
         }
 
-        function showCurrentProgram() {
-            const currentTime = new Date();
-            const channel = data[0];
-            const currentProgram = channel.programs.find(program => currentTime >= new Date(program.start) && currentTime <= new Date(program.end));
+        if (progressInterval) clearInterval(progressInterval);
+        progressInterval = setInterval(() => updateProgressBar(currentProgram), 1000);
+    }
 
-            if (currentProgram) {
-                const programList = document.getElementById('current-program');
+    function showNextProgram() {
+        const channel = data[0];
+        const programList = document.getElementById('current-program');
+
+        if (attemptCount < 2) {
+            if (currentProgramIndex < channel.programs.length) {
+                const nextProgram = channel.programs[currentProgramIndex];
                 programList.innerHTML = `
-                    <div class="program-item now">
-                        <h3>${currentProgram.title}</h3>
-                        <p>${currentProgram.description}</p>
-                        <p class="time"><strong>Inizio Programma:</strong> ${new Date(currentProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(currentProgram.end).toLocaleString()}</p>
-                        ${currentProgram.poster ? `<img src="${currentProgram.poster}" alt="${currentProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
+                    <div class="program-item">
+                        <h3>${nextProgram.title}</h3>
+                        <p>${nextProgram.description}</p>
+                        <p class="time"><strong>Inizio Programma:</strong> ${new Date(nextProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(nextProgram.end).toLocaleString()}</p>
+                        ${nextProgram.poster ? `<img src="${nextProgram.poster}" alt="${nextProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
                         <div class="progress-bar-container">
                             <progress id="progress-bar" value="0" max="100"></progress>
                             <div id="time-remaining">Tempo rimanente: --</div>
                         </div>
                     </div>
                 `;
-                currentProgramIndex = channel.programs.indexOf(currentProgram) + 1;
-                updateProgressBar(currentProgram);
+                currentProgramIndex++;
+                attemptCount++;
+                clearInterval(progressInterval);
+            } else {
+                programList.innerHTML = `<p>Non ci sono altri programmi disponibili.</p>`;
             }
         }
 
-        function updateProgressBar(currentProgram) {
-            const currentTime = new Date();
-            const startTime = new Date(currentProgram.start);
-            const endTime = new Date(currentProgram.end);
-            const duration = endTime - startTime;
-            const elapsed = currentTime - startTime;
-
-            if (elapsed >= 0 && elapsed <= duration) {
-                const progress = (elapsed / duration) * 100;
-                const remainingTime = endTime - currentTime;
-                const remainingMinutes = Math.ceil(remainingTime / (1000 * 60));
-
-                document.getElementById('progress-bar').value = progress;
-                document.getElementById('time-remaining').innerText = `Tempo rimanente: ${remainingMinutes} min`;
-            }
-
-            if (progressInterval) clearInterval(progressInterval);
-            progressInterval = setInterval(() => updateProgressBar(currentProgram), 1000);
+        if (attemptCount >= 2) {
+            setTimeout(() => {
+                showCurrentProgram();
+                attemptCount = 0;
+            }, 5000);
         }
+    }
 
-        function showNextProgram() {
-            const channel = data[0];
-            const programList = document.getElementById('current-program');
+    loadEPGData();
+</script>
 
-            if (attemptCount < 2) {
-                if (currentProgramIndex < channel.programs.length) {
-                    const nextProgram = channel.programs[currentProgramIndex];
-                    programList.innerHTML = `
-                        <div class="program-item">
-                            <h3>${nextProgram.title}</h3>
-                            <p>${nextProgram.description}</p>
-                            <p class="time"><strong>Inizio Programma:</strong> ${new Date(nextProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(nextProgram.end).toLocaleString()}</p>
-                            ${nextProgram.poster ? `<img src="${nextProgram.poster}" alt="${nextProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
-                            <div class="progress-bar-container">
-                                <progress id="progress-bar" value="0" max="100"></progress>
-                                <div id="time-remaining">Tempo rimanente: --</div>
-                            </div>
-                        </div>
-                    `;
-                    currentProgramIndex++;
-                    attemptCount++;
-                    clearInterval(progressInterval);
-                } else {
-                    programList.innerHTML = `<p>Non ci sono altri programmi disponibili.</p>`;
-                }
-            }
-
-            if (attemptCount >= 2) {
-                setTimeout(() => {
-                    showCurrentProgram();
-                    attemptCount = 0;
-                }, 5000);
-            }
-        }
-
-        loadEPGData();
-    </script>
 </body>
 </html>
