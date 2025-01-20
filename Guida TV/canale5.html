@@ -19,13 +19,11 @@
 
         /* Banner */
         #banner {
-            
             color: #fff;
             padding: 10px 20px;
             text-align: center;
             font-size: 20px;
             width: 100%;
-           
             top: 0;
             left: 0;
             z-index: 10;
@@ -136,15 +134,11 @@
 </head>
 <body>
     <!-- Barra con orologio -->
-   
-
-    <!-- Contenitore guida TV -->
     <div id="tv-guide">
-     <div id="banner">
-        <div id="clock"></div>
-    </div>
+        <div id="banner">
+            <div id="clock"></div>
+        </div>
         <div id="current-program" class="program-list">
-        
             <!-- Mostra il programma in onda -->
         </div>
         <div class="date-selector">
@@ -171,9 +165,7 @@
         document.getElementById('clock').innerText = `${formattedDate} | ${formattedTime}`;
     }
 
-    // Aggiorna l'orologio ogni secondo
     setInterval(updateClock, 1000);
-    // Inizializza l'orologio all'avvio
     updateClock();
 
     let data = [];
@@ -191,13 +183,13 @@
             data = epgData.filter(channel => channel.name === 'Canale 5');
 
             if (data.length === 0) {
-                showFallbackMessage();  // Se non ci sono dati per il canale, mostra il messaggio di fallback
+                showFallbackMessage();
             } else {
                 showCurrentProgram();
             }
         } catch (error) {
             console.error('Errore:', error);
-            showFallbackMessage();  // In caso di errore nel caricamento dei dati
+            showFallbackMessage();
         }
     }
 
@@ -211,7 +203,6 @@
             </div>
         `;
 
-        // Resetta eventuali intervalli attivi
         clearInterval(progressInterval);
     }
 
@@ -226,7 +217,7 @@
                 <div class="program-item now">
                     <h3>${currentProgram.title}</h3>
                     <p>${currentProgram.description}</p>
-                    <p class="time"><strong>Inizio Programma:</strong> ${new Date(currentProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(currentProgram.end).toLocaleString()}</p>
+                    <p class="time"><strong>Inizio Programma:</strong> ${new Date(currentProgram.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })} <br><strong>Fine Programma:</strong> ${new Date(currentProgram.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
                     ${currentProgram.poster ? `<img src="${currentProgram.poster}" alt="${currentProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
                     <div class="progress-bar-container">
                         <progress id="progress-bar" value="0" max="100"></progress>
@@ -237,7 +228,7 @@
             currentProgramIndex = channel.programs.indexOf(currentProgram) + 1;
             updateProgressBar(currentProgram);
         } else {
-            showFallbackMessage(); // Se non c'è programma corrente, mostra il fallback
+            showFallbackMessage();
         }
     }
 
@@ -272,7 +263,7 @@
                     <div class="program-item">
                         <h3>${nextProgram.title}</h3>
                         <p>${nextProgram.description}</p>
-                        <p class="time"><strong>Inizio Programma:</strong> ${new Date(nextProgram.start).toLocaleString()} <br><strong>Fine Programma:</strong> ${new Date(nextProgram.end).toLocaleString()}</p>
+                        <p class="time"><strong>Inizio Programma:</strong> ${new Date(nextProgram.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })} <br><strong>Fine Programma:</strong> ${new Date(nextProgram.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
                         ${nextProgram.poster ? `<img src="${nextProgram.poster}" alt="${nextProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
                         <div class="progress-bar-container">
                             <progress id="progress-bar" value="0" max="100"></progress>
