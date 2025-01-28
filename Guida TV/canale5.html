@@ -10,7 +10,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            color: #fff;
+            color: #ffffffc7;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -106,11 +106,58 @@
             background-color: #ffffff42;
         }
 
-        #time-remaining {
+         #time-remaining {
             margin-top: 5px;
             font-size: 19px;
             color: #fff;
         }
+
+     #show-evening-programs {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 75px;
+    right: 30px;
+    background-color: rgba(0, 191, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1), 0 0 20px rgb(116 116 116 / 28%) inset;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 20px, 21px;
+    background-position: 102% 50%, -2% 50%;
+    font-size: 17px;
+}
+
+        /* Barra superiore, posizione del pulsante */
+        #banner .buttons {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Bottone "Chiudi" */
+        .close-button {
+            padding: 10px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Programmi serali */
+        .evening-programs {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-align: center;
+        }
+        
+
+
 
         /* Icona del prossimo programma */
         .date-selector {
@@ -130,10 +177,12 @@
         .date-selector img:hover {
             transform: scale(1.1);
         }
+        
+        
     </style>
 </head>
 <body>
-    <!-- Barra con orologio -->
+
     <div id="tv-guide">
         <div id="banner">
             <div id="clock"></div>
@@ -146,7 +195,7 @@
         </div>
     </div>
 
-   <script>
+ <script>
     function updateClock() {
         const now = new Date();
         const options = { 
@@ -163,6 +212,13 @@
             hour12: false 
         });
         document.getElementById('clock').innerText = `${formattedDate} | ${formattedTime}`;
+
+        // Verifica se siamo tra le 00:00 e le 01:30
+        if (now.getHours() === 6 && now.getMinutes() < 59) {
+            showUpdatingMessage();
+        } else {
+            hideUpdatingMessage();
+        }
     }
 
     setInterval(updateClock, 1000);
@@ -170,6 +226,7 @@
 
     let data = [];
     let currentProgramIndex = 0;
+    let isEveningProgram = false; // Flag per identificare se siamo nei programmi serali
     let attemptCount = 0;
     let progressInterval;
 
@@ -195,14 +252,12 @@
 
     function showFallbackMessage() {
         const programList = document.getElementById('current-program');
-        programList.innerHTML = `
-            <div class="program-item now">
-                <h3>Guida TV non disponibile</h3>
-                <p>Al momento non possiamo mostrare la guida TV. Riprova più tardi.</p>
-                <img src="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg" alt="Fallback Image">
-            </div>
-        `;
-
+        programList.innerHTML = 
+            `<div class="program-item now">
+                <h3>Programma attualmente non disponibile</h3>
+                <p>Al momento non possiamo mostrare il <strong>programma in onda</strong>. Ti consigliamo di riprovare più tardi o di vedere <br>il prossimo programma, tramite la freccia presente sulla destra.</p>
+                <img src="https://i.ibb.co/fFcsyCS/nessun-segnale-J-tv.jpg" alt="Fallback Image">
+            </div>`;
         clearInterval(progressInterval);
     }
 
@@ -213,18 +268,18 @@
 
         if (currentProgram) {
             const programList = document.getElementById('current-program');
-            programList.innerHTML = `
-                <div class="program-item now">
+            programList.innerHTML = 
+                `<div class="program-item now">
                     <h3>${currentProgram.title}</h3>
                     <p>${currentProgram.description}</p>
                     <p class="time"><strong>Inizio Programma:</strong> ${new Date(currentProgram.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })} <br><strong>Fine Programma:</strong> ${new Date(currentProgram.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
-                    ${currentProgram.poster ? `<img src="${currentProgram.poster}" alt="${currentProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
+                    ${currentProgram.poster ? `<img src="${currentProgram.poster}" alt="${currentProgram.title} poster">` : '<p>Immagine non disponibile</p>'}
                     <div class="progress-bar-container">
                         <progress id="progress-bar" value="0" max="100"></progress>
                         <div id="time-remaining">Tempo rimanente: --</div>
                     </div>
-                </div>
-            `;
+                    <button id="show-evening-programs" onclick="showEveningPrograms()">Questa Sera</button>
+                </div>`;
             currentProgramIndex = channel.programs.indexOf(currentProgram) + 1;
             updateProgressBar(currentProgram);
         } else {
@@ -253,38 +308,120 @@
     }
 
     function showNextProgram() {
-        const channel = data[0];
-        const programList = document.getElementById('current-program');
+        if (isEveningProgram) {
+            showNextEveningProgram();
+        } else {
+            const channel = data[0];
+            const programList = document.getElementById('current-program');
 
-        if (attemptCount < 2) {
             if (currentProgramIndex < channel.programs.length) {
                 const nextProgram = channel.programs[currentProgramIndex];
-                programList.innerHTML = `
-                    <div class="program-item">
+                programList.innerHTML = 
+                    `<div class="program-item">
                         <h3>${nextProgram.title}</h3>
                         <p>${nextProgram.description}</p>
                         <p class="time"><strong>Inizio Programma:</strong> ${new Date(nextProgram.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })} <br><strong>Fine Programma:</strong> ${new Date(nextProgram.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
-                        ${nextProgram.poster ? `<img src="${nextProgram.poster}" alt="${nextProgram.title} poster">` : `<p>Immagine non disponibile</p>`}
+                        ${nextProgram.poster ? `<img src="${nextProgram.poster}" alt="${nextProgram.title} poster">` : '<p>Immagine non disponibile</p>'}
                         <div class="progress-bar-container">
                             <progress id="progress-bar" value="0" max="100"></progress>
                             <div id="time-remaining">Tempo rimanente: --</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 currentProgramIndex++;
                 attemptCount++;
                 clearInterval(progressInterval);
             } else {
-                programList.innerHTML = `<p>Non ci sono altri programmi disponibili.</p>`;
+                programList.innerHTML = `<div class="program-item now">
+                <h3>Non ci sono altri programmi disponibili.</h3>
+                <p>Al momento i prossimi programmi non sono disponibili poiché Bry sta ricevendo i nuovi dati per la programmazione del canale. Ti invitiamo a riprovare più tardi o, se preferisci, a tornare alle ore 06:00, quando i dati saranno aggiornati e disponibili.</p>
+                <img src="https://i.ibb.co/zHRGKpwW/nessun-segnakl-e-J-tv.jpg" alt="Fallback Image">
+            </div>`;
             }
         }
 
-        if (attemptCount >= 2) {
+        if (attemptCount >= 19) {
             setTimeout(() => {
                 showCurrentProgram();
                 attemptCount = 0;
             }, 5000);
         }
+    }
+
+       let eveningProgramIndex = 0; // Indice per il programma serale attuale
+
+    function showEveningPrograms() {
+        const eveningPrograms = data[0].programs.filter(program => {
+            const startTime = new Date(program.start);
+            return startTime.getHours() >= 21;
+        });
+
+        if (eveningPrograms.length > 0) {
+            eveningProgramIndex = 0;
+            isEveningProgram = true;
+            showEveningProgram(eveningPrograms[eveningProgramIndex]);
+        } else {
+            alert("Nessun programma disponibile per questa sera.");
+        }
+    }
+    
+    
+     // Mostra il programma serale corrente
+    function showEveningProgram(program) {
+        const programList = document.getElementById('current-program');
+        programList.innerHTML = 
+            `<div class="program-item">
+                <h2>Programma per questa sera</h2>
+                <h3>${program.title}</h3>
+                <p>${program.description}</p>
+                <p class="time"><strong>Inizio Programma:</strong> ${new Date(program.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</p>
+                <p class="time"><strong>Fine Programma:</strong> ${new Date(program.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}</p>
+                ${program.poster ? `<img src="${program.poster}" alt="${program.title} poster" style="max-width: 30%; border-radius: 8px;">` : '<p>Immagine non disponibile</p>'}
+                <button class="close-button" onclick="closeEveningPrograms()">Chiudi</button>
+            </div>`;
+    }
+
+
+// Funzione per mostrare il prossimo programma
+    function showNextEveningProgram() {
+        const eveningPrograms = data[0].programs.filter(program => new Date(program.start).getHours() >= 21);
+        if (eveningProgramIndex < eveningPrograms.length - 1) {
+            eveningProgramIndex++;
+            showEveningProgram(eveningPrograms[eveningProgramIndex]);
+            resetProgressBar(); // Reset della barra di progresso
+        }
+    }
+
+
+
+
+
+    function closeEveningPrograms() {
+        isEveningProgram = false;
+        showCurrentProgram();
+    }
+
+    function showUpdatingMessage() {
+        const programList = document.getElementById('current-program');
+        programList.innerHTML = 
+            `<div class="program-item now">
+                <h3>Guida TV in fase di aggiornamento</h3>
+                <p>La guida TV è attualmente in fase di aggiornamento da parte dei gestori. Ti invitiamo a riprovare tra poco.</p>
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFvsldEkJIdf2qKg_inxyXeDtIK79kqjQYVY8__3dLs9s1kqY5tVqrr_0aoFLBkJmVDJ2R-msbvNCNhkoX___wuujIwSqccOwd1mGNiHLPZEIs1hZZUvYfxS0WelsO696_XQeclAkIOXRgWhpmaYYlVTURrsPm0-uWF0HVKRtVD_RPg5ydZ4SAnlSVh4E/s1200/Senza%20titolo-1.jpg" alt="Fallback Image">
+            </div>`;
+            
+         // Disabilita il pulsante Data Selector
+        document.querySelector('.date-selector img').disabled = true;
+       
+    }
+
+    function hideUpdatingMessage() {
+        const programList = document.getElementById('current-program');
+        if (programList.innerHTML.includes('Guida TV in fase di aggiornamento')) {
+            programList.innerHTML = '';
+        }
+
+        // Abilita il pulsante Data Selector
+        document.querySelector('.date-selector img').disabled = false;
     }
 
     loadEPGData();
