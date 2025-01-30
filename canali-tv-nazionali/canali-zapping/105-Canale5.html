@@ -104,7 +104,7 @@ window.addEventListener("message", function(event) {
   if (event.data === "rewind") {
     if (window.player) {
       const currentTime = window.player.getCurrentTime();
-      window.player.seek(Math.max(0, currentTime - 10)); // Indietro di 10 secondi
+      window.player.seek(Math.max(0, currentTime - 30)); // Indietro di 10 secondi
     }
   }
 }, false);
