@@ -131,25 +131,18 @@
           },
         },
       });
-    </script>
 
 
-   
- <script>
-// Rendi il player accessibile globalmente
-window.player = player;
-
-// Ascolta i messaggi provenienti dalla pagina principale
-window.addEventListener("message", function(event) {
-  if (event.data === "rewind") {
-    if (window.player) {
-      const currentTime = window.player.getCurrentTime();
-      window.player.seek(Math.max(0, currentTime - 30)); // Indietro di 10 secondi
+  // Ascolta i messaggi per il rewind
+  window.addEventListener("message", function(event) {
+    if (event.data === "rewind") {
+      if (window.player) {
+        const currentTime = window.player.getCurrentTime();
+        window.player.seek(Math.max(0, currentTime - 30)); // Rewind di 30 secondi
+      }
     }
-  }
-}, false);
-</script>   
-
+  }, false);
+</script>
 
 
    
