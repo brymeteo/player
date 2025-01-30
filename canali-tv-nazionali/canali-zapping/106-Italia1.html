@@ -94,6 +94,25 @@
                 },
             },
         });
+
+// Rendi il player accessibile globalmente
+window.player = player;
+
+// Ascolta i messaggi provenienti dalla pagina principale
+window.addEventListener("message", function(event) {
+  if (event.data === "rewind") {
+    if (window.player) {
+      const currentTime = window.player.getCurrentTime();
+      window.player.seek(Math.max(0, currentTime - 10)); // Indietro di 10 secondi
+    }
+  } 
+  else if (event.data === "live") { // Aggiungi il comando per tornare alla diretta
+    if (window.player) {
+      window.player.seek(window.player.getDuration()); // Torna alla diretta (posizione corrente)
+    }
+  }
+}, false);
+
         
         
         var logo = document.getElementById("logo");
