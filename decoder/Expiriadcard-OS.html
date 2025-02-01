@@ -1,0 +1,42 @@
+<div style="margin: 230px auto; margin-left: 110px; width: 90%;">
+    <div style="background-image: url('https://brymeteo.github.io/player/decoder/immagini/television-background-1.png'); background-size: cover; padding: 20px; border-radius: 15px; color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); position: relative;">
+        <h2 style="font-size: 28px; margin-bottom: 20px;">Dettagli Abbonamento</h2>
+        <div style="font-size: 19px; text-align: left;">
+            <p><strong>ID Codice cliente:</strong> xx55gd3iy</p>
+            <p><strong>Nome Utente:</strong> Bryan</p>
+            <p><strong>Tipo di Abbonamento:</strong> Premium</p>
+            <p><strong>Data di Scadenza:</strong> 10/03/2025</p>
+            <p><strong>ID Personale:</strong> XYZ567</p>
+            <p><strong>Pin Attivazione Smart card:</strong> XYZ12345fs</p>
+            <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
+            <p><strong>Tempo rimanente fino alla scadenza:</strong> <span id="countdown"></span></p>
+        </div>
+        <img src="https://i.ibb.co/0XtvkBs/Vox-OSdecoder3-logo-TRASPARENTE.png" alt="Logo" style="position: absolute; top: 50%; right: 90px; transform: translateY(-50%); height: 50px; width: auto;">
+    </div>
+</div>
+
+<script>
+    // Funzione per calcolare il tempo rimanente
+    function updateCountdown() {
+        const scadenza = new Date('2025-03-10'); // Imposta la data di scadenza dell'abbonamento
+        const today = new Date();
+        
+        // Calcola la differenza in millisecondi
+        const diff = scadenza - today;
+        
+        // Se la data di scadenza è già passata
+        if (diff <= 0) {
+            document.getElementById('countdown').textContent = 'Abbonamento scaduto';
+            return;
+        }
+        
+        // Calcola giorni rimanenti
+        const giorniRimanenti = Math.ceil(diff / (1000 * 3600 * 24)); // Converti la differenza in giorni
+        document.getElementById('countdown').textContent = giorniRimanenti + ' giorni';
+    }
+
+    // Aggiorna il countdown ogni giorno (una volta al giorno)
+    setInterval(updateCountdown, 1000 * 60 * 60 * 24);
+
+    // Aggiorna immediatamente al caricamento della pagina
+    updateCountdown();</script>
