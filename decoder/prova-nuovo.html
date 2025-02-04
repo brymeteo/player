@@ -55,6 +55,7 @@
     right: 0px;
     height: 140%;
     width: 4px;
+     z-index: 2000;
     background: linear-gradient(0deg, rgb(255 255 255 / 0%) 0%, rgb(167 137 137 / 0%) 25%, rgb(255 255 255 / 32%) 50%, rgb(255 255 255 / 0%) 75%, rgb(255 255 255 / 0%) 100%);
 }
 
@@ -271,14 +272,14 @@
     <div id="content">
  
   <div id="sidebar">
-  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br>
   <div id="menu-title">Home</div>
      <br><br><br>
    
   
   <iframe src="https://brymeteo.github.io/player/canali-tv-nazionali/zapping-versione-lista-canali.html" width="402" height="226.0" frameborder="0" allowfullscreen="" style="position: relative; left: -42px;"></iframe>
 
-   <br><br><br><br><br><br><br>
+   <br><br><br><br><br>
        
        <div id="logo-clock-container">
           <div id="logo">
@@ -3056,7 +3057,7 @@ updateTime();
 <!-- sfondo Home normale -->
   // Funzione per ripristinare lo sfondo predefinito
   function resetBackground() {
-    document.body.style.backgroundImage = "url('https://brymeteo.github.io/player/decoder/immagini/home.png')";
+    document.body.style.backgroundImage = "url('https://i.ibb.co/zH0dJTFL/home.png')";
   }
 // Funzione per cambiare lo sfondo quando si clicca sul pulsante "Guida TV"
   function changeBackgroundGuidaTV() {
