@@ -696,6 +696,24 @@
 <!-- Icona di fullscreen -->
 <button id="fullscreen-icon">&#x26F6;</button>
 
+
+<script>
+  window.addEventListener("message", function(event) {
+    // Verifica se il messaggio contiene l'azione di fullscreen
+    if (event.data && event.data.action === "toggleFullscreen") {
+      // Trova il pulsante fullscreen dentro l'iframe
+      const fullscreenButton = document.getElementById("fullscreen-icon");
+
+      // Se il pulsante esiste, simula il clic
+      if (fullscreenButton) {
+        fullscreenButton.click();
+      }
+    }
+  });
+</script>
+
+
+    
 <script>
 let channels = document.querySelectorAll('#channels li');
 let selectedChannelIndex = 0;
