@@ -714,34 +714,30 @@
 <script>
 // Ascolta i messaggi provenienti dal sito principale
 window.addEventListener("message", (event) => {
-    // Controlla che il messaggio provenga dal dominio giusto (opzionale, per sicurezza)
-    // if (event.origin !== "https://il-tuo-dominio.com") return;
-
     if (event.data && event.data.changeChannel) {
-        const channelToSwitch = event.data.channelName;  // Il numero del canale ricevuto
-        changeChannel(channelToSwitch);
+        const channelNumber = event.data.channelNumber;
+        changeChannel(channelNumber);  // Cambia canale
     }
 });
 
 // Funzione per cambiare canale
-function changeChannel(channelName) {
+function changeChannel(channelNumber) {
     const channelList = document.getElementById("channels");
     const channelItems = channelList.getElementsByTagName("li");
 
     for (let i = 0; i < channelItems.length; i++) {
         const channelItem = channelItems[i];
-        const channelNumber = channelItem.getAttribute("data-number");
+        const dataNumber = channelItem.getAttribute("data-number");
 
-        // Controlliamo se il numero del canale corrisponde
-        if (channelNumber === channelName) {
-            // Clicca sull'elemento corrispondente al canale
-            channelItem.click();
+        // Se il numero del canale nell'iframe corrisponde al numero inviato dal sito principale
+        if (dataNumber === channelNumber) {
+            channelItem.click();  // Clicca sull'elemento per selezionarlo
             break;
         }
     }
 }
-
 </script>
+
 <script>
 let channels = document.querySelectorAll('#channels li');
 let selectedChannelIndex = 0;
