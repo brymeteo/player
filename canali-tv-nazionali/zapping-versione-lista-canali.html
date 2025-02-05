@@ -712,30 +712,37 @@
   });
 </script>
 <script>
-// Ascolta i messaggi provenienti dal sito principale
+// Funzione per gestire i messaggi in arrivo dal sito principale
 window.addEventListener("message", (event) => {
-    if (event.data && event.data.changeChannel) {
-        const channelNumber = event.data.channelNumber;
-        changeChannel(channelNumber);  // Cambia canale
+    // Verifica che il messaggio contenga un ID canale
+    if (event.data && event.data.channel) {
+        const channelId = event.data.channel;
+        changeChannel(channelId);
     }
 });
 
-// Funzione per cambiare canale
-function changeChannel(channelNumber) {
-    const channelList = document.getElementById("channels");
-    const channelItems = channelList.getElementsByTagName("li");
+// Funzione per cambiare canale basata sull'ID ricevuto
+function changeChannel(channelId) {
+    // Mappa degli URL dei canali
+    const channelUrls = {
+        "rai-1": "https://brymeteo.github.io/player/canali-tv-nazionali/101-Rai1.html",
+        "rai-2": "https://brymeteo.github.io/player/canali-tv-nazionali/102-Rai2.html",
+        "rai-3": "https://brymeteo.github.io/player/canali-tv-nazionali/103-Rai3.html",
+        "canale-5": "https://brymeteo.github.io/player/canali-tv-nazionali/105-Canale5.html",
+        "italia-1": "https://brymeteo.github.io/player/canali-tv-nazionali/106-Italia1.html",
+        "rete-4": "https://brymeteo.github.io/player/canali-tv-nazionali/104-Rete4.html",
+        "la7": "https://brymeteo.github.io/player/canali-tv-nazionali/la7.html",
+        "tv8": "https://brymeteo.github.io/player/canali-tv-nazionali/tv8.html",
+        "nove": "https://brymeteo.github.io/player/canali-tv-nazionali/nove.html",
+        "20": "https://brymeteo.github.io/player/canali-tv-nazionali/20.html"
+    };
 
-    for (let i = 0; i < channelItems.length; i++) {
-        const channelItem = channelItems[i];
-        const dataNumber = channelItem.getAttribute("data-number");
-
-        // Se il numero del canale nell'iframe corrisponde al numero inviato dal sito principale
-        if (dataNumber === channelNumber) {
-            channelItem.click();  // Clicca sull'elemento per selezionarlo
-            break;
-        }
+    // Controlla se il canale esiste nella mappa e cambia l'URL
+    if (channelUrls[channelId]) {
+        window.location.href = channelUrls[channelId];
     }
 }
+
 </script>
 
 <script>
