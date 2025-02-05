@@ -718,7 +718,7 @@ window.addEventListener("message", (event) => {
     // if (event.origin !== "https://il-tuo-dominio.com") return;
 
     if (event.data && event.data.changeChannel) {
-        const channelToSwitch = event.data.channelName;
+        const channelToSwitch = event.data.channelName;  // Il numero del canale ricevuto
         changeChannel(channelToSwitch);
     }
 });
@@ -732,8 +732,7 @@ function changeChannel(channelName) {
         const channelItem = channelItems[i];
         const channelNumber = channelItem.getAttribute("data-number");
 
-        // Controlliamo se il nome del canale nel sito principale corrisponde
-        // al nome del canale nell'iframe (ad esempio, "rai-1", "rai-2", etc.)
+        // Controlliamo se il numero del canale corrisponde
         if (channelNumber === channelName) {
             // Clicca sull'elemento corrispondente al canale
             channelItem.click();
@@ -741,6 +740,7 @@ function changeChannel(channelName) {
         }
     }
 }
+
 </script>
 <script>
 let channels = document.querySelectorAll('#channels li');
