@@ -350,20 +350,53 @@
 
 <script>
 window.addEventListener('message', function(event) {
-    console.log('Messaggio ricevuto nell\'iframe:', event.data); // Aggiungi log
+    console.log('Messaggio ricevuto nell\'iframe:', event.data);
 
-    // Verifica il messaggio e simula il clic
     if (event.data === 'scroll-up') {
-        document.getElementById('scroll-up').click();
-        console.log('Clic su scroll-up');  // Aggiungi log
+        const scrollUpButton = document.getElementById('scroll-up');
+        if (scrollUpButton) {
+            scrollUpButton.click();
+            console.log('Clic su scroll-up');
+            
+            // Simula anche il cambio di canale, ad esempio cliccando su un canale successivo
+            const nextChannelButton = document.querySelector('.next-channel'); // Modifica in base al tuo codice HTML
+            if (nextChannelButton) {
+                nextChannelButton.click(); // Cambia canale
+                console.log('Cambio canale (scroll-up)');
+            } else {
+                console.log('Pulsante per cambiare canale non trovato');
+            }
+        } else {
+            console.log('Pulsante scroll-up non trovato');
+        }
     } else if (event.data === 'scroll-down') {
-        document.getElementById('scroll-down').click();
-        console.log('Clic su scroll-down');  // Aggiungi log
+        const scrollDownButton = document.getElementById('scroll-down');
+        if (scrollDownButton) {
+            scrollDownButton.click();
+            console.log('Clic su scroll-down');
+            
+            // Simula anche il cambio di canale, ad esempio cliccando su un canale precedente
+            const prevChannelButton = document.querySelector('.prev-channel'); // Modifica in base al tuo codice HTML
+            if (prevChannelButton) {
+                prevChannelButton.click(); // Cambia canale
+                console.log('Cambio canale (scroll-down)');
+            } else {
+                console.log('Pulsante per cambiare canale non trovato');
+            }
+        } else {
+            console.log('Pulsante scroll-down non trovato');
+        }
     } else if (event.data === 'voice-control') {
-        document.getElementById('voice-control-button').click();
-        console.log('Clic su voice-control');  // Aggiungi log
+        const voiceControlButton = document.getElementById('voice-control-button');
+        if (voiceControlButton) {
+            voiceControlButton.click();
+            console.log('Clic su voice-control');
+        } else {
+            console.log('Pulsante voice-control non trovato');
+        }
     }
 });
+
 
 </script>
 
