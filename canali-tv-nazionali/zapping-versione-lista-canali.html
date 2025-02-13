@@ -698,37 +698,37 @@
 
 <script>
   window.addEventListener('message', function(event) {
-    // Se il messaggio proviene dal sito corretto
-    // if (event.origin !== 'https://tuosito.com') return;
+  const comando = event.data;
+  console.log("Comando ricevuto:", comando);
 
-    const comando = event.data;
-    console.log("Comando ricevuto:", comando); // Aggiungi log per il comando
-
-    // Esegui l'azione in base al comando ricevuto
-    if (comando === 'scroll-up') {
-      const btnUp = document.getElementById('scroll-up');
-      if (btnUp) {
-        console.log("Cliccando Freccia Su..."); // Debug
-        btnUp.click(); // Clicca sul pulsante Freccia su
-      } else {
-        console.log("Pulsante Freccia Su non trovato!");
-      }
-    } else if (comando === 'scroll-down') {
-      const btnDown = document.getElementById('scroll-down');
-      if (btnDown) {
-        console.log("Cliccando Freccia Giù..."); // Debug
-        btnDown.click(); // Clicca sul pulsante Freccia giù
-      } else {
-        console.log("Pulsante Freccia Giù non trovato!");
-      }
-    } else if (comando.startsWith('conferma-canale-')) {
-      const numeroCanale = comando.split('-')[2];
-      const canale = document.querySelector(`li[data-number="${numeroCanale}"]`);
-      if (canale) {
-        canale.click();
-      }
+  if (comando === 'scroll-up') {
+    const btnUp = document.getElementById('scroll-up');
+    if (btnUp) {
+      console.log("Cliccando Freccia Su...");
+      btnUp.click(); // Clicca sul pulsante Freccia su
+    } else {
+      console.log("Pulsante Freccia Su non trovato!");
     }
-  });
+  } else if (comando === 'scroll-down') {
+    const btnDown = document.getElementById('scroll-down');
+    if (btnDown) {
+      console.log("Cliccando Freccia Giù...");
+      btnDown.click(); // Clicca sul pulsante Freccia giù
+    } else {
+      console.log("Pulsante Freccia Giù non trovato!");
+    }
+  } else if (comando.startsWith('conferma-canale-')) {
+    const numeroCanale = comando.split('-')[2];
+    const canale = document.querySelector(`li[data-number="${numeroCanale}"]`);
+    if (canale) {
+      console.log(`Selezionando il canale ${numeroCanale}...`);
+      canale.click();
+    } else {
+      console.log(`Canale ${numeroCanale} non trovato!`);
+    }
+  }
+});
+
 </script>
 
 
