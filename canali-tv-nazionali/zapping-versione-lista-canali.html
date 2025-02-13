@@ -697,75 +697,35 @@
 <button id="fullscreen-icon">&#x26F6;</button>
 
 <script>
-    // Variabile per tenere traccia del canale selezionato
-    let selectedChannelIndex = 0;
-    const channels = document.querySelectorAll("li");  // Seleziona tutti i canali
+  // Ascolta i messaggi provenienti dal sito principale
+  window.addEventListener('message', function(event) {
+    // Assicurati di controllare che il messaggio provenga dal dominio corretto
+    // Ad esempio, se il dominio principale è "https://tuosito.com", controlla:
+    // if (event.origin !== 'https://tuosito.com') return;
 
-    // Funzione per aggiornare la selezione del canale
-    function updateSelectedChannel() {
-        // Rimuovi la classe 'selected' da tutti i canali
-        channels.forEach(channel => channel.classList.remove('selected'));
+    const comando = event.data;
 
-        // Aggiungi la classe 'selected' al canale corrente
-        if (channels[selectedChannelIndex]) {
-            channels[selectedChannelIndex].classList.add('selected');
-        }
+    // Esegui l'azione in base al comando ricevuto
+    if (comando === 'scroll-up') {
+      const btnUp = document.getElementById('scroll-up');
+      if (btnUp) btnUp.click(); // Clicca sul pulsante "Freccia su"
+    } else if (comando === 'scroll-down') {
+      const btnDown = document.getElementById('scroll-down');
+      if (btnDown) btnDown.click(); // Clicca sul pulsante "Freccia giù"
+    } else if (comando.startsWith('conferma-canale-')) {
+      // Estrai il numero del canale dal comando (es. "conferma-canale-101")
+      const numeroCanale = comando.split('-')[2]; // "101" in "conferma-canale-101"
+      
+      // Trova il canale corrispondente usando il data-number
+      const canale = document.querySelector(`li[data-number="${numeroCanale}"]`);
+      
+      if (canale) {
+        canale.click(); // Clicca sul canale specificato
+      }
     }
-
-    // Funzione per gestire i messaggi
-    window.addEventListener("message", function(event) {
-        const command = event.data;
-
-        if (command === "scroll-up") {
-            // Scorri al canale precedente
-            if (selectedChannelIndex > 0) {
-                selectedChannelIndex--;
-            }
-            updateSelectedChannel();  // Aggiorna la selezione
-        } else if (command === "scroll-down") {
-            // Scorri al canale successivo
-            if (selectedChannelIndex < channels.length - 1) {
-                selectedChannelIndex++;
-            }
-            updateSelectedChannel();  // Aggiorna la selezione
-        } else if (command === "select-channel") {
-            // Clicca sul canale selezionato
-            if (channels[selectedChannelIndex]) {
-                channels[selectedChannelIndex].click();  // Clicca sul canale
-            }
-        }
-    });
-
-    // Gestione dei tasti premuti
-    document.addEventListener('keydown', (e) => {
-        // Se viene premuto il tasto 'ArrowUp', scorrere indietro
-        if (e.key === 'ArrowUp') {
-            if (selectedChannelIndex > 0) {
-                selectedChannelIndex--;
-                updateSelectedChannel();  // Aggiorna la selezione
-            }
-        } else if (e.key === 'ArrowDown') {
-            // Se viene premuto il tasto 'ArrowDown', scorrere in avanti
-            if (selectedChannelIndex < channels.length - 1) {
-                selectedChannelIndex++;
-                updateSelectedChannel();  // Aggiorna la selezione
-            }
-        } else if (e.key === 'Enter') {
-            // Se viene premuto 'Enter', seleziona il canale
-            if (channels[selectedChannelIndex]) {
-                channels[selectedChannelIndex].click();
-            }
-        } else if (e.key === '3') {
-            // Se viene premuto '3', seleziona il canale
-            if (channels[selectedChannelIndex]) {
-                channels[selectedChannelIndex].click();
-            }
-        }
-    });
-
-    // Inizializza la selezione del primo canale
-    updateSelectedChannel();
+  });
 </script>
+
 
 
 <script>
