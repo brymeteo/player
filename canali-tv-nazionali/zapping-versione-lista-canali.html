@@ -697,38 +697,49 @@
 <button id="fullscreen-icon">&#x26F6;</button>
 
 <script>
-   // Funzione che ascolta i messaggi provenienti dal sito principale
-   window.addEventListener("message", function(event) {
-       console.log("Messaggio ricevuto:", event.data);  // Aggiungi questo per il debug
+    // Variabile per tenere traccia del canale selezionato
+    let selectedChannelIndex = 0;
+    const channels = document.querySelectorAll("li");  // Seleziona tutti i canali
 
-       const command = event.data;
-       if (command === "scroll-up") {
-           const scrollUpButton = document.getElementById("scroll-up");
-           if (scrollUpButton) {
-               console.log("Cliccando il pulsante Scroll Up");  // Debug
-               scrollUpButton.click();
-           } else {
-               console.log("Pulsante Scroll Up non trovato");
-           }
-       } else if (command === "scroll-down") {
-           const scrollDownButton = document.getElementById("scroll-down");
-           if (scrollDownButton) {
-               console.log("Cliccando il pulsante Scroll Down");  // Debug
-               scrollDownButton.click();
-           } else {
-               console.log("Pulsante Scroll Down non trovato");
-           }
-       } else if (command === "select-channel") {
-           const channelItem = document.querySelector('li[data-channel="video1.mp4"]');
-           if (channelItem) {
-               console.log("Cliccando il canale");  // Debug
-               channelItem.click();
-           } else {
-               console.log("Elemento canale non trovato");
-           }
-       }
-   });
+    // Funzione per aggiornare la selezione del canale
+    function updateSelectedChannel() {
+        // Rimuovi la classe 'selected' da tutti i canali
+        channels.forEach(channel => channel.classList.remove('selected'));
+
+        // Aggiungi la classe 'selected' al canale corrente
+        if (channels[selectedChannelIndex]) {
+            channels[selectedChannelIndex].classList.add('selected');
+        }
+    }
+
+    // Funzione per gestire i messaggi
+    window.addEventListener("message", function(event) {
+        const command = event.data;
+
+        if (command === "scroll-up") {
+            // Scorri al canale precedente
+            if (selectedChannelIndex > 0) {
+                selectedChannelIndex--;
+            }
+            updateSelectedChannel();  // Aggiorna la selezione
+        } else if (command === "scroll-down") {
+            // Scorri al canale successivo
+            if (selectedChannelIndex < channels.length - 1) {
+                selectedChannelIndex++;
+            }
+            updateSelectedChannel();  // Aggiorna la selezione
+        } else if (command === "select-channel") {
+            // Clicca sul canale selezionato
+            if (channels[selectedChannelIndex]) {
+                channels[selectedChannelIndex].click();  // Clicca sul canale
+            }
+        }
+    });
+
+    // Inizializza la selezione del primo canale
+    updateSelectedChannel();
 </script>
+
 
 <script>
   window.addEventListener("message", function(event) {
