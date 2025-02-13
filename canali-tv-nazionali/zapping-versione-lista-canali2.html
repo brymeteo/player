@@ -996,30 +996,26 @@ function scrollChannels(direction) {
     changeVideo(selectedChannelIndex);
 }
 
-// Versione senza chiamata a resetHideTimeout
-function scrollChannelsNoReset(direction) {
+// Funzione per scorrere i canali e cambiare video
+function scrollChannels(direction, reset = true) {
+    if (reset) {
+        resetHideTimeout();  // Reset del timer solo se l'input è umano
+    }
+
     if (direction === 'down' && selectedChannelIndex < channels.length - 1) {
         selectChannel(selectedChannelIndex + 1);
     } else if (direction === 'up' && selectedChannelIndex > 0) {
         selectChannel(selectedChannelIndex - 1);
     }
+
+    // Cambia il video immediatamente dopo la selezione del canale
     changeVideo(selectedChannelIndex);
 }
 
-// Variabile globale per determinare se usare o meno il reset nel setInterval
-let useResetForScroll = true;
-let scrollInterval;
-
 // Gestione del pulsante scroll-up
 document.getElementById('scroll-up').addEventListener('mousedown', (e) => {
-    useResetForScroll = e.isTrusted; // true se reale, false se sintetico
-    if (useResetForScroll) {
-        scrollChannels('up');
-        scrollInterval = setInterval(() => scrollChannels('up'), 100); // scorre ogni 100ms
-    } else {
-        scrollChannelsNoReset('up');
-        scrollInterval = setInterval(() => scrollChannelsNoReset('up'), 100);
-    }
+    scrollChannels('up', e.isTrusted);
+    scrollInterval = setInterval(() => scrollChannels('up', false), 100); // Evita di riattivare il menu ad ogni iterazione
 });
 
 document.getElementById('scroll-up').addEventListener('mouseup', () => clearInterval(scrollInterval));
@@ -1027,14 +1023,8 @@ document.getElementById('scroll-up').addEventListener('mouseleave', () => clearI
 
 // Gestione del pulsante scroll-down
 document.getElementById('scroll-down').addEventListener('mousedown', (e) => {
-    useResetForScroll = e.isTrusted;
-    if (useResetForScroll) {
-        scrollChannels('down');
-        scrollInterval = setInterval(() => scrollChannels('down'), 100);
-    } else {
-        scrollChannelsNoReset('down');
-        scrollInterval = setInterval(() => scrollChannelsNoReset('down'), 100);
-    }
+    scrollChannels('down', e.isTrusted);
+    scrollInterval = setInterval(() => scrollChannels('down', false), 100);
 });
 
 document.getElementById('scroll-down').addEventListener('mouseup', () => clearInterval(scrollInterval));
