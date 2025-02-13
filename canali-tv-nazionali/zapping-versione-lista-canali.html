@@ -697,12 +697,24 @@
 <button id="fullscreen-icon">&#x26F6;</button>
 
 <script>
-window.addEventListener("message", function(event) {
-    // Verifica che il messaggio sia uno di quelli previsti
-    if (["scroll-up", "scroll-down", "select-channel"].includes(event.data)) {
-        document.getElementById(event.data).click();
+// Aggiungi un listener per i messaggi in arrivo dall'esterno (dal sito principale)
+window.addEventListener('message', function(event) {
+    // Gestisci il messaggio in base al tipo
+    switch(event.data) {
+        case 'scroll-up':
+            document.getElementById('scroll-up').click();
+            break;
+        case 'scroll-down':
+            document.getElementById('scroll-down').click();
+            break;
+        case 'voice-control':
+            document.getElementById('voice-control-button').click();
+            break;
+        default:
+            break;
     }
 });
+
 </script>
 
 
