@@ -816,33 +816,39 @@
 
 
 <script>
-    window.addEventListener("message", function(event) {
-    // Assicurati che il messaggio provenga da una fonte sicura
-    // if (event.origin !== "https://tuo-dominio.com") return;
-
-    const message = event.data;
-    if (message === 'click-microphone') {
-        const microphoneButton = document.getElementById('voice-control-button');
-        if (microphoneButton) {
-            microphoneButton.click();
-        }
-    } else if (message === 'click-rewind') {
-        const rewindButton = document.getElementById('scroll-buttons');
-        if (rewindButton) {
-            rewindButton.click();
-        }
-    } else if (message === 'click-scroll-up') {
-        const scrollUpButton = document.getElementById('scroll-up');
-        if (scrollUpButton) {
-            scrollUpButton.click();
-        }
-    } else if (message === 'click-scroll-down') {
-        const scrollDownButton = document.getElementById('scroll-down');
-        if (scrollDownButton) {
-            scrollDownButton.click();
-        }
+ window.addEventListener("message", function(event) {
+  if (event.data) {
+    // Gestione del fullscreen già presente
+    if (event.data.action === "toggleFullscreen") {
+      const fullscreenButton = document.getElementById("fullscreen-icon");
+      if (fullscreenButton) {
+        fullscreenButton.click();
+      }
     }
+    // Nuova gestione per simulare i click
+    else if (event.data.action === "simulateClick") {
+      const key = event.data.key;
+      if (key === '3') {
+        // Simula il click sul pulsante del microfono
+        const micButton = document.getElementById('voice-control-button');
+        if (micButton) micButton.click();
+      } else if (key === '2') {
+        // Simula il click sul pulsante con id "scroll-buttons" (rewind)
+        const rewindButton = document.getElementById('scroll-buttons');
+        if (rewindButton) rewindButton.click();
+      } else if (key === '4') {
+        // Simula il click sul pulsante "scroll-up"
+        const scrollUp = document.getElementById('scroll-up');
+        if (scrollUp) scrollUp.click();
+      } else if (key === '5') {
+        // Simula il click sul pulsante "scroll-down"
+        const scrollDown = document.getElementById('scroll-down');
+        if (scrollDown) scrollDown.click();
+      }
+    }
+  }
 });
+
 </script>
 
 
