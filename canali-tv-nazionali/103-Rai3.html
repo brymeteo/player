@@ -132,6 +132,16 @@
           },
         },
       });
+
+         // Ascolta i messaggi per il rewind
+  window.addEventListener("message", function(event) {
+    if (event.data === "rewind") {
+      if (window.player) {
+        const currentTime = window.player.getCurrentTime();
+        window.player.seek(Math.max(0, currentTime - 30)); // Rewind di 30 secondi
+      }
+    }
+  }, false);
     </script>
     
     <script>
@@ -152,7 +162,7 @@
         function resetTimer() {
             logo.style.display = "block"; // Riappare il logo
             clearTimeout(timer);
-            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
+            timer = setTimeout(hideLogo, 6000); // Nascondi il logo dopo 10 secondi di inattività
         }
 
         document.addEventListener("mousemove", resetTimer);
