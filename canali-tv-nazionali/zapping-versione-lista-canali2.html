@@ -818,14 +818,14 @@
 <script>
  window.addEventListener("message", function(event) {
   if (event.data) {
-    // Gestione del fullscreen già presente
+    // Gestione del fullscreen (già presente)
     if (event.data.action === "toggleFullscreen") {
       const fullscreenButton = document.getElementById("fullscreen-icon");
       if (fullscreenButton) {
         fullscreenButton.click();
       }
     }
-    // Nuova gestione per simulare i click
+    // Gestione per simulare i click
     else if (event.data.action === "simulateClick") {
       const key = event.data.key;
       if (key === '3') {
@@ -837,17 +837,24 @@
         const rewindButton = document.getElementById('scroll-buttons');
         if (rewindButton) rewindButton.click();
       } else if (key === '4') {
-        // Simula il click sul pulsante "scroll-up"
+        // Simula mousedown e mouseup sul pulsante "scroll-up"
         const scrollUp = document.getElementById('scroll-up');
-        if (scrollUp) scrollUp.click();
+        if (scrollUp) {
+          scrollUp.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          scrollUp.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+        }
       } else if (key === '5') {
-        // Simula il click sul pulsante "scroll-down"
+        // Simula mousedown e mouseup sul pulsante "scroll-down"
         const scrollDown = document.getElementById('scroll-down');
-        if (scrollDown) scrollDown.click();
+        if (scrollDown) {
+          scrollDown.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          scrollDown.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+        }
       }
     }
   }
 });
+
 
 </script>
 
