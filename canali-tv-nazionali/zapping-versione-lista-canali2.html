@@ -815,10 +815,35 @@
 
 
 
+<script>
+    window.addEventListener("message", function(event) {
+    // Assicurati che il messaggio provenga da una fonte sicura
+    // if (event.origin !== "https://tuo-dominio.com") return;
 
-
-
-
+    const message = event.data;
+    if (message === 'click-microphone') {
+        const microphoneButton = document.getElementById('voice-control-button');
+        if (microphoneButton) {
+            microphoneButton.click();
+        }
+    } else if (message === 'click-rewind') {
+        const rewindButton = document.getElementById('scroll-buttons');
+        if (rewindButton) {
+            rewindButton.click();
+        }
+    } else if (message === 'click-scroll-up') {
+        const scrollUpButton = document.getElementById('scroll-up');
+        if (scrollUpButton) {
+            scrollUpButton.click();
+        }
+    } else if (message === 'click-scroll-down') {
+        const scrollDownButton = document.getElementById('scroll-down');
+        if (scrollDownButton) {
+            scrollDownButton.click();
+        }
+    }
+});
+</script>
 
 
     
