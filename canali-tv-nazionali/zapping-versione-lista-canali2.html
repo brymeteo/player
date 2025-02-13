@@ -1022,8 +1022,13 @@ window.onload = () => {
 };
 
 // Rileva movimento del mouse
-document.addEventListener('mousemove', resetHideTimeout);
-document.addEventListener('click', resetHideTimeout);
+document.addEventListener('mousemove', (e) => {
+  if (e.isTrusted) resetHideTimeout();
+});
+document.addEventListener('click', (e) => {
+  if (e.isTrusted) resetHideTimeout();
+});
+
 
 // Aggiungi il gestore di clic per ogni canale
 channels.forEach((channel, index) => {
