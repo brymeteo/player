@@ -697,34 +697,40 @@
 <button id="fullscreen-icon">&#x26F6;</button>
 
 <script>
-  // Ascolta i messaggi provenienti dal sito principale
   window.addEventListener('message', function(event) {
-    // Assicurati di controllare che il messaggio provenga dal dominio corretto
-    // Ad esempio, se il dominio principale è "https://tuosito.com", controlla:
+    // Se il messaggio proviene dal sito corretto
     // if (event.origin !== 'https://tuosito.com') return;
 
     const comando = event.data;
+    console.log("Comando ricevuto:", comando); // Aggiungi log per il comando
 
     // Esegui l'azione in base al comando ricevuto
     if (comando === 'scroll-up') {
       const btnUp = document.getElementById('scroll-up');
-      if (btnUp) btnUp.click(); // Clicca sul pulsante "Freccia su"
+      if (btnUp) {
+        console.log("Cliccando Freccia Su..."); // Debug
+        btnUp.click(); // Clicca sul pulsante Freccia su
+      } else {
+        console.log("Pulsante Freccia Su non trovato!");
+      }
     } else if (comando === 'scroll-down') {
       const btnDown = document.getElementById('scroll-down');
-      if (btnDown) btnDown.click(); // Clicca sul pulsante "Freccia giù"
+      if (btnDown) {
+        console.log("Cliccando Freccia Giù..."); // Debug
+        btnDown.click(); // Clicca sul pulsante Freccia giù
+      } else {
+        console.log("Pulsante Freccia Giù non trovato!");
+      }
     } else if (comando.startsWith('conferma-canale-')) {
-      // Estrai il numero del canale dal comando (es. "conferma-canale-101")
-      const numeroCanale = comando.split('-')[2]; // "101" in "conferma-canale-101"
-      
-      // Trova il canale corrispondente usando il data-number
+      const numeroCanale = comando.split('-')[2];
       const canale = document.querySelector(`li[data-number="${numeroCanale}"]`);
-      
       if (canale) {
-        canale.click(); // Clicca sul canale specificato
+        canale.click();
       }
     }
   });
 </script>
+
 
 
 
