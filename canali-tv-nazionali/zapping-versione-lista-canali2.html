@@ -1030,6 +1030,32 @@ document.getElementById('scroll-down').addEventListener('mousedown', (e) => {
 document.getElementById('scroll-down').addEventListener('mouseup', () => clearInterval(scrollInterval));
 document.getElementById('scroll-down').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
+// Gestione dei tasti 4 (scroll-up) e 5 (scroll-down) dal sito principale
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowUp') {
+        // Clicca il pulsante scroll-up (simulando il click umano)
+        const scrollUpButton = document.getElementById('scroll-up');
+        if (scrollUpButton) {
+            scrollUpButton.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, isTrusted: true }));
+            setTimeout(() => {
+                scrollUpButton.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            }, 50); // Esegui un rilascio del mouse dopo un breve ritardo
+        }
+    }
+
+    if (event.key === 'ArrowDown') {
+        // Clicca il pulsante scroll-down (simulando il click umano)
+        const scrollDownButton = document.getElementById('scroll-down');
+        if (scrollDownButton) {
+            scrollDownButton.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, isTrusted: true }));
+            setTimeout(() => {
+                scrollDownButton.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            }, 50); // Esegui un rilascio del mouse dopo un breve ritardo
+        }
+    }
+});
+
+
 
 
 // Mostra la lista dei canali al caricamento
