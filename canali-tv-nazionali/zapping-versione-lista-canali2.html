@@ -983,23 +983,13 @@ document.getElementById('fullscreen-icon').addEventListener('click', () => {
     }
 });
 
-// Funzione per scorrere i canali e cambiare video
-// Funzione che scorre i canali e cambia video (con reset)
-function scrollChannels(direction) {
-    resetHideTimeout();  // Reset del timer se l'evento è reale
-
-    if (direction === 'down' && selectedChannelIndex < channels.length - 1) {
-        selectChannel(selectedChannelIndex + 1);
-    } else if (direction === 'up' && selectedChannelIndex > 0) {
-        selectChannel(selectedChannelIndex - 1);
-    }
-    changeVideo(selectedChannelIndex);
-}
+let isHumanInteraction = false; // Flag per determinare se l'interazione è umana
+let menuTimeout;  // Timer per nascondere il menu dopo l'inattività
 
 // Funzione per scorrere i canali e cambiare video
 function scrollChannels(direction, reset = true) {
-    if (reset) {
-        resetHideTimeout();  // Reset del timer solo se l'input è umano
+    if (reset && isHumanInteraction) {
+        resetHideTimeout();  // Reset del timer solo se l'interazione è umana
     }
 
     if (direction === 'down' && selectedChannelIndex < channels.length - 1) {
@@ -1012,9 +1002,43 @@ function scrollChannels(direction, reset = true) {
     changeVideo(selectedChannelIndex);
 }
 
+// Funzione per nascondere il menu
+function hideMenu() {
+    const menu = document.getElementById('channel-list-container');
+    if (menu) {
+        menu.style.opacity = '0';  // Nasconde il menu
+    }
+}
+
+// Funzione per mostrare il menu
+function showMenu() {
+    const menu = document.getElementById('channel-list-container');
+    if (menu) {
+        menu.style.opacity = '1';  // Mostra il menu
+    }
+
+    // Reset del timer di timeout per nascondere il menu dopo un certo periodo di inattività
+    clearTimeout(menuTimeout);
+    menuTimeout = setTimeout(hideMenu, 3000); // Nasconde il menu dopo 3 secondi di inattività
+}
+
+// Aggiungi l'evento mousemove per far apparire il menu
+document.addEventListener('mousemove', () => {
+    isHumanInteraction = true;  // Interazione umana
+    showMenu();  // Mostra il menu
+});
+
+// Aggiungi l'evento click per far apparire il menu
+document.addEventListener('click', () => {
+    isHumanInteraction = true;  // Interazione umana
+    showMenu();  // Mostra il menu
+});
+
 // Gestione del pulsante scroll-up
 document.getElementById('scroll-up').addEventListener('mousedown', (e) => {
-    scrollChannels('up', e.isTrusted);
+    // Interazione automatica, non far apparire il menu
+    isHumanInteraction = false;
+    scrollChannels('up', e.isTrusted);  // Scorrimento verso l'alto
     scrollInterval = setInterval(() => scrollChannels('up', false), 100); // Evita di riattivare il menu ad ogni iterazione
 });
 
@@ -1023,37 +1047,15 @@ document.getElementById('scroll-up').addEventListener('mouseleave', () => clearI
 
 // Gestione del pulsante scroll-down
 document.getElementById('scroll-down').addEventListener('mousedown', (e) => {
-    scrollChannels('down', e.isTrusted);
-    scrollInterval = setInterval(() => scrollChannels('down', false), 100);
+    // Interazione automatica, non far apparire il menu
+    isHumanInteraction = false;
+    scrollChannels('down', e.isTrusted);  // Scorrimento verso il basso
+    scrollInterval = setInterval(() => scrollChannels('down', false), 100); // Evita di riattivare il menu ad ogni iterazione
 });
 
 document.getElementById('scroll-down').addEventListener('mouseup', () => clearInterval(scrollInterval));
 document.getElementById('scroll-down').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-// Gestione dei tasti 4 (scroll-up) e 5 (scroll-down) dal sito principale
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowUp') {
-        // Clicca il pulsante scroll-up (simulando il click umano)
-        const scrollUpButton = document.getElementById('scroll-up');
-        if (scrollUpButton) {
-            scrollUpButton.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, isTrusted: true }));
-            setTimeout(() => {
-                scrollUpButton.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-            }, 50); // Esegui un rilascio del mouse dopo un breve ritardo
-        }
-    }
-
-    if (event.key === 'ArrowDown') {
-        // Clicca il pulsante scroll-down (simulando il click umano)
-        const scrollDownButton = document.getElementById('scroll-down');
-        if (scrollDownButton) {
-            scrollDownButton.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, isTrusted: true }));
-            setTimeout(() => {
-                scrollDownButton.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-            }, 50); // Esegui un rilascio del mouse dopo un breve ritardo
-        }
-    }
-});
 
 
 
