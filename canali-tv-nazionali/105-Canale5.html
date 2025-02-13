@@ -108,7 +108,19 @@
             },
         },
     });
-
+      
+ // Ascolta i messaggi per il rewind
+  window.addEventListener("message", function(event) {
+    if (event.data === "rewind") {
+      if (window.player) {
+        const currentTime = window.player.getCurrentTime();
+        window.player.seek(Math.max(0, currentTime - 30)); // Rewind di 30 secondi
+      }
+    }
+  }, false);
+   </script>   
+   
+   <script>  
     var logo = document.getElementById("logo");
     var timer;
     var popupInstance = null;
@@ -120,7 +132,7 @@
     function resetTimer() {
         logo.style.display = "block";
         clearTimeout(timer);
-        timer = setTimeout(hideLogo, 15000);
+        timer = setTimeout(hideLogo, 7000);
     }
 
     document.addEventListener("mousemove", resetTimer);
