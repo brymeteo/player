@@ -696,7 +696,35 @@
 <!-- Icona di fullscreen -->
 <button id="fullscreen-icon">&#x26F6;</button>
 
+<script>
+// Funzione che ascolta i messaggi provenienti dal sito principale
+window.addEventListener("message", function(event) {
+    if (event.origin !== "https://il-tuo-sito-principale.com") {
+        return;  // Assicurati che il messaggio venga dal tuo sito principale
+    }
 
+    const command = event.data;
+    if (command === "scroll-up") {
+        // Simula il clic sul pulsante della freccia su
+        const scrollUpButton = document.getElementById("scroll-up");
+        if (scrollUpButton) {
+            scrollUpButton.click();
+        }
+    } else if (command === "scroll-down") {
+        // Simula il clic sul pulsante della freccia giù
+        const scrollDownButton = document.getElementById("scroll-down");
+        if (scrollDownButton) {
+            scrollDownButton.click();
+        }
+    } else if (command === "select-channel") {
+        // Seleziona il canale, cliccando l'elemento <li>
+        const channelItem = document.querySelector('li[data-channel="video1.mp4"]');
+        if (channelItem) {
+            channelItem.click();
+        }
+    }
+});
+</script>
 <script>
   window.addEventListener("message", function(event) {
     // Verifica se il messaggio contiene l'azione di fullscreen
