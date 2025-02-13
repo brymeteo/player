@@ -349,21 +349,19 @@
 
 
 <script>
-// Aggiungi un listener per i messaggi in arrivo dall'esterno (dal sito principale)
 window.addEventListener('message', function(event) {
-    // Gestisci il messaggio in base al tipo
-    switch(event.data) {
-        case 'scroll-up':
-            document.getElementById('scroll-up').click();
-            break;
-        case 'scroll-down':
-            document.getElementById('scroll-down').click();
-            break;
-        case 'voice-control':
-            document.getElementById('voice-control-button').click();
-            break;
-        default:
-            break;
+    console.log('Messaggio ricevuto nell\'iframe:', event.data); // Aggiungi log
+
+    // Verifica il messaggio e simula il clic
+    if (event.data === 'scroll-up') {
+        document.getElementById('scroll-up').click();
+        console.log('Clic su scroll-up');  // Aggiungi log
+    } else if (event.data === 'scroll-down') {
+        document.getElementById('scroll-down').click();
+        console.log('Clic su scroll-down');  // Aggiungi log
+    } else if (event.data === 'voice-control') {
+        document.getElementById('voice-control-button').click();
+        console.log('Clic su voice-control');  // Aggiungi log
     }
 });
 
