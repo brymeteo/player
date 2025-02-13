@@ -376,8 +376,74 @@
 
 
 
+<script>
+  // Funzione per attivare la modalità a schermo intero
+  function enterFullScreen() {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();  // Chrome, Firefox, Opera
+    } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) { // Safari, Chrome
+      document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+      document.documentElement.msRequestFullscreen();
+    }
+  }
+
+  // Aggiungi un listener per la pressione del tasto 0
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "0") {
+      enterFullScreen(); // Attiva la modalità a schermo intero
+    }
+  });
+</script>
 
 
+<script>
+// Accedere all'iframe
+const iframe = document.getElementById('my-iframe');
+const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+// Funzione per cliccare il pulsante del microfono (tasto 3)
+function clickMicrophoneButton() {
+    const microphoneButton = iframeDocument.getElementById('voice-control-button');
+    if (microphoneButton) {
+        microphoneButton.click();
+    }
+}
+
+// Funzione per abilitare il pulsante di rewind (tasto 2)
+function clickRewindButton() {
+    const rewindButton = iframeDocument.getElementById('scroll-buttons');
+    if (rewindButton) {
+        rewindButton.click();
+    }
+}
+
+// Funzione per cliccare il pulsante scroll-up (tasto 4)
+function clickScrollUpButton() {
+    const scrollUpButton = iframeDocument.getElementById('scroll-up');
+    if (scrollUpButton) {
+        scrollUpButton.click();
+    }
+}
+
+// Funzione per cliccare il pulsante scroll-down (tasto 5)
+function clickScrollDownButton() {
+    const scrollDownButton = iframeDocument.getElementById('scroll-down');
+    if (scrollDownButton) {
+        scrollDownButton.click();
+    }
+}
+
+// Aggiungere gli event listener sui tasti principali
+document.getElementById('tasto-3').addEventListener('click', clickMicrophoneButton);
+document.getElementById('tasto-2').addEventListener('click', clickRewindButton);
+document.getElementById('tasto-4').addEventListener('click', clickScrollUpButton);
+document.getElementById('tasto-5').addEventListener('click', clickScrollDownButton);
+
+
+</script>
 
 
 
