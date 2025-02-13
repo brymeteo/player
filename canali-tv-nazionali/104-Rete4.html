@@ -126,7 +126,19 @@
                 },
             },
         });
-        
+
+          // Ascolta i messaggi per il rewind
+  window.addEventListener("message", function(event) {
+    if (event.data === "rewind") {
+      if (window.player) {
+        const currentTime = window.player.getCurrentTime();
+        window.player.seek(Math.max(0, currentTime - 30)); // Rewind di 30 secondi
+      }
+    }
+  }, false);
+   </script>   
+   
+   <script>
         player.on(Clappr.Events.PLAYER_ERROR, function (err) {
             // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
             document.getElementById("fallback-image").style.display = "block";
@@ -143,7 +155,7 @@
         function resetTimer() {
             logo.style.display = "block"; // Riappare il logo
             clearTimeout(timer);
-            timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
+            timer = setTimeout(hideLogo, 7000); // Nascondi il logo dopo 10 secondi di inattività
         }
 
         document.addEventListener("mousemove", resetTimer);
