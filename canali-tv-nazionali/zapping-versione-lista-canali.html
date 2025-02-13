@@ -697,7 +697,8 @@
 <button id="fullscreen-icon">&#x26F6;</button>
 
 <script>
-  window.addEventListener('message', function(event) {
+ // Codice nell'iframe per confermare il canale selezionato
+window.addEventListener('message', function(event) {
   const comando = event.data;
   console.log("Comando ricevuto:", comando);
 
@@ -705,26 +706,21 @@
     const btnUp = document.getElementById('scroll-up');
     if (btnUp) {
       console.log("Cliccando Freccia Su...");
-      btnUp.click(); // Clicca sul pulsante Freccia su
-    } else {
-      console.log("Pulsante Freccia Su non trovato!");
+      btnUp.click();
     }
   } else if (comando === 'scroll-down') {
     const btnDown = document.getElementById('scroll-down');
     if (btnDown) {
       console.log("Cliccando Freccia Giù...");
-      btnDown.click(); // Clicca sul pulsante Freccia giù
-    } else {
-      console.log("Pulsante Freccia Giù non trovato!");
+      btnDown.click();
     }
   } else if (comando.startsWith('conferma-canale-')) {
-    const numeroCanale = comando.split('-')[2];
-    const canale = document.querySelector(`li[data-number="${numeroCanale}"]`);
-    if (canale) {
-      console.log(`Selezionando il canale ${numeroCanale}...`);
-      canale.click();
+    const canaleSelezionato = document.querySelector('li.selected');
+    if (canaleSelezionato) {
+      console.log(`Confermando il canale selezionato: ${canaleSelezionato.dataset.number}`);
+      canaleSelezionato.click();  // Clicca sul canale selezionato
     } else {
-      console.log(`Canale ${numeroCanale} non trovato!`);
+      console.log("Nessun canale selezionato!");
     }
   }
 });
