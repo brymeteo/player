@@ -736,6 +736,33 @@
         }
     });
 
+    // Gestione dei tasti premuti
+    document.addEventListener('keydown', (e) => {
+        // Se viene premuto il tasto 'ArrowUp', scorrere indietro
+        if (e.key === 'ArrowUp') {
+            if (selectedChannelIndex > 0) {
+                selectedChannelIndex--;
+                updateSelectedChannel();  // Aggiorna la selezione
+            }
+        } else if (e.key === 'ArrowDown') {
+            // Se viene premuto il tasto 'ArrowDown', scorrere in avanti
+            if (selectedChannelIndex < channels.length - 1) {
+                selectedChannelIndex++;
+                updateSelectedChannel();  // Aggiorna la selezione
+            }
+        } else if (e.key === 'Enter') {
+            // Se viene premuto 'Enter', seleziona il canale
+            if (channels[selectedChannelIndex]) {
+                channels[selectedChannelIndex].click();
+            }
+        } else if (e.key === '3') {
+            // Se viene premuto '3', seleziona il canale
+            if (channels[selectedChannelIndex]) {
+                channels[selectedChannelIndex].click();
+            }
+        }
+    });
+
     // Inizializza la selezione del primo canale
     updateSelectedChannel();
 </script>
