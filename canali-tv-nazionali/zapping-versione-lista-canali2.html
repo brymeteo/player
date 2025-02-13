@@ -814,55 +814,6 @@
 
 
 
-<script>
-// Funzioni per interagire con l'iframe
-function clickMicrophoneButton() {
-    const iframe = document.getElementById('my-iframe');
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    
-    const microphoneButton = iframeDocument.getElementById('voice-control-button');
-    if (microphoneButton) {
-        microphoneButton.click();  // Clicca il pulsante del microfono
-    }
-}
-
-function clickRewindButton() {
-    const iframe = document.getElementById('my-iframe');
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    
-    const rewindButton = iframeDocument.getElementById('scroll-buttons');
-    if (rewindButton) {
-        rewindButton.click();  // Clicca il pulsante rewind
-    }
-}
-
-function clickScrollUpButton() {
-    const iframe = document.getElementById('my-iframe');
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    
-    const scrollUpButton = iframeDocument.getElementById('scroll-up');
-    if (scrollUpButton) {
-        scrollUpButton.click();  // Clicca il pulsante scroll-up
-    }
-}
-
-function clickScrollDownButton() {
-    const iframe = document.getElementById('my-iframe');
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-    
-    const scrollDownButton = iframeDocument.getElementById('scroll-down');
-    if (scrollDownButton) {
-        scrollDownButton.click();  // Clicca il pulsante scroll-down
-    }
-}
-
-// Aggiungi eventi ai pulsanti nel sito principale
-document.getElementById('tasto-3').addEventListener('click', clickMicrophoneButton);
-document.getElementById('tasto-2').addEventListener('click', clickRewindButton);
-document.getElementById('tasto-4').addEventListener('click', clickScrollUpButton);
-document.getElementById('tasto-5').addEventListener('click', clickScrollDownButton);
-
-</script>
 
 
 
