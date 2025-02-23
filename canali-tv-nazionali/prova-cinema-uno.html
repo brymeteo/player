@@ -1,0 +1,344 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Player -->
+    <script src="https://cdn.fluidplayer.com/3.28.0/fluidplayer.min.js" defer></script>
+    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+    <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: #171a45;
+        }
+
+        [data-watermark-top-right] {
+            position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 26%;
+            width: 21.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 40;
+            background: 0 0 !important;
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            height: auto;
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 500;
+        }
+
+        #hls-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .player-controls {
+            display: none !important;
+        }
+
+        .media-control .media-control-layer {
+            display: none !important;
+        }
+
+        #second-logo {
+            position: absolute;
+            top: 86%;
+            right: 5%;
+            max-width: 26%;
+            width: 16.5%;
+            height: auto !important;
+            pointer-events: none;
+            z-index: 1000;
+            background: 0 0 !important;
+            display: none;
+        }
+
+
+   .fluid_controls_container {
+            display: none !important;
+        }
+    </style>
+    
+     <style>
+    /* Stile per il contenitore dell'elemento */
+    #element-container {
+       position: absolute;
+      top: 8%;
+      right: 70%;
+      max-width: 25%;
+            width: auto;
+            height: auto;
+            transition: opacity 1s, transform 33s;
+ z-index: 800;
+    }
+
+    #element {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+  
+  
+      <style>
+    
+    /* Impostazioni per il logo */
+#myLogo {
+    position: fixed; /* Posiziona il logo in basso a destra in modo fisso */
+    bottom: 10%;     /* Distanza dal basso */
+    right: 6%;      /* Distanza da destra */
+    width: 16%;     /* Imposta una larghezza per il logo (modifica come preferisci) */
+    opacity: 0;       /* Inizialmente il logo è invisibile */
+    transition: opacity 0.5s ease; /* Animazione per la transizione dell'opacità */
+     z-index: 1000;
+}
+
+    </style>
+    
+    
+    
+    
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="video-container" class="hidden">
+    
+    
+<video id="hls-video">
+            <source id="video-source" type="application/x-mpegURL">
+        </video>
+    </div>
+    
+    
+    
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/201.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+    
+   
+    
+    
+    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
+    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Secondo Logo">
+<img id="myLogo" src="https://img1.picmix.com/output/stamp/normal/5/6/7/2/2132765_7e449.gif" alt="Logo">
+    <script>
+        const videoSourceURL = "https://dotfvxkfj90ca.cloudfront.net/programming/movie2/playlist.m3u8?token=4062f2a0-021f-493c-aa60-f9fc42698dfe&streamSessionId=f1e7dcb2-7cf5-480b-9557-2e8f382b63bf&code=Tvmy&expires=1740368371057&ctrl=0c137e623d277468a12e6eed40276463f8f59371914ed9552c43515caac1f209216f748f4e7c975f3c1ded2e5ac5db3f09e4c51e2674546e407aceb44c71c388";
+        let videoPlaying = false; // Flag per tenere traccia dello stato di riproduzione del video
+        let inactivityTimeout; // Timer per monitorare l'inattività
+        const inactivityDuration = 2000; // 10 secondi di inattività
+
+        // Funzione per ricaricare la pagina una volta all'apertura della pagina
+        function reloadOnce() {
+            if (!sessionStorage.getItem('pageReloaded')) {
+                sessionStorage.setItem('pageReloaded', 'true');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        }
+
+        // Funzione per gestire il ricaricamento della pagina al rientro
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                clearTimeout(inactivityTimeout); // Cancella il timer se l'utente esce dalla pagina
+            } else {
+                inactivityTimeout = setTimeout(() => {
+                    location.reload(); // Ricarica la pagina se l'utente rientra dopo 10 secondi
+                }, inactivityDuration);
+            }
+        }
+
+        window.onload = function () {
+            reloadOnce();  // Controlla se la pagina deve essere ricaricata
+            document.addEventListener('visibilitychange', handleVisibilityChange); // Ascolta il cambio di visibilità della pagina
+
+            setTimeout(function () {
+                document.getElementById("video-container").classList.remove("hidden");
+                document.getElementById("second-logo").style.display = "block";
+            }, 3000);
+
+            setTimeout(function () {
+                document.getElementById("background-overlay").style.display = "none";
+            }, 3000);
+
+            document.getElementById("video-source").src = videoSourceURL;
+
+            var logo = document.getElementById("logo");
+            var timerLogo;
+
+            function hideLogo() {
+                logo.style.display = "none";
+            }
+
+            function resetLogoTimer() {
+                logo.style.display = "block";
+                clearTimeout(timerLogo);
+                timerLogo = setTimeout(hideLogo, 15000);
+            }
+
+            document.addEventListener("mousemove", resetLogoTimer);
+            document.addEventListener("keypress", resetLogoTimer);
+
+            resetLogoTimer();
+
+            var player = fluidPlayer('hls-video', {
+                layoutControls: {
+                    autoPlay: true,
+                    mute: false,
+                    fillToContainer: true,
+                },
+               
+            });
+        };
+    </script>
+    
+    <script>
+    // Array di elementi con data e orario di visualizzazione
+    const elements = [
+        { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001224-653e5653e7/TITOLO-0.webp?ph=7e11bb4538", start: "2024-12-24T12:25", end: "2024-12-24T13:58" },
+      
+      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001228-a15a6a15a8/TITOLO-1.webp?ph=7e11bb4538", start: "2024-12-24T14:02", end: "2024-12-24T15:47" },
+      
+      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001238-1976819769/TITOLO-10.webp?ph=7e11bb4538", start: "2024-12-24T15:50", end: "2024-12-24T17:25" },
+      
+      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001240-79f5279f55/TITOLO-7.webp?ph=7e11bb4538", start: "2024-12-24T17:30", end: "2024-12-24T19:05" },
+      
+      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001242-db6bedb6c0/TITOLO-61.webp?ph=7e11bb4538", start: "2024-12-24T19:08", end: "2024-12-24T20:51" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001244-e2029e202b/TITOLO-79.webp?ph=7e11bb4538", start: "2024-12-24T20:55", end: "2024-12-24T22:18" },
+      
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001246-78ec378ec4/TITOLO-98.webp?ph=7e11bb4538", start: "2024-12-24T22:23", end: "2024-12-24T23:56" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001248-0f5c60f5c9/TITOLO-03.webp?ph=7e11bb4538", start: "2024-12-25T00:00", end: "2024-12-25T00:03" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001250-6fd706fd72/TITOLO-66.webp?ph=7e11bb4538", start: "2024-12-25T00:04", end: "2024-12-25T00:22" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001252-eac4ceac50/TITOLO-8.webp?ph=7e11bb4538", start: "2024-12-25T00:25", end: "2024-12-25T02:02" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001254-14b2714b28/TITOLO-80.webp?ph=7e11bb4538", start: "2024-12-25T02:07", end: "2024-12-25T03:22" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001234-8065280654/TITOLO-3.webp?ph=7e11bb4538", start: "2024-12-25T03:25", end: "2024-12-25T05:22" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001236-58a5758a5b/TITOLO-2.webp?ph=7e11bb4538", start: "2024-12-25T10:18", end: "2024-12-25T11:57" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001256-d6b70d6b71/TITOLO-26.webp?ph=7e11bb4538", start: "2024-12-25T12:00", end: "2024-12-25T13:34" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001258-38d5438d55/TITOLO-85.webp?ph=7e11bb4538", start: "2024-12-25T13:37", end: "2024-12-25T15:15" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001260-a5756a5758/TITOLO-22.webp?ph=7e11bb4538", start: "2024-12-25T15:18", end: "2024-12-25T16:52" },
+
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001262-4b5744b576/TITOLO-72.webp?ph=7e11bb4538", start: "2024-12-25T16:55", end: "2024-12-25T18:37" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001264-bab11bab12/TITOLO-16.webp?ph=7e11bb4538", start: "2024-12-25T18:40", end: "2024-12-25T20:17" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001266-577a4577a5/TITOLO-65.webp?ph=7e11bb4538", start: "2024-12-25T20:21", end: "2024-12-25T21:53" },
+     
+     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001268-c6226c6229/TITOLO-30.webp?ph=7e11bb4538", start: "2024-12-25T21:58", end: "2024-12-25T23:55" },
+
+{ src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001270-1dc0c1dc0f/TITOLO-5.webp?ph=7e11bb4538", start: "2024-12-26T00:02", end: "2024-12-26T01:41" }
+      
+    ];
+
+    const elementNode = document.getElementById("element");
+
+    // Funzione per aggiornare l'elemento visibile
+    function updateElement() {
+      const now = new Date();
+      const activeElement = elements.find(
+        (element) =>
+          new Date(element.start) <= now && new Date(element.end) >= now
+      );
+
+      if (activeElement) {
+        elementNode.src = activeElement.src;
+        elementNode.alt = `Elemento programmato per il periodo: ${activeElement.start} - ${activeElement.end}`;
+      } else {
+        elementNode.src = ""; // Nessun elemento visibile
+        elementNode.alt = "";
+      }
+    }
+
+    // Aggiorna l'elemento ogni minuto
+    setInterval(updateElement, 3000);
+
+    // Aggiorna subito all'avvio
+    updateElement();
+  </script>
+    
+   <script>// Funzione per mostrare e nascondere il logo
+function showLogo() {
+    const myLogo = document.getElementById('myLogo');
+    
+    // Mostra il logo
+    myLogo.style.opacity = 1;
+
+    // Nascondi il logo dopo 15 secondi
+    setTimeout(() => {
+        myLogo.style.opacity = 0;
+    }, 50000); // 20 secondi
+}
+
+// Imposta un intervallo per mostrare il logo ogni 5 minuti (300000 ms)
+setInterval(showLogo, 300000); // 5 minuti in millisecondi
+</script>
+    
+    
+    
+    
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
+</body>
+
+</html>
