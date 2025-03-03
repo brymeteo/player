@@ -30,6 +30,18 @@
       100% { transform: rotate(360deg); }
     }
     
+    
+    button:focus,
+button:active {
+  outline: none;
+  box-shadow: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+    
     /* Controlli in alto */
     .top-controls {
       position: absolute;
@@ -98,6 +110,7 @@
       justify-content: center;
       align-items: center;
       gap: 200px;
+      z-index: 133;
     }
     .center-controls button {
       background: none;
@@ -116,6 +129,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 133;
     }
     .time-button img { width: 70px; height: 70px; }
     
@@ -128,8 +142,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 133;
     }
     .play-button img { width: 90px; height: 90px; }
+    
     
     /* Controlli in basso */
     .bottom-controls {
@@ -139,6 +155,7 @@
       right: 0;
       padding: 50px;
       background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+      z-index: 133;
     }
     .progress-container {
       height: 10px;
@@ -370,6 +387,36 @@ input[type="radio"]:checked + .custom-icon {
 }
 
 
+.video-container.controls-fixed .top-controls,
+.video-container.controls-fixed .center-controls,
+.video-container.controls-fixed .bottom-controls,
+.video-container.controls-fixed .right-top-controls {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: none !important;
+}
+
+/* Overlay inizialmente nascosto */
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 55%); /* Regola l'opacità a piacere */
+  z-index: 1;
+  opacity: 0; /* Inizialmente nascosto */
+  transition: opacity 0.8s ease-in-out;
+  pointer-events: none;
+}
+
+/* Quando l'overlay è attivo */
+.show-overlay #overlay {
+  opacity: 1;
+}
+
+
+
 
   </style>
 </head>
@@ -380,6 +427,12 @@ input[type="radio"]:checked + .custom-icon {
       <source src="https://s3-spotlightr-output.b-cdn.net/99139006/backup/1740623411kongskullisland20174kitaaac20uhdbdrip.mp4" type="video/mp4">
       Il tuo browser non supporta il tag video.
     </video>
+    
+    
+    <!-- Overlay scuro che copre tutto lo schermo -->
+  <div id="overlay"></div>
+  
+    
     
     <!-- Spinner centrato -->
     <div id="spinner" class="spinner">
@@ -550,6 +603,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const videoPlayer = document.getElementById("videoPlayer");
   const videoSource = document.getElementById("videoSource");
   const timeIndicator = document.getElementById('timeIndicator');
+
 
   let isFullscreen = false;
   let useHours = false;
@@ -824,11 +878,93 @@ volumeRange.addEventListener('input', function() {
         document.querySelector('.center-controls').style.opacity = '0';
         document.querySelector('.bottom-controls').style.opacity = '0';
       }
-    }, 3000);
+    }, 13000);
   });
 });
 </script>
+<script>
+  const video = document.getElementById("video");
+  const playIcon = document.getElementById("playIcon");
+  const videoContainer = document.querySelector(".video-container");
+  const overlay = document.getElementById("overlay");
+  const controls = document.querySelectorAll(".top-controls, .center-controls, .bottom-controls, .right-top-controls");
+  let controlsVisible = false;
+  let hideTimeout;
 
+  // Funzione per mostrare i controlli e l'overlay
+  function showControls() {
+    controlsVisible = true;
+    videoContainer.classList.add("show-overlay");
+
+    controls.forEach(control => {
+      control.style.opacity = "1";
+      control.style.pointerEvents = "auto";
+    });
+
+    overlay.style.opacity = "1"; // Mostra overlay
+
+    // Nascondi dopo un po' se non c'è interazione
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(hideControls, 3000);
+  }
+
+  // Funzione per nascondere i controlli e l'overlay
+  function hideControls() {
+    controlsVisible = false;
+    videoContainer.classList.remove("show-overlay");
+
+    controls.forEach(control => {
+      control.style.opacity = "0";
+      control.style.pointerEvents = "none";
+    });
+
+    overlay.style.opacity = "0"; // Nasconde overlay
+  }
+
+  // Controlli con la tastiera
+  document.addEventListener("keydown", function (event) {
+    switch (event.key) {
+      case "ArrowRight":
+        video.currentTime += 10;
+        break;
+      case "ArrowLeft":
+        video.currentTime -= 10;
+        break;
+      case "Enter":
+        event.preventDefault();
+        if (!video.paused) {
+          video.pause();
+          playIcon.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NyIgaGVpZ2h0PSI2NyIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDY3IDY3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMjAuMjggOS42NWMtMi4yMDUtMS4yNjgtNC4wMjYtLjIyOC00LjAyNiAyLjMwN3Y0My44MDVjMCAyLjUzNSAxLjgyIDMuNTc0IDQuMDI3IDIuMzA3bDM4LjQ3MS0yMS45MDNhMi41NTYgMi41NTYgMCAwIDAgMS4wOTQtLjkzNSAyLjUxNCAyLjUxNCAwIDAgMCAwLTIuNzQzIDIuNTU2IDIuNTU2IDAgMCAwLTEuMDkzLS45MzZMMjAuMjggOS42NXoiLz48L3N2Zz4="; // Cambia l'icona in play
+          videoContainer.classList.add("controls-fixed"); // Mantiene i controlli visibili
+        } else {
+          video.play();
+          playIcon.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NyIgaGVpZ2h0PSI2NyIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDY3IDY3Ij48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00Ni4zMzIgNS43NzNhNC4xMjUgNC4xMjUgMCAwIDAtNC4xMjUgNC4xMjV2NDYuNzVhNC4xMjcgNC4xMjcgMCAwIDAgNC4xMjUgNC4xMjUgNC4xMjcgNC4xMjcgMCAwIDAgNC4xMjUtNC4xMjVWOS44OThhNC4xMjUgNC4xMjUgMCAwIDAtNC4xMjUtNC4xMjV6TTI1LjcwNyA5Ljg5OHY0Ni43NWE0LjEyNSA0LjEyNSAwIDEgMS04LjI1IDBWOS44OThhNC4xMjMgNC4xMjMgMCAwIDEgNC4xMjUtNC4xMjUgNC4xMjMgNC4xMjMgMCAwIDEgNC4xMjUgNC4xMjV6IiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4="; // Cambia l'icona in pausa
+          videoContainer.classList.remove("controls-fixed");
+        }
+        showControls(); // Mostra i controlli quando si preme invio
+        break;
+    }
+  });
+
+  // Mostra i controlli al movimento del mouse
+  document.addEventListener("mousemove", showControls);
+
+  // Nasconde i controlli automaticamente dopo un po'
+  document.addEventListener("mouseleave", hideControls);
+
+  // Quando si clicca un pulsante dei controlli col mouse, si resetta il timer per nasconderli
+  const controlButtons = document.querySelectorAll(
+    ".top-controls button, .center-controls button, .bottom-controls button, .right-top-controls button"
+  );
+
+  controlButtons.forEach(button => {
+    button.addEventListener("click", function () {
+      videoContainer.classList.remove("controls-fixed"); // Il mouse non fissa i controlli
+      button.blur(); // Rimuove il focus
+    });
+  });
+
+</script>
 
 </body>
 </html>
