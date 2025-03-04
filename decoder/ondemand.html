@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lettore Video Personalizzato</title>
+  <title>Lettore Video bry os</title>
   <style>
     /* Stili generali */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
@@ -220,6 +220,18 @@ transform: translateX(-80px); /* Sposta ulteriormente di 40px a destra */
       padding: 9px;
       border-radius: 5px;
     }
+    
+    
+    
+    #volumeRange:focus,
+#volumeRange::-webkit-slider-thumb:focus,
+#volumeRange::-moz-focus-inner {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+    
     
     #volumeRange {
   -webkit-appearance: none;
@@ -891,35 +903,41 @@ volumeRange.addEventListener('input', function() {
   let controlsVisible = false;
   let hideTimeout;
 
-  // Funzione per mostrare i controlli e l'overlay
-  function showControls() {
-    controlsVisible = true;
-    videoContainer.classList.add("show-overlay");
+ 
+ // Funzione per mostrare i controlli e l'overlay
+function showControls() {
+  controlsVisible = true;
+  videoContainer.classList.add("show-overlay");
 
-    controls.forEach(control => {
-      control.style.opacity = "1";
-      control.style.pointerEvents = "auto";
-    });
+  controls.forEach(control => {
+    control.style.opacity = "1";
+    control.style.pointerEvents = "auto";
+  });
 
-    overlay.style.opacity = "1"; // Mostra overlay
+  overlay.style.opacity = "1"; // Mostra overlay
 
-    // Nascondi dopo un po' se non c'è interazione
+  // Imposta il timeout per nascondere i controlli SOLO se il video NON è in pausa
+  if (!video.paused) {
     clearTimeout(hideTimeout);
     hideTimeout = setTimeout(hideControls, 3000);
   }
+}
 
-  // Funzione per nascondere i controlli e l'overlay
-  function hideControls() {
-    controlsVisible = false;
-    videoContainer.classList.remove("show-overlay");
+// Funzione per nascondere i controlli e l'overlay
+function hideControls() {
+  // Se il video è in pausa, non nascondere nulla
+  if (video.paused) return;
 
-    controls.forEach(control => {
-      control.style.opacity = "0";
-      control.style.pointerEvents = "none";
-    });
+  controlsVisible = false;
+  videoContainer.classList.remove("show-overlay");
 
-    overlay.style.opacity = "0"; // Nasconde overlay
-  }
+  controls.forEach(control => {
+    control.style.opacity = "0";
+    control.style.pointerEvents = "none";
+  });
+
+  overlay.style.opacity = "0"; // Nasconde overlay
+}
 
   // Controlli con la tastiera
   document.addEventListener("keydown", function (event) {
