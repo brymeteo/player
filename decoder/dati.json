@@ -1,0 +1,21 @@
+[
+  {
+    "link": "https://brymeteo.github.io/player/decoder/ondemand/6795.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://image.tmdb.org/t/p/original/zadT1xo0md5ut1xSpY7lxo6HTXQ.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Zathura - Un'avventura spaziale",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Zathura - Un'avventura spaziale"
+  },
+  {
+    "link": "https://brymeteo.github.io/player/decoder/ondemand/615656.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://image.tmdb.org/t/p/original/z0BfLSi2Jg1wPeDk9h12epcjptY.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Shark 2 - L'abisso",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Shark 2 - L'abisso"
+  }
+  // Altri oggetti...
+]
