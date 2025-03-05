@@ -1,0 +1,65 @@
+[
+  {
+    "link": "https://brymeteo.github.io/tv/youtube.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://www.paginesispa.it/wp-content/uploads/elementor/thumbs/youtube-logo-ql1uhdil582q5p3dwy8f6z72h1uacop4o7uabflwko.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "YouTube",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "YouTube"
+  },
+  {
+    "link": "https://www.raiplay.it/",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://brymeteo.github.io/player/decoder/immagini/raiplay.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "RaiPlay",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "RaiPlay"
+  },
+  {
+    "link": "https://www.meteoblue.com/it/meteotv/67a3ed",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://brymeteo.github.io/player/decoder/immagini/meteo-ecco-quando-potrebbe-esserci-la-svolta-autunnale-c-e-una-data-copia.png",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Previsioni Meteo",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Previsioni Meteo"
+  },
+   {
+    "link": "https://fast.com/it/#",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://brymeteo.github.io/player/decoder/immagini/fast.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Fast",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Fast"
+  },
+   {
+    "link": "https://www.autodraw.com/",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://brymeteo.github.io/player/decoder/immagini/disegno.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Disegno libero Autodraw",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Autodraw"
+  },
+  {
+    "link": "https://html5.gamedistribution.com/4d1a4fc412a84cd6a3b1cc79c79f8200/?timestamp=1709777420&countryCode=it&siteid=88&channelid=1&siteLocale=it&locale=it&gd_sdk_referrer_url=https%3A%2F%2Fwww.gioco.it%2Fgioco%2Fsolitaire-collection",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://store-images.s-microsoft.com/image/apps.8156.14627950352580788.bc6c803a-c428-4344-90cd-3fbfbc58a5f7.250a45fb-df95-41f9-8e29-2002b9025dd0?mode=scale&q=90&h=720&w=1280",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Gioco online di carte",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Solitario - gioco di carte"
+  },
+  {
+    "link": "https://html5.gamedistribution.com/a186dc9ac7f548f884db8ff54df6dd9f/?timestamp=1709776949&countryCode=it&siteid=88&channelid=1&siteLocale=it&locale=it&gd_sdk_referrer_url=https%3A%2F%2Fwww.gioco.it%2Fgioco%2Ffruit-ninja",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://preteen-ministry.net/cdn/shop/products/Fruit_Ninja_-_Cover_1445x.jpg?v=1507262323",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Fruit Ninja",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Fruit Ninja"
+  }
+]
