@@ -16,5 +16,32 @@
     "descrizione": "Shark 2 - L'abisso",
     "titoloFooter": "Reality 24/7",
     "descrizioneFooter": "Shark 2 - L'abisso"
+  },
+  {
+    "link": "https://brymeteo.github.io/player/decoder/ondemand/615656.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://image.tmdb.org/t/p/original/ceOlzNRzyo6eklMjEgNDPmcA7Pg.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Super Mario Bros. - Il film",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Super Mario Bros. - Il film"
+  },
+   {
+    "link": "https://brymeteo.github.io/player/decoder/ondemand/615656.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://image.tmdb.org/t/p/original/8An7XwzDmiF0lFmKW4p2pVJMuKA.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Fast & Furious 10",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Fast & Furious 10"
+  },
+   {
+    "link": "https://brymeteo.github.io/player/decoder/ondemand/615656.html",
+    "ariaLabel": "Reality 24/7. All your fave reality shows 24/7. Live.",
+    "img": "https://image.tmdb.org/t/p/original/aL8GgqbWzRmqRJAoyhDlj0ZsGhG.jpg",
+    "titolo": "Cinema 1 HD",
+    "descrizione": "Jumanji - Benvenuti nella giungla",
+    "titoloFooter": "Reality 24/7",
+    "descrizioneFooter": "Jumanji - Benvenuti nella giungla"
   }
 ]
