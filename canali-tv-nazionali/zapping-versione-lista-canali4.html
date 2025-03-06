@@ -278,7 +278,7 @@
           <img src="https://api.superguidatv.it/v1/channels/188/logo?width=320&theme=dark" alt="Italia 1 Logo" style="width: 96px; height: auto; object-fit: cover;margin-right: 55px;">106 - Italia 1 HD
         </li>
         <li data-channel="video1.mp4" data-url="https://brymeteo.github.io/player/decoder/immagini/cartello-configurazione-canali-completata.html" data-number="100" class="selected">
-          <!-- Puoi aggiungere qui ulteriore contenuto se necessario -->
+          <!-- Contenuto aggiuntivo se necessario -->
         </li>
       </ul>
     </div>
@@ -297,6 +297,15 @@
   </div>
 
   <script>
+    // Variabile per evitare la visualizzazione del container in seguito a tasti (4 e 5) simulati
+    let preventChannelShow = false;
+    function setPreventChannelShowForDuration(duration) {
+      preventChannelShow = true;
+      setTimeout(() => {
+        preventChannelShow = false;
+      }, duration);
+    }
+
     let channels = document.querySelectorAll('#channels li');
     let selectedChannelIndex = 0;
     let scrollInterval = null;
@@ -315,15 +324,18 @@
       document.getElementById('fullscreen-icon').style.opacity = '0';
     }
 
-    // Resetta il timer di nascondimento e mostra il menu
+    // Resetta il timer di nascondimento: se preventChannelShow è attivo, non mostra il menu
     function resetHideTimeout() {
       clearTimeout(hideTimeout);
-      showChannelList();
+      if (!preventChannelShow) {
+        showChannelList();
+      }
       hideTimeout = setTimeout(hideChannelList, 4000);
     }
 
-    // Mostra il menu solo al click (rimuovendo il listener sul mousemove)
+    // Gestione del click sull'intera pagina
     document.addEventListener('click', (e) => {
+      // Se l'evento è generato dall'utente (trusted) si può ripristinare la possibilità di mostrare il menu
       if (e.isTrusted) resetHideTimeout();
     });
 
@@ -516,7 +528,9 @@
           if (fullscreenButton) {
             fullscreenButton.click();
           }
-        } else if (event.data.action === "simulateClick") {
+        }
+        // Gestione degli eventi simulati
+        else if (event.data.action === "simulateClick") {
           const key = event.data.key;
           if (key === '3') {
             const micButton = document.getElementById('voice-control-button');
@@ -524,13 +538,17 @@
           } else if (key === '2') {
             const rewindButton = document.getElementById('scroll-buttons');
             if (rewindButton) rewindButton.click();
-          } else if (key === '4') {
+          }
+          // Per i tasti 4 e 5, prima si attiva il flag per impedire la visualizzazione del container
+          else if (key === '4') {
+            setPreventChannelShowForDuration(5000); // Impedisce la visualizzazione per 5 secondi
             const scrollUp = document.getElementById('scroll-up');
             if (scrollUp) {
               scrollUp.dispatchEvent(new MouseEvent('mousedown', { bubbles: false, cancelable: true }));
               scrollUp.dispatchEvent(new MouseEvent('mouseup', { bubbles: false, cancelable: true }));
             }
           } else if (key === '5') {
+            setPreventChannelShowForDuration(5000);
             const scrollDown = document.getElementById('scroll-down');
             if (scrollDown) {
               scrollDown.dispatchEvent(new MouseEvent('mousedown', { bubbles: false, cancelable: true }));
