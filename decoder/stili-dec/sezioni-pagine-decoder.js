@@ -321,7 +321,7 @@ function adjustSettingsInterface() {
 
 
 
-<div class="cp_grid__wrapper cp_spacing--03-top" data-testid="category-mid-rails-upsell-banner"><picture class="cp_picture" data-testid="free-trial-banner"><source media="(min-width: 1920px)" srcset="https://brymeteo.github.io/player/decoder/immagini/output-onlinepngtools-1.png"><source media="(min-width: 1280px)" srcset="https://brymeteo.github.io/player/decoder/immagini/output-onlinepngtools-1.png"><source media="(min-width: 768px)" srcset="https://brymeteo.github.io/player/decoder/immagini/output-onlinepngtools-1.png"><img alt="Start your 7 day free trial" class="cp_picture__img" src="https://brymeteo.github.io/player/decoder/immagini/output-onlinepngtools-1.png"></picture></a></div>
+<div class="cp_grid__wrapper cp_spacing--03-top" data-testid="category-mid-rails-upsell-banner"></a></div>
 
     <div data-testid="standard-grid" class="cp_grid__wrapper standard-grid">
       <div class="cp_grid cp_section-header cp_grid--justify-space-between cp_grid--align-items-bottom">
