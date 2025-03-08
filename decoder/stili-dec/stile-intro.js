@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
       // Definisci la data di scadenza
-      var expirationDate = new Date('2025-01-10T00:30:00');
+      var expirationDate = new Date('2025-04-10T00:30:00');
       var now = new Date();
       var isExpired = now > expirationDate;
 
