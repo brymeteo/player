@@ -105,19 +105,27 @@
 
 <!-- INIZIO CODICE INTRO -->
 <link rel="stylesheet" href="https://brymeteo.github.io/player/decoder/stili-dec/stile-intro.css">
- <!-- Overlay con il video di apertura -->
+</head>
+<body>
   <div class="overlay-container" id="loading-overlay">
-    <video id="introVideo" autoplay muted playsinline style="width:100%; height:auto;">
-      <source src="https://my-os.s3.cubbit.eu/intro%20bryOS.mp4" type="video/mp4">
-      Il tuo browser non supporta il video.
-    </video>
-  </div>
-<!-- Overlay per abbonamento -->
-  <div id="expired-overlay" class="overlay-container">
-    <div id="expired-content">
-      <!-- Assicurati di impostare il src corretto per l'immagine -->
-      <img id="expiredImage" src="https://brymeteo.github.io/player/decoder/immagini/abbonamento.webp" alt="Abbonamento Scaduto">
+    <div class="overlay-content">
+      <img src="https://brymeteo.github.io/player/decoder/immagini/bry-logo-ufficiale4.webp" alt="Icona di caricamento" class="overlay-logo">
+      <p class="progress-text">Caricamento in corso del decoder</p>
+      <div class="cs-loader">
+        <div class="cs-loader-inner">
+          <label>●</label>
+          <label>●</label>
+          <label>●</label>
+          <label>●</label>
+          <label>●</label>
+          <label>●</label>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div id="expired-overlay">
+    <!-- Contenuto per overlay scaduto, se necessario -->
   </div>
  <!-- Intro full screen --> 
 <script src="https://brymeteo.github.io/player/decoder/stili-dec/stile-intro-full-screen.js"></script>
