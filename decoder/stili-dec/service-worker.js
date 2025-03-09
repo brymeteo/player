@@ -5,7 +5,7 @@ self.addEventListener('install', (event) => {
       // Aggiungi i file da memorizzare nella cache
       return cache.addAll([
         '/',                     // Homepage
-        'https://brymeteo.github.io/player/decoder/decoder-smart-lg-bry-os.html',            // Pagina principale
+        'https://brymeteo.github.io/player/decoder/prova-decoder.html',            // Pagina principale
         'https://brymeteo.github.io/player/decoder/stili-dec/manifest.json',         // Manifest della PWA
         'https://i.ibb.co/sd5mVxJF/bryos.png',              // Icona
         'https://brymeteo.github.io/player/decoder/stili-dec/sezioni-pagine-decoder.js',            // CSS
