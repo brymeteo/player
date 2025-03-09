@@ -1005,7 +1005,7 @@
       font-family: Arial, sans-serif;
       overflow: hidden;
     }
-    /* Video a tutto schermo */
+    /* Contenitore a tutto schermo */
     .fullscreen-video {
       position: fixed;
       top: 0;
@@ -1025,28 +1025,24 @@
 </head>
 <body>
 
-<!-- Video a tutto schermo -->
+<!-- Immagine a tutto schermo -->
 <div class="fullscreen-video" id="fullscreenVideo">
-  <video autoplay muted playsinline loop style="width:100%; height:100%; object-fit:cover;" onclick="unlockContent()">
-    <source src="https://my-os.s3.cubbit.eu/channels.mp4" type="video/mp4">
-    Il tuo browser non supporta i video.
-  </video>
+  <img src="https://brymeteo.github.io/player/decoder/immagini/immagine-attivazione-canali.webp" alt="Immagine di copertina" style="width:100%; height:100%; object-fit:cover;" onclick="unlockContent()">
 </div>
 
-<!-- Contenuto dei canali -->
 
 
 <script>
   function unlockContent() {
-    // Memorizza nel localStorage che il video è stato visto
+    // Memorizza nel localStorage che l'immagine è stata visualizzata
     localStorage.setItem('videoWatched', 'true');
-    // Nascondi il video e mostra il contenuto dei canali
+    // Nascondi l'immagine e mostra il contenuto dei canali
     document.getElementById('fullscreenVideo').style.display = 'none';
     document.getElementById('channelsContent').style.display = 'block';
   }
   
   window.onload = function() {
-    // Se il video è già stato visto, nascondi il video e mostra direttamente i canali
+    // Se l'immagine è già stata visualizzata, mostra direttamente i canali
     if (localStorage.getItem('videoWatched') === 'true') {
       document.getElementById('fullscreenVideo').style.display = 'none';
       document.getElementById('channelsContent').style.display = 'block';
