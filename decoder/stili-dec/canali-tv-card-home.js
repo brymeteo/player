@@ -251,8 +251,8 @@ programCards.forEach((cardObj, index) => {
 
 function initialize() {
 fetchPrograms();
-setInterval(fetchPrograms, 1000);  // Ricarica i programmi ogni 10 secondi
-setInterval(updateProgressBar, 1000);  // Aggiorna la barra di progresso ogni secondo
+setInterval(fetchPrograms, 15000);  // Ricarica i programmi ogni 10 secondi
+setInterval(updateProgressBar, 15000);  // Aggiorna la barra di progresso ogni secondo
 
 // Aggiungiamo i listener per i tasti (6 per aprire il modal, 7 e 8 per navigare tra i programmi)
 window.addEventListener('keydown', (event) => {
