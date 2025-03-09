@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
       function showLoading() {
         document.getElementById('loading-overlay').style.display = 'flex';
         // Dopo 9 secondi aggiorna l'overlay
@@ -14,10 +14,7 @@
         // Crea il pulsante "Accedi"
         var button = document.createElement("button");
         button.textContent = "Accedi";
-        button.style.fontSize = "20px";
-        button.style.padding = "10px 20px";
-        button.style.marginTop = "20px";
-        button.style.cursor = "pointer";
+        button.classList.add("access-button");
 
         // Aggiunge l'evento click per rimuovere l'overlay e attivare il full screen
         button.addEventListener("click", function() {
