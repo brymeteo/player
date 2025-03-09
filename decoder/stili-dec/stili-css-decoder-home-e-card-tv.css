@@ -4,7 +4,7 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     background-image: url('https://brymeteo.github.io/player/decoder/immagini/intro-sfondo.webp');
-    
+    background-color: #225b8e;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
