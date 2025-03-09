@@ -2,7 +2,7 @@
   "name": "Bry OS Decoder",
   "short_name": "Bry OS",
   "description": "Piattaforma Televisiva",
-  "start_url": "https://brymeteo.github.io/player/decoder/decoder-smart-lg-bry-os.html",
+  "start_url": "https://brymeteo.github.io/player/decoder/prova-decoder.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
