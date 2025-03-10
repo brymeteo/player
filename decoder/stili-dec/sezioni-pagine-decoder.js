@@ -706,17 +706,11 @@ function adjustSettingsInterface() {
     element.classList.add('active');
 
     var updateCustomization = `
-     <div style="margin: -19px auto; margin-left: 50px; width: 90%;">
+     <div style="margin: -19px auto; margin-left: 51px;">
 <link rel="stylesheet" href="https://brymeteo.github.io/player/decoder/style-film-ondemand.css" data-n-g="">
 
 
- <iframe
-    src="https://brymeteo.github.io/player/Guida%20TV/home.html"
-    width="108.5%%"
-    height="1340px"
-    frameborder="0"
-    scrolling="no"
-></iframe>       
+ <iframe src="https://brymeteo.github.io/player/decoder/stili-dec/guida-tv.html" width="101.7%" height="3240px" frameborder="0" scrolling="no"></iframe>     
               
 
 
