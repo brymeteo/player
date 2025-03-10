@@ -14,13 +14,14 @@
       font-family: "Helvetica Neue", Arial, sans-serif;
      
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
     /* ---------- CONTENITORE PRINCIPALE ---------- */
     .epg-container {
       display: flex;
       flex-direction: column;
-      width: 100vw;
+      width: 130vw;
       height: 100vh;
     }
     /* ---------- BARRA SUPERIORE (DATA + ORARI DINAMICI) ---------- */
@@ -99,28 +100,28 @@
     display: inline-block;
     /* min-width: 190px; */
     margin-right: 3px;
-    height: 100%;
+    /* height: 100%; */
     background: #1a3d6042;
-    border: 1px solid #2a5d9087;
-    padding: 5px 15px;
+    border: 1px solid #3a73ab5c;
+    padding: 5px 18px;
     box-sizing: border-box;
     font-size: 21px;
     line-height: 60px;
-    overflow: hidden;
+    /* overflow: hidden; */
     text-overflow: ellipsis;
     white-space: nowrap;
     transition: background 0.2s;
-    vertical-align: middle;
+    /* vertical-align: -2px; */
     cursor: pointer;
 }
     .program-block:hover {
       background: #2a5d90;
     }
     .program-block.current {
-    background: #1f5b96ab;
+    background: #1b5187bf;
     border-color: #4c82b800;
-    font-weight: bold;
-    border-left: 6px solid #ffffff99;
+    /* font-weight: bold; */
+    /* border-left: 1px solid #ffffff; */
 }
     /* Etichette orarie per i blocchi (posizionate in alto a sinistra) */
    .time-label {
