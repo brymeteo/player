@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>EPG Sky - Prossimi 3 Programmi, Scroll Unico</title>
+  <style>
+    /* ---------- RESET DI BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+     
+      color: #fff;
+      overflow: hidden;
+    }
+    /* ---------- CONTENITORE PRINCIPALE ---------- */
+    .epg-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+    }
+    /* ---------- BARRA SUPERIORE (DATA + ORARI DINAMICI) ---------- */
+    .epg-topbar {
+    flex: 0 0 50px;
+    background: linear-gradient(to right, #0b234070, #0b234070);
+    border-bottom: 2px solid #ffffff30;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+    .epg-day-label {
+      font-weight: bold;
+      font-size: 18px;
+      margin-right: 30px;
+    }
+    .time-slot {
+      margin-right: 30px;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+    /* ---------- CORPO EPG: UNICO SCROLL VERTICALE ---------- */
+    .epg-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* ---------- STRUTTURA A TABELLA ---------- */
+    .epg-table {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .epg-row {
+    display: table-row;
+    height: 50px;
+    border-bottom: 1px solid #5666779e;
+}
+    /* ---------- CELLA CANALE (SINISTRA) ---------- */
+    .channel-cell {
+    display: table-cell;
+    width: 220px;
+    background: linear-gradient(#163e6bb0, #163e6bb0);
+    border-right: 2px solid #ffffff4d;
+    padding: 0 10px;
+    vertical-align: middle;
+}
+    .channel-number {
+    font-size: 21px;
+    font-weight: bold;
+    margin-right: 8px;
+    color: #aab7c5;
+}
+    .channel-name {
+    font-size: 24px;
+    /* font-weight: bold; */
+    color: #ffffffcf;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+    /* ---------- CELLA PROGRAMMI (DESTRA) ---------- */
+    .schedule-cell {
+    display: table-cell;
+    position: relative;
+    vertical-align: top;
+    background-color: #1035618c;
+}
+    /* ---------- BLOCCHI PROGRAMMA ---------- */
+    .program-block {
+    position: relative;
+    display: inline-block;
+    /* min-width: 190px; */
+    margin-right: 3px;
+    height: 100%;
+    background: #1a3d6042;
+    border: 1px solid #2a5d9087;
+    padding: 5px 15px;
+    box-sizing: border-box;
+    font-size: 21px;
+    line-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: background 0.2s;
+    vertical-align: middle;
+    cursor: pointer;
+}
+    .program-block:hover {
+      background: #2a5d90;
+    }
+    .program-block.current {
+    background: #1f5b96ab;
+    border-color: #4c82b800;
+    font-weight: bold;
+    border-left: 6px solid #ffffff99;
+}
+    /* Etichette orarie per i blocchi (posizionate in alto a sinistra) */
+   .time-label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    color: #9fb4bcc9;
+    font-size: 19px;
+    padding: 0 2px;
+}
+    /* ---------- SCROLLBAR PERSONALIZZATA ---------- */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1a3d60;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b2340;
+    }
+    /* ---------- MODAL POPUP ---------- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      color: #000;
+      position: relative;
+    }
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="epg-container">
+    <!-- Barra superiore: data e orari dinamici -->
+    <div class="epg-topbar" id="epg-topbar">
+      <!-- La day label e le time slot verranno inseriti dinamicamente -->
+    </div>
+    <!-- Corpo EPG: scrollbar unico -->
+    <div class="epg-body">
+      <div class="epg-table" id="epg-table">
+        <!-- Righe create dinamicamente da JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Popup per i dettagli del programma -->
+  <div id="popup-modal" class="modal">
+    <div class="modal-content">
+      <span id="modal-close" class="close">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-description"></p>
+      <img id="modal-image" src="" alt="" style="max-width:100%; margin-bottom:10px;">
+      <p id="modal-time"></p>
+      <p id="modal-channel"></p>
+    </div>
+  </div>
+
+  <script>
+    const DATA_URL = "https://brymeteo.github.io/tv/dati_programmi.json";
+    let channelsData = [];
+
+    const topbarEl = document.getElementById('epg-topbar');
+    const epgTableEl = document.getElementById('epg-table');
+
+    async function loadEPG() {
+      try {
+        const response = await fetch(DATA_URL);
+        channelsData = await response.json();
+
+        // 1. Organizza i programmi: se esiste un programma in corso, lo includiamo e poi i prossimi 2
+        filterNext3Programs();
+        // 2. Disegna la barra oraria dinamica basata sugli orari dei programmi visualizzati
+        drawTimeSlots();
+        // 3. Disegna la tabella EPG
+        drawEPGTable();
+      } catch (err) {
+        console.error("Errore nel caricamento EPG:", err);
+      }
+    }
+
+    function filterNext3Programs() {
+      const now = Date.now();
+      channelsData.forEach(channel => {
+        // Trova il programma in corso (se presente)
+        const currentProg = channel.programs.find(prog => {
+          const start = new Date(prog.start).getTime();
+          const end = new Date(prog.end).getTime();
+          return start <= now && now <= end;
+        });
+        // I programmi futuri (escludendo eventuali programmi già in corso)
+        const futureProgs = channel.programs.filter(prog => new Date(prog.start).getTime() > now);
+        if (currentProg) {
+          channel.programs = [currentProg, ...futureProgs.slice(0, 2)];
+        } else {
+          channel.programs = futureProgs.slice(0, 3);
+        }
+      });
+    }
+
+    function drawTimeSlots() {
+      // Pulisce la topbar e aggiunge la data
+      topbarEl.innerHTML = "";
+      const now = new Date();
+      const dayLabel = document.createElement('div');
+      dayLabel.className = "epg-day-label";
+      const options = { weekday: 'long', day: 'numeric', month: 'long' };
+      dayLabel.textContent = now.toLocaleDateString('it-IT', options);
+      topbarEl.appendChild(dayLabel);
+
+      // Colleziona gli orari unici dai programmi visualizzati
+      let timesSet = new Set();
+      channelsData.forEach(channel => {
+        channel.programs.forEach(prog => {
+          let startTime = new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+          timesSet.add(startTime);
+          // Se il programma è in corso, aggiunge anche l'orario corrente
+          const progStart = new Date(prog.start).getTime();
+          const progEnd = new Date(prog.end).getTime();
+          if (progStart <= now.getTime() && now.getTime() <= progEnd) {
+            let currentTime = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            timesSet.add(currentTime);
+          }
+        });
+      });
+      // Converte il Set in array e ordina in base al tempo
+      let timesArray = Array.from(timesSet);
+      timesArray.sort((a, b) => {
+        const [ha, ma] = a.split(':').map(Number);
+        const [hb, mb] = b.split(':').map(Number);
+        return (ha * 60 + ma) - (hb * 60 + mb);
+      });
+      // Aggiunge ogni time slot alla topbar
+      timesArray.forEach(t => {
+        const slotDiv = document.createElement('div');
+        slotDiv.className = 'time-slot';
+        slotDiv.textContent = t;
+        topbarEl.appendChild(slotDiv);
+      });
+    }
+
+    function drawEPGTable() {
+      epgTableEl.innerHTML = "";
+      const now = Date.now();
+      channelsData.forEach((channel, index) => {
+        if (!channel.programs || channel.programs.length === 0) return;
+
+        // Crea la riga per il canale
+        const rowEl = document.createElement('div');
+        rowEl.className = 'epg-row';
+
+        // Cella del canale (sinistra)
+        const channelCell = document.createElement('div');
+        channelCell.className = 'channel-cell';
+        channelCell.innerHTML = `
+          <div>
+            <span class="channel-number">${channel.number || (100 + index)}</span>
+            <span class="channel-name">${channel.name}</span>
+          </div>
+        `;
+        rowEl.appendChild(channelCell);
+
+        // Cella dei programmi (destra)
+        const scheduleCell = document.createElement('div');
+        scheduleCell.className = 'schedule-cell';
+
+        channel.programs.forEach(prog => {
+          const progDiv = document.createElement('div');
+          progDiv.className = 'program-block';
+          progDiv.textContent = prog.title;
+
+          const progStart = new Date(prog.start).getTime();
+          const progEnd = new Date(prog.end).getTime();
+          if (progStart <= now && now <= progEnd) {
+            progDiv.classList.add('current');
+            const currentLabel = document.createElement('div');
+            currentLabel.className = 'time-label';
+            currentLabel.textContent = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            progDiv.appendChild(currentLabel);
+          } else {
+            const startLabel = document.createElement('div');
+            startLabel.className = 'time-label';
+            startLabel.textContent = new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            progDiv.appendChild(startLabel);
+          }
+
+          progDiv.addEventListener('click', () => openPopup(prog, channel));
+          scheduleCell.appendChild(progDiv);
+        });
+
+        rowEl.appendChild(scheduleCell);
+        epgTableEl.appendChild(rowEl);
+      });
+    }
+
+    function openPopup(prog, channel) {
+      const modal = document.getElementById("popup-modal");
+      document.getElementById("modal-title").textContent = prog.title;
+      document.getElementById("modal-description").textContent = prog.description || "Nessuna descrizione disponibile.";
+      
+      const modalImage = document.getElementById("modal-image");
+      if (prog.image) {
+        modalImage.src = prog.image;
+        modalImage.style.display = "block";
+      } else {
+        modalImage.style.display = "none";
+      }
+
+      document.getElementById("modal-time").textContent = `Orario: ${new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })} - ${new Date(prog.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`;
+      document.getElementById("modal-channel").textContent = `Canale: ${channel.name}`;
+      modal.style.display = "block";
+    }
+
+    document.getElementById("modal-close").addEventListener('click', () => {
+      document.getElementById("popup-modal").style.display = "none";
+    });
+    window.addEventListener('click', (event) => {
+      const modal = document.getElementById("popup-modal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    loadEPG();
+  </script>
+</body>
+</html>
