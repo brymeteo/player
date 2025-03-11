@@ -1,4 +1,4 @@
-  let currentCardIndex = -1;
+ let currentCardIndex = -1;
 let programCards = [];
 
  // Mappa dei loghi per ogni canale
@@ -250,51 +250,48 @@ programCards.forEach((cardObj, index) => {
 }
 
 function initialize() {
-fetchPrograms();
-setInterval(fetchPrograms, 1000);  // Ricarica i programmi ogni 10 secondi
-setInterval(updateProgressBar, 1000);  // Aggiorna la barra di progresso ogni secondo
-
-// Aggiungiamo i listener per i tasti (6 per aprire il modal, 7 e 8 per navigare tra i programmi)
-window.addEventListener('keydown', (event) => {
-  if (event.key === '6') {
-    // Verifica se un contenitore esiste
-    if (currentCardIndex !== -1) {
-      const modal = document.getElementById('program-modal');
-      const currentCardObj = programCards[currentCardIndex];
-
-      // Se il modal è già aperto, chiudilo, altrimenti aprilo con l'URL del programma
-      if (modal.style.display === 'flex') {
-        closeModal();
-      } else if (currentCardObj) {
-        const url = currentCardObj.programUrl;
-        openModal(url);
+  // Carica subito le card
+  fetchPrograms();
+  
+  // Avvia l'aggiornamento periodico dei programmi dopo 1 secondo
+  setTimeout(() => {
+    setInterval(fetchPrograms, 20000);  // aggiorna i programmi ogni 20 secondi
+  }, 1000);
+  
+  // Aggiorna la barra di progresso ogni secondo
+  setInterval(updateProgressBar, 20000);
+  
+  // Aggiungiamo i listener per i tasti e per il click sulle card
+  window.addEventListener('keydown', (event) => {
+    if (event.key === '6') {
+      if (currentCardIndex !== -1) {
+        const modal = document.getElementById('program-modal');
+        const currentCardObj = programCards[currentCardIndex];
+        if (modal.style.display === 'flex') {
+          closeModal();
+        } else if (currentCardObj) {
+          openModal(currentCardObj.programUrl);
+        }
       }
     }
-  }
-
-  if (event.key === '7') {
-    // Naviga verso il prossimo programma
-    navigateCards('next');
-  }
-
-  if (event.key === '8') {
-    // Naviga verso il programma precedente
-    navigateCards('prev');
-  }
-});
-
-// Gestione interazione con il mouse per navigare tra i programmi
-document.body.addEventListener('click', (event) => {
-  if (event.target.closest('.card-container')) {
-    // Quando una card viene cliccata, apri il modal con l'URL corrispondente
-    const card = event.target.closest('.card-container');
-    const cardId = card.id.replace('card-container-', '');
-    const programUrl = programCards.find(item => item.cardContainer.id === card.id)?.programUrl;
-    if (programUrl) {
-      openModal(programUrl);
+    if (event.key === '7') {
+      navigateCards('next');
     }
-  }
-});
+    if (event.key === '8') {
+      navigateCards('prev');
+    }
+  });
+  
+  document.body.addEventListener('click', (event) => {
+    const card = event.target.closest('.card-container');
+    if (card) {
+      const programUrl = programCards.find(item => item.cardContainer.id === card.id)?.programUrl;
+      if (programUrl) {
+        openModal(programUrl);
+      }
+    }
+  });
 }
+
 
 initialize(); // Esegui l'inizializzazione
