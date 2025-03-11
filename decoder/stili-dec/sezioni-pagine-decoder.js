@@ -551,7 +551,6 @@ function adjustSettingsInterface() {
     var modifySettingsDisplay = `
      <div style="margin: 230px auto; margin-left: 110px; width: 90%;">
 <style>
-    
     .container {
       text-align: center;
     }
@@ -588,14 +587,23 @@ function adjustSettingsInterface() {
       padding: 20px;
       border: 2px solid #f5f5f5;
       z-index: 1000;
-      
-      box-shadow: 0 0 20px rgba(134 95 172.7);
+      box-shadow: 0 0 20px rgba(134 95 172, 0.7);
       background-color: rgba(5, 25, 65, 1.1);
+    }
+    /* Stile per i link testuali cliccabili */
+    .action-link span {
+      color: #cfcfcf;
+      font-size: 25px;
+      cursor: pointer;
+    }
+    /* Stile per il messaggio del popup in bianco */
+    #notification-message {
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+   <div class="container">
     <div class="separator"></div>
     <div class="indicator">&#10003;</div>
     <h1 style="text-align: left;"><span style="color: #f3f3f3; font-size: 25px;">My Bry Full HD</span></h1>
@@ -618,6 +626,24 @@ function adjustSettingsInterface() {
         </div>
         <p><span style="color: #f3f3f3;">Non chiudere questa pagina, ci vorrà qualche istante per l'aggiornamento.</span></p>
       </div>
+    </div>
+    
+    <!-- Link testuali per le azioni di svuotamento e ricaricamento -->
+    <h1 id="clear-storage" class="action-link">
+      <span onclick="clearLocalStorage()">Svuota LocalStorage</span>
+    </h1>
+    <div class="separator"></div>
+    <h1 id="clear-session" class="action-link">
+      <span onclick="clearSessionStorage()">Svuota SessionStorage</span>
+    </h1>
+    <div class="separator"></div>
+    <h1 id="force-reload" class="action-link">
+      <span onclick="forceReload()">Forza Ricaricamento</span>
+    </h1>
+    <div class="separator"></div>
+    <!-- Popup notifica -->
+    <div class="popup-container" id="notification-popup">
+      <h2 id="notification-message" style="text-align: center;"></h2>
     </div>
   </div>
 
