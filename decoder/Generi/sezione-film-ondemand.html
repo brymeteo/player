@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup Modal Esempio</title>
+  <style>
+    /* Impostazioni globali per coprire l'intero schermo */
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden; /* Nasconde la scrollbar orizzontale */
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a4b8f;
+      color: white;
+    }
+    .container {
+      width: 100%;
+      padding: 0;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    
+    .time {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    /* Sezione Hero */
+    .hero-section {
+      min-height: 500px; 
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0a4b8f;
+      position: relative;
+    }
+    
+    .hero-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+      background-blend-mode: multiply;
+      mask-image: linear-gradient(to right, 
+                  rgba(0, 0, 0, 0.1) 0%, 
+                  rgba(0, 0, 0, 0.3) 20%, 
+                  rgba(0, 0, 0, 0.6) 40%, 
+                  rgba(0, 0, 0, 0.8) 70%);
+      -webkit-mask-image: linear-gradient(to right, 
+                  rgba(0, 0, 0, 0.1) 0%, 
+                  rgba(0, 0, 0, 0.3) 20%, 
+                  rgba(0, 0, 0, 0.6) 40%, 
+                  rgba(0, 0, 0, 0.8) 70%);
+    }
+    
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, 
+                 rgba(10, 75, 143, 0.95) 0%, 
+                 rgba(10, 75, 143, 0.8) 30%, 
+                 rgba(10, 75, 143, 0.6) 60%, 
+                 rgba(10, 75, 143, 0.3) 85%);
+      z-index: 2;
+    }
+    
+    .hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 30px;
+    width: 50%;
+}
+    
+    .hero-title {
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .hero-rating {
+      margin-bottom: 10px;
+    }
+    
+    .star-rating {
+      color: gold;
+      letter-spacing: 2px;
+    }
+    
+    .hero-metadata {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .metadata-badge {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 15px;
+    }
+    
+    .hero-description {
+      font-size: 19px;
+      line-height: 1.4;
+    }
+    
+    /* Pulsanti nella sezione hero */
+    .hero-buttons {
+      margin-top: 15px;
+    }
+    
+    .hero-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #061f408c;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+      border: 2px solid #ffffff63;
+      box-shadow: 0 0 10px rgb(255 255 255 / 17%);
+      transform: scale(1.05);
+      position: relative;
+    }
+    
+    .hero-button:hover {
+      background-color: #bf0510;
+    }
+    
+    .section-title {
+      font-size: 22px;
+      margin: 20px 0;
+      padding: 0 20px;
+    }
+    
+    /* Wrapper per ogni sezione di film */
+    .movie-wrapper {
+      position: relative;
+      margin-bottom: 30px;
+      padding: 0 20px;
+    }
+    
+    /* Contenitore movie scrollabile */
+    .movie-container {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+    
+    /* Nascondi scrollbar */
+    .movie-container::-webkit-scrollbar {
+      display: none;
+    }
+    .movie-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Frecce di navigazione (fisse nel wrapper) */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 24px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .nav-arrow.left { left: 5px; }
+    .nav-arrow.right { right: 5px; }
+    
+    /* Card dei film */
+    .movie-card {
+      flex: 0 0 190px;
+      height: 280px;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s, border 0.2s;
+      border: 2px solid transparent;
+    }
+    
+    .movie-card.active {
+      border: 2px solid white;
+    }
+    
+    .movie-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .premiere-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .recommendation-text {
+      font-size: 18px;
+      margin: 20px 0;
+      opacity: 0.9;
+    }
+    
+    .cinema-logo {
+      background-color: #e30613;
+      color: white;
+      font-size: 14px;
+      padding: 2px 6px;
+      margin-left: 5px;
+      border-radius: 3px;
+      text-transform: lowercase;
+    }
+    
+    /* Stili per il popup modal */
+    .popup-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(10 75 143 / 97%);
+}
+ .popup-content {
+    position: relative;
+    margin: 10% auto;
+    width: 93%;
+    max-width: 1600px;
+    background-color: #000000;
+    padding: 1px;
+    border-radius: 5px;
+    top: -60px;
+}
+    .popup-content iframe {
+      width: 100%;
+     
+      height: 690px;
+      border: none;
+    }
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #aaa;
+      cursor: pointer;
+    }
+    .popup-close:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sezione Hero -->
+    <div class="hero-section" id="heroSection">
+      <div class="hero-background" id="heroBackground"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-title">Zathura - Un'avventura spaziale</div>
+        <div class="hero-rating">
+          <span class="star-rating">★★★★½</span> 1h 56m
+        </div>
+        <div class="hero-metadata">
+          <span class="metadata-badge">12</span>
+          <span class="metadata-badge">HD</span>
+          <span class="metadata-badge">S</span>
+        </div>
+        <div class="hero-description">
+          Will Smith stars come un assassino che diventa bersaglio di un nemico misterioso.
+        </div>
+        <!-- Pulsanti "Guarda ora" e "Trailer" -->
+        <div class="hero-buttons">
+          <a href="https://brymeteo.github.io/player/decoder/ondemand.html" class="hero-button watch-now">Guarda ora</a>
+          <a href="https://play.google.com/video/lava/web/player/yt:movie:NZgCV4CGd_E?autoplay=1&authuser=0&embed=play" class="hero-button trailer">Trailer</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-title">Film in On-demand</div>
+    <div class="movie-wrapper">
+      <div class="nav-arrow left">&#10094;</div>
+      <div class="movie-container">
+        <!-- Movie Card 1 -->
+        <div class="movie-card active" data-id="gemini-man" data-title="Zathura - Un'avventura spaziale" data-rating="★★★★" data-duration="1h 53m - 2005" data-badges="PG,HD,S,AVVENTURA" data-description="Un gioco da tavolo misterioso porta due giovani fratelli a viaggiare nello spazio e a vivere una serie di avventure emozionanti." data-image="https://image.tmdb.org/t/p/original/s9Bn7Mx4U9cWOR1WdFZjU1DTAkh.jpg" data-watch="https://brymeteo.github.io/player/decoder/ondemand.html" data-trailer="https://play.google.com/video/lava/web/player/yt:movie:NZgCV4CGd_E?autoplay=1&authuser=0&embed=play">
+          <img src="https://www.themoviedb.org/t/p/w1280/gJCOB4u1TI2AjLIEnvnfIivS5d1.jpg" alt="Gemini Man">
+        </div>
+        
+        <!-- Movie Card 2 -->
+        <div class="movie-card" data-id="coyote-lake" data-title="Shark 2 - L'abisso" data-rating="★★★½" data-duration="1h 56m - 2023" data-badges="15,HD,AZIONE" data-description="Jonas Taylor guida un gruppo di ricerca nelle profondità dell'oceano. In un mondo dominato da squali colossali, il pericolo è sempre dietro l'angolo." data-image="https://image.tmdb.org/t/p/original/qlxy8yo5bcgUw2KAmmojUKp4rHd.jpg" data-watch="https://example.com/watch/coyote-lake" data-trailer="https://play.google.com/video/lava/web/player/yt:movie:1NOHK4-eG_E.P?autoplay=1&authuser=0&embed=play">
+          <img src="https://www.themoviedb.org/t/p/w1280/aXLb2YWXEammySGBh0m6aELmaNq.jpg" alt="Coyote Lake">
+          <div class="premiere-badge">DISPONIBILE A BREVE</div>
+        </div>
+        
+        <!-- Movie Card 3 -->
+        <div class="movie-card" data-id="fast-furious" data-title="Super Mario Bros. - Il film" data-rating="★★★★½" data-duration="1h 32m - 2023" data-badges="T,HD,S,ANIMAZIONE" data-description="Un idraulico di Brooklyn viaggia attraverso il Regno dei Funghi per salvare il mondo da un nemico spietato." data-image="https://image.tmdb.org/t/p/original/1Vx6KxZWHdDuRAsi8t3MGIYMAsT.jpg" data-watch="https://example.com/watch/fast-furious" data-trailer="https://example.com/trailer/fast-furious">
+          <img src="https://www.themoviedb.org/t/p/w1280/A1H2lnpur1IofI0ufcImcAnSytP.jpg" alt="Fast & Furious: Hobbs & Shaw">
+          <div class="premiere-badge">DISPONIBILE A BREVE</div>
+        </div>
+        
+        <!-- Movie Card 4 -->
+        <div class="movie-card" data-id="Fast & Furious 10" data-title="Fast & Furious 10" data-rating="★★★★" data-duration="2h 22m - 2023" data-badges="13+,HD,AZIONE" data-description="Dom Toretto affronta la sfida più pericolosa per salvare la famiglia da un nemico spietato." data-image="https://image.tmdb.org/t/p/original/k8lWXLyC3r0Vd9wKNzlWvtJmogV.jpg" data-watch="https://example.com/watch/fast-furious-10" data-trailer="https://example.com/trailer/fast-furious-10">
+          <img src="https://www.themoviedb.org/t/p/w1280/hC6mLdlgpFU63FOduX80xaGevGj.jpg" alt="Mr. Jones">
+          <div class="premiere-badge">DISPONIBILE A BREVE</div>
+        </div>
+        
+        <!-- Movie Card 5 -->
+        <div class="movie-card" data-id="pets-2" data-title="Jumanji - Benvenuti nella giungla" data-rating="★★★½" data-duration="1h 59m - 2017" data-badges="U,HD,S,AVVENTURA" data-description="Un gruppo di liceali si ritrova catapultato in un misterioso videogioco e vive avventure pericolose." data-image="https://image.tmdb.org/t/p/original/pUnz5LQ22X8gSN45PahyO2rGK95.jpg" data-watch="https://example.com/watch/pets-2" data-trailer="https://example.com/trailer/pets-2">
+          <img src="https://www.themoviedb.org/t/p/w1280/A0h3sGQ7l8MCCVw5DiHEIbET3sz.jpg" alt="The Secret Life of Pets 2">
+          <div class="premiere-badge">DISPONIBILE A BREVE</div>
+        </div>
+        
+        <!-- Movie Card 6 -->
+        <div class="movie-card" data-id="shazam" data-title="Jurassic World - Il dominio" data-rating="★★★★" data-duration="2h 26m - 2022" data-badges="T,HD,S,AVVENTURA,AZIONE" data-description="Quattro anni dopo la distruzione di Isla Nublar, dinosauri e umani convivono in un equilibrio precario." data-image="https://image.tmdb.org/t/p/original/bKIieJsg3SWc4EHI5dzFxfoFg7C.jpg" data-watch="https://example.com/watch/shazam" data-trailer="https://example.com/trailer/shazam">
+          <img src="https://www.themoviedb.org/t/p/w1280/oJAbxkiHF78rY7AMGHFsZnFxoq6.jpg" alt="Shazam!">
+          <div class="premiere-badge">DISPONIBILE AD APRILE</div>
+        </div>
+        
+        <!-- Movie Card 7 -->
+        <div class="movie-card" data-id="four-kids" data-title="Shrek" data-rating="★★★★★" data-duration="1h 30m - 2001" data-badges="PG,HD,ANIMAZIONE" data-description="L'orco Shrek, con l'aiuto di Ciuchino, tenta di salvare la principessa Fiona." data-image="https://image.tmdb.org/t/p/original/bNTHSd3UqqLzIVwbDOGPnx3ScfF.jpg" data-watch="https://example.com/watch/shrek" data-trailer="https://example.com/trailer/shrek">
+          <img src="https://www.themoviedb.org/t/p/w1280/o04jZs5SXhbvhqO4981W7KJXOWZ.jpg" alt="Four Kids and It">
+          <div class="premiere-badge">DISPONIBILE A BREVE</div>
+        </div>
+        
+      </div>
+      <div class="nav-arrow right">&#10095;</div>
+    </div>
+    
+  </div>
+  
+  <!-- Popup Modal -->
+<div id="popupModal" class="popup-modal">
+  <div class="popup-content">
+    <span class="popup-close">&times;</span>
+    <!-- Pulsante fullscreen -->
+    
+    <iframe id="popupIframe" src="" 
+            allowfullscreen 
+            webkitallowfullscreen 
+            mozallowfullscreen 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+    </iframe>
+  </div>
+</div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Selezione dei pulsanti nella sezione hero per il popup
+      const heroWatchBtn = document.querySelector('.hero-button.watch-now');
+      const heroTrailerBtn = document.querySelector('.hero-button.trailer');
+      
+      // Modal popup
+      const popupModal = document.getElementById('popupModal');
+      const popupIframe = document.getElementById('popupIframe');
+      const popupClose = document.querySelector('.popup-close');
+      
+      // Funzione per aprire il popup e caricare il link nell'iframe
+      function openPopup(e) {
+        e.preventDefault(); // Previene il comportamento del link
+        const url = this.getAttribute('href');
+        popupIframe.src = url;
+        popupModal.style.display = 'block';
+      }
+      
+      // Assegna l'evento ai pulsanti "Guarda ora" e "Trailer"
+      [heroWatchBtn, heroTrailerBtn].forEach(btn => {
+        btn.addEventListener('click', openPopup);
+      });
+      
+      // Chiusura del popup al click sulla "X"
+      popupClose.addEventListener('click', function() {
+        popupModal.style.display = 'none';
+        popupIframe.src = '';
+      });
+      
+      // Chiusura del popup se si clicca fuori dalla finestra di contenuto
+      window.addEventListener('click', function(e) {
+        if (e.target === popupModal) {
+          popupModal.style.display = 'none';
+          popupIframe.src = '';
+        }
+      });
+      
+      // Gestione della sezione hero e aggiornamento in base alla movie card
+      const heroSection = document.getElementById('heroSection');
+      const heroTitle = document.querySelector('.hero-title');
+      const heroRating = document.querySelector('.hero-rating');
+      const heroMetadata = document.querySelector('.hero-metadata');
+      const heroDescription = document.querySelector('.hero-description');
+      const heroBackground = document.getElementById('heroBackground');
+      const movieCards = document.querySelectorAll('.movie-card');
+      
+      // Imposta l'immagine di background iniziale per la sezione hero
+      const defaultCard = document.querySelector('.movie-card.active');
+      if(defaultCard) {
+        updateHeroSection(defaultCard);
+      }
+      
+      // Funzione per aggiornare la sezione hero con i dati del film
+      function updateHeroSection(card) {
+        const title = card.getAttribute('data-title');
+        const rating = card.getAttribute('data-rating');
+        const duration = card.getAttribute('data-duration');
+        const badges = card.getAttribute('data-badges').split(',');
+        const description = card.getAttribute('data-description');
+        const imageUrl = card.getAttribute('data-image');
+        const watchUrl = card.getAttribute('data-watch');
+        const trailerUrl = card.getAttribute('data-trailer');
+        
+        heroTitle.textContent = title;
+        heroRating.innerHTML = `<span class="star-rating">${rating}</span> ${duration}`;
+        heroMetadata.innerHTML = '';
+        badges.forEach(badge => {
+          const span = document.createElement('span');
+          span.className = 'metadata-badge';
+          span.textContent = badge;
+          heroMetadata.appendChild(span);
+        });
+        heroDescription.textContent = description;
+        heroBackground.style.backgroundImage = `url('${imageUrl}')`;
+        
+        // Aggiorna i link dei pulsanti della sezione hero
+        heroWatchBtn.setAttribute('href', watchUrl);
+        heroTrailerBtn.setAttribute('href', trailerUrl);
+      }
+      
+      // Aggiunge l'evento click ad ogni movie card
+      movieCards.forEach(card => {
+        card.addEventListener('click', function() {
+          movieCards.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          updateHeroSection(this);
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+      });
+      
+      // Funzionalità delle frecce di navigazione
+      const leftArrows = document.querySelectorAll('.nav-arrow.left');
+      const rightArrows = document.querySelectorAll('.nav-arrow.right');
+      
+      leftArrows.forEach(arrow => {
+        arrow.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const container = this.parentElement.querySelector('.movie-container');
+          container.scrollBy({left: -200, behavior: 'smooth'});
+        });
+      });
+      
+      rightArrows.forEach(arrow => {
+        arrow.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const container = this.parentElement.querySelector('.movie-container');
+          container.scrollBy({left: 200, behavior: 'smooth'});
+        });
+      });
+    });
+  </script>
+</body>
+</html>
