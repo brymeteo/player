@@ -749,5 +749,31 @@ function adjustSettingsInterface() {
     document.getElementById('main-content').innerHTML = updateCustomization;
   }
 
+  
+<!-- sezione Film Ondemand -->
+ // Funzione per mostrare i dettagli dell'abbonamento
+  function updateTVGuide(element) {
+    // Rimuove la classe "active" da tutti i pulsanti
+    var menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => item.classList.remove('active'));
 
-  function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}window.onscroll=function(){scrollFunction()};function scrollFunction(){if(document.body.scrollTop>20||document.documentElement.scrollTop>20){document.getElementById("scroll-to-top").style.display="block"}else{document.getElementById("scroll-to-top").style.display="none"}}
+    // Aggiunge la classe "active" al pulsante cliccato
+    element.classList.add('active');
+
+    var updateTVGuide = `
+     <div style="margin: -21px auto; margin-left: 50px; ">
+<link rel="stylesheet" href="https://brymeteo.github.io/player/decoder/style-film-ondemand.css" data-n-g="">
+
+
+                    
+<iframe src="https://brymeteo.github.io/player/decoder/Generi/sezione-film-ondemand.html" width="101.8%" height="3240px" frameborder="0" scrolling="no" allow="fullscreen" allowfullscreen=""></iframe>     
+              
+
+</div></section></div>
+
+ `;
+    document.getElementById('main-content').innerHTML = updateTVGuide;
+  }
+
+
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}window.onscroll=function(){scrollFunction()};function scrollFunction(){if(document.body.scrollTop>20||document.documentElement.scrollTop>20){document.getElementById("scroll-to-top").style.display="block"}else{document.getElementById("scroll-to-top").style.display="none"}}
