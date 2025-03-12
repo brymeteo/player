@@ -8,6 +8,14 @@
     // Imposta il nuovo sfondo
     document.body.style.backgroundImage = "url('https://brymeteo.github.io/player/decoder/immagini/altricanali.webp')";
   }
+<!-- sfondo Film Ondemand sezioni -->
+// Funzione per cambiare lo sfondo quando si clicca sul pulsante "Cartoni animati"
+  function loadTVSection() {
+    // Ripristina lo sfondo predefinito prima di cambiare lo sfondo
+    resetBackground();
+    // Imposta il nuovo sfondo
+    document.body.style.backgroundImage = "url('https://brymeteo.github.io/player/decoder/immagini/home3.webp')";
+  }  
 <!-- sfondo Guida TV sezioni -->
 // Funzione per cambiare lo sfondo quando si clicca sul pulsante "Cartoni animati"
   function channeguidtvNome() {
