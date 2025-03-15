@@ -14,7 +14,7 @@
     /* Spinner per il caricamento */
     .spinner {
       position: absolute;
-      top: 46%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 5;
@@ -45,7 +45,7 @@ button::-moz-focus-inner {
     /* Controlli in alto */
     .top-controls {
       position: absolute;
-      top: -20px;
+      top: 28px;
       left: 0;
       right: 0;
       display: flex;
@@ -102,7 +102,7 @@ button::-moz-focus-inner {
     /* Controlli centrali */
     .center-controls {
       position: absolute;
-      top: 46%;
+      top: 50%;
       left: 0;
       right: 0;
       transform: translateY(-50%);
@@ -427,13 +427,12 @@ input[type="radio"]:checked + .custom-icon {
   opacity: 1;
 }
 
-
 /* Media query per dispositivi con larghezza massima di 600px */
 @media only screen and (max-width: 600px) {
   /* Riduci il padding e, se necessario, cambia l'orientamento dei controlli in alto */
   .top-controls {
     padding: 10px;
-    
+   
   }
   
   /* Adatta il titolo per non occupare troppo spazio */
@@ -443,8 +442,8 @@ input[type="radio"]:checked + .custom-icon {
   }
   
   /* Riduci le dimensioni dei pulsanti in alto a destra */
-  .right-top-controls button {
-    width: 40px;
+  .top-controls button {
+    width: 30px;
     height: 40px;
     margin: 0 5px;
   }
