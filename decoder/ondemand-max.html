@@ -7,7 +7,7 @@
  <style>
     /* Stili generali */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+    body { background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100%; overflow: hidden; }
     .video-container { position: relative; width: 100%; height: 100vh; background-color: #000; overflow: hidden; }
     video { width: 100%; height: 100%; object-fit: contain; }
     
@@ -48,7 +48,7 @@
       display: flex;
       justify-content: space-between;
       padding: 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+      
       z-index: 2;
     }
     .title {
@@ -460,7 +460,7 @@
 
   <div class="video-container">
     <video id="video" poster="https://via.placeholder.com/1280x720.png?text=Poster+del+video">
-      <source src="https://my-os.s3.cubbit.eu/premiere%20cinema%20sigla.mp4?versionId=ab28ae27-4990-41a1-9a4f-04f41e23342f" type="video/mp4">
+      <source src="https://my-os.s3.cubbit.eu/premierecinema.mp4" type="video/mp4">
       Il tuo browser non supporta il tag video.
     </video>
     
@@ -979,7 +979,6 @@ function hideControls() {
           videoContainer.classList.add("controls-fixed"); // Mantiene i controlli visibili
         } else {
           video.play();
-          playIcon.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NyIgaGVpZ2h0PSI2NyIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDY3IDY3Ij48cGF0aCBmaWxsPSIjZmZmIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik00Ni4zMzIgNS43NzNhNC4xMjUgNC4xMjUgMCAwIDAtNC4xMjUgNC4xMjV2NDYuNzVhNC4xMjcgNC4xMjcgMCAwIDAgNC4xMjUgNC4xMjUgNC4xMjcgNC4xMjcgMCAwIDAgNC4xMjUtNC4xMjVWOS44OThhNC4xMjUgNC4xMjUgMCAwIDAtNC4xMjUtNC4xMjV6TTI1LjcwNyA5Ljg5OHY0Ni43NWE0LjEyNSA0LjEyNSAwIDEgMS04LjI1IDBWOS44OThhNC4xMjMgNC4xMjMgMCAwIDEgNC4xMjUtNC4xMjUgNC4xMjMgNC4xMjMgMCAwIDEgNC4xMjUgNC4xMjV6IiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4="; // Cambia l'icona in pausa
           videoContainer.classList.remove("controls-fixed");
         }
         showControls(); // Mostra i controlli quando si preme invio
