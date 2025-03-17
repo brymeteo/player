@@ -68,12 +68,19 @@
     /* ---------- CELLA CANALE (SINISTRA) ---------- */
     .channel-cell {
     display: table-cell;
-    width: 220px;
+    width: 340px;
     background: linear-gradient(#163e6bb0, #163e6bb0);
     border-right: 2px solid #ffffff4d;
     padding: 0 10px;
     vertical-align: middle;
 }
+
+   .channel-cell img {
+      height: 40px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
     .channel-number {
     font-size: 21px;
     font-weight: bold;
@@ -145,81 +152,135 @@
     ::-webkit-scrollbar-track {
       background: #0b2340;
     }
-    /* ---------- MODAL POPUP ---------- */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.8);
+
+    /* ---------- TOOLTIP (POPUP) FISSO AL MOUSE ---------- */
+   .info-box {
+    position: fixed;
+    display: none;
+    background-color: rgb(42 77 120);
+    color: #fff;
+    padding: 15px;
+    border: 1px solid #ffffff75;
+    border-radius: 5px;
+    width: 350px;
+    z-index: 9999;
+    pointer-events: none;
+}
+    .info-box img {
+      max-width: 100%;
+      display: block;
+      margin-bottom: 10px;
+      
+      border-radius: 4px;
     }
-    .modal-content {
-      background-color: #fefefe;
-      margin: 10% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      color: #000;
-      position: relative;
+    .info-box h2 {
+      margin-bottom: 8px;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #fff;
     }
-    .close {
-      color: #aaa;
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 28px;
+    .info-box p {
+      margin-bottom: 6px;
+      font-size: 18px;
+      line-height: 1.3;
+      color: #e6e3e3;
+    }
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+    .info-box .label {
       font-weight: bold;
-      cursor: pointer;
+      color: #fff;
     }
   </style>
 </head>
 <body>
   <div class="epg-container">
     <!-- Barra superiore: data e orari dinamici -->
-    <div class="epg-topbar" id="epg-topbar">
-      <!-- La day label e le time slot verranno inseriti dinamicamente -->
-    </div>
+    <div class="epg-topbar" id="epg-topbar"></div>
+    
     <!-- Corpo EPG: scrollbar unico -->
     <div class="epg-body">
-      <div class="epg-table" id="epg-table">
-        <!-- Righe create dinamicamente da JS -->
-      </div>
+      <div class="epg-table" id="epg-table"></div>
     </div>
   </div>
 
-  <!-- Modal Popup per i dettagli del programma -->
-  <div id="popup-modal" class="modal">
-    <div class="modal-content">
-      <span id="modal-close" class="close">&times;</span>
-      <h2 id="modal-title"></h2>
-      <p id="modal-description"></p>
-      <img id="modal-image" src="" alt="" style="max-width:100%; margin-bottom:10px;">
-      <p id="modal-time"></p>
-      <p id="modal-channel"></p>
-    </div>
-  </div>
+  <!-- Tooltip (box informazioni) -->
+  <div class="info-box" id="info-box"></div>
 
   <script>
+    // Mappa personalizzata dei loghi (modifica gli URL con quelli corretti)
+    const customLogos = {
+      "rai-1": "https://api.superguidatv.it/v1/channels/217/logo?width=320&theme=dark",
+      "rai-2": "https://api.superguidatv.it/v1/channels/218/logo?width=320&theme=dark",
+      "rai-3": "https://api.superguidatv.it/v1/channels/219/logo?width=320&theme=dark",
+      "rete-4": "https://api.superguidatv.it/v1/channels/189/logo?width=320&theme=dark",
+      "canale-5": "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark",
+      "italia-1": "https://api.superguidatv.it/v1/channels/188/logo?width=320&theme=dark",
+      "la7": "https://api.superguidatv.it/v1/channels/253/logo?width=320&theme=dark",
+       "Tv8": "https://api.superguidatv.it/v1/channels/237/logo?width=320&theme=dark",
+       "nove": "https://api.superguidatv.it/v1/channels/238/logo?width=320&theme=dark",
+       "20-mediaset": "https://api.superguidatv.it/v1/channels/443/logo?width=320&theme=dark",
+       "rai-4": "https://api.superguidatv.it/v1/channels/220/logo?width=320&theme=dark",
+       "rai-premium": "https://api.superguidatv.it/v1/channels/225/logo?width=320&theme=dark",
+        "mediaset-27": "https://api.superguidatv.it/v1/channels/601/logo?width=320&theme=dark",
+        "la-5": "https://api.superguidatv.it/v1/channels/190/logo?width=320&theme=dark",
+        "real-time": "https://api.superguidatv.it/v1/channels/255/logo?width=320&theme=dark",
+        "la7d": "https://i.ibb.co/ZftFtWZ/logo.png",
+        "mediaset-extra": "https://api.superguidatv.it/v1/channels/194/logo?width=320&theme=dark",
+        "topcrime": "https://api.superguidatv.it/v1/channels/193/logo?width=320&theme=dark",
+        "warner-tv": "https://i.ibb.co/rdv3dg9/logo.png",
+        "dmax": "https://api.superguidatv.it/v1/channels/256/logo?width=320&theme=dark",
+        "mediaset-italia-due": "https://api.superguidatv.it/v1/channels/191/logo?width=320&theme=dark",
+        "giallo": "https://i.ibb.co/YZTNyP4/logo.png",
+        "cielo": "https://api.superguidatv.it/v1/channels/239/logo?width=320&theme=dark",
+        "foodnetwork": "https://i.ibb.co/LJT1d90/logo.png",
+        "home-and-garden-tv": "https://i.ibb.co/1GN3qnt/logo.png",
+        "tv2000": "https://i.ibb.co/8dBBCBN/logo.png",
+        "gambero-rosso": "https://i.ibb.co/7NQhbNQb/logo.webp",
+        "history-channel": "https://i.ibb.co/TWLHWxH/logo-1-1.png",
+        "rsi-la1": "https://i.ibb.co/h55V9hy/logo-1.webp",
+        "rsi-la2": "https://i.ibb.co/x8dpNHBg/logo-1.webp",
+        "sportitalia": "https://i.ibb.co/qsKy4tb/logo.png",
+        "iris": "https://api.superguidatv.it/v1/channels/192/logo?width=320&theme=dark",
+        "cine-34": "https://api.superguidatv.it/v1/channels/574/logo?width=320&theme=dark",
+        "rai-movie": "https://api.superguidatv.it/v1/channels/229/logo?width=320&theme=dark",
+        "focus": "https://api.superguidatv.it/v1/channels/249/logo?width=320&theme=dark",
+        "motor-trend": "https://api.superguidatv.it/v1/channels/444/logo?width=320",
+        "sky-tg24": "https://api.superguidatv.it/v1/channels/240/logo?width=320",
+        "tgcom24": "https://api.superguidatv.it/v1/channels/197/logo?width=320",
+        "rai-news-24": "https://api.superguidatv.it/v1/channels/222/logo?width=320",
+        "boing": "https://api.superguidatv.it/v1/channels/195/logo?width=320",
+        "k2": "https://api.superguidatv.it/v1/channels/245/logo?width=320",
+        "rai-gulp": "https://api.superguidatv.it/v1/channels/228/logo?width=320",
+        "rai-yoyo": "https://api.superguidatv.it/v1/channels/227/logo?width=320",
+        "frisbee": "https://api.superguidatv.it/v1/channels/246/logo?width=320",
+        "cartoonito": "https://i.ibb.co/Yt6t6cM/logo-1.png",
+        "super": "https://api.superguidatv.it/v1/channels/247/logo?width=320",
+        "deejay-tv": "https://api.superguidatv.it/v1/channels/162/logo?width=320",
+        "rtl-102.5-tv": "https://api.superguidatv.it/v1/channels/243/logo?width=320",
+        "radioitaliatv": "https://i.ibb.co/gm6gY0H/logo-1.png",
+        "radiofreccia": "https://i.ibb.co/SVjZvd0/logo-1.png",
+    };
+
+    // URL del JSON contenente i dati dei canali e dei programmi
     const DATA_URL = "https://brymeteo.github.io/tv/dati_programmi.json";
     let channelsData = [];
 
     const topbarEl = document.getElementById('epg-topbar');
     const epgTableEl = document.getElementById('epg-table');
+    const infoBoxEl = document.getElementById('info-box');
 
     async function loadEPG() {
       try {
         const response = await fetch(DATA_URL);
         channelsData = await response.json();
 
-        // 1. Organizza i programmi: se esiste un programma in corso, lo includiamo e poi i prossimi 2
+        // Filtra per ogni canale i programmi (programma in corso + successivi 2)
         filterNext3Programs();
-        // 2. Disegna la barra oraria dinamica basata sugli orari dei programmi visualizzati
+        // Disegna la barra oraria dinamica
         drawTimeSlots();
-        // 3. Disegna la tabella EPG
+        // Disegna la tabella EPG
         drawEPGTable();
       } catch (err) {
         console.error("Errore nel caricamento EPG:", err);
@@ -229,14 +290,17 @@
     function filterNext3Programs() {
       const now = Date.now();
       channelsData.forEach(channel => {
-        // Trova il programma in corso (se presente)
+        if (!channel.programs) return;
+
+        // Trova il programma in corso (se esiste)
         const currentProg = channel.programs.find(prog => {
           const start = new Date(prog.start).getTime();
           const end = new Date(prog.end).getTime();
           return start <= now && now <= end;
         });
-        // I programmi futuri (escludendo eventuali programmi già in corso)
+        // Programmi futuri (dopo quello in corso)
         const futureProgs = channel.programs.filter(prog => new Date(prog.start).getTime() > now);
+
         if (currentProg) {
           channel.programs = [currentProg, ...futureProgs.slice(0, 2)];
         } else {
@@ -246,7 +310,6 @@
     }
 
     function drawTimeSlots() {
-      // Pulisce la topbar e aggiunge la data
       topbarEl.innerHTML = "";
       const now = new Date();
       const dayLabel = document.createElement('div');
@@ -255,12 +318,14 @@
       dayLabel.textContent = now.toLocaleDateString('it-IT', options);
       topbarEl.appendChild(dayLabel);
 
-      // Colleziona gli orari unici dai programmi visualizzati
+      // Raccoglie gli orari unici dei programmi
       let timesSet = new Set();
       channelsData.forEach(channel => {
+        if (!channel.programs) return;
         channel.programs.forEach(prog => {
           let startTime = new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
           timesSet.add(startTime);
+
           // Se il programma è in corso, aggiunge anche l'orario corrente
           const progStart = new Date(prog.start).getTime();
           const progEnd = new Date(prog.end).getTime();
@@ -270,14 +335,14 @@
           }
         });
       });
-      // Converte il Set in array e ordina in base al tempo
+
       let timesArray = Array.from(timesSet);
       timesArray.sort((a, b) => {
         const [ha, ma] = a.split(':').map(Number);
         const [hb, mb] = b.split(':').map(Number);
         return (ha * 60 + ma) - (hb * 60 + mb);
       });
-      // Aggiunge ogni time slot alla topbar
+
       timesArray.forEach(t => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'time-slot';
@@ -289,7 +354,8 @@
     function drawEPGTable() {
       epgTableEl.innerHTML = "";
       const now = Date.now();
-      channelsData.forEach((channel, index) => {
+
+      channelsData.forEach(channel => {
         if (!channel.programs || channel.programs.length === 0) return;
 
         // Crea la riga per il canale
@@ -299,9 +365,11 @@
         // Cella del canale (sinistra)
         const channelCell = document.createElement('div');
         channelCell.className = 'channel-cell';
+        // Usa la mappa customLogos o il logo del JSON se presente
+        const channelLogo = customLogos[channel.id] || channel.logo || "";
         channelCell.innerHTML = `
           <div>
-            
+            ${channelLogo ? `<img src="${channelLogo}" alt="logo ${channel.name}">` : ""}
             <span class="channel-name">${channel.name}</span>
           </div>
         `;
@@ -318,6 +386,7 @@
 
           const progStart = new Date(prog.start).getTime();
           const progEnd = new Date(prog.end).getTime();
+
           if (progStart <= now && now <= progEnd) {
             progDiv.classList.add('current');
             const currentLabel = document.createElement('div');
@@ -331,7 +400,11 @@
             progDiv.appendChild(startLabel);
           }
 
-          progDiv.addEventListener('click', () => openPopup(prog, channel));
+          // Gestione eventi per il tooltip
+          progDiv.addEventListener('mouseenter', (e) => showInfoBox(e, prog, channel));
+          progDiv.addEventListener('mousemove', (e) => moveInfoBox(e));
+          progDiv.addEventListener('mouseleave', hideInfoBox);
+
           scheduleCell.appendChild(progDiv);
         });
 
@@ -340,34 +413,40 @@
       });
     }
 
-    function openPopup(prog, channel) {
-      const modal = document.getElementById("popup-modal");
-      document.getElementById("modal-title").textContent = prog.title;
-      document.getElementById("modal-description").textContent = prog.description || "Nessuna descrizione disponibile.";
-      
-      const modalImage = document.getElementById("modal-image");
-      if (prog.image) {
-        modalImage.src = prog.image;
-        modalImage.style.display = "block";
-      } else {
-        modalImage.style.display = "none";
-      }
+    function showInfoBox(event, prog, channel) {
+      const title = prog.title || "Senza titolo";
+      const description = prog.description || "Nessuna descrizione disponibile.";
+      const category = prog.category || "N/A";
+      const startTime = new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+      const endTime = new Date(prog.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+      const timeText = `${startTime} - ${endTime}`;
+      const channelText = channel.name;
+      let poster = prog.poster ? `<img src="${prog.poster}" alt="Poster programma">` : "";
 
-      document.getElementById("modal-time").textContent = `Orario: ${new Date(prog.start).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })} - ${new Date(prog.end).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}`;
-      document.getElementById("modal-channel").textContent = `Canale: ${channel.name}`;
-      modal.style.display = "block";
+      infoBoxEl.innerHTML = `
+        <h2>${title}</h2>
+        ${poster}
+        <p><span class="label">Descrizione:</span> ${description}</p>
+        <p><span class="label">Orario:</span> ${timeText}</p>
+        <p><span class="label">Canale:</span> ${channelText}</p>
+      `;
+
+      infoBoxEl.style.display = "block";
+      moveInfoBox(event);
     }
 
-    document.getElementById("modal-close").addEventListener('click', () => {
-      document.getElementById("popup-modal").style.display = "none";
-    });
-    window.addEventListener('click', (event) => {
-      const modal = document.getElementById("popup-modal");
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    });
+    function moveInfoBox(event) {
+      const offsetX = 15;
+      const offsetY = 15;
+      infoBoxEl.style.top = (event.clientY + offsetY) + "px";
+      infoBoxEl.style.left = (event.clientX + offsetX) + "px";
+    }
 
+    function hideInfoBox() {
+      infoBoxEl.style.display = "none";
+    }
+
+    // Avvio caricamento EPG
     loadEPG();
   </script>
 </body>
