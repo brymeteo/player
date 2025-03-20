@@ -83,16 +83,12 @@
     
     
     <style>
-    .player-controls {
-        display: none !important; /* Nasconde i controlli del player */
+    /* Nasconde i controlli del player */
+    #player .media-control,
+    #player .player-controls,
+    #player .control-bar {
+      display: none !important;
     }
-
-    .media-control .media-control-layer {
-        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
-    }
-
-    /* Altri stili esistenti... */
-    
     </style>
     
     
@@ -133,15 +129,47 @@
       });
 
 
-  // Ascolta i messaggi per il rewind
-  window.addEventListener("message", function(event) {
-    if (event.data === "rewind") {
-      if (window.player) {
-        const currentTime = window.player.getCurrentTime();
-        window.player.seek(Math.max(0, currentTime - 30)); // Rewind di 30 secondi
-      }
+  // Gestione dei comandi vocali tramite postMessage
+   window.addEventListener("message", function(event) {
+  if (!event.data) return;
+  console.log("Messaggio ricevuto:", event.data);
+
+  // Comando "pausa"
+  if (event.data === "pause") {
+    player.pause();
+    console.log("Comando: pausa eseguito");
+  } 
+  // Comando "riprendi" o "play"
+  else if (event.data === "play" || event.data === "riprendi") {
+    player.play();
+    console.log("Comando: riprendi eseguito");
+  } 
+  // Comando "live": ricarica la sorgente live per tornare al live edge
+  else if (event.data === "live") {
+    player.load(player.options.source);
+    console.log("Comando: live eseguito, live stream ricaricato");
+  } 
+  // Comando "rewind"/"indietro"
+  // Gestisce sia il caso in cui viene inviato come stringa che come oggetto con specifica temporale
+  else if ((event.data === "rewind" || event.data === "indietro") ||
+           (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+    // Imposta il rewind predefinito a 10 secondi
+    let rewindSeconds = 10;
+    // Se è stato specificato un valore, lo usa
+    if (typeof event.data === "object" && event.data.seconds) {
+      rewindSeconds = event.data.seconds;
     }
-  }, false);
+    if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+      var currentTime = player.getCurrentTime();
+      var newTime = currentTime - rewindSeconds;
+      if (newTime < 0) newTime = 0;
+      player.seek(newTime);
+      console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+    } else {
+      console.log("Il comando 'indietro' non è supportato per questo live stream");
+    }
+  }
+});
 </script>
 
 
