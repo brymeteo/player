@@ -62,17 +62,14 @@
         }
     </style>
     
-    <style>
-    .player-controls {
-        display: none !important; /* Nasconde i controlli del player */
+  <style>
+    /* Nasconde i controlli del player */
+    #player .media-control,
+    #player .player-controls,
+    #player .control-bar {
+      display: none !important;
     }
-
-    .media-control .media-control-layer {
-        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
-    }
-
-    /* Altri stili esistenti... */
-</style>
+    </style>
 
     
 </head>
@@ -109,41 +106,79 @@
         },
     });
 
-    var logo = document.getElementById("logo");
-    var timer;
-    var popupInstance = null;
+    // Gestione dei comandi vocali tramite postMessage
+   window.addEventListener("message", function(event) {
+  if (!event.data) return;
+  console.log("Messaggio ricevuto:", event.data);
 
-    function hideLogo() {
-        logo.style.display = "none";
+  // Comando "pausa"
+  if (event.data === "pause") {
+    player.pause();
+    console.log("Comando: pausa eseguito");
+  } 
+  // Comando "riprendi" o "play"
+  else if (event.data === "play" || event.data === "riprendi") {
+    player.play();
+    console.log("Comando: riprendi eseguito");
+  } 
+  // Comando "live": ricarica la sorgente live per tornare al live edge
+  else if (event.data === "live") {
+    player.load(player.options.source);
+    console.log("Comando: live eseguito, live stream ricaricato");
+  } 
+  // Comando "rewind"/"indietro"
+  // Gestisce sia il caso in cui viene inviato come stringa che come oggetto con specifica temporale
+  else if ((event.data === "rewind" || event.data === "indietro") ||
+           (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+    // Imposta il rewind predefinito a 10 secondi
+    let rewindSeconds = 10;
+    // Se è stato specificato un valore, lo usa
+    if (typeof event.data === "object" && event.data.seconds) {
+      rewindSeconds = event.data.seconds;
     }
-
-    function resetTimer() {
-        logo.style.display = "block";
-        clearTimeout(timer);
-        timer = setTimeout(hideLogo, 15000);
+    if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+      var currentTime = player.getCurrentTime();
+      var newTime = currentTime - rewindSeconds;
+      if (newTime < 0) newTime = 0;
+      player.seek(newTime);
+      console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+    } else {
+      console.log("Il comando 'indietro' non è supportato per questo live stream");
     }
-
-    document.addEventListener("mousemove", resetTimer);
-    document.addEventListener("keypress", resetTimer);
-    resetTimer();
-
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode === 38) { // Freccia su
-            if (!popupInstance) {
-                popupInstance = lity(document.getElementById('logo').getAttribute('data-lity-target'));
-            } else {
-                popupInstance.close();
-                popupInstance = null;
-            }
-        }
-    });
+  }
+});
 </script>
 
 
+   
+    <script>
+    
+           player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        });
+        
+        var logo = document.getElementById("logo");
+        var timer;
 
+        function hideLogo() {
+            logo.style.display = "none";
+        }
 
- <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+        function resetTimer() {
+            logo.style.display = "block"; // Riappare il logo
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 6000); // Nascondi il logo dopo 10 secondi di inattività
+        }
 
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keypress", resetTimer);
+
+        resetTimer(); // Avvia il timer all'avvio della pagina
+    </script>
+
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
