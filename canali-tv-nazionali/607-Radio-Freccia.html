@@ -9,7 +9,7 @@
     <!-- Video resolution switcher -->
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
-    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
+   <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
 
     <style>
         #background-overlay {
@@ -20,7 +20,6 @@
             height: 100%;
             z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
             background: #171a45;
-            
         }
 
         #logo {
@@ -44,6 +43,7 @@
         body {
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Evita la visualizzazione della barra di scorrimento */
         }
 
         #video-container {
@@ -60,21 +60,25 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
     </style>
     
     
-    
     <style>
-    .player-controls {
-        display: none !important; /* Nasconde i controlli del player */
+    /* Nasconde i controlli del player */
+    #player .media-control,
+    #player .player-controls,
+    #player .control-bar {
+      display: none !important;
     }
-
-    .media-control .media-control-layer {
-        display: none !important; /* Nasconde ulteriori controlli e strati di controllo */
-    }
-
-    /* Altri stili esistenti... */
-</style>
+    </style>
     
     
     
@@ -87,6 +91,11 @@
     <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/607.png" alt="Logo" data-lity=""
         data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
 
+<!-- Immagine di fallback già caricata sotto -->
+    <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+    
+        <div id="player"></div>
+    
     <script>
         var player = new Clappr.Player({
             source: "https://dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S3160845/0tuSetc8UFkF/playlist_video.m3u8",
@@ -114,30 +123,79 @@
             },
         });
         
+      // Gestione dei comandi vocali tramite postMessage
+   window.addEventListener("message", function(event) {
+  if (!event.data) return;
+  console.log("Messaggio ricevuto:", event.data);
+
+  // Comando "pausa"
+  if (event.data === "pause") {
+    player.pause();
+    console.log("Comando: pausa eseguito");
+  } 
+  // Comando "riprendi" o "play"
+  else if (event.data === "play" || event.data === "riprendi") {
+    player.play();
+    console.log("Comando: riprendi eseguito");
+  } 
+  // Comando "live": ricarica la sorgente live per tornare al live edge
+  else if (event.data === "live") {
+    player.load(player.options.source);
+    console.log("Comando: live eseguito, live stream ricaricato");
+  } 
+  // Comando "rewind"/"indietro"
+  // Gestisce sia il caso in cui viene inviato come stringa che come oggetto con specifica temporale
+  else if ((event.data === "rewind" || event.data === "indietro") ||
+           (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+    // Imposta il rewind predefinito a 10 secondi
+    let rewindSeconds = 10;
+    // Se è stato specificato un valore, lo usa
+    if (typeof event.data === "object" && event.data.seconds) {
+      rewindSeconds = event.data.seconds;
+    }
+    if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+      var currentTime = player.getCurrentTime();
+      var newTime = currentTime - rewindSeconds;
+      if (newTime < 0) newTime = 0;
+      player.seek(newTime);
+      console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+    } else {
+      console.log("Il comando 'indietro' non è supportato per questo live stream");
+    }
+  }
+});
+</script>
+
+
+   
+    <script>
+    
+           player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+            // Se si verifica un errore durante la riproduzione del video, visualizza l'immagine di fallback
+            document.getElementById("fallback-image").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        });
         
         var logo = document.getElementById("logo");
-    var timer;
+        var timer;
 
-    function hideLogo() {
-      logo.style.display = "none";
-    }
+        function hideLogo() {
+            logo.style.display = "none";
+        }
 
-    function resetTimer() {
-      logo.style.display = "block"; // Riappare il logo
-      clearTimeout(timer);
-      timer = setTimeout(hideLogo, 15000); // Nascondi il logo dopo 10 secondi di inattività
-    }
+        function resetTimer() {
+            logo.style.display = "block"; // Riappare il logo
+            clearTimeout(timer);
+            timer = setTimeout(hideLogo, 6000); // Nascondi il logo dopo 10 secondi di inattività
+        }
 
-    document.addEventListener("mousemove", resetTimer);
-    document.addEventListener("keypress", resetTimer);
+        document.addEventListener("mousemove", resetTimer);
+        document.addEventListener("keypress", resetTimer);
 
-    resetTimer(); // Avvia il timer all'avvio della pagina
-        
-   
+        resetTimer(); // Avvia il timer all'avvio della pagina
     </script>
 
- <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
-
+    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
