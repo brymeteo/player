@@ -108,7 +108,7 @@
   color: #fff;
   text-align: center;
   z-index: 9999;
-  width: 300px;
+  width: 500px;
   font-family: sans-serif;
   font-size: 20px; /* Dimensione font per desktop */
 }
@@ -122,7 +122,7 @@
 /* Stili per dispositivi mobili (max-width: 600px) */
 @media only screen and (max-width: 600px) {
   #overlay-card {
-    width: 200px;
+    width: 300px;
     font-size: 14px; /* Dimensione font più piccola per mobile */
   }
   
@@ -161,19 +161,31 @@
         transform: scale(0.5);
       }
     }
-    /* Messaggio in alto a destra per restart */
-    #restart-message {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      z-index: 10000;
-      font-family: sans-serif;
-      font-size: 14px;
-    }
+   /* Messaggio in alto a destra per restart */
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+/* Responsive per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #restart-message {
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+    font-size: 12px;
+  }
+}
+
+
     .hidden {
       display: none;
     }
@@ -273,7 +285,7 @@
           // Nasconde il messaggio dopo 3 secondi (modifica la durata se necessario)
           setTimeout(function () {
             restartMessage.classList.add("hidden");
-          }, 3000);
+          }, 15000);
         }, 5000);
       }
     }
