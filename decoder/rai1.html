@@ -1,4 +1,5 @@
 
+
    
     <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/level-selector@latest/dist/level-selector.min.js"></script>
@@ -97,24 +98,39 @@
   <style>
     /* Overlay centrale */
     #overlay-card {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.8);
-      padding: 20px;
-      border-radius: 10px;
-      color: #fff;
-      text-align: center;
-      z-index: 9999;
-      width: 300px;
-      font-family: sans-serif;
-    }
-    #overlay-card img {
-      width: 50px;
-      height: auto;
-      margin-bottom: 10px;
-    }
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 300px;
+  font-family: sans-serif;
+  font-size: 20px; /* Dimensione font per desktop */
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Stili per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 200px;
+    font-size: 14px; /* Dimensione font più piccola per mobile */
+  }
+  
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
     /* Animazione spinner con cubetti */
     .spinner-cubes {
       display: flex;
