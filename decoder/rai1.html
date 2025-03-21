@@ -291,49 +291,60 @@
     }
 
     // Gestione dei comandi vocali tramite postMessage
-    window.addEventListener("message", function (event) {
-      if (!event.data) return;
-      console.log("Messaggio ricevuto:", event.data);
+window.addEventListener("message", function (event) {
+  if (!event.data) return;  // Ignora i messaggi vuoti
 
-      // Comando "pausa"
-      if (event.data === "pause") {
-        player.pause();
-        console.log("Comando: pausa eseguito");
-        showOverlay("pause");
-      }
-      // Comando "riprendi" o "play"
-      else if (event.data === "play" || event.data === "riprendi") {
-        player.play();
-        console.log("Comando: riprendi eseguito");
-        // Se è visibile una card di pausa, trasformala in play e nascondila dopo 2 sec.
-        if (!overlayCard.classList.contains("hidden")) {
-          showOverlay("play");
-        }
-      }
-      // Comando "live": ricarica la sorgente live
-      else if (event.data === "live") {
-        player.load(player.options.source);
-        console.log("Comando: live eseguito, live stream ricaricato");
-      }
-      // Comando "rewind"/"indietro"
-      else if ((event.data === "rewind" || event.data === "indietro") ||
-        (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
-        let rewindSeconds = 10;
-        if (typeof event.data === "object" && event.data.seconds) {
-          rewindSeconds = event.data.seconds;
-        }
-        if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
-          var currentTime = player.getCurrentTime();
-          var newTime = currentTime - rewindSeconds;
-          if (newTime < 0) newTime = 0;
-          player.seek(newTime);
-          console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
-          showOverlay("restart");
-        } else {
-          console.log("Il comando 'indietro' non è supportato per questo live stream");
-        }
-      }
-    });
+  console.log("Messaggio ricevuto dal parent:", event.data);
+
+  // Assicuriamoci che player sia definito e possa eseguire play/pause
+  if (!player || typeof player.play !== "function" || typeof player.pause !== "function") {
+    console.error("L'oggetto player non è definito o non supporta play/pause.");
+    return;
+  }
+
+  // Comando "pausa"
+  if (event.data === "pause") {
+    player.pause();
+    console.log("Comando: pausa eseguito");
+    showOverlay("pause");
+  }
+  // Comando "riprendi" o "play"
+  else if (event.data === "play" || event.data === "riprendi") {
+    player.play();
+    console.log("Comando: riprendi eseguito");
+    if (!overlayCard.classList.contains("hidden")) {
+      showOverlay("play");
+    }
+  }
+  // Comando "live"
+  else if (event.data === "live") {
+    if (player.load && player.options && player.options.source) {
+      player.load(player.options.source);
+      console.log("Comando: live eseguito, stream live ricaricato.");
+    } else {
+      console.warn("Non è possibile ricaricare la sorgente live.");
+    }
+  }
+  // Comando "rewind"
+  else if ((event.data === "rewind" || event.data === "indietro") ||
+           (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+    let rewindSeconds = 10;
+    if (typeof event.data === "object" && event.data.seconds) {
+      rewindSeconds = event.data.seconds;
+    }
+    if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+      var currentTime = player.getCurrentTime();
+      var newTime = currentTime - rewindSeconds;
+      if (newTime < 0) newTime = 0;
+      player.seek(newTime);
+      console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+      showOverlay("restart");
+    } else {
+      console.log("Il comando 'indietro' non è supportato per questo live stream.");
+    }
+  }
+});
+
   </script>
 
   <script>
