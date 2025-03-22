@@ -500,6 +500,73 @@ body {
         z-index: 10000; /* Metti il pulsante sopra all'iframe */
     }
 </style>
+
+
+<style>
+    /* Overlay per il microfono con sfondo più scuro */
+    #voice-overlay {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      /* Gradiente con fondo completamente nero in basso e più scuro in alto */
+      background: linear-gradient(to top, rgb(15 70 117) 95%, rgb(255 255 255 / 23%) 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 9999;
+      flex-direction: column;
+    }
+  
+    .mic-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .mic-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(26 26 26 / 7%) 40%, rgb(56 111 158) 100%);
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: pulse 2s infinite;
+}
+  
+    .mic-icon {
+      width: 60px;
+      height: 60px;
+    }
+  
+    .mic-text {
+      margin-top: 10px;
+      font-size: 25px;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+  
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0,255,255,0.6);
+      }
+      50% {
+        box-shadow: 0 0 30px 10px rgba(0,255,255,0.2);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0,255,255,0);
+      }
+    }
+  </style>
+
+
+
 <link href="https://brymeteo.github.io/player/lity-popup-full-screen.css" rel="stylesheet"/>
 </head>
 <body translate="no">
@@ -508,6 +575,13 @@ body {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+
+
+
+
+
 
 <div id="overlay"></div>
 <div id="content">
@@ -555,10 +629,10 @@ body {
 
 <div class="menu-item" onclick="updateMenuTitle(this); intrattenimeNome(); adjustSettingsInterface(this);" data-title="Intrattenimento">Intrattenimento</div>
 <div class="menu-item" onclick="updateMenuTitle(this); nuovaFunzioneNome(); nuovaFunzioneAbbonamento(this);" data-title="Cinema">Cinema</div>
-<div class="menu-item" onclick="updateMenuTitle(this); loadTVSection(); updateTVGuide(this);" data-title="Film Disponibili">Film</div>
+<div class="menu-item" onclick="updateMenuTitle(this); loadTVSection(); updateTVGuide(this);" data-title="Film">Film</div>
 <div class="menu-item" onclick="updateMenuTitle(this); ondemandFunzioneNome(); showSettings(this);" data-title="On Demand">Serie TV</div>
-<div class="menu-item" onclick="updateMenuTitle(this); changeBackground(); yetEvenMoreSettingsContent(this);" data-title="Cartoni & Kids">Canali Bambini</div>
-<div class="menu-item" onclick="updateMenuTitle(this); neoKidsName(); customizeSettingsContent(this);" data-title="Bambini">Cartoni & Kids</div>
+<div class="menu-item" onclick="updateMenuTitle(this); changeBackground(); yetEvenMoreSettingsContent(this);" data-title="Canali Bambini">Canali Bambini</div>
+<div class="menu-item" onclick="updateMenuTitle(this); neoKidsName(); customizeSettingsContent(this);" data-title="Cartoni Animati">Cartoni & Kids</div>
 <div class="menu-item" onclick="updateMenuTitle(this); channeguidtvNome(); updateCustomization(this);" data-title="Guida TV">Guida TV</div>
 <div class="menu-item" onclick="updateMenuTitle(this); newFunctionName(); newSubscriptionFunction(this);" data-title="Assistenza">Assistenza e Guide</div>
 <div class="menu-item" onclick="updateMenuTitle(this); appservNome(); updateSettingsUI(this);" data-title="Applicazioni">App e Servizi</div>
@@ -566,6 +640,28 @@ body {
 <div id="main-content"></div>
 <button id="scroll-to-top" onclick="scrollToTop()" class="menu-item">Torna su</button>
 </div>
+
+
+
+
+
+  <!-- Overlay con l’effetto desiderato in basso -->
+  <div id="voice-overlay">
+    <div class="mic-wrapper">
+      <div class="mic-circle">
+        <img src="https://i.ibb.co/zW5pkG33/microphone-retro-icon-icons-com-67975.png" 
+             alt="microfono" 
+             class="mic-icon">
+      </div>
+      <div class="mic-text">Ciao, cosa posso fare per te?</div>
+    </div>
+    <!-- Elemento per mostrare il messaggio della sezione aperta o l'errore -->
+    <div id="result-message"></div>
+  </div>
+
+
+
+
 
 <!-- Tasti e numeri per home decoder e altro -->
 <script src="https://brymeteo.github.io/player/decoder/stili-dec/tasti-numeri-home-decoder.js"></script>
@@ -590,6 +686,114 @@ body {
 
 <!-- My os impostazioni -->
 <script src="https://brymeteo.github.io/player/decoder/stili-dec/my-os-impostazioni.js"></script>
+
+ <script>
+    // Verifica se il browser supporta la Web Speech API
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'it-IT';
+      recognition.interimResults = true; // per aggiornamenti in tempo reale
+      recognition.maxAlternatives = 1;
+  
+      // Funzione per mostrare un messaggio temporaneo
+      function showMessage(text, duration) {
+        const resultMessage = document.getElementById('result-message');
+        resultMessage.innerText = text;
+        resultMessage.style.display = 'block';
+        setTimeout(() => {
+          resultMessage.style.display = 'none';
+        }, duration);
+      }
+  
+      // Avvia il riconoscimento vocale e mostra l'overlay
+      function activateVoiceCommand() {
+        // Reset testo iniziale
+        document.querySelector('.mic-text').innerText = "Ciao, cosa posso fare per te?";
+        document.getElementById('voice-overlay').style.display = 'flex';
+        recognition.start();
+      }
+  
+      // Durante il riconoscimento, aggiorna il testo in tempo reale
+      recognition.onresult = function(event) {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          interimTranscript += event.results[i][0].transcript;
+        }
+        document.querySelector('.mic-text').innerText = interimTranscript;
+  
+        // Se il risultato è definitivo, processa il comando
+        if (event.results[event.results.length - 1].isFinal) {
+          const transcript = interimTranscript.toLowerCase().trim();
+          console.log("Comando riconosciuto:", transcript);
+          processVoiceCommand(transcript);
+        }
+      };
+  
+      // Se non viene riconosciuto alcun comando
+      recognition.onnomatch = function() {
+        document.querySelector('.mic-text').innerText = "Mi dispiace non ho capito. Riprova cliccando il tasto numero 1 e pronuncia in modo dettagliato.";
+        setTimeout(() => {
+          document.getElementById('voice-overlay').style.display = 'none';
+          document.querySelector('.mic-text').innerText = "Ciao, cosa posso fare per te?";
+        }, 15000);
+      };
+  
+      recognition.onerror = function(event) {
+        console.error("Errore nel riconoscimento vocale:", event.error);
+        document.querySelector('.mic-text').innerText = "Mi dispiace non ho capito. Riprova cliccando il tasto numero 1 e pronuncia in modo dettagliato.";
+        setTimeout(() => {
+          document.getElementById('voice-overlay').style.display = 'none';
+          document.querySelector('.mic-text').innerText = "Ciao, cosa posso fare per te?";
+        }, 5000);
+      };
+  
+      recognition.onend = function() {
+        // Nasconde l'overlay alla fine del riconoscimento (se non è già stato nascosto dall'errore)
+        setTimeout(() => {
+          document.getElementById('voice-overlay').style.display = 'none';
+        }, 1000);
+      };
+  
+      // Funzione che mappa il comando vocale agli elementi del menu
+      function processVoiceCommand(command) {
+        const menuItems = document.querySelectorAll('#quick-links .menu-item, #sidebar2 .menu-item');
+        let trovato = false;
+  
+        menuItems.forEach(item => {
+          let titolo = item.getAttribute('data-title');
+          if(titolo) {
+            titolo = titolo.toLowerCase().trim();
+            if (command.indexOf(titolo) !== -1) {
+              console.log("Apro la sezione:", titolo);
+              item.click();
+              trovato = true;
+              // Mostra il messaggio della sezione aperta per 2 secondi
+              showMessage("Apro la sezione: " + titolo, 2000);
+            }
+          }
+        });
+  
+        if (!trovato) {
+          console.log("Nessuna sezione corrisponde al comando:", command);
+        }
+      }
+  
+      // Listener per il tasto "1" per attivare il microfono
+      document.addEventListener('keydown', function(e) {
+        if (e.key === '1') {
+          activateVoiceCommand();
+        }
+      });
+    } else {
+      console.error("Il riconoscimento vocale non è supportato da questo browser.");
+    }
+  </script>
+
+
+
+
+
 </body>
 </html>
 <!-- FINE CODICE DECODER -->
