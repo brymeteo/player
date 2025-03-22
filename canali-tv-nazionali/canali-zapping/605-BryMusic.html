@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <!-- Player -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
+  
+  <!-- Stili esistenti -->
+ <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            background: #171a45;
+            
+        }
+        
+        
+        
+        
+        
+       [data-watermark-top-right] {
+        position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 18%;
+            
+            width: auto;
+            height: auto;
+            
+            width: 13.5%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
+
+        
+        
+        
+        
+        
+        
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            /* Personalizza dimensioni */
+            height: auto;
+            /* Personalizza dimensioni */
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            /* Rendere il logo visibile immediatamente */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+        
+        
+          /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
+        
+        
+    </style>
+    
+    
+    <style>
+    /* Nasconde i controlli del player */
+    #player .media-control,
+    #player .player-controls,
+    #player .control-bar {
+      display: none !important;
+    }
+    </style>
+  
+  <!-- Nuovi stili per overlay e animazioni -->
+  <style>
+    /* Overlay centrale */
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px; /* Dimensione font per desktop */
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Stili per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 300px;
+    font-size: 14px; /* Dimensione font più piccola per mobile */
+  }
+  
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
+    /* Animazione spinner con cubetti */
+    .spinner-cubes {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .spinner-cubes div {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      margin: 2px;
+      animation: spinner 1s infinite ease-in-out;
+    }
+    .spinner-cubes div:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .spinner-cubes div:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .spinner-cubes div:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes spinner {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+    }
+   /* Messaggio in alto a destra per restart */
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+/* Responsive per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+    #restart-message {
+        top: 5px;
+        /* right: 5px; */
+        /* padding: 5px; */
+        font-size: 16px;
+    }
+}
+
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="player" class="hidden"></div>
+    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/605.png" alt="Logo" data-lity=""
+        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
+        
+        
+        
+     <!-- Immagine di fallback -->
+  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+  
+  <div id="player"></div>
+  
+  <!-- Overlay card centrale per i comandi -->
+  <div id="overlay-card" class="hidden">
+    <img id="overlay-icon" src="" alt="Icona comando">
+    <!-- Contenitore per l'animazione spinner -->
+    <div id="overlay-animation" class="spinner-cubes">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p id="overlay-text"></p>
+  </div>
+  
+  <!-- Messaggio in alto a destra (per il caso restart) -->
+  <div id="restart-message" class="hidden">
+    Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
+  </div>
+        
+
+    <script>
+    var player = new Clappr.Player({
+    source: "https://amg00056-amg00056c8-rakuten-it-3239.playouts.now.amagi.tv/playlist/amg00056-vevotvfast-vevopopit-rakutenit/cb5734196573678f84cb3678d1f743829e7b3dcb0e6c886470af4a9765d96208d6e5af87b208b7634ce6419a34567d2c0c34db66bd6c69d7df7ac7503113106d8ae9f23b85cc755ce0a3566e35b679194ffd0805c85e2b46f4c556488934be7c4534ed0a65597bcd9e01ef290f909f0b8979378bb3dd7f396d390ec90c1fbcbf5ba0f8ff5e43ca78f3b01b4bc37a43e69f419cd01aa681d50ec85ed422f9468097f68e871182879266ab55b26e70324d7c9d934697cc4bbfd99f562099703a34783f82f2caa91e66f42d295dfcecf4b264ed18cb9d57e50a55b214c235ee5d8b6fb936b2f24bb292afc652444bcdae3c772eb3ecb485e96f1cd716faa6fae2747889e42b7b48c77edd2c3f4acb979237b5e113b9b502b4966f323be1b046babf90aadb91da6f9b04ebe6d5b91c636f42270bb77c83bb4cfa08fc59e6f732007d6c658cbb74e5a7f80448082087844deb171eafd28886e01a22da65693f8203ce5e0736b65e1c7de13ec68a306d902318ba2234ff4c3df22496dc7dacf58bbf5c51c5dfc351c07cfba70fd3fb0ba76a035006c1b4461b17142880bf300f6434c240e18687b5740859a1f5ccfac21e6a046b14070ad2e0e5269f8a9a5c777fc057355f6604019f00a401b5661b577f914882f64d1ee907253ed9b7305965788fd8b4f3f3bcb854b97ecacaef292e3c5c5cb03a013461dfbad70b97504a7a6962901f6d47cf413006b9949bb3cad13bcad165fd60665937c4f5450c0b067665479fc86b8e07bb921fb8c89c0b9693e76044812f9c130488efdf63f6f984c95b3099ae257f0df3867e922677b27dba2a8cc14fdcb5430f1f397f44cf9a269c35d88fc0bc41eb2da95c3c6ee679a299f18cde635fe0995e41556331462f0a26767dd2bdd4601344e9b231943b8c8f45bb4d50012c2daaeae0e3ca981666fe175922cd82de87aacb1119cb1c851fab4536d69b89b383b65ecf96a0fcea821538685a65e73edd938794dfc5cf641063e8e3d7b33d042fa242c29914e4e77b168bdedbb58a3cd51d8344f6c5c9bae8b285ebc527e00fdc636d2e37143672e9d3f8ea11948f0543b27ae19c4c7289a7ebee6cf7d6bd482da40da0cd2a6fad377049c6b8f35f8802b6f23c26a7aa685a955b0181d8bf774cf775f21f6534b1ec917e37caf40a91669281b85a1fdb464db207164a8448d7abf32963e8b7164076e8080c833ec4ebd14e567fabdd37777c435c5b599f101c1fe5386bb713fdb1b1e62673d873e5655b904aeffa25c0f35cd1a291ccf99f7f0fc1d00319f503e279dc02dec983fd42c97069b8679c1f22eb9ff3cd88d485d0ebda0d510c9954916a9924c3dec871149feaad0a698ec9df88bcf8d975997f9efa825fc456/129/1920x1080_7333040/index.m3u8",
+    parentId: "#player",
+    width: '100%',
+    height: '100vh',
+    controls: false,
+    autoPlay: true, // Abilita l'auto-play
+    watermark: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001050-74ca074ca3/bry%20music%20hd.webp?ph=7e11bb4538",
+    position: 'top-right',
+    
+});
+        
+   // Variabili per gestire timer e stato overlay
+    var overlayCard = document.getElementById("overlay-card");
+    var overlayIcon = document.getElementById("overlay-icon");
+    var overlayText = document.getElementById("overlay-text");
+    var restartMessage = document.getElementById("restart-message");
+    var overlayTimer, restartTimer;
+
+    // Funzione per mostrare l'overlay card con contenuto personalizzato
+    function showOverlay(state) {
+      clearTimeout(overlayTimer);
+      clearTimeout(restartTimer);
+      overlayCard.classList.remove("hidden");
+      // Imposta contenuto in base allo stato: "pause", "play", "restart"
+      if (state === "pause") {
+        // Usa l'icona pausa (sostituisci l'URL con quello corretto)
+        overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
+        overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
+        // L'animazione spinner (i cubetti) è già visibile nel div #overlay-animation
+      } else if (state === "play") {
+        // Aggiorna l'icona in play
+        overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
+        overlayText.innerHTML = "";
+        // Dopo 2 secondi nascondi l'overlay
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+      } else if (state === "restart") {
+        // Per il comando rewind (indietro) mostra l'icona di restart
+        overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+        overlayText.innerHTML = "Video messo indietro.";
+        // Nasconde la card dopo 2 secondi
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+        // Dopo 5 secondi, mostra il messaggio in alto a destra
+        restartTimer = setTimeout(function () {
+          restartMessage.classList.remove("hidden");
+          // Nasconde il messaggio dopo 3 secondi (modifica la durata se necessario)
+          setTimeout(function () {
+            restartMessage.classList.add("hidden");
+          }, 15000);
+        }, 5000);
+      }
+    }
+
+    // Gestione dei comandi vocali tramite postMessage
+    window.addEventListener("message", function (event) {
+      if (!event.data) return;
+      console.log("Messaggio ricevuto:", event.data);
+
+      // Comando "pausa"
+      if (event.data === "pause") {
+        player.pause();
+        console.log("Comando: pausa eseguito");
+        showOverlay("pause");
+      }
+      // Comando "riprendi" o "play"
+      else if (event.data === "play" || event.data === "riprendi") {
+        player.play();
+        console.log("Comando: riprendi eseguito");
+        // Se è visibile una card di pausa, trasformala in play e nascondila dopo 2 sec.
+        if (!overlayCard.classList.contains("hidden")) {
+          showOverlay("play");
+        }
+      }
+      // Comando "live": ricarica la sorgente live
+      else if (event.data === "live") {
+        player.load(player.options.source);
+        console.log("Comando: live eseguito, live stream ricaricato");
+      }
+      // Comando "rewind"/"indietro"
+      else if ((event.data === "rewind" || event.data === "indietro") ||
+        (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+        let rewindSeconds = 10;
+        if (typeof event.data === "object" && event.data.seconds) {
+          rewindSeconds = event.data.seconds;
+        }
+        if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+          var currentTime = player.getCurrentTime();
+          var newTime = currentTime - rewindSeconds;
+          if (newTime < 0) newTime = 0;
+          player.seek(newTime);
+          console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+          showOverlay("restart");
+        } else {
+          console.log("Il comando 'indietro' non è supportato per questo live stream");
+        }
+      }
+    });
+  </script>
+
+  <script>
+    player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+      document.getElementById("fallback-image").style.display = "block";
+      document.getElementById("player").style.display = "none";
+    });
+
+    var logo = document.getElementById("logo");
+    var timer;
+    function hideLogo() {
+      logo.style.display = "none";
+    }
+    function resetTimer() {
+      logo.style.display = "block";
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 6000);
+    }
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+    resetTimer();
+  </script>
+
+  <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
