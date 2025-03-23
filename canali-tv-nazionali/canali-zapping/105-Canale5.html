@@ -85,6 +85,7 @@
     overflow: hidden;
     zoom: 140%;
 }
+
         
 #channel-info-inner {
     position: relative;
@@ -131,6 +132,42 @@
         }
         
         
+       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+@media only screen and (max-width: 600px) {
+    #channel-info-bar {
+        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
+        left: 10px;   /* Riduci il margine a sinistra */
+        zoom: 100%;   /* Ridimensiona al 100% su schermi piccoli */
+    }
+
+    #channel-info-inner {
+        padding: 5px 8px; /* Riduci i padding interni */
+        margin: 1px;
+        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+    }
+
+    #channel-logo {
+        width: 50px; /* Logo più piccolo su schermi mobili */
+    }
+
+    #channel-title {
+        font-size: 20px; /* Riduci la dimensione del titolo */
+    }
+
+    #channel-number {
+        font-size: 18px;
+        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+    }
+
+    #program-name {
+        font-size: 18px; /* Riduci la dimensione del font */
+    }
+
+    #program-progress-bar {
+        height: 8px; /* Barra di avanzamento più piccola */
+    }
+}
+        
           /* Stili per la barra di avanzamento del programma */
     #program-progress-container {
       margin-top: 10px;
@@ -154,7 +191,6 @@
       height: 100%;
       background-color: #87bdda;
     }
-        
         
         
     </style>
@@ -278,16 +314,16 @@
   
   <div id="player"></div>
   
-  <!-- Barra informativa del canale con stile 3D migliorato -->
- <div id="channel-info-bar">
-  <div id="channel-info-inner">
-    <div id="channel-name">
-      <img id="channel-logo" src="https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark" alt="Logo canale" style="width:70px; height:auto; margin-left: -20px;">
-      <span id="channel-title">Canale 5 HD</span>
-      <span id="channel-number">105</span>
-    </div>
-    <div id="program-name">In Cucina con GialloZafferano</div>
- <!-- Barra di avanzamento del programma -->
+  <!-- Barra informativa -->
+  <div id="channel-info-bar">
+    <div id="channel-info-inner">
+      <div id="channel-name">
+        <img id="channel-logo" src="https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark" alt="Logo canale" style="width:70px; height:auto; margin-left: -20px;">
+        <span id="channel-title">Canale 5 HD</span>
+        <span id="channel-number">105</span>
+      </div>
+      <div id="program-name">In Cucina con GialloZafferano</div>
+      <!-- Barra di avanzamento del programma -->
       <div id="program-progress-container">
         <div>
           <span id="program-start-time">--:--</span>
