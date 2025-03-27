@@ -582,9 +582,9 @@
     // URL del file JSON contenente i dati EPG
     const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
     // Identificativo del canale selezionato (esempio: "canale-5")
-    let selectedChannelId = "rai-0";
+    let selectedChannelId = "rete-";
     // URL personalizzato per il logo del canale
-    const customLogoURL = "https://i.ibb.co/FLQ8fDZ1/logo.png";
+    const customLogoURL = "https://api.superguidatv.it/v1/channels/189/logo?width=320&theme=dark";
 
     // Variabile globale per salvare il programma corrente
     let currentProgramGlobal = null;
@@ -624,8 +624,7 @@
       }
     }, 1000);
 
-    // Funzione per aggiornare le informazioni del canale e del programma
-   function updateProgramName() {
+    function updateProgramName() {
   fetch(epgUrl)
     .then(response => {
       if (!response.ok) {
@@ -634,28 +633,29 @@
       return response.json();
     })
     .then(data => {
-      // Trova il canale selezionato
+      // Trova il canale selezionato dall'array dei canali
       const channel = data.find(ch => ch.id === selectedChannelId);
       if (!channel) {
         console.error("Canale non trovato");
         return;
       }
-      
-      // Aggiorna il logo (usando il logo personalizzato) e il titolo del canale
-      const channelLogoEl = document.getElementById("channel-logo");
-      if (channelLogoEl) channelLogoEl.src = customLogoURL;
-      
+
       // Ottieni l'orario corrente
       const now = new Date();
       
-      // Trova il programma corrente confrontando orari di inizio e fine
-      const programs = channel.programs;
-      const currentProgram = programs.find(program => {
+      // Trova il programma corrente
+      const currentProgram = channel.programs.find(program => {
         const start = new Date(program.start);
         const end = new Date(program.end);
         return now >= start && now < end;
       });
-      
+
+      // Trova il prossimo programma
+      const nextProgram = channel.programs.find(program => {
+        const start = new Date(program.start);
+        return start > now;
+      });
+
       // Salva il programma corrente in una variabile globale
       currentProgramGlobal = currentProgram;
       
@@ -668,27 +668,17 @@
           programNameEl.textContent = "Programma non disponibile";
         }
       }
-      
-      // Individua il prossimo programma
-      const nextProgramEl = document.getElementById("next-program");
-      if (currentProgram) {
-        // Trova l'indice del programma corrente nell'array dei programmi
-        const currentIndex = programs.findIndex(program => program.title === currentProgram.title);
-        const nextProgram = programs[currentIndex + 1];
+
+      // Aggiorna il nome del programma a seguire
+      const nextProgramNameEl = document.getElementById("next-program-name");
+      if (nextProgramNameEl) {
         if (nextProgram) {
-          nextProgramEl.textContent = "A seguire » " + nextProgram.title;
+          nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
         } else {
-          nextProgramEl.textContent = "Prossimo programma: non disponibile";
-        }
-      } else {
-        // Se non c'è un programma corrente, mostra il primo programma in programma
-        if (programs.length > 0) {
-          nextProgramEl.textContent = "A seguire » " + programs[0].title;
-        } else {
-          nextProgramEl.textContent = "Prossimo programma: non disponibile";
+          nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
         }
       }
-      
+
       // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
       if (currentProgram) {
         updateProgressBar(currentProgram);
