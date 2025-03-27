@@ -137,7 +137,7 @@
     #channel-info-bar {
         bottom: 20px; /* Riduci la distanza dal bordo inferiore */
         left: 20px;   /* Riduci il margine a sinistra */
-        zoom: 100%;   /* Ridimensiona al 100% su schermi piccoli */
+        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
     }
 
     #channel-info-inner {
@@ -300,6 +300,18 @@
     .hidden {
       display: none;
     }
+    
+    
+
+         #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}     
+
+    
+    
   </style>
 </head>
 
@@ -320,9 +332,12 @@
       <div id="channel-name">
         <img id="channel-logo" src="https://api.superguidatv.it/v1/channels/188/logo?width=320&theme=dark" alt="Logo canale" style="width:70px; height:auto; margin-left: -20px;">
         <span id="channel-title">Italia 1 HD</span>
-        <span id="channel-number">106</span>
+        <span id="channel-number">&nbsp; &nbsp;&nbsp;&nbsp;106</span>
       </div>
       <div id="program-name">Caricamento in corso...</div>
+      <!-- Aggiungi questa riga per il programma a seguire -->
+<div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
+
       <!-- Barra di avanzamento del programma -->
       <div id="program-progress-container">
         <div>
@@ -560,61 +575,71 @@
       }
     }, 1000);
 
-    // Funzione per aggiornare le informazioni del canale e del programma
     function updateProgramName() {
-      fetch(epgUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Errore nel recupero dei dati EPG");
-          }
-          return response.json();
-        })
-        .then(data => {
-          // Trova il canale selezionato dall'array dei canali
-          const channel = data.find(ch => ch.id === selectedChannelId);
-          if (!channel) {
-            console.error("Canale non trovato");
-            return;
-          }
-          
-          // Aggiorna il logo (usando il logo personalizzato) e il titolo del canale
-          const channelLogoEl = document.getElementById("channel-logo");
-          if (channelLogoEl) channelLogoEl.src = customLogoURL;
-          
-          
-          
-          // Ottieni l'orario corrente
-          const now = new Date();
-          
-          // Trova il programma corrente confrontando orari di inizio e fine
-          const currentProgram = channel.programs.find(program => {
-            const start = new Date(program.start);
-            const end = new Date(program.end);
-            return now >= start && now < end;
-          });
-          
-          // Salva il programma corrente in una variabile globale
-          currentProgramGlobal = currentProgram;
-          
-          // Aggiorna il nome del programma in corso
-          const programNameEl = document.getElementById("program-name");
-          if (programNameEl) {
-            if (currentProgram) {
-              programNameEl.textContent = currentProgram.title;
-            } else {
-              programNameEl.textContent = "Programma non disponibile";
-            }
-          }
-          
-          // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
-          if (currentProgram) {
-            updateProgressBar(currentProgram);
-          }
-        })
-        .catch(error => {
-          console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
-        });
-    }
+  fetch(epgUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Errore nel recupero dei dati EPG");
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Trova il canale selezionato dall'array dei canali
+      const channel = data.find(ch => ch.id === selectedChannelId);
+      if (!channel) {
+        console.error("Canale non trovato");
+        return;
+      }
+
+      // Ottieni l'orario corrente
+      const now = new Date();
+      
+      // Trova il programma corrente
+      const currentProgram = channel.programs.find(program => {
+        const start = new Date(program.start);
+        const end = new Date(program.end);
+        return now >= start && now < end;
+      });
+
+      // Trova il prossimo programma
+      const nextProgram = channel.programs.find(program => {
+        const start = new Date(program.start);
+        return start > now;
+      });
+
+      // Salva il programma corrente in una variabile globale
+      currentProgramGlobal = currentProgram;
+      
+      // Aggiorna il nome del programma in corso
+      const programNameEl = document.getElementById("program-name");
+      if (programNameEl) {
+        if (currentProgram) {
+          programNameEl.textContent = currentProgram.title;
+        } else {
+          programNameEl.textContent = "Programma non disponibile";
+        }
+      }
+
+      // Aggiorna il nome del programma a seguire
+      const nextProgramNameEl = document.getElementById("next-program-name");
+      if (nextProgramNameEl) {
+        if (nextProgram) {
+          nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
+        } else {
+          nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
+        }
+      }
+
+      // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
+      if (currentProgram) {
+        updateProgressBar(currentProgram);
+      }
+    })
+    .catch(error => {
+      console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+    });
+}
+
 
     // Esegui l'aggiornamento all'avvio della pagina
     updateProgramName();
