@@ -351,6 +351,16 @@
     .hidden {
       display: none;
     }
+    
+    
+          #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}      
+    
+    
   </style>
 </head>
 
@@ -369,12 +379,12 @@
   <div id="channel-info-bar">
     <div id="channel-info-inner">
       <div id="channel-name">
-        <img id="channel-logo" src="https://i.ibb.co/k6zC0xN/logo.png" alt="Logo canale" style="width:70px; height:auto; margin-left: -13px;">
+        <img id="channel-logo" src="https://i.ibb.co/FLQ8fDZ1/logo.png" alt="Logo canale" style="width:70px; height:auto; margin-left: -6.1px;">
         <span id="channel-title">Vox HD</span>
-        <span id="channel-number">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;108</span>
+        <span id="channel-number">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;108</span>
       </div>
       <div id="program-name">Caricamento in corso...</div>
-      <div id="next-program" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: in attesa...</div>
+      <div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
       <!-- Barra di avanzamento del programma -->
       <div id="program-progress-container">
         <div>
@@ -574,7 +584,7 @@
     // Identificativo del canale selezionato (esempio: "canale-5")
     let selectedChannelId = "rai-0";
     // URL personalizzato per il logo del canale
-    const customLogoURL = "https://i.ibb.co/k6zC0xN/logo.png";
+    const customLogoURL = "https://i.ibb.co/FLQ8fDZ1/logo.png";
 
     // Variabile globale per salvare il programma corrente
     let currentProgramGlobal = null;
