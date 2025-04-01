@@ -540,18 +540,33 @@
   // Variabile globale per salvare il programma corrente
   let currentProgramGlobal = null;
 
-  // Funzione per sottrarre un'ora ad una data
-  function subtractOneHour(date) {
-    const newDate = new Date(date);
-    newDate.setHours(newDate.getHours() - 1);
-    return newDate;
+  // Funzione per determinare se una data è in ora legale (DST)
+  function isDST(date) {
+    // Confronta l'offset di gennaio e luglio per il medesimo anno
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
+
+  // Funzione per regolare l'orario in base al periodo:
+  // - In ora legale (DST): sottrae un'ora
+  // - In ora solare: aggiunge un'ora
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      // Ora legale: sottrai un'ora
+      date.setHours(date.getHours() - 1);
+    } else {
+      // Ora solare: aggiungi un'ora
+      date.setHours(date.getHours() + 1);
+    }
+    return date;
   }
 
   // Funzione per aggiornare la barra di avanzamento del programma
   function updateProgressBar(currentProgram) {
-    // Sottraggo un'ora ai tempi di inizio e fine
-    const startTime = subtractOneHour(currentProgram.start);
-    const endTime = subtractOneHour(currentProgram.end);
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
     const now = new Date();
 
     // Calcola la durata totale e il tempo trascorso (in millisecondi)
@@ -602,17 +617,16 @@
         // Ottieni l'orario corrente
         const now = new Date();
         
-        // Trova il programma corrente
+        // Trova il programma corrente, regolando l'orario dei programmi
         const currentProgram = channel.programs.find(program => {
-          // Sottraggo un'ora agli orari del programma
-          const start = subtractOneHour(program.start);
-          const end = subtractOneHour(program.end);
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
           return now >= start && now < end;
         });
 
-        // Trova il prossimo programma
+        // Trova il prossimo programma, regolando l'orario dei programmi
         const nextProgram = channel.programs.find(program => {
-          const start = subtractOneHour(program.start);
+          const start = adjustTime(program.start);
           return start > now;
         });
 
@@ -654,6 +668,7 @@
   // Aggiorna le informazioni ogni minuto
   setInterval(updateProgramName, 60000);
 </script>
+
 
 
 
