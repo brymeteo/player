@@ -736,7 +736,7 @@ function adjustSettingsInterface() {
 <link rel="stylesheet" href="https://brymeteo.github.io/player/decoder/style-film-ondemand.css" data-n-g="">
 
 
- <iframe src="https://brymeteo.github.io/player/decoder/stili-dec/guida-tv.html" width="101.7%" height="3240px" frameborder="0" scrolling="no"></iframe>     
+ <iframe src="https://brymeteo.github.io/player/decoder/stili-dec/guida-tv-ora-legale.html" width="101.7%" height="3240px" frameborder="0" scrolling="no"></iframe>     
               
 
 
