@@ -549,122 +549,144 @@
   </script>
 
 <script>
-    // URL del file JSON contenente i dati EPG
-    const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
-    // Identificativo del canale selezionato (esempio: "canale-5")
-    let selectedChannelId = "rai-1";
-    // URL personalizzato per il logo del canale
-    const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
+  // URL del file JSON contenente i dati EPG
+  const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+  // Identificativo del canale selezionato (esempio: "canale-5")
+  let selectedChannelId = "rai-1";
+  // URL personalizzato per il logo del canale
+  const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
 
-    // Variabile globale per salvare il programma corrente
-    let currentProgramGlobal = null;
+  // Variabile globale per salvare il programma corrente
+  let currentProgramGlobal = null;
 
-    // Funzione per aggiornare la barra di avanzamento del programma
-    function updateProgressBar(currentProgram) {
-      const startTime = new Date(currentProgram.start);
-      const endTime = new Date(currentProgram.end);
-      const now = new Date();
+  // Funzione per determinare se una data è in ora legale (DST)
+  function isDST(date) {
+    // Confronta l'offset di gennaio e luglio per il medesimo anno
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
 
-      // Calcola la durata totale e il tempo trascorso (in millisecondi)
-      const totalDuration = endTime - startTime;
-      const elapsed = now - startTime;
-      
-      // Calcola la percentuale di completamento
-      let progressPercent = (elapsed / totalDuration) * 100;
-      progressPercent = Math.max(0, Math.min(progressPercent, 100));
-      
-      // Aggiorna la larghezza della barra di avanzamento
-      document.getElementById("program-progress").style.width = progressPercent + "%";
-      
-      // Funzione per formattare l'orario in "HH:MM"
-      const formatTime = date => {
-        return date.getHours().toString().padStart(2, '0') + ":" +
-               date.getMinutes().toString().padStart(2, '0');
-      };
-      
-      // Aggiorna gli orari di inizio e fine
-      document.getElementById("program-start-time").textContent = formatTime(startTime);
-      document.getElementById("program-end-time").textContent = formatTime(endTime);
+  // Funzione per regolare l'orario in base al periodo:
+  // - In ora legale (DST): sottrae un'ora
+  // - In ora solare: aggiunge un'ora
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      // Ora legale: sottrai un'ora
+      date.setHours(date.getHours() - 1);
+    } else {
+      // Ora solare: aggiungi un'ora
+      date.setHours(date.getHours() + 1);
     }
+    return date;
+  }
 
-    // Aggiorna il progress bar ogni secondo (se esiste un programma corrente)
-    setInterval(function(){
-      if (window.currentProgramGlobal) {
-        updateProgressBar(window.currentProgramGlobal);
-      }
-    }, 1000);
+  // Funzione per aggiornare la barra di avanzamento del programma
+  function updateProgressBar(currentProgram) {
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
+    const now = new Date();
 
-    function updateProgramName() {
-  fetch(epgUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Errore nel recupero dei dati EPG");
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Trova il canale selezionato dall'array dei canali
-      const channel = data.find(ch => ch.id === selectedChannelId);
-      if (!channel) {
-        console.error("Canale non trovato");
-        return;
-      }
+    // Calcola la durata totale e il tempo trascorso (in millisecondi)
+    const totalDuration = endTime - startTime;
+    const elapsed = now - startTime;
+    
+    // Calcola la percentuale di completamento
+    let progressPercent = (elapsed / totalDuration) * 100;
+    progressPercent = Math.max(0, Math.min(progressPercent, 100));
+    
+    // Aggiorna la larghezza della barra di avanzamento
+    document.getElementById("program-progress").style.width = progressPercent + "%";
+    
+    // Funzione per formattare l'orario in "HH:MM"
+    const formatTime = date => {
+      return date.getHours().toString().padStart(2, '0') + ":" +
+             date.getMinutes().toString().padStart(2, '0');
+    };
+    
+    // Aggiorna gli orari di inizio e fine
+    document.getElementById("program-start-time").textContent = formatTime(startTime);
+    document.getElementById("program-end-time").textContent = formatTime(endTime);
+  }
 
-      // Ottieni l'orario corrente
-      const now = new Date();
-      
-      // Trova il programma corrente
-      const currentProgram = channel.programs.find(program => {
-        const start = new Date(program.start);
-        const end = new Date(program.end);
-        return now >= start && now < end;
-      });
+  // Aggiorna il progress bar ogni secondo (se esiste un programma corrente)
+  setInterval(function(){
+    if (window.currentProgramGlobal) {
+      updateProgressBar(window.currentProgramGlobal);
+    }
+  }, 1000);
 
-      // Trova il prossimo programma
-      const nextProgram = channel.programs.find(program => {
-        const start = new Date(program.start);
-        return start > now;
-      });
+  function updateProgramName() {
+    fetch(epgUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Errore nel recupero dei dati EPG");
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Trova il canale selezionato dall'array dei canali
+        const channel = data.find(ch => ch.id === selectedChannelId);
+        if (!channel) {
+          console.error("Canale non trovato");
+          return;
+        }
 
-      // Salva il programma corrente in una variabile globale
-      currentProgramGlobal = currentProgram;
-      
-      // Aggiorna il nome del programma in corso
-      const programNameEl = document.getElementById("program-name");
-      if (programNameEl) {
+        // Ottieni l'orario corrente
+        const now = new Date();
+        
+        // Trova il programma corrente, regolando l'orario dei programmi
+        const currentProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
+          return now >= start && now < end;
+        });
+
+        // Trova il prossimo programma, regolando l'orario dei programmi
+        const nextProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          return start > now;
+        });
+
+        // Salva il programma corrente in una variabile globale
+        currentProgramGlobal = currentProgram;
+        
+        // Aggiorna il nome del programma in corso
+        const programNameEl = document.getElementById("program-name");
+        if (programNameEl) {
+          if (currentProgram) {
+            programNameEl.textContent = currentProgram.title;
+          } else {
+            programNameEl.textContent = "Programma non disponibile";
+          }
+        }
+
+        // Aggiorna il nome del programma a seguire
+        const nextProgramNameEl = document.getElementById("next-program-name");
+        if (nextProgramNameEl) {
+          if (nextProgram) {
+            nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
+          } else {
+            nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
+          }
+        }
+
+        // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
         if (currentProgram) {
-          programNameEl.textContent = currentProgram.title;
-        } else {
-          programNameEl.textContent = "Programma non disponibile";
+          updateProgressBar(currentProgram);
         }
-      }
+      })
+      .catch(error => {
+        console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+      });
+  }
 
-      // Aggiorna il nome del programma a seguire
-      const nextProgramNameEl = document.getElementById("next-program-name");
-      if (nextProgramNameEl) {
-        if (nextProgram) {
-          nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
-        } else {
-          nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
-        }
-      }
-
-      // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
-      if (currentProgram) {
-        updateProgressBar(currentProgram);
-      }
-    })
-    .catch(error => {
-      console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
-    });
-}
-
-
-    // Esegui l'aggiornamento all'avvio della pagina
-    updateProgramName();
-    // Aggiorna le informazioni ogni minuto
-    setInterval(updateProgramName, 60000);
-  </script>
+  // Esegui l'aggiornamento all'avvio della pagina
+  updateProgramName();
+  // Aggiorna le informazioni ogni minuto
+  setInterval(updateProgramName, 60000);
+</script>
 
 
 
