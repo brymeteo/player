@@ -1,4 +1,42 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Serie Dylan</title>
+        
+        
+       
+        
 <script src="https://brymeteo.github.io/player/playerjs%20(1).js" type="text/javascript"></script>
+<style>
+   /* Imposta il corpo della pagina per non avere margini o padding */
+   body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+   }
+
+   /* Imposta il div del player per occupare l'intera larghezza e altezza della finestra */
+   #player1 {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+   }
+
+   /* Imposta anche la playlist (se la vuoi visibile sotto il video) */
+   #playlist_container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+   }
+</style>
+
+
 
 <div id="player1"></div>
 <div id="playlist_container"></div>
