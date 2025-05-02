@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Meteo Lombardia - Vento domani 15:00</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; }
+    .container { position: relative; aspect-ratio: 1; }
+    #map {
+      position: relative; width: 100%; height: 100%;
+      background: url('https://brymeteo.github.io/tv/Grafica/cartine/meteo-regione-lombardia.png') no-repeat center center;
+      background-size: cover;
+    }
+    .weather-container {
+      position: absolute; display: flex; align-items: center;
+      transform: translate(-50%, -50%);
+    }
+    .wind-icon { width: 75px; height: 75px; }
+    .wind-label { font-size: 14px; font-weight: bold; margin-left: 4px; color: white; }
+    @media (max-width: 500px) {
+      .wind-icon { width: 50px; height: 50px; }
+      .wind-label { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+  </div>
+
+<script>
+  const API_KEY = "bd5e378503939ddaee76f12ad7a97608";
+
+
+
+  const locations = [
+    { name: "Milano", lat: 45.464, lon: 9.190, x: 24, y: 59.5 },
+    { name: "Varese", lat: 45.829, lon: 8.822, x: 14.7, y: 42.8 },
+    { name: "Mantova", lat: 45.160, lon: 10.798, x: 79.7, y: 74.3 },
+    { name: "Brescia", lat: 45.633, lon: 10.300, x: 64.3, y: 56.2 },
+    { name: "Cremona", lat: 45.136, lon: 10.028, x: 57.2, y: 68.7 },
+    { name: "Bergamo", lat: 45.833, lon: 9.800, x: 47.3, y: 48.7 },
+    { name: "Pavia", lat: 45.117, lon: 9.133, x: 26.3, y: 75.5 },
+    { name: "Sondrio", lat: 46.167, lon: 10.050, x: 48.5, y: 27.1 },
+    { name: "Lodi", lat: 45.314, lon: 9.503, x: 42.5, y: 63.7 },
+    { name: "Lecco", lat: 45.853, lon: 9.390, x: 34.0, y: 35 },
+    { name: "Como", lat: 45.810, lon: 9.087, x: 27.5, y: 45.2 },
+    { name: "Monza", lat: 45.583, lon: 9.275, x: 37, y: 54.2 },
+    { name: "Vestone", lat: 45.709, lon: 10.400, x: 62, y: 41 },
+    { name: "Chiavenna", lat: 46.322, lon: 9.399, x: 33, y: 23 },
+    { name: "Grosio", lat: 46.298, lon: 10.274, x: 63, y: 20 },
+    { name: "Oltre il Colle", lat: 45.889, lon: 9.769, x: 48, y: 38 }
+  ];
+  
+  
+  // Mappa delle icone del vento per direzione e intensità (debole, moderato, forte)
+        const windDirectionIcons = {
+            'Nord': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V91.svg',   // Debole
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V92.svg', // Moderato
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V93.svg'    // Forte
+            },
+            'Nord-Est': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V111.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V112.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V113.svg'
+            },
+            'Est': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V131.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V132.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V133.svg'
+            },
+            'Sud-Est': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V151.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V152.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V153.svg'
+            },
+            'Sud': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V11.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V12.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V13.svg'
+            },
+            'Sud-Ovest': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V31.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V32.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V33.svg'
+            },
+            'Ovest': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V51.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V52.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V53.svg'
+            },
+            'Nord-Ovest': {
+                'Debole': 'https://brymeteo.github.io/tv/Grafica/Icone/V71.svg',
+                'Moderato': 'https://brymeteo.github.io/tv/Grafica/Icone/V72.svg',
+                'Forte': 'https://brymeteo.github.io/tv/Grafica/Icone/V73.svg'
+            }
+        };
+
+  
+ function getWindIntensity(speedKmh) {
+    if (speedKmh < 15) {
+        return 'Debole';
+    } else if (speedKmh >= 15 && speedKmh < 50) {
+        return 'Moderato';
+    } else {
+        return 'Forte';
+    }
+}
+
+
+        // Funzione per convertire i gradi in punti cardinali
+        function getWindDirection(degrees) {
+            const directions = ['Nord', 'Nord-Est', 'Est', 'Sud-Est', 'Sud', 'Sud-Ovest', 'Ovest', 'Nord-Ovest'];
+            const index = Math.floor((degrees + 22.5) / 45);
+            return directions[index % 8];
+        }
+
+  /**
+   * Fetch forecast for tomorrow at 15:00 or nearest
+   */
+  async function fetchWeatherData(lat, lon) {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}`
+              + `&appid=${API_KEY}&units=metric&lang=it`;
+    const data = await fetch(url).then(r => r.json());
+
+    // Calcola domani alle 15:00
+    const d = new Date();
+    d.setDate(d.getDate() + 2);
+    d.setHours(15, 0, 0, 0);
+    const yyyy = d.getFullYear();
+    const mm   = String(d.getMonth()+1).padStart(2,'0');
+    const dd   = String(d.getDate()).padStart(2,'0');
+    const target = `${yyyy}-${mm}-${dd} 15:00:00`;
+
+    // Trova forecast esatto o il più vicino
+    let forecast = data.list.find(item => item.dt_txt === target);
+    if (!forecast) {
+      forecast = data.list.reduce((prev, curr) => {
+        const diffPrev = Math.abs(new Date(prev.dt_txt) - d);
+        const diffCurr = Math.abs(new Date(curr.dt_txt) - d);
+        return diffCurr < diffPrev ? curr : prev;
+      });
+    }
+    return forecast;
+  }
+
+  /**
+   * Aggiorna icone e label vento per ogni location
+   */
+  async function updateWeatherIcons() {
+    const map = document.getElementById('map');
+    map.innerHTML = '';
+
+    const promises = locations.map(loc =>
+      fetchWeatherData(loc.lat, loc.lon).then(forecast => ({ loc, forecast }))
+    );
+    const results = await Promise.all(promises);
+
+    results.forEach(({ loc, forecast }) => {
+      const speedKmh = forecast.wind.speed * 3.6;
+      const dir = getWindDirection(forecast.wind.deg);
+      const intensity = getWindIntensity(speedKmh);
+      const iconUrl = windDirectionIcons[dir][intensity];
+
+      const container = document.createElement('div');
+      container.className = 'weather-container';
+      container.style.left = `${loc.x}%`;
+      container.style.top  = `${loc.y}%`;
+
+      const img = document.createElement('img');
+      img.src = iconUrl; img.alt = `${dir} ${intensity}`; img.className = 'wind-icon';
+
+      const label = document.createElement('span');
+      label.className = 'wind-label';
+      label.textContent = `${Math.round(speedKmh)} km/h`;
+
+      container.append(img, label);
+      map.appendChild(container);
+    });
+  }
+
+  updateWeatherIcons();
+  setInterval(updateWeatherIcons, 3*60*60*1000);
+</script>
+</body>
+</html>
