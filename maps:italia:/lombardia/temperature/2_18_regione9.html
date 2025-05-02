@@ -32,6 +32,9 @@
       .weather-container { width: 36px; height: 36px; font-size: 12px; }
     }
   </style>
+  
+  <script src="https://brymeteo.github.io/player/maps:italia:/config.js"></script>
+
 </head>
 <body>
   <div class="container">
@@ -40,7 +43,7 @@
   </div>
 
   <script>
-     const API_KEY = "bd5e378503939ddaee76f12ad7a97608";
+     const API_KEY = window.OPENWEATHER_API_KEY;
     const locations = [
       { name: "Milano", lat: 45.464, lon: 9.192, x: 24, y: 59.5 },
       { name: "Varese", lat: 45.829, lon: 8.822, x: 14.7, y: 42.8 },
