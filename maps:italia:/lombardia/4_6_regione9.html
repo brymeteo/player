@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Meteo Lombardia</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    #map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('https://brymeteo.github.io/tv/Grafica/cartine/meteo-regione-lombardia.png') no-repeat center center;
+      background-size: cover;
+    }
+
+    .weather-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      transform: translate(-50%, -50%);
+    }
+
+    .weather-icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    @media (max-width: 500px) {
+      .weather-icon {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    .temperature {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13px;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+  </div>
+
+  <script>
+    const API_KEY = "cf712d1eacadea60c54fc2822e9ad5d1";
+
+    const iconUrls = {
+      '01d': 'https://brymeteo.github.io/tv/Grafica/Icone/05.png',
+      '01n': 'https://brymeteo.github.io/tv/Grafica/Icone/02.png',
+      '02d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
+      '02n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
+      '03d': 'https://brymeteo.github.io/tv/Grafica/Icone/26.png',
+      '03n': 'https://brymeteo.github.io/tv/Grafica/Icone/27.png',
+      '04d': 'https://brymeteo.github.io/tv/Grafica/Icone/10.png',
+      '04n': 'https://brymeteo.github.io/tv/Grafica/Icone/11.png',
+      '09d': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+      '09n': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+      '10d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
+      '10n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
+      '11d': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+      '11n': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+      '13d': 'https://brymeteo.github.io/tv/Grafica/Icone/08.png',
+      '13n': 'https://brymeteo.github.io/tv/Grafica/Icone/08.png',
+      '50d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
+      '50n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png'
+    };
+
+    const locations = [
+      { name: "Milano",      lat: 45.464, lon: 9.192,  x: 24,   y: 59.5 },
+      { name: "Varese",      lat: 45.829, lon: 8.822,  x: 14.7, y: 42.8 },
+      { name: "Mantova",     lat: 45.160, lon: 10.798, x: 79.7, y: 74.3 },
+      { name: "Brescia",     lat: 45.525, lon: 10.227, x: 64.3, y: 56.2 },
+      { name: "Cremona",     lat: 45.136, lon: 10.028, x: 57.2, y: 68.7 },
+      { name: "Bergamo",     lat: 45.698, lon: 9.669,  x: 47.3, y: 48.7 },
+      { name: "Pavia",       lat: 45.184, lon: 9.162,  x: 26.3, y: 75.5 },
+      { name: "Sondrio",     lat: 46.169, lon: 9.869,  x: 48.5, y: 27.1 },
+      { name: "Lodi",        lat: 45.314, lon: 9.503,  x: 42.5, y: 63.7 },
+      { name: "Lecco",       lat: 45.853, lon: 9.390,  x: 34.0, y: 35   },
+      { name: "Como",        lat: 45.810, lon: 9.087,  x: 27.5, y: 45.2 },
+      { name: "Monza",       lat: 45.583, lon: 9.275,  x: 37,   y: 54.2 },
+      { name: "Vestone",     lat: 45.709, lon: 10.400, x: 62,   y: 41   },
+      { name: "Colico Piano",lat: 46.132, lon: 9.370,  x: 33,   y: 23   },
+      { name: "Grosio",      lat: 46.298, lon: 10.274, x: 63,   y: 20   },
+      { name: "Oltre il Colle",lat:45.889, lon:9.769,  x: 48,   y: 38   }
+    ];
+
+    // Fetch forecast for tomorrow at 15:00 or nearest
+    async function fetchWeatherData(lat, lon) {
+      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=it`;
+      const data = await fetch(url).then(res => res.json());
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 3);
+      const yyyy = tomorrow.getFullYear();
+      const mm   = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const dd   = String(tomorrow.getDate()).padStart(2, '0');
+      const target = `${yyyy}-${mm}-${dd} 09:00:00`;
+
+      const forecast = data.list.find(item => item.dt_txt === target);
+      const selected = forecast || data.list[0];
+
+      return {
+        temp: Math.round(selected.main.temp),
+        iconCode: selected.weather[0].icon,
+        description: selected.weather[0].description
+      };
+    }
+
+    // Update map icons in parallel
+    async function updateWeatherIcons() {
+      const map = document.getElementById('map');
+      map.innerHTML = '';
+
+      const promises = locations.map(loc =>
+        fetchWeatherData(loc.lat, loc.lon).then(data => ({ loc, data }))
+      );
+      const results = await Promise.all(promises);
+
+      results.forEach(({ loc, data }) => {
+        const iconUrl = iconUrls[data.iconCode] || iconUrls['01d'];
+        const container = document.createElement('div');
+        container.className = 'weather-container';
+        container.style.left = `${loc.x}%`;
+        container.style.top  = `${loc.y}%`;
+
+        const img = document.createElement('img');
+        img.src = iconUrl;
+        img.alt = data.description;
+        img.className = 'weather-icon';
+
+        const tempSpan = document.createElement('span');
+        
+
+        container.append(img, tempSpan);
+        map.appendChild(container);
+      });
+    }
+
+    // Launch initial update and repeat every 3 hours
+    updateWeatherIcons();
+    setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+  </script>
+</body>
+</html>
