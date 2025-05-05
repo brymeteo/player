@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -82,33 +83,41 @@ function getSeaState(windSpeedKmh) {
 
 
 
-  async function fetchWeatherData(lat, lon) {
-  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}`
-            + `&appid=${API_KEY}&units=metric&lang=it`;
-  const data = await fetch(url).then(r => r.json());
+async function fetchWeatherData(lat, lon) {
+  // URL con cache-bust per evitare risposte cache su Safari iOS
+  const url = `https://api.openweathermap.org/data/2.5/forecast`
+            + `?lat=${lat}&lon=${lon}`
+            + `&appid=${API_KEY}&units=metric&lang=it`
+            + `&cachebust=${Date.now()}`;
 
-  // Costruisci la data target: oggi alle 09:00
+  const response = await fetch(url, { cache: 'no-store' });
+  const data = await response.json();
+
+  // Calcola target alle 09:00 di oggi + offset (stessa tua logica per 0,1,2…)
   const now = new Date();
-  const targetDate = new Date();
-  targetDate.setDate(targetDate.getDate() + 0); // giorno oggi 0
-targetDate.setHours(15, 0, 0, 0); // ore 09:00
+  const targetDate = new Date(now.getTime());
+  targetDate.setDate(now.getDate() + 0);   // se vuoi domani usa +1, ecc.
+  targetDate.setHours(15, 0, 0, 0);
 
-
-
-  // Trova la previsione più vicina all’orario target
+  // Trova la previsione più vicina
   let closest = data.list[0];
-  let minDiff = Math.abs(new Date(closest.dt_txt) - targetDate);
+  let minDiff = Infinity;
 
   for (const item of data.list) {
-    const diff = Math.abs(new Date(item.dt_txt) - targetDate);
+    // Trasforma "YYYY-MM-DD HH:mm:ss" in "YYYY-MM-DDTHH:mm:ssZ"
+    const iso = item.dt_txt.replace(' ', 'T') + 'Z';
+    const dt  = new Date(iso);
+
+    const diff = Math.abs(dt - targetDate);
     if (diff < minDiff) {
-      closest = item;
       minDiff = diff;
+      closest = item;
     }
   }
 
   return closest;
 }
+
 
 
     async function updateSeaIcons() {
