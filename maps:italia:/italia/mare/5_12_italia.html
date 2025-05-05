@@ -97,7 +97,7 @@ async function fetchWeatherData(lat, lon) {
   const now = new Date();
   const targetDate = new Date(now.getTime());
   targetDate.setDate(now.getDate() + 4);   // se vuoi domani usa +1, ecc.
-  targetDate.setHours(12, 0, 0, 0);
+  targetDate.setHours(15, 0, 0, 0);
 
   // Trova la previsione più vicina
   let closest = data.list[0];
