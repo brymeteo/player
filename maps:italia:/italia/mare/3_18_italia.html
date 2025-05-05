@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Mare Personalizzata</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; }
+    .container { position: relative; aspect-ratio: 1; }
+    #map {
+      position: relative;
+      width: 100%; height: 105%;
+      background: url('https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000325-276e1276e4/italia-1--4-8-2.webp?ph=a7daf9079c') no-repeat center center;
+      background-size: cover;
+    }
+    .weather-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      transform: translate(-50%, -50%);
+    }
+    .sea-icon { width: 52px; height: 52px; }
+    @media (max-width: 500px) {
+      .sea-icon { width: 42px; height: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+  </div>
+
+  <script src="https://brymeteo.github.io/player/maps:italia:/config-previsioni-regionali.js"></script>
+  <script>
+    const API_KEY = window.OPENWEATHER_API_KEY;
+
+    // Definisci qui le località di mare su cui vuoi visualizzare le icone
+    const seaLocations = [
+      { name: "Genova", lat: 44.406, lon: 8.934, x: 21, y: 33 },
+      { name: "Livorno", lat: 43.543, lon: 10.316, x: 27, y: 38 },
+      { name: "Venezia", lat: 45.439, lon: 12.331, x: 52, y: 19 },
+      { name: "Bari", lat: 41.118, lon: 16.851, x: 84, y: 54 },
+      { name: "Cagliari", lat: 39.213, lon: 9.130, x: 24, y: 82 },
+      { name: "Catania", lat: 37.502, lon: 15.087, x: 73, y: 90.7 },
+      { name: "Arbatax", lat: 39.926, lon: 9.701, x: 34, y: 67 },
+      { name: "Sassari", lat: 40.730, lon: 8.551, x: 13, y: 56 },
+      { name: "Nizza", lat: 43.700, lon: 7.250, x: 11, y: 42 },
+      { name: "Oristano", lat: 39.903, lon: 8.600, x: 11, y: 71 },
+      { name: "Palermo", lat: 38.116, lon: 13.360, x: 47, y: 80 },
+      { name: "Agrigento", lat: 37.450, lon: 13.500, x: 49, y: 94 },
+      { name: "Reggio Calabria", lat: 38.111, lon: 15.661, x: 68, y: 75 },
+      { name: "Napoli", lat: 40.883, lon: 14.417, x: 54, y: 64 },
+      { name: "Roma", lat: 41.895, lon: 12.484, x: 40, y: 54 },
+      { name: "Catanzaro", lat: 38.891, lon: 16.599, x: 84, y: 83 },
+      { name: "Taranto", lat: 40.417, lon: 17.240, x: 87, y: 73 },
+      { name: "Pescara", lat: 42.460, lon: 14.210, x: 67, y: 43 },
+      { name: "Ancona", lat: 43.598, lon: 13.510, x: 61, y: 32 },
+      { name: "Ravenna", lat: 44.417, lon: 12.201, x: 52, y: 26 },
+      
+      // Aggiungi o rimuovi località a tuo piacimento
+    ];
+
+    // Mappa icone del mare in base allo stato del mare
+    const seaIcons = {
+      "Calmo": "https://brymeteo.github.io/tv/Grafica/Icone/Mare1.svg",
+      "Mosso": "https://brymeteo.github.io/tv/Grafica/Icone/Mare2.svg",
+      "Poco mosso": "https://brymeteo.github.io/tv/Grafica/Icone/Mare2.svg",
+      "Agitato": "https://brymeteo.github.io/tv/Grafica/Icone/Mare3.svg"
+    };
+
+ // Se OpenWeather non fornisce dati di stato del mare, calcola in base al vento
+function getSeaState(windSpeedKmh) {
+  if (windSpeedKmh < 20) {
+    return 'Calmo'; // fino a Beaufort 3 (fino a 19 km/h)
+  } else if (windSpeedKmh < 52) {
+    return 'Mosso'; // Beaufort 4–7 (20–51 km/h)
+  } else {
+    return 'Agitato'; // Beaufort 8+ (≥52 km/h)
+  }
+}
+
+
+
+  async function fetchWeatherData(lat, lon) {
+  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}`
+            + `&appid=${API_KEY}&units=metric&lang=it`;
+  const data = await fetch(url).then(r => r.json());
+
+  // Costruisci la data target: oggi alle 09:00
+  const now = new Date();
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 2); // giorno oggi 0
+targetDate.setHours(21, 0, 0, 0); // ore 09:00
+
+
+
+  // Trova la previsione più vicina all’orario target
+  let closest = data.list[0];
+  let minDiff = Math.abs(new Date(closest.dt_txt) - targetDate);
+
+  for (const item of data.list) {
+    const diff = Math.abs(new Date(item.dt_txt) - targetDate);
+    if (diff < minDiff) {
+      closest = item;
+      minDiff = diff;
+    }
+  }
+
+  return closest;
+}
+
+
+    async function updateSeaIcons() {
+      const map = document.getElementById('map');
+      map.innerHTML = '';
+
+      const promises = seaLocations.map(loc =>
+        fetchWeatherData(loc.lat, loc.lon).then(forecast => ({ loc, forecast }))
+      );
+      const results = await Promise.all(promises);
+
+      results.forEach(({ loc, forecast }) => {
+        const windKmh = forecast.wind.speed * 3.6;
+        const state = getSeaState(windKmh);
+        const iconUrl = seaIcons[state];
+
+        const container = document.createElement('div');
+        container.className = 'weather-container';
+        container.style.left = `${loc.x}%`;
+        container.style.top  = `${loc.y}%`;
+
+        const img = document.createElement('img');
+        img.src = iconUrl;
+        img.alt = `Mare ${state}`;
+        img.className = 'sea-icon';
+
+        container.appendChild(img);
+        map.appendChild(container);
+      });
+    }
+
+    // Avvia aggiornamento e ripeti ogni 3 ore
+    updateSeaIcons();
+    setInterval(updateSeaIcons, 3*60*60*1000);
+  </script>
+</body>
+</html>
