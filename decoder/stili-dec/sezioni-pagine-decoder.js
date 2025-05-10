@@ -518,7 +518,7 @@ function adjustSettingsInterface() {
                         <p><strong>ID Codice cliente:</strong> xx55gd3iy</p>
                         <p><strong>Nome Utente:</strong> Bryan</p>
                         <p><strong>Tipo di Abbonamento:</strong> Premium</p>
-                        <p><strong>Data di Scadenza:</strong> 10/05/2025</p>
+                        <p><strong>Data di Scadenza:</strong> 10/06/2025</p>
                         <p><strong>ID Personale:</strong> XYZ567</p>
                         <p><strong>Pin Attivazione Smart card:</strong> XYZ12345fs</p>
                         <!-- Aggiungi altri dettagli dell'account o contrattuali secondo necessità -->
