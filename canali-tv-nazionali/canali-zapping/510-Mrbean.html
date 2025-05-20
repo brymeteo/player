@@ -11,7 +11,8 @@
         src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
 
-    <style>
+    <!-- Stili esistenti -->
+ <style>
         #background-overlay {
             position: fixed;
             top: 0;
@@ -20,14 +21,26 @@
             height: 100%;
             z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
             background: #171a45;
-            
         }
-        
-        
-        
-        
-        
-          [data-watermark-top-right] {
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            /* Personalizza dimensioni */
+            height: auto;
+            /* Personalizza dimensioni */
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            /* Rendere il logo visibile immediatamente */
+        }
+
+
+
+ 
+     [data-watermark-top-right] {
         position: absolute;
             top: 7%;
             right: 82%;
@@ -50,26 +63,9 @@
             
           }
 
-        
-        
-        
-        
-        
-        
 
-        #logo {
-            position: absolute;
-            top: 71%;
-            left: 21%;
-            width: 57%;
-            /* Personalizza dimensioni */
-            height: auto;
-            /* Personalizza dimensioni */
-            opacity: 90%;
-            cursor: pointer;
-            display: block;
-            /* Rendere il logo visibile immediatamente */
-        }
+
+
 
         .hidden {
             display: none;
@@ -78,6 +74,7 @@
         body {
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Evita la visualizzazione della barra di scorrimento */
         }
 
         #video-container {
@@ -94,9 +91,8 @@
             width: 100%;
             height: 100%;
         }
-        
-        
-          /* Stile per l'immagine di fallback */
+
+        /* Stile per l'immagine di fallback */
         #fallback-image {
             width: 100%;
             height: 100%;
@@ -104,9 +100,130 @@
             display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
         }
         
+        /* Stile per la barra informativa del canale - migliorato con effetto 3D */
+       #channel-info-bar {
+    position: absolute;
+    bottom: 60px;
+    left: 45px;
+    background-color: rgb(19 19 19 / 0%);
+    color: white;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgb(255 255 255 / 0%);
+    overflow: hidden;
+    zoom: 160%;
+}
+
+        
+#channel-info-inner {
+    position: relative;
+    border: 3px solid rgb(37 167 182 / 53%);
+    border-radius: 4px;
+    margin: 2px;
+    padding: 8px 12px;
+    background: linear-gradient(to bottom, rgb(32 78 116), rgb(36 59 100 / 87%));
+}
+        
+        
+        #channel-name {
+            display: flex;
+            
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        #channel-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        #channel-number {
+            font-size: 22px;
+            opacity: 0.9;
+            font-weight: normal;
+            padding: 0 0 0 4px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
+            margin-left: auto;
+        }
+        
+        #program-name {
+            font-size: 23px;
+            opacity: 0.85;
+            text-align: left;
+            margin-top: 2px;
+            padding-top: 2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+@media only screen and (max-width: 600px) {
+    #channel-info-bar {
+        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
+        left: 20px;   /* Riduci il margine a sinistra */
+        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
+    }
+
+    #channel-info-inner {
+        padding: 5px 8px; /* Riduci i padding interni */
+        margin: 1px;
+        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+    }
+
+    #channel-logo {
+        width: 50px; /* Logo più piccolo su schermi mobili */
+    }
+
+    #channel-title {
+        font-size: 20px; /* Riduci la dimensione del titolo */
+    }
+
+    #channel-number {
+        font-size: 18px;
+        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+    }
+
+    #program-name {
+        font-size: 18px; /* Riduci la dimensione del font */
+    }
+
+    #program-progress-bar {
+        height: 8px; /* Barra di avanzamento più piccola */
+    }
+}
+        
+          /* Stili per la barra di avanzamento del programma */
+    #program-progress-container {
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #program-progress-container > div {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    #program-progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #878787d6;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    #program-progress {
+      width: 0%;
+      height: 100%;
+      background-color: #87bdda;
+    }
+        
         
     </style>
-    
     
     
     <style>
@@ -213,21 +330,57 @@
     .hidden {
       display: none;
     }
+    
+    
+
+         #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}     
+
+    
+    
   </style>
 </head>
 
 <body>
     <div id="background-overlay"></div>
     <div id="player" class="hidden"></div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/510.png" alt="Logo" data-lity=""
-        data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
-        
-        
-        
-        <!-- Immagine di fallback -->
+    
+
+
+<!-- Immagine di fallback -->
   <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
   
   <div id="player"></div>
+  
+  <!-- Barra informativa -->
+  <div id="channel-info-bar">
+    <div id="channel-info-inner">
+      <div id="channel-name">
+        <img id="channel-logo" src="https://i.ibb.co/pWbyF3L/logo-1.png" alt="Logo canale" style="width:70px; height:auto; margin-left: -2.8px;">
+        <span id="channel-title">&nbsp;Mr.Bean Animated HD</span>
+        <span id="channel-number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;510</span>
+      </div>
+      <div id="program-name">Caricamento in corso...</div>
+      <!-- Aggiungi questa riga per il programma a seguire -->
+<div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
+
+      <!-- Barra di avanzamento del programma -->
+      <div id="program-progress-container">
+        <div>
+          <span id="program-start-time">--:--</span>
+          <span id="program-end-time">--:--</span>
+        </div>
+        <div id="program-progress-bar">
+          <div id="program-progress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   
   <!-- Overlay card centrale per i comandi -->
   <div id="overlay-card" class="hidden">
@@ -245,10 +398,11 @@
   <div id="restart-message" class="hidden">
     Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
   </div>
-        
 
-    <script>
-    var player = new Clappr.Player({
+
+
+  <script>
+     var player = new Clappr.Player({
     source: "https://amg00627-amg00627c29-rakuten-it-3989.playouts.now.amagi.tv/playlist/amg00627-banijayfast-mrbeanitcc-rakutenit/cb5734196573678f84cb3678d1f743829e7b3dcb0e6c886470af4a9765d96208d6e5af87b208b7634ce6419a34567d2c0c34db66bd6c69d7df7ac7503113106d8ae9f23b85cc755ce0a3566e35b679194ffd0805c85e2b46f4c556488934be7c4534ed0a65597bcd9e01ef290f909f0b8979378bb3dd7f396d390ec90c1fbcbf5ba0f8ff5e43ca78f5e44f4bc02b17b69f419cd01aa681d50ec85e8e25f3168095a5da8745818e9937ff51b66e7232537c9d934683c55cafdf88563199782f4e0a2780c9f7af1e64d61d393688fecfac5aef1fcf9020935f20b2048c47f656e00ffb50f5b114d8c7d4de465206a0c14d6824a5dab493eb3041d80c98b5ecdf2909f39f157c54f67fcc34223ce295a172d69444cee072dfe6037539c4827a8b8dbb879df6e70ecf249891a7c968460362535a8210f69b688964df2cadc85e25044e1df4c354c6878a08673835eced5fd00024acc88e91e01a22da6569338207cf521665d83b7e2699478b9b387fb6341e930a3ef45621854ce88725f1d5bd8f626de4889118bb0583b40ec1c912a669034d1ba3f75e2b2f3e6ddcef7f082269c242e1ecc7e8731b0fe0fb97a4aa2339032a28411899e7e67d9280c7161412b3154c24751643925d8e6c8d4d4f512d995387fc5c76c85f2078b1ea3e0a0c68c59be0d885d29b1def0eb9a8fc3d3c045c6dab41634c0ac3a4825da717210e7b5993306347ad156541e59bdae097941c95f63d890940124cc6d126630f7d70422b98b14af577d6b24a9c9ceb7dedceac3364a41d800821bff1fd4dd9cca0e60136b18b763846b6f206e4520c9d65be4189d663e7bd54141739543aa6e436f64be3a6f0a82a9e3f924b0668e37bbea3fab6d7742481fb2e626a5e054d0a38182d08abe5d1611672efb918ea50f29936c32304012c2daaeae0e3ca981666fe175922cd82de87aacb1119cb1c851fab4536d69b89b383b65ecf96a0fcea821538685a65e73edd938794dfc5cf641063e8e3d7b33d042fa242c29914e4e77b168bdedbb58a3cd51d8344f6c5c9bae8b285ebc527e00fdc636d2e37143672e9d3f8ea11948f0543b27ae19c4c7289a7ebee6cf7d6bd482da40da0cd2a6fad377049c6b8f35f8802b6f23c26a7aa685a955b0181d8bf774cf775f21f6534b1ec917e37caf40a91669281b85a1fdb464db207164a8448d7abf32963e8b7164076e8080c833ec4ebd14e567fabdd37777c435c5b599f101c1fe5386bb713fdb1b1e62673d873e5655b904aeffa25c0f35cd1a291ccf99f7f0fc1d00319f503e279dc02dec983fd42c97069b8679c1f22eb9ff3cd88d485d0ebda0d510c9954916a9920cddec87114a3ebad0a690dd1292e57f756de2f563b0492779bf1/167/1920x1080_6046040/index.m3u8",
     parentId: "#player",
     width: '100%',
@@ -260,12 +414,14 @@
     
 });
         
-  // Variabili per gestire timer e stato overlay
+      
+ // Variabili per gestire timer e stato overlay
     var overlayCard = document.getElementById("overlay-card");
     var overlayIcon = document.getElementById("overlay-icon");
     var overlayText = document.getElementById("overlay-text");
     var restartMessage = document.getElementById("restart-message");
-    var overlayTimer, restartTimer;
+    var channelInfoBar = document.getElementById("channel-info-bar");
+    var overlayTimer, restartTimer, channelInfoTimer;
 
     // Funzione per mostrare l'overlay card con contenuto personalizzato
     function showOverlay(state) {
@@ -304,6 +460,25 @@
         }, 5000);
       }
     }
+
+    // Gestione della barra informativa del canale
+    function hideChannelInfo() {
+      channelInfoBar.style.display = "none";
+    }
+    
+    function showChannelInfo() {
+      channelInfoBar.style.display = "block";
+      clearTimeout(channelInfoTimer);
+      // Nascondi la barra informativa dopo 6 secondi
+      channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+    }
+    
+    // Mostra la barra informativa al caricamento della pagina
+    showChannelInfo();
+    
+    // Mostra la barra informativa al movimento del mouse o pressione tasti
+    document.addEventListener("mousemove", showChannelInfo);
+    document.addEventListener("keypress", showChannelInfo);
 
     // Gestione dei comandi vocali tramite postMessage
     window.addEventListener("message", function (event) {
@@ -371,6 +546,134 @@
     document.addEventListener("keypress", resetTimer);
     resetTimer();
   </script>
+
+<script>
+    // URL del file JSON contenente i dati EPG
+const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+// Identificativo del canale selezionato (esempio: "canale-5")
+let selectedChannelId = "k2";
+// URL personalizzato per il logo del canale
+const customLogoURL = "https://i.ibb.co/pWbyF3L/logo-1.png";
+
+// Variabile globale per salvare il programma corrente
+let currentProgramGlobal = null;
+
+// Funzione per aggiornare la barra di avanzamento del programma
+function updateProgressBar(currentProgram) {
+    const startTime = new Date(currentProgram.start);
+    const endTime = new Date(currentProgram.end);
+    const now = new Date();
+
+    // Calcola la durata totale e il tempo trascorso (in millisecondi)
+    const totalDuration = endTime - startTime;
+    const elapsed = now - startTime;
+
+    // Calcola la percentuale di completamento
+    let progressPercent = (elapsed / totalDuration) * 100;
+    progressPercent = Math.max(0, Math.min(progressPercent, 100));
+
+    // Aggiorna la larghezza della barra di avanzamento
+    document.getElementById("program-progress").style.width = progressPercent + "%";
+
+    // Funzione per formattare l'orario in "HH:MM"
+    const formatTime = date => {
+        return date.getHours().toString().padStart(2, '0') + ":" +
+               date.getMinutes().toString().padStart(2, '0');
+    };
+
+    // Aggiorna gli orari di inizio e fine
+    document.getElementById("program-start-time").textContent = formatTime(startTime);
+    document.getElementById("program-end-time").textContent = formatTime(endTime);
+}
+
+// Aggiorna il progress bar ogni secondo (se esiste un programma corrente)
+setInterval(function(){
+    if (window.currentProgramGlobal) {
+        updateProgressBar(window.currentProgramGlobal);
+    }
+}, 1000);
+
+// Funzione per modificare dinamicamente i titoli del programma in onda e a seguire
+function changeProgramTitles(programTitle, nextProgramTitle) {
+    // Cambia il titolo del programma in onda
+    const programNameEl = document.getElementById("program-name");
+    if (programNameEl && programTitle) {
+        programNameEl.textContent = programTitle;
+    }
+
+    // Cambia il titolo del programma a seguire
+    const nextProgramNameEl = document.getElementById("next-program-name");
+    if (nextProgramNameEl && nextProgramTitle) {
+        nextProgramNameEl.textContent = "A seguire » " + nextProgramTitle;
+    }
+}
+
+// Funzione per aggiornare il nome del programma in onda e a seguire
+function updateProgramName() {
+    fetch(epgUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Errore nel recupero dei dati EPG");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Trova il canale selezionato dall'array dei canali
+            const channel = data.find(ch => ch.id === selectedChannelId);
+            if (!channel) {
+                console.error("Canale non trovato");
+                return;
+            }
+
+            // Ottieni l'orario corrente
+            const now = new Date();
+
+            // Trova il programma corrente
+            const currentProgram = channel.programs.find(program => {
+                const start = new Date(program.start);
+                const end = new Date(program.end);
+                return now >= start && now < end;
+            });
+
+            // Trova il prossimo programma
+            const nextProgram = channel.programs.find(program => {
+                const start = new Date(program.start);
+                return start > now;
+            });
+
+            // Salva il programma corrente in una variabile globale
+            currentProgramGlobal = currentProgram;
+
+            // Cambia dinamicamente i titoli
+            changeProgramTitles("Mr.Bean animated series", "Mr.Bean animated series");
+
+            // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
+            if (currentProgram) {
+                updateProgressBar(currentProgram);
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+        });
+}
+
+// Esegui l'aggiornamento all'avvio della pagina
+updateProgramName();
+// Aggiorna le informazioni ogni minuto
+setInterval(updateProgramName, 60000);
+
+// Esempio di utilizzo per modificare i titoli a piacimento
+// La funzione `changeProgramTitles` può essere chiamata in qualsiasi momento
+// per aggiornare i titoli del programma corrente e del programma a seguire.
+// changeProgramTitles("Nuovo Programma In Corso", "Prossimo Programma");
+
+</script>
+
+
+
+
+
+
 
   <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
