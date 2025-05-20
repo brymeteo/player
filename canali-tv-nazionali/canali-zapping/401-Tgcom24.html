@@ -10,8 +10,8 @@
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
-  
-  <!-- Stili esistenti -->
+
+    <!-- Stili esistenti -->
  <style>
         #background-overlay {
             position: fixed;
@@ -36,6 +36,36 @@
             display: block;
             /* Rendere il logo visibile immediatamente */
         }
+
+
+
+ 
+[data-watermark-top-right] {
+        position: absolute;
+            top: 7%;
+            right: 5%;
+            max-width: 18%;
+            
+            width: auto;
+            height: auto;
+            
+            width: 11.5%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
+
+
+
+
 
         .hidden {
             display: none;
@@ -69,6 +99,130 @@
             object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
             display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
         }
+        
+        /* Stile per la barra informativa del canale - migliorato con effetto 3D */
+       #channel-info-bar {
+    position: absolute;
+    bottom: 60px;
+    left: 45px;
+    background-color: rgb(19 19 19 / 0%);
+    color: white;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgb(255 255 255 / 0%);
+    overflow: hidden;
+    zoom: 160%;
+}
+
+        
+#channel-info-inner {
+    position: relative;
+    border: 3px solid rgb(37 167 182 / 53%);
+    border-radius: 4px;
+    margin: 2px;
+    padding: 8px 12px;
+    background: linear-gradient(to bottom, rgb(32 78 116), rgb(36 59 100 / 87%));
+}
+        
+        
+        #channel-name {
+            display: flex;
+            
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        #channel-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        #channel-number {
+            font-size: 22px;
+            opacity: 0.9;
+            font-weight: normal;
+            padding: 0 0 0 4px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
+            margin-left: auto;
+        }
+        
+        #program-name {
+            font-size: 23px;
+            opacity: 0.85;
+            text-align: left;
+            margin-top: 2px;
+            padding-top: 2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+@media only screen and (max-width: 600px) {
+    #channel-info-bar {
+        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
+        left: 20px;   /* Riduci il margine a sinistra */
+        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
+    }
+
+    #channel-info-inner {
+        padding: 5px 8px; /* Riduci i padding interni */
+        margin: 1px;
+        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+    }
+
+    #channel-logo {
+        width: 50px; /* Logo più piccolo su schermi mobili */
+    }
+
+    #channel-title {
+        font-size: 20px; /* Riduci la dimensione del titolo */
+    }
+
+    #channel-number {
+        font-size: 18px;
+        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+    }
+
+    #program-name {
+        font-size: 18px; /* Riduci la dimensione del font */
+    }
+
+    #program-progress-bar {
+        height: 8px; /* Barra di avanzamento più piccola */
+    }
+}
+        
+          /* Stili per la barra di avanzamento del programma */
+    #program-progress-container {
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #program-progress-container > div {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    #program-progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #878787d6;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    #program-progress {
+      width: 0%;
+      height: 100%;
+      background-color: #87bdda;
+    }
+        
+        
     </style>
     
     
@@ -176,19 +330,57 @@
     .hidden {
       display: none;
     }
+    
+    
+
+         #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}     
+
+    
+    
   </style>
 </head>
 
 <body>
     <div id="background-overlay"></div>
     <div id="player" class="hidden"></div>
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/401.png" alt="Logo" data-lity=""
-        data-lity-target="https://www.superguidatv.it/programmazione-canale/oggi/guida-programmi-tv-tgcom24/197/">
+    
+
 
 <!-- Immagine di fallback -->
   <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
   
   <div id="player"></div>
+  
+  <!-- Barra informativa -->
+  <div id="channel-info-bar">
+    <div id="channel-info-inner">
+      <div id="channel-name">
+        <img id="channel-logo" src="https://api.superguidatv.it/v1/channels/197/logo?width=320" alt="Logo canale" style="width:70px; height:auto; margin-left: 0.8px;">
+        <span id="channel-title">&nbsp;Tgcom24 HD</span>
+        <span id="channel-number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;401</span>
+      </div>
+      <div id="program-name">Caricamento in corso...</div>
+      <!-- Aggiungi questa riga per il programma a seguire -->
+<div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
+
+      <!-- Barra di avanzamento del programma -->
+      <div id="program-progress-container">
+        <div>
+          <span id="program-start-time">--:--</span>
+          <span id="program-end-time">--:--</span>
+        </div>
+        <div id="program-progress-bar">
+          <div id="program-progress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   
   <!-- Overlay card centrale per i comandi -->
   <div id="overlay-card" class="hidden">
@@ -206,10 +398,11 @@
   <div id="restart-message" class="hidden">
     Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
   </div>
-    
-    
-    <script>
-        var player = new Clappr.Player({
+
+
+
+  <script>
+  var player = new Clappr.Player({
             source: "https://live02-seg.msf.cdn.mediaset.net/live/ch-kf/kf-clr.isml/index.m3u8",
             parentId: "#player",
             width: '100%',
@@ -235,12 +428,14 @@
             },
         });
         
-    // Variabili per gestire timer e stato overlay
+      
+ // Variabili per gestire timer e stato overlay
     var overlayCard = document.getElementById("overlay-card");
     var overlayIcon = document.getElementById("overlay-icon");
     var overlayText = document.getElementById("overlay-text");
     var restartMessage = document.getElementById("restart-message");
-    var overlayTimer, restartTimer;
+    var channelInfoBar = document.getElementById("channel-info-bar");
+    var overlayTimer, restartTimer, channelInfoTimer;
 
     // Funzione per mostrare l'overlay card con contenuto personalizzato
     function showOverlay(state) {
@@ -279,6 +474,25 @@
         }, 5000);
       }
     }
+
+    // Gestione della barra informativa del canale
+    function hideChannelInfo() {
+      channelInfoBar.style.display = "none";
+    }
+    
+    function showChannelInfo() {
+      channelInfoBar.style.display = "block";
+      clearTimeout(channelInfoTimer);
+      // Nascondi la barra informativa dopo 6 secondi
+      channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+    }
+    
+    // Mostra la barra informativa al caricamento della pagina
+    showChannelInfo();
+    
+    // Mostra la barra informativa al movimento del mouse o pressione tasti
+    document.addEventListener("mousemove", showChannelInfo);
+    document.addEventListener("keypress", showChannelInfo);
 
     // Gestione dei comandi vocali tramite postMessage
     window.addEventListener("message", function (event) {
@@ -346,6 +560,152 @@
     document.addEventListener("keypress", resetTimer);
     resetTimer();
   </script>
+
+<script>
+  // URL del file JSON contenente i dati EPG
+  const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+  // Identificativo del canale selezionato (esempio: "canale-5")
+  let selectedChannelId = "tgcom24";
+  // URL personalizzato per il logo del canale
+  const customLogoURL = "https://api.superguidatv.it/v1/channels/240/logo?width=320";
+
+  // Variabile globale per salvare il programma corrente
+  let currentProgramGlobal = null;
+
+  // Funzione per determinare se una data è in ora legale (DST)
+  function isDST(date) {
+    // Confronta l'offset di gennaio e luglio per il medesimo anno
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
+
+  // Funzione per regolare l'orario in base al periodo:
+  // - In ora legale (DST): sottrae un'ora
+  // - In ora solare: aggiunge un'ora
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      // Ora legale: sottrai un'ora
+      date.setHours(date.getHours() - 1);
+    } else {
+      // Ora solare: aggiungi un'ora
+      date.setHours(date.getHours() + 1);
+    }
+    return date;
+  }
+
+  // Funzione per aggiornare la barra di avanzamento del programma
+  function updateProgressBar(currentProgram) {
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
+    const now = new Date();
+
+    // Calcola la durata totale e il tempo trascorso (in millisecondi)
+    const totalDuration = endTime - startTime;
+    const elapsed = now - startTime;
+    
+    // Calcola la percentuale di completamento
+    let progressPercent = (elapsed / totalDuration) * 100;
+    progressPercent = Math.max(0, Math.min(progressPercent, 100));
+    
+    // Aggiorna la larghezza della barra di avanzamento
+    document.getElementById("program-progress").style.width = progressPercent + "%";
+    
+    // Funzione per formattare l'orario in "HH:MM"
+    const formatTime = date => {
+      return date.getHours().toString().padStart(2, '0') + ":" +
+             date.getMinutes().toString().padStart(2, '0');
+    };
+    
+    // Aggiorna gli orari di inizio e fine
+    document.getElementById("program-start-time").textContent = formatTime(startTime);
+    document.getElementById("program-end-time").textContent = formatTime(endTime);
+  }
+
+  // Aggiorna il progress bar ogni secondo (se esiste un programma corrente)
+  setInterval(function(){
+    if (window.currentProgramGlobal) {
+      updateProgressBar(window.currentProgramGlobal);
+    }
+  }, 1000);
+
+  function updateProgramName() {
+    fetch(epgUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Errore nel recupero dei dati EPG");
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Trova il canale selezionato dall'array dei canali
+        const channel = data.find(ch => ch.id === selectedChannelId);
+        if (!channel) {
+          console.error("Canale non trovato");
+          return;
+        }
+
+        // Ottieni l'orario corrente
+        const now = new Date();
+        
+        // Trova il programma corrente, regolando l'orario dei programmi
+        const currentProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
+          return now >= start && now < end;
+        });
+
+        // Trova il prossimo programma, regolando l'orario dei programmi
+        const nextProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          return start > now;
+        });
+
+        // Salva il programma corrente in una variabile globale
+        currentProgramGlobal = currentProgram;
+        
+        // Aggiorna il nome del programma in corso
+        const programNameEl = document.getElementById("program-name");
+        if (programNameEl) {
+          if (currentProgram) {
+            programNameEl.textContent = currentProgram.title;
+          } else {
+            programNameEl.textContent = "Programma non disponibile";
+          }
+        }
+
+        // Aggiorna il nome del programma a seguire
+        const nextProgramNameEl = document.getElementById("next-program-name");
+        if (nextProgramNameEl) {
+          if (nextProgram) {
+            nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
+          } else {
+            nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
+          }
+        }
+
+        // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
+        if (currentProgram) {
+          updateProgressBar(currentProgram);
+        }
+      })
+      .catch(error => {
+        console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+      });
+  }
+
+  // Esegui l'aggiornamento all'avvio della pagina
+  updateProgramName();
+  // Aggiorna le informazioni ogni minuto
+  setInterval(updateProgramName, 60000);
+</script>
+
+
+
+
+
+
 
   <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
