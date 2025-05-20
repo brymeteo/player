@@ -49,7 +49,7 @@
             width: auto;
             height: auto;
             
-            width: 13.5%;
+            width: 11.5%;
     height: auto !important;
     pointer-events: none;
             z-index: 999;
@@ -360,9 +360,9 @@
   <div id="channel-info-bar">
     <div id="channel-info-inner">
       <div id="channel-name">
-        <img id="channel-logo" src="https://i.ibb.co/JCpnFhw/logo-1.png" alt="Logo canale" style="width:70px; height:auto; margin-left: -11.8px;">
-        <span id="channel-title">Radio M2O HD</span>
-        <span id="channel-number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;606</span>
+        <img id="channel-logo" src="https://i.ibb.co/sbyfV5n/logo-1.png" alt="Logo canale" style="width:70px; height:auto; margin-left: -1.8px;">
+        <span id="channel-title">&nbsp;Radio Bruno HD</span>
+        <span id="channel-number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;608</span>
       </div>
       <div id="program-name">Caricamento in corso...</div>
       <!-- Aggiungi questa riga per il programma a seguire -->
@@ -402,8 +402,8 @@
 
 
   <script>
-   var player = new Clappr.Player({
-            source: "https://4c4b867c89244861ac216426883d1ad0.msvdn.net/live/S62628868/uhdWBlkC1AoO/playlist.m3u8",
+      var player = new Clappr.Player({
+            source: "https://stream7.xdevel.com/video0s975758-1051/stream/playlist.m3u8",
             parentId: "#player",
             width: '100%',
             height: '100vh',
@@ -659,7 +659,7 @@ function updateProgramName() {
             currentProgramGlobal = currentProgram;
 
             // Cambia dinamicamente i titoli
-            changeProgramTitles("Musica allo stato puro", "Musica allo stato puro");
+            changeProgramTitles("Chiamala per nome", "Chiamala per nome");
 
             // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
             if (currentProgram) {
