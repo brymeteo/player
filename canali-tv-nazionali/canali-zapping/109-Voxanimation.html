@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -37,16 +36,26 @@
 
     .logo-overlay {
       position: absolute;
-            top: 86%;
+            top: 7%;
             right: 5%;
-            max-width: 26%;
-            width: 17.5%;
-            height: auto !important;
-            pointer-events: none;
-            z-index: 997;
-            background: 0 0 !important;
-           
-        }
+            max-width: 19%;
+            opacity: 1.0;
+            width: auto;
+            height: auto;
+            
+            width: 16.6%;
+    height: auto !important;
+    pointer-events: none;
+            z-index: 999;
+            overflow-clip-margin: content-box;
+    overflow: clip;
+            z-index: 1000;
+    pointer-events: none;
+    background: 0 0 !important;
+            
+            
+            
+          }
 
     .video-js .vjs-control-bar {
       display: none !important;
@@ -321,7 +330,7 @@
   
 <div id="background-overlay"></div>
 
-  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay" />
+  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001317-320a2320a4/path1.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay" />
 
 
 
@@ -552,22 +561,32 @@
     showOverlay("play");
   }
 
-  if (event.data === "restart") {
-    // Torna all'inizio del video corrente
+if (event.data === "restart") {
+  // Se il player è già in riproduzione, riavvia l'attuale traccia
+  if (player.readyState() > 0) {
+    player.currentTime(0);
+    player.play();
+    showOverlay("restart");
+  } else {
+    // Se il player non è pronto, carica la traccia corrente dall'inizio
     const risultato = calcolaIndexEOffset();
     if (!risultato) return;
-
     const { index } = risultato;
-    caricaVideo(palinsesto[index], 0);
+    caricaVideo(index, 0);
     showOverlay("restart");
   }
+}
+
 
 
       // Comando "live": ricarica la sorgente live
-      else if (event.data === "live") {
-        player.load(player.options.source);
-        console.log("Comando: live eseguito, live stream ricaricato");
-      }
+else if (event.data === "live") {
+  player.load(player.options.source);
+  console.log("Comando: live eseguito, live stream ricaricato");
+  // Ricarica la pagina
+  location.reload();
+}
+
       // Comando "rewind"/"indietro"
       else if ((event.data === "rewind" || event.data === "indietro") ||
         (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
