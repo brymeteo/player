@@ -1,344 +1,730 @@
-
-
-
-
-
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="it">
 <head>
-    <title>DIRETTA TV</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Player -->
-    <script src="https://cdn.fluidplayer.com/3.28.0/fluidplayer.min.js" defer></script>
-    <link href="https://brymeteo.github.io/tv/lity.min.css" rel="stylesheet">
-    <style>
-        #background-overlay {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canale TV Live Simulato</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video-js.min.css" rel="stylesheet" />
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    
+     #background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000;
+            z-index: 1000; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
             background: #171a45;
         }
 
-        [data-watermark-top-right] {
-            position: absolute;
-            top: 7%;
-            right: 5%;
-            max-width: 26%;
-            width: 21.5%;
-            height: auto !important;
-            pointer-events: none;
-            z-index: 40;
-            background: 0 0 !important;
-        }
+    
+    
+    
 
-        #logo {
-            position: absolute;
-            top: 71%;
-            left: 21%;
-            width: 57%;
-            height: auto;
-            opacity: 90%;
-            cursor: pointer;
-            display: block;
-            z-index: 1000;
-        }
+    .video-js {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
 
-        .hidden {
-            display: none;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 500;
-        }
-
-        #hls-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        #fallback-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        .player-controls {
-            display: none !important;
-        }
-
-        .media-control .media-control-layer {
-            display: none !important;
-        }
-
-        #second-logo {
-            position: absolute;
+      .logo-overlay {
+      position: absolute;
             top: 86%;
             right: 5%;
             max-width: 26%;
-            width: 16.5%;
+            width: 17.5%;
             height: auto !important;
             pointer-events: none;
-            z-index: 1000;
+            z-index: 997;
             background: 0 0 !important;
-            display: none;
+           
         }
 
-
-   .fluid_controls_container {
-            display: none !important;
-        }
-    </style>
-    
-     <style>
-    /* Stile per il contenitore dell'elemento */
-    #element-container {
-       position: absolute;
-      top: 8%;
-      right: 70%;
-      max-width: 25%;
-            width: auto;
-            height: auto;
-            transition: opacity 1s, transform 33s;
- z-index: 800;
+    .video-js .vjs-control-bar {
+      display: none !important;
     }
 
-    #element {
-      max-width: 100%;
-      height: auto;
+    .vjs-fullscreen-control {
+      z-index: 15;
     }
-  </style>
-  
-  
-      <style>
+
+    #fallback-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
+
+    h1 {
+      text-align: center;
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      z-index: 60;
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
     
-    /* Impostazioni per il logo */
-#myLogo {
-    position: fixed; /* Posiziona il logo in basso a destra in modo fisso */
-    bottom: 10%;     /* Distanza dal basso */
-    right: 6%;      /* Distanza da destra */
-    width: 16%;     /* Imposta una larghezza per il logo (modifica come preferisci) */
-    opacity: 0;       /* Inizialmente il logo è invisibile */
-    transition: opacity 0.5s ease; /* Animazione per la transizione dell'opacità */
-     z-index: 1000;
+         /* Stile per la barra informativa del canale - migliorato con effetto 3D */
+       #channel-info-bar {
+    position: absolute;
+    bottom: 60px;
+    left: 45px;
+    background-color: rgb(19 19 19 / 0%);
+    color: white;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgb(255 255 255 / 0%);
+    overflow: hidden;
+    zoom: 160%;
 }
 
+        
+#channel-info-inner {
+    position: relative;
+    border: 3px solid rgb(37 167 182 / 53%);
+    border-radius: 4px;
+    margin: 2px;
+    padding: 8px 12px;
+    background: linear-gradient(to bottom, rgb(32 78 116), rgb(36 59 100 / 87%));
+}
+        
+        
+        #channel-name {
+            display: flex;
+            
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        #channel-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        #channel-number {
+            font-size: 22px;
+            opacity: 0.9;
+            font-weight: normal;
+            padding: 0 0 0 4px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
+            margin-left: auto;
+        }
+        
+        #program-name {
+            font-size: 23px;
+            opacity: 0.85;
+            text-align: left;
+            margin-top: 2px;
+            padding-top: 2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+@media only screen and (max-width: 600px) {
+    #channel-info-bar {
+        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
+        left: 20px;   /* Riduci il margine a sinistra */
+        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
+    }
+
+    #channel-info-inner {
+        padding: 5px 8px; /* Riduci i padding interni */
+        margin: 1px;
+        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+    }
+
+    #channel-logo {
+        width: 50px; /* Logo più piccolo su schermi mobili */
+    }
+
+    #channel-title {
+        font-size: 20px; /* Riduci la dimensione del titolo */
+    }
+
+    #channel-number {
+        font-size: 18px;
+        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+    }
+
+    #program-name {
+        font-size: 18px; /* Riduci la dimensione del font */
+    }
+
+    #program-progress-bar {
+        height: 8px; /* Barra di avanzamento più piccola */
+    }
+}
+        
+          /* Stili per la barra di avanzamento del programma */
+    #program-progress-container {
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #program-progress-container > div {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    #program-progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #878787d6;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    #program-progress {
+      width: 0%;
+      height: 100%;
+      background-color: #87bdda;
+    }
+        
+        
     </style>
     
     
-    
-    
-</head>
-
-<body>
-    <div id="background-overlay"></div>
-    <div id="video-container" class="hidden">
-    
-    
-<video id="hls-video">
-            <source id="video-source" type="application/x-mpegURL">
-        </video>
-    </div>
-    
-    
-    
-    <img id="logo" src="https://brymeteo.github.io/player/banner-decoder/201.png" alt="Logo" data-lity="" data-lity-target="https://wips.plug.it/cips/tecnologia/cms/2021/06/nessun-segnale-tv.jpg">
-    
    
+  
+  <!-- Nuovi stili per overlay e animazioni -->
+  <style>
+    /* Overlay centrale */
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px; /* Dimensione font per desktop */
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Stili per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 300px;
+    font-size: 14px; /* Dimensione font più piccola per mobile */
+  }
+  
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
+    /* Animazione spinner con cubetti */
+    .spinner-cubes {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .spinner-cubes div {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      margin: 2px;
+      animation: spinner 1s infinite ease-in-out;
+    }
+    .spinner-cubes div:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .spinner-cubes div:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .spinner-cubes div:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes spinner {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+    }
+   /* Messaggio in alto a destra per restart */
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+/* Responsive per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+    #restart-message {
+        top: 5px;
+        /* right: 5px; */
+        /* padding: 5px; */
+        font-size: 16px;
+    }
+}
+
+
+    .hidden {
+      display: none;
+    }
     
     
-    <img id="fallback-image" src="https://i.ibb.co/h2HKbxz/avviso-sat-canali.png" alt="Fallback Image">
-    <img id="second-logo" src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Secondo Logo">
-<img id="myLogo" src="https://img1.picmix.com/output/stamp/normal/5/6/7/2/2132765_7e449.gif" alt="Logo">
-    <script>
-        const videoSourceURL = "https://dotfvxkfj90ca.cloudfront.net/programming/movie2/playlist.m3u8?token=4062f2a0-021f-493c-aa60-f9fc42698dfe&streamSessionId=f1e7dcb2-7cf5-480b-9557-2e8f382b63bf&code=Tvmy&expires=1740368371057&ctrl=0c137e623d277468a12e6eed40276463f8f59371914ed9552c43515caac1f209216f748f4e7c975f3c1ded2e5ac5db3f09e4c51e2674546e407aceb44c71c388";
-        let videoPlaying = false; // Flag per tenere traccia dello stato di riproduzione del video
-        let inactivityTimeout; // Timer per monitorare l'inattività
-        const inactivityDuration = 2000; // 10 secondi di inattività
 
-        // Funzione per ricaricare la pagina una volta all'apertura della pagina
-        function reloadOnce() {
-            if (!sessionStorage.getItem('pageReloaded')) {
-                sessionStorage.setItem('pageReloaded', 'true');
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
+         #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}     
 
-        // Funzione per gestire il ricaricamento della pagina al rientro
-        function handleVisibilityChange() {
-            if (document.hidden) {
-                clearTimeout(inactivityTimeout); // Cancella il timer se l'utente esce dalla pagina
-            } else {
-                inactivityTimeout = setTimeout(() => {
-                    location.reload(); // Ricarica la pagina se l'utente rientra dopo 10 secondi
-                }, inactivityDuration);
-            }
-        }
-
-        window.onload = function () {
-            reloadOnce();  // Controlla se la pagina deve essere ricaricata
-            document.addEventListener('visibilitychange', handleVisibilityChange); // Ascolta il cambio di visibilità della pagina
-
-            setTimeout(function () {
-                document.getElementById("video-container").classList.remove("hidden");
-                document.getElementById("second-logo").style.display = "block";
-            }, 3000);
-
-            setTimeout(function () {
-                document.getElementById("background-overlay").style.display = "none";
-            }, 3000);
-
-            document.getElementById("video-source").src = videoSourceURL;
-
-            var logo = document.getElementById("logo");
-            var timerLogo;
-
-            function hideLogo() {
-                logo.style.display = "none";
-            }
-
-            function resetLogoTimer() {
-                logo.style.display = "block";
-                clearTimeout(timerLogo);
-                timerLogo = setTimeout(hideLogo, 15000);
-            }
-
-            document.addEventListener("mousemove", resetLogoTimer);
-            document.addEventListener("keypress", resetLogoTimer);
-
-            resetLogoTimer();
-
-            var player = fluidPlayer('hls-video', {
-                layoutControls: {
-                    autoPlay: true,
-                    mute: false,
-                    fillToContainer: true,
-                },
-               
-            });
-        };
-    </script>
     
-    <script>
-    // Array di elementi con data e orario di visualizzazione
-    const elements = [
-        { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001224-653e5653e7/TITOLO-0.webp?ph=7e11bb4538", start: "2024-12-24T12:25", end: "2024-12-24T13:58" },
-      
-      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001228-a15a6a15a8/TITOLO-1.webp?ph=7e11bb4538", start: "2024-12-24T14:02", end: "2024-12-24T15:47" },
-      
-      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001238-1976819769/TITOLO-10.webp?ph=7e11bb4538", start: "2024-12-24T15:50", end: "2024-12-24T17:25" },
-      
-      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001240-79f5279f55/TITOLO-7.webp?ph=7e11bb4538", start: "2024-12-24T17:30", end: "2024-12-24T19:05" },
-      
-      { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001242-db6bedb6c0/TITOLO-61.webp?ph=7e11bb4538", start: "2024-12-24T19:08", end: "2024-12-24T20:51" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001244-e2029e202b/TITOLO-79.webp?ph=7e11bb4538", start: "2024-12-24T20:55", end: "2024-12-24T22:18" },
-      
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001246-78ec378ec4/TITOLO-98.webp?ph=7e11bb4538", start: "2024-12-24T22:23", end: "2024-12-24T23:56" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001248-0f5c60f5c9/TITOLO-03.webp?ph=7e11bb4538", start: "2024-12-25T00:00", end: "2024-12-25T00:03" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001250-6fd706fd72/TITOLO-66.webp?ph=7e11bb4538", start: "2024-12-25T00:04", end: "2024-12-25T00:22" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001252-eac4ceac50/TITOLO-8.webp?ph=7e11bb4538", start: "2024-12-25T00:25", end: "2024-12-25T02:02" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001254-14b2714b28/TITOLO-80.webp?ph=7e11bb4538", start: "2024-12-25T02:07", end: "2024-12-25T03:22" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001234-8065280654/TITOLO-3.webp?ph=7e11bb4538", start: "2024-12-25T03:25", end: "2024-12-25T05:22" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001236-58a5758a5b/TITOLO-2.webp?ph=7e11bb4538", start: "2024-12-25T10:18", end: "2024-12-25T11:57" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001256-d6b70d6b71/TITOLO-26.webp?ph=7e11bb4538", start: "2024-12-25T12:00", end: "2024-12-25T13:34" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001258-38d5438d55/TITOLO-85.webp?ph=7e11bb4538", start: "2024-12-25T13:37", end: "2024-12-25T15:15" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001260-a5756a5758/TITOLO-22.webp?ph=7e11bb4538", start: "2024-12-25T15:18", end: "2024-12-25T16:52" },
 
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001262-4b5744b576/TITOLO-72.webp?ph=7e11bb4538", start: "2024-12-25T16:55", end: "2024-12-25T18:37" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001264-bab11bab12/TITOLO-16.webp?ph=7e11bb4538", start: "2024-12-25T18:40", end: "2024-12-25T20:17" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001266-577a4577a5/TITOLO-65.webp?ph=7e11bb4538", start: "2024-12-25T20:21", end: "2024-12-25T21:53" },
-     
-     { src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001268-c6226c6229/TITOLO-30.webp?ph=7e11bb4538", start: "2024-12-25T21:58", end: "2024-12-25T23:55" },
+    
+    
+  </style>
+</head>
+<body>
 
-{ src: "https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001270-1dc0c1dc0f/TITOLO-5.webp?ph=7e11bb4538", start: "2024-12-26T00:02", end: "2024-12-26T01:41" }
-      
-    ];
+  
+<div id="background-overlay"></div>
 
-    const elementNode = document.getElementById("element");
+  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay" />
 
-    // Funzione per aggiornare l'elemento visibile
-    function updateElement() {
-      const now = new Date();
-      const activeElement = elements.find(
-        (element) =>
-          new Date(element.start) <= now && new Date(element.end) >= now
-      );
 
-      if (activeElement) {
-        elementNode.src = activeElement.src;
-        elementNode.alt = `Elemento programmato per il periodo: ${activeElement.start} - ${activeElement.end}`;
-      } else {
-        elementNode.src = ""; // Nessun elemento visibile
-        elementNode.alt = "";
+
+
+  <!-- Barra informativa -->
+  <div id="channel-info-bar">
+    <div id="channel-info-inner">
+      <div id="channel-name">
+        <img id="channel-logo" src="https://i.ibb.co/cKBphGKt/logo.png" alt="Logo canale" style="width:70px; height:auto; margin-left: 1.8px;">
+        <span id="channel-title">&nbsp;Flix Animation HD</span>
+        <span id="channel-number">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;109</span>
+      </div>
+      <div id="program-name">Caricamento in corso...</div>
+      <!-- Aggiungi questa riga per il programma a seguire -->
+<div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
+
+      <!-- Barra di avanzamento del programma -->
+      <div id="program-progress-container">
+        <div>
+          <span id="program-start-time">--:--</span>
+          <span id="program-end-time">--:--</span>
+        </div>
+        <div id="program-progress-bar">
+          <div id="program-progress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Overlay card centrale per i comandi -->
+  <div id="overlay-card" class="hidden">
+    <img id="overlay-icon" src="" alt="Icona comando">
+    <!-- Contenitore per l'animazione spinner -->
+    <div id="overlay-animation" class="spinner-cubes">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p id="overlay-text"></p>
+  </div>
+  
+  <!-- Messaggio in alto a destra (per il caso restart) -->
+  <div id="restart-message" class="hidden">
+    Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
+  </div>
+
+
+
+
+
+
+  <video
+    id="videoPlayer"
+    class="video-js vjs-default-skin"
+    autoplay
+    preload="auto"
+    data-setup='{}'
+  ></video>
+
+  <!-- Immagine di fallback -->
+  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video.min.js"></script>
+
+  <script>
+  const orarioInizioStreaming = new Date("2025-05-24T18:48:00");
+
+  const palinsesto = [
+  {
+    title: "1",
+    url: "https://hfs302.serversicuro.cc/hls/dnzpfcjp5xgv4nwyvaux53rztt54lkrbioyox5uoupbuahzh4tygghtrhhyq/index-v1-a1.m3u8",
+    duration: 5588
+  },
+  {
+    title: "2",
+    url: "https://embed-cloudfront.wistia.com/deliveries/16a70e526fbe3ec6521bbaf4788d4eb8661bae81.m3u8",
+    duration: 26
+  },
+  {
+    title: "3",
+    url: "https://embed-cloudfront.wistia.com/deliveries/c73ef2ece2908dd0c80ddf9c6b751d29f0cc820b.m3u8",
+    duration: 6
+  },
+  {
+    title: "4",
+    url: "https://ms-025x.host-cdn.net/hls/llzeliuerahnmttc2tmmjnosrtuvpt7delcpi76bggsoapu4bvmohtpwv6pq/index-v1-a1.m3u8",
+    duration: 5663
+  },
+  {
+    title: "2",
+    url: "https://embed-cloudfront.wistia.com/deliveries/16a70e526fbe3ec6521bbaf4788d4eb8661bae81.m3u8",
+    duration: 26
+  },
+  {
+    title: "3",
+    url: "https://embed-cloudfront.wistia.com/deliveries/c73ef2ece2908dd0c80ddf9c6b751d29f0cc820b.m3u8",
+    duration: 6
+  }
+ 
+];
+
+  const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
+  const player = videojs("videoPlayer");
+  let currentIndex;
+
+  function caricaVideo(index, offset = 0) {
+    const item = palinsesto[index];
+    console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+    player.src({ src: item.url, type: "application/x-mpegURL" });
+    player.one('loadedmetadata', () => {
+      player.currentTime(offset);
+      player.play().catch(e => console.warn(e));
+    });
+    currentIndex = index;
+  }
+
+  player.on('ended', () => {
+    const next = (currentIndex + 1) % palinsesto.length;
+    caricaVideo(next, 0);
+  });
+
+  // Inizializzazione
+  (function initLive() {
+    const now = new Date();
+    const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+
+    if (secondsFromStart < 0) {
+      console.log("Il palinsesto non è ancora iniziato.");
+      document.getElementById('fallback-image').style.display = 'block';
+      return;
+    }
+
+    const secondsInLoop = secondsFromStart % durataTotale;
+
+    let accumulated = 0;
+    let idx = 0;
+    for (; idx < palinsesto.length; idx++) {
+      if (secondsInLoop < accumulated + palinsesto[idx].duration) {
+        break;
+      }
+      accumulated += palinsesto[idx].duration;
+    }
+
+    const offset = secondsInLoop - accumulated;
+    caricaVideo(idx, offset);
+  })();
+</script>
+
+  
+  <script>
+  // Variabili per gestire timer e stato overlay
+    var overlayCard = document.getElementById("overlay-card");
+    var overlayIcon = document.getElementById("overlay-icon");
+    var overlayText = document.getElementById("overlay-text");
+    var restartMessage = document.getElementById("restart-message");
+    var channelInfoBar = document.getElementById("channel-info-bar");
+    var overlayTimer, restartTimer, channelInfoTimer;
+
+    // Funzione per mostrare l'overlay card con contenuto personalizzato
+    function showOverlay(state) {
+      clearTimeout(overlayTimer);
+      clearTimeout(restartTimer);
+      overlayCard.classList.remove("hidden");
+      // Imposta contenuto in base allo stato: "pause", "play", "restart"
+      if (state === "pause") {
+        // Usa l'icona pausa (sostituisci l'URL con quello corretto)
+        overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
+        overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
+        // L'animazione spinner (i cubetti) è già visibile nel div #overlay-animation
+      } else if (state === "play") {
+        // Aggiorna l'icona in play
+        overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
+        overlayText.innerHTML = "";
+        // Dopo 2 secondi nascondi l'overlay
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+      } else if (state === "restart") {
+        // Per il comando rewind (indietro) mostra l'icona di restart
+        overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+        overlayText.innerHTML = "Video messo indietro.";
+        // Nasconde la card dopo 2 secondi
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+        // Dopo 5 secondi, mostra il messaggio in alto a destra
+        restartTimer = setTimeout(function () {
+          restartMessage.classList.remove("hidden");
+          // Nasconde il messaggio dopo 3 secondi (modifica la durata se necessario)
+          setTimeout(function () {
+            restartMessage.classList.add("hidden");
+          }, 15000);
+        }, 5000);
       }
     }
 
-    // Aggiorna l'elemento ogni minuto
-    setInterval(updateElement, 3000);
-
-    // Aggiorna subito all'avvio
-    updateElement();
-  </script>
+    // Gestione della barra informativa del canale
+    function hideChannelInfo() {
+      channelInfoBar.style.display = "none";
+    }
     
-   <script>// Funzione per mostrare e nascondere il logo
-function showLogo() {
-    const myLogo = document.getElementById('myLogo');
+    function showChannelInfo() {
+      channelInfoBar.style.display = "block";
+      clearTimeout(channelInfoTimer);
+      // Nascondi la barra informativa dopo 6 secondi
+      channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+    }
     
-    // Mostra il logo
-    myLogo.style.opacity = 1;
+    // Mostra la barra informativa al caricamento della pagina
+    showChannelInfo();
+    
+    // Mostra la barra informativa al movimento del mouse o pressione tasti
+    document.addEventListener("mousemove", showChannelInfo);
+    document.addEventListener("keypress", showChannelInfo);
 
-    // Nascondi il logo dopo 15 secondi
-    setTimeout(() => {
-        myLogo.style.opacity = 0;
-    }, 50000); // 20 secondi
+    // Gestione dei comandi vocali tramite postMessage
+   window.addEventListener("message", function (event) {
+  if (!event.data) return;
+  console.log("Messaggio ricevuto:", event.data);
+
+  if (event.data === "pause") {
+    player.pause();
+    showOverlay("pause");
+  }
+
+  if (event.data === "play") {
+    player.play();
+    showOverlay("play");
+  }
+
+if (event.data === "restart") {
+  // Se il player è già in riproduzione, riavvia l'attuale traccia
+  if (player.readyState() > 0) {
+    player.currentTime(0);
+    player.play();
+    showOverlay("restart");
+  } else {
+    // Se il player non è pronto, carica la traccia corrente dall'inizio
+    const risultato = calcolaIndexEOffset();
+    if (!risultato) return;
+    const { index } = risultato;
+    caricaVideo(index, 0);
+    showOverlay("restart");
+  }
 }
 
-// Imposta un intervallo per mostrare il logo ogni 5 minuti (300000 ms)
-setInterval(showLogo, 300000); // 5 minuti in millisecondi
-</script>
-    
-    
-    
-    
-    <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js" defer></script>
-</body>
 
+
+      // Comando "live": ricarica la sorgente live
+else if (event.data === "live") {
+  player.load(player.options.source);
+  console.log("Comando: live eseguito, live stream ricaricato");
+  // Ricarica la pagina
+  location.reload();
+}
+
+      // Comando "rewind"/"indietro"
+      else if ((event.data === "rewind" || event.data === "indietro") ||
+        (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+        let rewindSeconds = 10;
+        if (typeof event.data === "object" && event.data.seconds) {
+          rewindSeconds = event.data.seconds;
+        }
+        if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+          var currentTime = player.getCurrentTime();
+          var newTime = currentTime - rewindSeconds;
+          if (newTime < 0) newTime = 0;
+          player.seek(newTime);
+          console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+          showOverlay("restart");
+        } else {
+          console.log("Il comando 'indietro' non è supportato per questo live stream");
+        }
+      }
+    });
+  </script>
+
+  <script>
+    player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+      document.getElementById("fallback-image").style.display = "block";
+      document.getElementById("player").style.display = "none";
+    });
+
+    var logo = document.getElementById("logo");
+    var timer;
+    function hideLogo() {
+      logo.style.display = "none";
+    }
+    function resetTimer() {
+      logo.style.display = "block";
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 6000);
+    }
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+    resetTimer();
+  </script>
+
+<script>
+  // URL del file JSON contenente i dati EPG
+  const epgUrl = "https://brymeteo.github.io/player/decoder/stili-dec/vox_animation_epg.json";
+  // Identificativo del canale selezionato (esempio: "canale-5")
+  let selectedChannelId = "vox-animation";
+  // URL personalizzato per il logo del canale
+  const customLogoURL = "https://i.ibb.co/spNPFxZX/logo.png";
+
+  // Variabile globale per salvare il programma corrente
+  let currentProgramGlobal = null;
+
+  function isDST(date) {
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
+
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      date.setHours(date.getHours() - 2);
+    } else {
+      date.setHours(date.getHours() + 2);
+    }
+    return date;
+  }
+
+  function updateProgressBar(currentProgram) {
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
+    const now = new Date();
+    const totalDuration = endTime - startTime;
+    const elapsed = now - startTime;
+    let progressPercent = (elapsed / totalDuration) * 100;
+    progressPercent = Math.max(0, Math.min(progressPercent, 100));
+    document.getElementById("program-progress").style.width = progressPercent + "%";
+
+    const formatTime = date => date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    document.getElementById("program-start-time").textContent = formatTime(startTime);
+    document.getElementById("program-end-time").textContent = formatTime(endTime);
+  }
+
+  setInterval(function(){
+    if (window.currentProgramGlobal) {
+      updateProgressBar(window.currentProgramGlobal);
+    }
+  }, 1000);
+
+  function updateProgramName() {
+    fetch(epgUrl)
+      .then(response => {
+        if (!response.ok) throw new Error("Errore nel recupero dei dati EPG");
+        return response.json();
+      })
+      .then(data => {
+        // Adattato per oggetto singolo (non array)
+        const channel = data.id === selectedChannelId ? data : null;
+        if (!channel) {
+          console.error("Canale non trovato");
+          return;
+        }
+
+        const now = new Date();
+
+        const currentProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
+          return now >= start && now < end;
+        });
+
+        const nextProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          return start > now;
+        });
+
+        currentProgramGlobal = currentProgram;
+
+        const programNameEl = document.getElementById("program-name");
+        if (programNameEl) {
+          programNameEl.textContent = currentProgram ? currentProgram.title : "Programma non disponibile";
+        }
+
+        const nextProgramNameEl = document.getElementById("next-program-name");
+        if (nextProgramNameEl) {
+          nextProgramNameEl.textContent = nextProgram ? "A seguire » " + nextProgram.title : "Programma a seguire: Non disponibile";
+        }
+
+        if (currentProgram) {
+          updateProgressBar(currentProgram);
+        }
+      })
+      .catch(error => {
+        console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+      });
+  }
+
+  updateProgramName();
+  setInterval(updateProgramName, 60000);
+</script>
+
+  
+  
+  
+  
+   <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+  
+</body>
 </html>
