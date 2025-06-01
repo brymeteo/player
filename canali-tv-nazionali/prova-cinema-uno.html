@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -388,40 +387,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video.min.js"></script>
 
   <script>
-  const orarioInizioStreaming = new Date("2025-05-24T18:45:00");
+  const orarioInizioStreaming = new Date("2025-05-24T18:55:00");
 
   const palinsesto = [
   {
-    title: "1",
-    url: "https://s37.drop.download:182/d/n7cvbf2p4v56fai4hkt5bdc4sawjjaclg3hbmzovyh7khakninc3537angxvcuhx7edbmh7y/Jumanji%20-%20Benvenuti%20nella%20giungla%20(2017).mp4",
-    duration: 5588
+    title: "Jumanji - Benvenuti nella giungla",
+    url: "https://cf247a12.movie-1h4.pages.dev/jumanji-benvenuti-nella-giungla/output.m3u8",
+    duration: 7143
   },
   {
-    title: "2",
+    title: "tv",
     url: "https://embed-cloudfront.wistia.com/deliveries/16a70e526fbe3ec6521bbaf4788d4eb8661bae81.m3u8",
     duration: 26
   },
   {
-    title: "3",
-    url: "https://embed-cloudfront.wistia.com/deliveries/c73ef2ece2908dd0c80ddf9c6b751d29f0cc820b.m3u8",
-    duration: 6
-  },
-  {
-    title: "4",
-    url: "https://ms-025x.host-cdn.net/hls/llzeliuerahnmttc2tmmjnosrtuvpt7delcpi76bggsoapu4bvmohtpwv6pq/index-v1-a1.m3u8",
-    duration: 5663
-  },
-  {
-    title: "2",
-    url: "https://embed-cloudfront.wistia.com/deliveries/16a70e526fbe3ec6521bbaf4788d4eb8661bae81.m3u8",
-    duration: 26
-  },
-  {
-    title: "3",
+    title: "tv1",
     url: "https://embed-cloudfront.wistia.com/deliveries/c73ef2ece2908dd0c80ddf9c6b751d29f0cc820b.m3u8",
     duration: 6
   }
- 
 ];
 
   const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
@@ -429,27 +412,15 @@
   let currentIndex;
 
   function caricaVideo(index, offset = 0) {
-  const item = palinsesto[index];
-  const isMp4 = item.url.endsWith(".mp4");
-  const type = isMp4 ? "video/mp4" : "application/x-mpegURL";
-
-  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
-  player.src({ src: item.url, type });
-
-  player.one('loadedmetadata', () => {
-    if (offset > 0 && typeof player.currentTime === "function") {
-      try {
-        player.currentTime(offset);
-      } catch (e) {
-        console.warn("Seek fallito:", e);
-      }
-    }
-    player.play().catch(e => console.warn(e));
-  });
-
-  currentIndex = index;
-}
-
+    const item = palinsesto[index];
+    console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+    player.src({ src: item.url, type: "application/x-mpegURL" });
+    player.one('loadedmetadata', () => {
+      player.currentTime(offset);
+      player.play().catch(e => console.warn(e));
+    });
+    currentIndex = index;
+  }
 
   player.on('ended', () => {
     const next = (currentIndex + 1) % palinsesto.length;
@@ -635,42 +606,28 @@ else if (event.data === "live") {
 
 <script>
   // URL del file JSON contenente i dati EPG
-  const epgUrl = "https://brymeteo.github.io/player/decoder/stili-dec/vox_animation_epg.json";
+  const epgUrl = "https://my-os.s3.cubbit.eu/palinsesto%20copia.json";
   // Identificativo del canale selezionato (esempio: "canale-5")
-  let selectedChannelId = "vox-animation";
+  let selectedChannelId = "premiere-cinema";
   // URL personalizzato per il logo del canale
   const customLogoURL = "https://i.ibb.co/spNPFxZX/logo.png";
 
   // Variabile globale per salvare il programma corrente
   let currentProgramGlobal = null;
 
-  function isDST(date) {
-    const january = new Date(date.getFullYear(), 0, 1);
-    const july = new Date(date.getFullYear(), 6, 1);
-    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
-  }
-
-  function adjustTime(dateInput) {
-    const date = new Date(dateInput);
-    if (isDST(date)) {
-      date.setHours(date.getHours() - 2);
-    } else {
-      date.setHours(date.getHours() + 2);
-    }
-    return date;
-  }
-
+  // Aggiorna la barra di progresso del programma corrente
   function updateProgressBar(currentProgram) {
-    const startTime = adjustTime(currentProgram.start);
-    const endTime = adjustTime(currentProgram.end);
+    const startTime = new Date(currentProgram.start);
+    const endTime = new Date(currentProgram.end);
     const now = new Date();
+
     const totalDuration = endTime - startTime;
     const elapsed = now - startTime;
     let progressPercent = (elapsed / totalDuration) * 100;
     progressPercent = Math.max(0, Math.min(progressPercent, 100));
     document.getElementById("program-progress").style.width = progressPercent + "%";
 
-    const formatTime = date => date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    const formatTime = date => date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
     document.getElementById("program-start-time").textContent = formatTime(startTime);
     document.getElementById("program-end-time").textContent = formatTime(endTime);
   }
@@ -681,6 +638,7 @@ else if (event.data === "live") {
     }
   }, 1000);
 
+  // Aggiorna i nomi del programma corrente e successivo
   function updateProgramName() {
     fetch(epgUrl)
       .then(response => {
@@ -698,13 +656,13 @@ else if (event.data === "live") {
         const now = new Date();
 
         const currentProgram = channel.programs.find(program => {
-          const start = adjustTime(program.start);
-          const end = adjustTime(program.end);
+          const start = new Date(program.start);
+          const end = new Date(program.end);
           return now >= start && now < end;
         });
 
         const nextProgram = channel.programs.find(program => {
-          const start = adjustTime(program.start);
+          const start = new Date(program.start);
           return start > now;
         });
 
@@ -732,6 +690,7 @@ else if (event.data === "live") {
   updateProgramName();
   setInterval(updateProgramName, 60000);
 </script>
+
 
   
   
