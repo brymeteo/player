@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -387,12 +388,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video.min.js"></script>
 
   <script>
-  const orarioInizioStreaming = new Date("2025-05-24T18:48:00");
+  const orarioInizioStreaming = new Date("2025-05-24T18:45:00");
 
   const palinsesto = [
   {
     title: "1",
-    url: "https://hfs302.serversicuro.cc/hls/dnzpfcjp5xgv4nwyvaux53rztt54lkrbioyox5uoupbuahzh4tygghtrhhyq/index-v1-a1.m3u8",
+    url: "https://s37.drop.download:182/d/n7cvbf2p4v56fai4hkt5bdc4sawjjaclg3hbmzovyh7khakninc3537angxvcuhx7edbmh7y/Jumanji%20-%20Benvenuti%20nella%20giungla%20(2017).mp4",
     duration: 5588
   },
   {
@@ -428,15 +429,27 @@
   let currentIndex;
 
   function caricaVideo(index, offset = 0) {
-    const item = palinsesto[index];
-    console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
-    player.src({ src: item.url, type: "application/x-mpegURL" });
-    player.one('loadedmetadata', () => {
-      player.currentTime(offset);
-      player.play().catch(e => console.warn(e));
-    });
-    currentIndex = index;
-  }
+  const item = palinsesto[index];
+  const isMp4 = item.url.endsWith(".mp4");
+  const type = isMp4 ? "video/mp4" : "application/x-mpegURL";
+
+  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+  player.src({ src: item.url, type });
+
+  player.one('loadedmetadata', () => {
+    if (offset > 0 && typeof player.currentTime === "function") {
+      try {
+        player.currentTime(offset);
+      } catch (e) {
+        console.warn("Seek fallito:", e);
+      }
+    }
+    player.play().catch(e => console.warn(e));
+  });
+
+  currentIndex = index;
+}
+
 
   player.on('ended', () => {
     const next = (currentIndex + 1) % palinsesto.length;
