@@ -320,7 +320,8 @@
   
 <div id="background-overlay"></div>
 
-  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay" />
+ <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001290-6bf616bf63/premiere_Cinema.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay hidden" id="main-logo" />
+
 
 
 
@@ -417,12 +418,15 @@ function caricaVideo(index, offset = 0) {
   const item = palinsesto[index];
   console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
 
-  // Verifica compatibilità nativa HLS
+  const logo = document.getElementById('main-logo');
+
   if (player.canPlayType('application/vnd.apple.mpegURL')) {
     player.src({ src: item.url, type: "application/x-mpegURL" });
     player.ready(() => {
       player.currentTime(offset);
-      player.play().catch(e => console.warn(e));
+      player.play().then(() => {
+        logo.classList.remove('hidden'); // Mostra il logo quando parte
+      }).catch(e => console.warn(e));
     });
   } else if (Hls.isSupported()) {
     const video = document.getElementById('videoPlayer');
@@ -431,7 +435,9 @@ function caricaVideo(index, offset = 0) {
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, function () {
       video.currentTime = offset;
-      video.play();
+      video.play().then(() => {
+        logo.classList.remove('hidden'); // Mostra il logo
+      });
     });
   } else {
     console.error("HLS non supportato da questo dispositivo.");
@@ -440,6 +446,7 @@ function caricaVideo(index, offset = 0) {
 
   currentIndex = index;
 }
+
 
 player.on('ended', () => {
   const next = (currentIndex + 1) % palinsesto.length;
