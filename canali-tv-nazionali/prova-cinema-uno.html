@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Canale TV Live Simulato</title>
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video-js.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet" />
 
   <style>
     body, html {
@@ -384,12 +384,14 @@
   <!-- Immagine di fallback -->
   <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video.min.js"></script>
+<!-- Video.js v8 + HLS.js fallback -->
+<script src="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <script>
-  const orarioInizioStreaming = new Date("2025-05-24T18:55:00");
+<script>
+const orarioInizioStreaming = new Date("2025-05-24T18:55:00");
 
-  const palinsesto = [
+const palinsesto = [
   {
     title: "Jumanji - Benvenuti nella giungla",
     url: "https://movie-1h4.pages.dev/jumanji-benvenuti-nella-giungla/output.m3u8",
@@ -407,51 +409,67 @@
   }
 ];
 
-  const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
-  const player = videojs("videoPlayer");
-  let currentIndex;
+const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
+const player = videojs("videoPlayer");
+let currentIndex;
 
-  function caricaVideo(index, offset = 0) {
-    const item = palinsesto[index];
-    console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+function caricaVideo(index, offset = 0) {
+  const item = palinsesto[index];
+  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+
+  // Verifica compatibilità nativa HLS
+  if (player.canPlayType('application/vnd.apple.mpegURL')) {
     player.src({ src: item.url, type: "application/x-mpegURL" });
-    player.one('loadedmetadata', () => {
+    player.ready(() => {
       player.currentTime(offset);
       player.play().catch(e => console.warn(e));
     });
-    currentIndex = index;
+  } else if (Hls.isSupported()) {
+    const video = document.getElementById('videoPlayer');
+    const hls = new Hls();
+    hls.loadSource(item.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.currentTime = offset;
+      video.play();
+    });
+  } else {
+    console.error("HLS non supportato da questo dispositivo.");
+    document.getElementById('fallback-image').style.display = 'block';
   }
 
-  player.on('ended', () => {
-    const next = (currentIndex + 1) % palinsesto.length;
-    caricaVideo(next, 0);
-  });
+  currentIndex = index;
+}
 
-  // Inizializzazione
-  (function initLive() {
-    const now = new Date();
-    const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+player.on('ended', () => {
+  const next = (currentIndex + 1) % palinsesto.length;
+  caricaVideo(next, 0);
+});
 
-    if (secondsFromStart < 0) {
-      console.log("Il palinsesto non è ancora iniziato.");
-      document.getElementById('fallback-image').style.display = 'block';
-      return;
+(function initLive() {
+  const now = new Date();
+  const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+
+  if (secondsFromStart < 0) {
+    console.log("Il palinsesto non è ancora iniziato.");
+    document.getElementById('fallback-image').style.display = 'block';
+    return;
+  }
+
+  const secondsInLoop = secondsFromStart % durataTotale;
+
+  let accumulated = 0;
+  let idx = 0;
+  for (; idx < palinsesto.length; idx++) {
+    if (secondsInLoop < accumulated + palinsesto[idx].duration) {
+      break;
     }
+    accumulated += palinsesto[idx].duration;
+  }
 
-    const secondsInLoop = secondsFromStart % durataTotale;
-
-    let accumulated = 0;
-    let idx = 0;
-    for (; idx < palinsesto.length; idx++) {
-      if (secondsInLoop < accumulated + palinsesto[idx].duration) {
-        break;
-      }
-      accumulated += palinsesto[idx].duration;
-    }
-
-    const offset = secondsInLoop - accumulated;
-    caricaVideo(idx, offset);
-  })();
+  const offset = secondsInLoop - accumulated;
+  caricaVideo(idx, offset);
+})();
 </script>
 
   
