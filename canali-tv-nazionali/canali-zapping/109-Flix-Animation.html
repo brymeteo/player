@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Canale TV Live Simulato</title>
 
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video-js.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet" />
 
   <style>
     body, html {
@@ -36,7 +36,7 @@
 
       .logo-overlay {
       position: absolute;
-            top: 86%;
+            top: 84%;
             right: 5%;
             max-width: 26%;
             width: 17.5%;
@@ -320,7 +320,8 @@
   
 <div id="background-overlay"></div>
 
-  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001332-2f1432f145/Flix%20animation%20hd-5.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay" />
+ <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001332-2f1432f145/Flix%20animation%20hd-5.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay hidden" id="main-logo" />
+
 
 
 
@@ -384,89 +385,288 @@
   <!-- Immagine di fallback -->
   <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.0/video.min.js"></script>
+<!-- Video.js v8 + HLS.js fallback -->
+<script src="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <script>
-  const orarioInizioStreaming = new Date("2025-05-24T02:00:00");
+<script>
+const orarioInizioStreaming = new Date("2025-06-06T06:00:00");
 
-  const palinsesto = [
+const palinsesto = [
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep1 St34 - Habeas testudo",
+    url: "https://ms-037.host-cdn.net/hls/llzeeicbqyhnmttc2qy4p3ge3s7wvzwvsmmdd53t6etoc3hzoyjjktgrjjdq/index-v1-a1.m3u8",
+    duration: 1298
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep2 St34 - La parola alla giurata Lisa",
+    url: "https://ms-037.host-cdn.net/hls/llzef3cpqyhnmttc2qy4p36oyicoqyfxf6fj2syrszeogxsvppvbp3lgthuq/index-v1-a1.m3u8",
+    duration: 1299
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep3 St34 - Lisa il boy scout",
+    url: "https://ms-037.host-cdn.net/hls/llzel3cmqyhnmttc2qzmp5ge36rrxfbonupjkgi6m56hckcpwtndgtfezr6a/index-v1-a1.m3u8",
+    duration: 1300
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep4 St34 - Il re della gentilezza",
+    url: "https://ms-037.host-cdn.net/hls/llzele2jqyhnmttc2qzmpmozz44tyka5gkxjsvcp3efkvh7qbt7x3g7rgqcq/index-v1-a1.m3u8",
+    duration: 1299
+  },
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep7 St34 - Dalla birra alla paternità",
+    url: "https://ms-010x.host-cdn.net/hls/llzeehduqyhnmttc2qzmp4ue2yryg2oni7fyehrpi2guxkjphhppogtlikra/index-v1-a1.m3u8",
+    duration: 1299
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio American Dad + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1fc4e4ad0bb29fe6e825ddf4e53cb7127372c4d0.m3u8",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E01 -  Il compagno di viaggio",
+    url: "https://ms-055.host-cdn.net/hls/llzeenqprahnmttc2tp4jz6mz67qswgqk3vupho4u3ficoph7ebtk2gtvnrq/index-v1-a1.m3u8",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad",
+    url: "https://embed-cloudfront.wistia.com/deliveries/5b34374c6e3e2b1c598896c9a0d0324458ecdfdc.m3u8",
+    duration: 8
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E02 -  Il professore e l'allenatore",
+    url: "https://ms-025x.host-cdn.net/hls/llzeemiprahnmttc2tp4j6wd3kbuabbc4o4v5yjdcxy5dqs5ynq77tGTNdbq/index-v1-a1.m3u8",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad",
+    url: "https://embed-cloudfront.wistia.com/deliveries/5b34374c6e3e2b1c598896c9a0d0324458ecdfdc.m3u8",
+    duration: 8
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E03 -  Il passato del preside",
+    url: "https://ms-041.host-cdn.net/hls/llzeknyfrahnmttc2tp4jn63yb6iysgq3ubo42zf5rlxnay3424jtngtfuca/index-v1-a1.m3u8",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1fc4e4ad0bb29fe6e825ddf4e53cb7127372c4d0.m3u8",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E04 -  L'evocazione piacevole a casa Smith",
+    url: "https://ms-037.host-cdn.net/hls/llzeemifrahnmttc2tp4jzw2rxhuiw3fc34edofkh7ndaudrqvykmqgt7bxa/index-v1-a1.m3u8",
+    duration: 1269
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio The Cleveland Show + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/8020875bb8ee5a3b7c8c854473aa753ff981a873.m3u8",
+    duration: 18
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "The Cleveland Show S1 E01 -  Ritorno a casa",
+    url: "https://ms-050.host-cdn.net/hls/llzeootmqyhnmttc2qy4p5mp26lfpmowv6fq6gye2mdxyzpord33mhgtbneq/index-v1-a1.m3u8",
+    duration: 1335
+  },
+  {
+    title: "Sigla+ Inizio The Cleveland Show",
+    url: "https://embed-cloudfront.wistia.com/deliveries/427b66c711d8d53c722dbc24df429eb69bf9c958.m3u8",
+    duration: 5
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "The Cleveland Show S1 E02 -  Da assassino a ballerino",
+    url: "https://ms-050.host-cdn.net/hls/llzeonlmqyhnmttc2qy4p3gc2tjwk5grrhlhyuy43ikyefm3nz3ldtygt3ca/index-v1-a1.m3u8",
+    duration: 1303
+  },
+  {
+    title: "Sigla+ Inizio I Griffin + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/50150c181a1e8f6fb63b6e6056e8e1d89e65dc5a.m3u8",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "I Griffin S19 E01 -  La prima parola di Stewie",
+    url: "https://ms-013.host-cdn.net/hls/llzefzksquhnmttc2qr4p3wh3gv45s3y7nm4n6f5sqvjovvhiuur6jugtrxa/index-v1-a1.m3u8",
+    duration: 1293
+  },
+  {
+    title: "Sigla+ Inizio I Griffin",
+    url: "https://embed-cloudfront.wistia.com/deliveries/0761fc021d4a963e6344cc87b5608006d3a6c254.m3u8",
+    duration: 5
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    duration: 5
+  },
+  {
+    title: "I Griffin S19 E02 -  Il talento di Mr. Stewie",
+    url: "https://ms-005.host-cdn.net/hls/llzefycsquhnmttc2qr4pn6oqx76jhwexavs4ch4aqu2cjwjgzbzigtfgusq/index-v1-a1.m3u8",
+    duration: 1298
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep8 St34 - Fratellastro di un altro pianeta",
+    url: "https://ms-025x.host-cdn.net/hls/llzeept6qyhnmttc2qzmp46v3ywvgb3i6cmxesgxlmye3wrrxjvgtedterrq/index-v1-a1.m3u8",
+    duration: 1299
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep3 St34 - Lisa il boy scout",
+    url: "https://ms-037.host-cdn.net/hls/llzel3cmqyhnmttc2qzmp5ge36rrxfbonupjkgi6m56hckcpwtndgtfezr6a/index-v1-a1.m3u8",
+    duration: 1300
+  }
+];
 
-{ title: "I Simpson Ep1 St34", url: "https://ms-037.host-cdn.net/hls/llzeeicbqyhnmttc2qy4p3ge3s7wvzwvsmmdd53t6etoc3hzoyjjktgrjjdq/index-v1-a1.m3u8", duration: 21 * 60 + 38 },
+const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
+const player = videojs("videoPlayer");
+let currentIndex;
 
-{ title: "I Simpson Ep2 St34", url: "https://hfs279.serversicuro.cc/hls/dnzpe2w22hg4a3gyvchx5mlvtcgcepk3um5zr2pfoqazfm4l4zlgt6mbptza/index-v1-a1.m3u8", duration: 21 * 60 + 39 }, // in secondi
-    
-{ title: "I Simpson Ep3 St34", url: "https://ms-037.host-cdn.net/hls/llzel3cmqyhnmttc2qzmp5ge36rrxfbonupjkgi6m56hd252fghrayp2grmq/index-v1-a1.m3u8", duration: 21 * 60 + 40 },
+function caricaVideo(index, offset = 0) {
+  const item = palinsesto[index];
+  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
 
-{ title: "I Simpson Ep4 St34", url: "https://ms-037.host-cdn.net/hls/llzele2jqyhnmttc2qzmpmozz44tyka5gkxjsvcp3efkuxafsgvj3gtnqlaq/index-v1-a1.m3u8", duration: 21 * 60 + 39 },
-    
-{ title: "I Simpson Ep5 St34", url: "https://ms-008.host-cdn.net/hls/llzekhz6qyhnmttc2q3mp5oeq6hmt5ahjrjx37ythfck6vulkxxwotgt5u3q/index-v1-a1.m3u8", duration: 21 * 60 + 34 },
-        
-{ title: "I Griffin S21 E01", url: "https://ms-005.host-cdn.net/hls/llzef6jdquhnmttc2q44pz6e2rzybvg2a5kb4iq2knaxqjyu4m6ttoxgtoeq/index-v1-a1.m3u8", duration: 21 * 60 + 38 },
-        
-{ title: "American Dad S20 E01", url: "https://ms-055.host-cdn.net/hls/llzeenqprahnmttc2tp4jz6mz67qswgqk3vupho4u3fid6qsmrld4cgrtosa/index-v1-a1.m3u8", duration: 21 * 60 + 09 },  
-       
-{ title: "American Dad S20 E02", url: "https://ms-025x.host-cdn.net/hls/llzeemiprahnmttc2tp4j6wd3kbuabbc4o4v5yjdcxy5canily2f3jgt6ibq/index-v1-a1.m3u8", duration: 21 * 60 + 09 },
+  const logo = document.getElementById('main-logo');
 
-{ title: "I Simpson Ep1 St33", url: "https://ms-039.host-cdn.net/hls/llzeot2bqyhnmttc2q5mp5ug3elohkezsqsypyxxzrmcslbizfwlhogthi6q/index-v1-a1.m3u8", duration: 21 * 60 + 39 },
-
-{ title: "I Simpson Ep2 St33", url: "https://ms-039.host-cdn.net/hls/llzeotsbqyhnmttc2q5mpy63rtnlubrpp7srxxw5g2wumtyozxcoygt5uriq/index-v1-a1.m3u8", duration: 21 * 60 + 39 },
-
-{ title: "I Simpson Ep4 St33", url: "https://hfs298.serversicuro.cc/hls/dnzpfsws3tg4a3gyvdhh5pjhy37gxv2bjbbs6qo3sksczkdg7mtttdgtkwma/index-v1-a1.m3u8", duration: 21 * 60 + 34 },
-
-{ title: "I Simpson Ep5 St33", url: "https://hfs298.serversicuro.cc/hls/dnzpftos3tg4a3gyvdhh5kj3sqkrufiwij37h3lfo3y7ey2lfx7mgrsbpo6a/index-v1-a1.m3u8", duration: 21 * 60 + 39 },
-
-{ title: "I Simpson Ep6 St33", url: "https://hfs298.serversicuro.cc/hls/,dnzpftos3tg4a3gyvdhh5kj3sqkrufiwij37h3lfo3y7fif6wcv2qgtsclia,.urlset/master.m3u8", duration: 21 * 60 + 39 },
-
-{ title: "I Simpson Ep8 St33", url: "https://hfs298.serversicuro.cc/hls/dnzpftws3tg4a3gyvdhh5mbrrkopkaja33jjaplkfv4gkw4u5ggrgtmrq3fa/index-v1-a1.m3u8", duration: 21 * 60 + 39 }
-
-       
-  ];
-
-  const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0); // in secondi
-  const player = videojs("videoPlayer");
-  let currentIndex;
-
-  function caricaVideo(index, offset = 0) {
-    const item = palinsesto[index];
-    console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+  if (player.canPlayType('application/vnd.apple.mpegURL')) {
     player.src({ src: item.url, type: "application/x-mpegURL" });
-    player.one('loadedmetadata', () => {
+    player.ready(() => {
       player.currentTime(offset);
-      player.play().catch(e => console.warn(e));
+      player.play().then(() => {
+        logo.classList.remove('hidden'); // Mostra il logo quando parte
+      }).catch(e => console.warn(e));
     });
-    currentIndex = index;
+  } else if (Hls.isSupported()) {
+    const video = document.getElementById('videoPlayer');
+    const hls = new Hls();
+    hls.loadSource(item.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.currentTime = offset;
+      video.play().then(() => {
+        logo.classList.remove('hidden'); // Mostra il logo
+      });
+    });
+  } else {
+    console.error("HLS non supportato da questo dispositivo.");
+    document.getElementById('fallback-image').style.display = 'block';
   }
 
-  player.on('ended', () => {
-    const next = (currentIndex + 1) % palinsesto.length;
-    caricaVideo(next, 0);
-  });
+  currentIndex = index;
+}
 
-  // Inizializzazione
-  (function initLive() {
-    const now = new Date();
-    const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
 
-    if (secondsFromStart < 0) {
-      console.log("Il palinsesto non è ancora iniziato.");
-      document.getElementById('fallback-image').style.display = 'block';
-      return;
+player.on('ended', () => {
+  const next = (currentIndex + 1) % palinsesto.length;
+  caricaVideo(next, 0);
+});
+
+(function initLive() {
+  const now = new Date();
+  const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+
+  if (secondsFromStart < 0) {
+    console.log("Il palinsesto non è ancora iniziato.");
+    document.getElementById('fallback-image').style.display = 'block';
+    return;
+  }
+
+  const secondsInLoop = secondsFromStart % durataTotale;
+
+  let accumulated = 0;
+  let idx = 0;
+  for (; idx < palinsesto.length; idx++) {
+    if (secondsInLoop < accumulated + palinsesto[idx].duration) {
+      break;
     }
+    accumulated += palinsesto[idx].duration;
+  }
 
-    const secondsInLoop = secondsFromStart % durataTotale;
-
-    let accumulated = 0;
-    let idx = 0;
-    for (; idx < palinsesto.length; idx++) {
-      if (secondsInLoop < accumulated + palinsesto[idx].duration) {
-        break;
-      }
-      accumulated += palinsesto[idx].duration;
-    }
-
-    const offset = secondsInLoop - accumulated;
-    caricaVideo(idx, offset);
-  })();
+  const offset = secondsInLoop - accumulated;
+  caricaVideo(idx, offset);
+})();
 </script>
 
   
@@ -621,42 +821,28 @@ else if (event.data === "live") {
 
 <script>
   // URL del file JSON contenente i dati EPG
-  const epgUrl = "https://brymeteo.github.io/player/decoder/stili-dec/vox_animation_epg.json";
+  const epgUrl = "https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-flix-animation.json";
   // Identificativo del canale selezionato (esempio: "canale-5")
-  let selectedChannelId = "vox-animation";
+  let selectedChannelId = "flix-animation";
   // URL personalizzato per il logo del canale
   const customLogoURL = "https://i.ibb.co/spNPFxZX/logo.png";
 
   // Variabile globale per salvare il programma corrente
   let currentProgramGlobal = null;
 
-  function isDST(date) {
-    const january = new Date(date.getFullYear(), 0, 1);
-    const july = new Date(date.getFullYear(), 6, 1);
-    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
-  }
-
-  function adjustTime(dateInput) {
-    const date = new Date(dateInput);
-    if (isDST(date)) {
-      date.setHours(date.getHours() - 2);
-    } else {
-      date.setHours(date.getHours() + 2);
-    }
-    return date;
-  }
-
+  // Aggiorna la barra di progresso del programma corrente
   function updateProgressBar(currentProgram) {
-    const startTime = adjustTime(currentProgram.start);
-    const endTime = adjustTime(currentProgram.end);
+    const startTime = new Date(currentProgram.start);
+    const endTime = new Date(currentProgram.end);
     const now = new Date();
+
     const totalDuration = endTime - startTime;
     const elapsed = now - startTime;
     let progressPercent = (elapsed / totalDuration) * 100;
     progressPercent = Math.max(0, Math.min(progressPercent, 100));
     document.getElementById("program-progress").style.width = progressPercent + "%";
 
-    const formatTime = date => date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    const formatTime = date => date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
     document.getElementById("program-start-time").textContent = formatTime(startTime);
     document.getElementById("program-end-time").textContent = formatTime(endTime);
   }
@@ -667,6 +853,7 @@ else if (event.data === "live") {
     }
   }, 1000);
 
+  // Aggiorna i nomi del programma corrente e successivo
   function updateProgramName() {
     fetch(epgUrl)
       .then(response => {
@@ -684,13 +871,13 @@ else if (event.data === "live") {
         const now = new Date();
 
         const currentProgram = channel.programs.find(program => {
-          const start = adjustTime(program.start);
-          const end = adjustTime(program.end);
+          const start = new Date(program.start);
+          const end = new Date(program.end);
           return now >= start && now < end;
         });
 
         const nextProgram = channel.programs.find(program => {
-          const start = adjustTime(program.start);
+          const start = new Date(program.start);
           return start > now;
         });
 
@@ -718,6 +905,7 @@ else if (event.data === "live") {
   updateProgramName();
   setInterval(updateProgramName, 60000);
 </script>
+
 
   
   
