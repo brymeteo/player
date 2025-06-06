@@ -820,19 +820,33 @@ else if (event.data === "live") {
   // Variabile globale per salvare il programma corrente
   let currentProgramGlobal = null;
 
-  // Aggiorna la barra di progresso del programma corrente
-  function updateProgressBar(currentProgram) {
-    const startTime = new Date(currentProgram.start);
-    const endTime = new Date(currentProgram.end);
-    const now = new Date();
+  function isDST(date) {
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
 
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      date.setHours(date.getHours() - 2);
+    } else {
+      date.setHours(date.getHours() + 2);
+    }
+    return date;
+  }
+
+  function updateProgressBar(currentProgram) {
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
+    const now = new Date();
     const totalDuration = endTime - startTime;
     const elapsed = now - startTime;
     let progressPercent = (elapsed / totalDuration) * 100;
     progressPercent = Math.max(0, Math.min(progressPercent, 100));
     document.getElementById("program-progress").style.width = progressPercent + "%";
 
-    const formatTime = date => date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    const formatTime = date => date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
     document.getElementById("program-start-time").textContent = formatTime(startTime);
     document.getElementById("program-end-time").textContent = formatTime(endTime);
   }
@@ -843,7 +857,6 @@ else if (event.data === "live") {
     }
   }, 1000);
 
-  // Aggiorna i nomi del programma corrente e successivo
   function updateProgramName() {
     fetch(epgUrl)
       .then(response => {
@@ -861,13 +874,13 @@ else if (event.data === "live") {
         const now = new Date();
 
         const currentProgram = channel.programs.find(program => {
-          const start = new Date(program.start);
-          const end = new Date(program.end);
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
           return now >= start && now < end;
         });
 
         const nextProgram = channel.programs.find(program => {
-          const start = new Date(program.start);
+          const start = adjustTime(program.start);
           return start > now;
         });
 
@@ -895,7 +908,6 @@ else if (event.data === "live") {
   updateProgramName();
   setInterval(updateProgramName, 60000);
 </script>
-
 
   
   
