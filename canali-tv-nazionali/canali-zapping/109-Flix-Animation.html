@@ -8,76 +8,71 @@
   <link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet" />
 
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    
-     #background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
-            background: #171a45;
-        }
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  #background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background: #171a45;
+  }
 
-    
-    
-    
+  .video-js {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
 
-    .video-js {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-    }
+  .logo-overlay {
+    position: absolute;
+    top: 84%;
+    right: 5%;
+    max-width: 26%;
+    width: 17.5%;
+    height: auto !important;
+    pointer-events: none;
+    z-index: 997;
+    background: 0 0 !important;
+  }
 
-      .logo-overlay {
-      position: absolute;
-            top: 84%;
-            right: 5%;
-            max-width: 26%;
-            width: 17.5%;
-            height: auto !important;
-            pointer-events: none;
-            z-index: 997;
-            background: 0 0 !important;
-           
-        }
+  .video-js .vjs-control-bar {
+    display: none !important;
+  }
 
-    .video-js .vjs-control-bar {
-      display: none !important;
-    }
+  .vjs-fullscreen-control {
+    z-index: 15;
+  }
 
-    .vjs-fullscreen-control {
-      z-index: 15;
-    }
+  #fallback-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
 
-    #fallback-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 999;
-    }
+  h1 {
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    z-index: 60;
+    color: white;
+    text-shadow: 0 0 5px black;
+  }
 
-    h1 {
-      text-align: center;
-      position: absolute;
-      top: 10px;
-      width: 100%;
-      z-index: 60;
-      color: white;
-      text-shadow: 0 0 5px black;
-    }
-    
-         /* Stile per la barra informativa del canale - migliorato con effetto 3D */
-       #channel-info-bar {
+  /* Stile per la barra informativa del canale - migliorato con effetto 3D */
+  #channel-info-bar {
     position: absolute;
     bottom: 60px;
     left: 45px;
@@ -90,230 +85,161 @@
     box-shadow: 0 2px 6px rgb(255 255 255 / 0%);
     overflow: hidden;
     zoom: 160%;
-}
+  }
 
-        
-#channel-info-inner {
+  #channel-info-inner {
     position: relative;
     border: 3px solid rgb(37 167 182 / 53%);
     border-radius: 4px;
     margin: 2px;
     padding: 8px 12px;
     background: linear-gradient(to bottom, rgb(32 78 116), rgb(36 59 100 / 87%));
-}
-        
-        
-        #channel-name {
-            display: flex;
-            
-            align-items: center;
-            margin-bottom: 4px;
-        }
-        
-        #channel-title {
-            font-size: 26px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        #channel-number {
-            font-size: 22px;
-            opacity: 0.9;
-            font-weight: normal;
-            padding: 0 0 0 4px;
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-            justify-content: space-between;
-            margin-left: auto;
-        }
-        
-        #program-name {
-            font-size: 23px;
-            opacity: 0.85;
-            text-align: left;
-            margin-top: 2px;
-            padding-top: 2px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        
-        
-       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
-@media only screen and (max-width: 600px) {
+  }
+
+  #channel-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  #channel-title {
+    font-size: 26px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  #channel-number {
+    font-size: 22px;
+    opacity: 0.9;
+    font-weight: normal;
+    padding: 0 0 0 4px;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    margin-left: auto;
+  }
+
+  #program-name {
+    font-size: 23px;
+    opacity: 0.85;
+    text-align: left;
+    margin-top: 2px;
+    padding-top: 2px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+  @media only screen and (max-width: 600px) {
     #channel-info-bar {
-        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
-        left: 20px;   /* Riduci il margine a sinistra */
-        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
+      bottom: 20px;
+      left: 20px;
+      zoom: 50%;
     }
 
     #channel-info-inner {
-        padding: 5px 8px; /* Riduci i padding interni */
-        margin: 1px;
-        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+      padding: 5px 8px;
+      margin: 1px;
+      border: 2px solid rgba(37, 167, 182, 0.53);
     }
 
     #channel-logo {
-        width: 50px; /* Logo più piccolo su schermi mobili */
+      width: 50px;
     }
 
     #channel-title {
-        font-size: 20px; /* Riduci la dimensione del titolo */
+      font-size: 20px;
     }
 
     #channel-number {
-        font-size: 18px;
-        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+      font-size: 18px;
+      margin-left: 20px;
     }
 
     #program-name {
-        font-size: 18px; /* Riduci la dimensione del font */
+      font-size: 18px;
     }
 
     #program-progress-bar {
-        height: 8px; /* Barra di avanzamento più piccola */
+      height: 8px;
     }
-}
-        
-          /* Stili per la barra di avanzamento del programma */
-    #program-progress-container {
-      margin-top: 10px;
-      font-family: Arial, sans-serif;
-    }
-    #program-progress-container > div {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-    }
-    #program-progress-bar {
-      width: 100%;
-      height: 10px;
-      background-color: #878787d6;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-    #program-progress {
-      width: 0%;
-      height: 100%;
-      background-color: #87bdda;
-    }
-        
-        
-    </style>
-    
-    
-   
-  
-  <!-- Nuovi stili per overlay e animazioni -->
-  <style>
-    /* Overlay centrale */
-    #overlay-card {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(30 75 121 / 98%);
-  padding: 20px;
-  border-radius: 10px;
-  color: #fff;
-  text-align: center;
-  z-index: 9999;
-  width: 500px;
-  font-family: sans-serif;
-  font-size: 20px; /* Dimensione font per desktop */
-}
-
-#overlay-card img {
-  width: 70px;
-  height: auto;
-  margin-bottom: 10px;
-}
-
-/* Stili per dispositivi mobili (max-width: 600px) */
-@media only screen and (max-width: 600px) {
-  #overlay-card {
-    width: 300px;
-    font-size: 14px; /* Dimensione font più piccola per mobile */
   }
-  
-  #overlay-card img {
-    width: 50px;
+
+  /* Stili per la barra di avanzamento del programma */
+  #program-progress-container {
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
   }
-}
+  #program-progress-container > div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+  #program-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #878787d6;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  #program-progress {
+    width: 0%;
+    height: 100%;
+    background-color: #87bdda;
+  }
 
-    /* Animazione spinner con cubetti */
-    .spinner-cubes {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .spinner-cubes div {
-      width: 10px;
-      height: 10px;
-      background-color: #fff;
-      margin: 2px;
-      animation: spinner 1s infinite ease-in-out;
-    }
-    .spinner-cubes div:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .spinner-cubes div:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .spinner-cubes div:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-    @keyframes spinner {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(0.5);
-      }
-    }
-   /* Messaggio in alto a destra per restart */
-#restart-message {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: rgb(30 75 121 / 98%);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 10000;
-  font-family: sans-serif;
-  font-size: 18px;
-}
+  /* Messaggio in alto a destra per restart */
+  #restart-message {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgb(30 75 121 / 98%);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10000;
+    font-family: sans-serif;
+    font-size: 18px;
+  }
 
-/* Responsive per dispositivi mobili (max-width: 600px) */
-@media only screen and (max-width: 600px) {
+  /* Responsive per dispositivi mobili (max-width: 600px) */
+  @media only screen and (max-width: 600px) {
     #restart-message {
-        top: 5px;
-        /* right: 5px; */
-        /* padding: 5px; */
-        font-size: 16px;
+      top: 5px;
+      font-size: 16px;
     }
-}
+  }
 
+  .hidden {
+    display: none;
+  }
 
-    .hidden {
-      display: none;
-    }
-    
-    
+  #next-program-name {
+    color: #c6ced3;
+    font-size: 18px;
+    margin-top: 4px;
+    opacity: 0.85;
+  }
 
-         #next-program-name {
-  color: #c6ced3; /* Sostituisci con il colore desiderato */
-  font-size: 18px;
-  margin-top: 4px;
-  opacity: 0.85;
-}     
+  #overlay-card {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 
-    
+  /* ————————————————————————————————————————————————
+     Qui sotto, nascondiamo la rotellina di Video.js (loading spinner)
+     e qualunque evenienza di “waiting” che potrebbe comparire.
+     ———————————————————————————————————————————————— */
+  .video-js .vjs-loading-spinner {
+    display: none !important;
+  }
+  .video-js .vjs-waiting {
+    display: none !important;
+  }
+</style>
 
-    
-    
-  </style>
 </head>
 <body>
 
@@ -352,17 +278,7 @@
   </div>
 
   
-  <!-- Overlay card centrale per i comandi -->
-  <div id="overlay-card" class="hidden">
-    <img id="overlay-icon" src="" alt="Icona comando">
-    <!-- Contenitore per l'animazione spinner -->
-    <div id="overlay-animation" class="spinner-cubes">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <p id="overlay-text"></p>
-  </div>
+
   
   <!-- Messaggio in alto a destra (per il caso restart) -->
   <div id="restart-message" class="hidden">
@@ -662,7 +578,7 @@ player.on('ended', () => {
   
   <script>
   // Variabili per gestire timer e stato overlay
-    var overlayCard = document.getElementById("overlay-card");
+    
     var overlayIcon = document.getElementById("overlay-icon");
     var overlayText = document.getElementById("overlay-text");
     var restartMessage = document.getElementById("restart-message");
