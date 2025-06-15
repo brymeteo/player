@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -59,33 +60,77 @@
     <div id="map"></div>
   </div>
 
-  <script src="https://brymeteo.github.io/player/maps:italia:/config-previsioni-regionali.js"></script>
-
   <script>
-     const API_KEY = window.OPENWEATHER_API_KEY;
+ const iconUrls = {
+  '01d': 'https://brymeteo.github.io/tv/Grafica/Icone/05.png',
+  '01n': 'https://brymeteo.github.io/tv/Grafica/Icone/02.png',
+  '02d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
+  '02n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
+  '03d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
+  '03n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
+  '04d': 'https://brymeteo.github.io/tv/Grafica/Icone/10.png',
+  '04n': 'https://brymeteo.github.io/tv/Grafica/Icone/11.png',
 
-    const iconUrls = {
-      '01d': 'https://brymeteo.github.io/tv/Grafica/Icone/05.png',
-      '01n': 'https://brymeteo.github.io/tv/Grafica/Icone/02.png',
-      '02d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
-      '02n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
-      '03d': 'https://brymeteo.github.io/tv/Grafica/Icone/26.png',
-      '03n': 'https://brymeteo.github.io/tv/Grafica/Icone/27.png',
-      '04d': 'https://brymeteo.github.io/tv/Grafica/Icone/10.png',
-      '04n': 'https://brymeteo.github.io/tv/Grafica/Icone/11.png',
-      '09d': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
-      '09n': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
-      '10d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
-      '10n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
-      '11d': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
-      '11n': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
-      '13d': 'https://brymeteo.github.io/tv/Grafica/Icone/08.png',
-      '13n': 'https://brymeteo.github.io/tv/Grafica/Icone/08.png',
-      '50d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
-      '50n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png'
-    };
+  // Nebbia
+  '45d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
+  '45n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png',
 
-     const locations = [
+  // Depositing rime fog
+  '48d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
+  '48n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png',
+
+  // Drizzle
+  '51d': 'https://brymeteo.github.io/tv/Grafica/Icone/15.png',
+  '51n': 'https://brymeteo.github.io/tv/Grafica/Icone/12.png',
+  '53d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
+  '53n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
+  '55d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.png',
+  '55n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.png',
+  '56d': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '56n': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '57d': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+  '57n': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+
+  // Rain
+  '61d': 'https://brymeteo.github.io/tv/Grafica/Icone/18.png',
+  '61n': 'https://brymeteo.github.io/tv/Grafica/Icone/18.png',
+  '63d': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+  '63n': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+  '65d': 'https://brymeteo.github.io/tv/Grafica/Icone/20.png',
+  '65n': 'https://brymeteo.github.io/tv/Grafica/Icone/20.png',
+  '66d': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '66n': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '67d': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+  '67n': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+
+  // Snow
+  '71d': 'https://brymeteo.github.io/tv/Grafica/Icone/30.png',
+  '71n': 'https://brymeteo.github.io/tv/Grafica/Icone/30.png',
+  '73d': 'https://brymeteo.github.io/tv/Grafica/Icone/31.png',
+  '73n': 'https://brymeteo.github.io/tv/Grafica/Icone/31.png',
+  '75d': 'https://brymeteo.github.io/tv/Grafica/Icone/32.png',
+  '75n': 'https://brymeteo.github.io/tv/Grafica/Icone/32.png',
+  '77d': 'https://brymeteo.github.io/tv/Grafica/Icone/77.png',
+  '77n': 'https://brymeteo.github.io/tv/Grafica/Icone/77.png',
+
+  // Showers
+  '80d': 'https://brymeteo.github.io/tv/Grafica/Icone/15.png',
+  '80n': 'https://brymeteo.github.io/tv/Grafica/Icone/12.png',
+  '81d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
+  '81n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
+  '82d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.png',
+  '82n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.png',
+
+  // Thunderstorm
+  '95d': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+  '95n': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+  '96d': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '96n': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '99d': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '99n': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+};
+
+  const locations = [
     
       { name: "Aosta", lat: 45.731, lon: 7.317, x: 13, y: 14 },
     
@@ -165,61 +210,104 @@
       
       
     ];
-    // Fetch forecast for tomorrow at 15:00 or nearest
-    async function fetchWeatherData(lat, lon) {
-      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=it`;
-      const data = await fetch(url).then(res => res.json());
 
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 3);
-      const yyyy = tomorrow.getFullYear();
-      const mm   = String(tomorrow.getMonth() + 1).padStart(2, '0');
-      const dd   = String(tomorrow.getDate()).padStart(2, '0');
-      const target = `${yyyy}-${mm}-${dd} 09:00:00`;
+function mapWeatherCodeToIconCode(weatherCode, isDay = true) {
+  const d = isDay ? 'd' : 'n';
+  switch (weatherCode) {
+    case 0:   return '01' + d;  // Clear sky
+    case 1:   return '02' + d;  // Mainly clear
+    case 2:   return '03' + d;  // Partly cloudy
+    case 3:   return '04' + d;  // Overcast
+    case 45:  return '45' + d;  // Fog
+    case 48:  return '48' + d;  // Depositing rime fog
+    case 51:  return '51' + d;  // Light drizzle
+    case 53:  return '53' + d;  // Moderate drizzle
+    case 55:  return '55' + d;  // Dense drizzle
+    case 56:  return '56' + d;  // Light freezing drizzle
+    case 57:  return '57' + d;  // Dense freezing drizzle
+    case 61:  return '61' + d;  // Slight rain
+    case 63:  return '63' + d;  // Moderate rain
+    case 65:  return '65' + d;  // Heavy rain
+    case 66:  return '66' + d;  // Light freezing rain
+    case 67:  return '67' + d;  // Heavy freezing rain
+    case 71:  return '71' + d;  // Slight snow fall
+    case 73:  return '73' + d;  // Moderate snow fall
+    case 75:  return '75' + d;  // Heavy snow fall
+    case 77:  return '77' + d;  // Snow grains
+    case 80:  return '80' + d;  // Slight rain showers
+    case 81:  return '81' + d;  // Moderate rain showers
+    case 82:  return '82' + d;  // Violent rain showers
+    case 85:  return '85' + d;  // Slight snow showers
+    case 86:  return '86' + d;  // Heavy snow showers
+    case 95:  return '95' + d;  // Thunderstorm
+    case 96:  return '96' + d;  // Thunderstorm with slight hail
+    case 99:  return '99' + d;  // Thunderstorm with heavy hail
+    default:  return '01' + d;  // Default: clear sky
+  }
+}
+    
+    
 
-      const forecast = data.list.find(item => item.dt_txt === target);
-      const selected = forecast || data.list[0];
+// Fetch weather data for today at 18:00
+async function fetchWeatherData(lat, lon) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode&timezone=Europe%2FRome`;
+  const res = await fetch(url);
+  const data = await res.json();
 
-      return {
-        temp: Math.round(selected.main.temp),
-        iconCode: selected.weather[0].icon,
-        description: selected.weather[0].description
-      };
-    }
+  const targetTime = new Date();
+  targetTime.setDate(targetTime.getDate() + 3);  // giorno dopo
+  targetTime.setHours(9, 0, 0, 0);  // Oggi alle 18:00
 
-    // Update map icons in parallel
-    async function updateWeatherIcons() {
-      const map = document.getElementById('map');
-      map.innerHTML = '';
+  const targetISO = targetTime.toISOString().slice(0, 16);
 
-      const promises = locations.map(loc =>
-        fetchWeatherData(loc.lat, loc.lon).then(data => ({ loc, data }))
-      );
-      const results = await Promise.all(promises);
+  const index = data.hourly.time.findIndex(t => t === targetISO);
+  if (index === -1) return null;
 
-      results.forEach(({ loc, data }) => {
-        const iconUrl = iconUrls[data.iconCode] || iconUrls['01d'];
-        const container = document.createElement('div');
-        container.className = 'weather-container';
-        container.style.left = `${loc.x}%`;
-        container.style.top  = `${loc.y}%`;
+  // Ora per decidere icona giorno o notte (6-18 giorno, altro notte)
+  const hour = targetTime.getHours();
+  const isDay = hour >= 6 && hour < 18;
 
-        const img = document.createElement('img');
-        img.src = iconUrl;
-        img.alt = data.description;
-        img.className = 'weather-icon';
+  return {
+    temp: Math.round(data.hourly.temperature_2m[index]),
+    iconCode: mapWeatherCodeToIconCode(data.hourly.weathercode[index], isDay)
+  };
+}
 
-        const tempSpan = document.createElement('span');
-        
+async function updateWeatherIcons() {
+  const map = document.getElementById('map');
+  map.innerHTML = '';
 
-        container.append(img, tempSpan);
-        map.appendChild(container);
-      });
-    }
+  const promises = locations.map(loc =>
+    fetchWeatherData(loc.lat, loc.lon).then(data => ({ loc, data }))
+  );
+  const results = await Promise.all(promises);
 
-    // Launch initial update and repeat every 3 hours
-    updateWeatherIcons();
-    setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+  results.forEach(({ loc, data }) => {
+    if (!data) return; // se dati non trovati
+
+    const iconUrl = iconUrls[data.iconCode] || iconUrls['01d'];
+    const container = document.createElement('div');
+    container.className = 'weather-container';
+    container.style.left = `${loc.x}%`;
+    container.style.top  = `${loc.y}%`;
+
+    const img = document.createElement('img');
+    img.src = iconUrl;
+    img.alt = data.iconCode;
+    img.className = 'weather-icon';
+
+    const tempSpan = document.createElement('span');
+   
+
+    container.append(img, tempSpan);
+    map.appendChild(container);
+  });
+}
+
+// Avvia la prima volta e aggiorna ogni 3 ore
+updateWeatherIcons();
+setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+
   </script>
 </body>
 </html>
