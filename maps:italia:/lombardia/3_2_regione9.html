@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -185,24 +186,50 @@ function mapWeatherCodeToIconCode(weatherCode, isDay = true) {
 }
 
 
-// Fetch weather data for today at 18:00
+function formatLocalISO(date) {
+  const pad = n => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}`;
+}
+
+let referenceSunrise, referenceSunset;
+
+async function fetchReferenceSunriseSunset(cityName) {
+  const location = locations.find(l => l.name === cityName);
+  if (!location) {
+    console.error("Località non trovata:", cityName);
+    return;
+  }
+
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=sunrise,sunset&timezone=Europe%2FRome`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  referenceSunrise = new Date(data.daily.sunrise[2]);
+  referenceSunset = new Date(data.daily.sunset[2]);
+}
+
 async function fetchWeatherData(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode&timezone=Europe%2FRome`;
   const res = await fetch(url);
   const data = await res.json();
 
-  const targetTime = new Date();
- targetTime.setDate(targetTime.getDate() + 2);  // giorno dopo
-  targetTime.setHours(2, 0, 0, 0);  //  alle 02:00
+  // Cambia qui l'indice per selezionare oggi (0), domani (1), ecc.
+  const dayIndex = 2;
+  const targetHour = 2;
 
-  const targetISO = targetTime.toISOString().slice(0, 16);
+  const now = new Date();
+  const targetDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + dayIndex,
+    targetHour
+  );
+  const isoTarget = formatLocalISO(targetDate); // es: "2025-06-17T17"
 
-  const index = data.hourly.time.findIndex(t => t === targetISO);
+  const index = data.hourly.time.findIndex(t => t.startsWith(isoTarget));
   if (index === -1) return null;
 
-  // Ora per decidere icona giorno o notte (6-18 giorno, altro notte)
-  const hour = targetTime.getHours();
-  const isDay = hour >= 6 && hour < 18;
+  const isDay = targetDate >= referenceSunrise && targetDate < referenceSunset;
 
   return {
     temp: Math.round(data.hourly.temperature_2m[index]),
@@ -211,6 +238,9 @@ async function fetchWeatherData(lat, lon) {
 }
 
 async function updateWeatherIcons() {
+  // Scegli la città di riferimento per alba/tramonto
+  await fetchReferenceSunriseSunset("Milano");
+
   const map = document.getElementById('map');
   map.innerHTML = '';
 
@@ -220,13 +250,13 @@ async function updateWeatherIcons() {
   const results = await Promise.all(promises);
 
   results.forEach(({ loc, data }) => {
-    if (!data) return; // se dati non trovati
+    if (!data) return;
 
     const iconUrl = iconUrls[data.iconCode] || iconUrls['01d'];
     const container = document.createElement('div');
     container.className = 'weather-container';
     container.style.left = `${loc.x}%`;
-    container.style.top  = `${loc.y}%`;
+    container.style.top = `${loc.y}%`;
 
     const img = document.createElement('img');
     img.src = iconUrl;
@@ -234,16 +264,16 @@ async function updateWeatherIcons() {
     img.className = 'weather-icon';
 
     const tempSpan = document.createElement('span');
-   
+    
 
     container.append(img, tempSpan);
     map.appendChild(container);
   });
 }
 
-// Avvia la prima volta e aggiorna ogni 3 ore
+// Esegui al caricamento
 updateWeatherIcons();
-setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+
 
   </script>
 </body>
