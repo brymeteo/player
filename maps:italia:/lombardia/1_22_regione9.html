@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Meteo Lombardia</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    #map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('https://brymeteo.github.io/tv/Grafica/cartine/meteo-regione-lombardia.png') no-repeat center center;
+      background-size: cover;
+    }
+
+    .weather-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      transform: translate(-50%, -50%);
+    }
+
+    .weather-icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    @media (max-width: 500px) {
+      .weather-icon {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    .temperature {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13px;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+  </div>
+
+  <script>
+ const iconUrls = {
+  '01d': 'https://brymeteo.github.io/tv/Grafica/Icone/05.png',
+  '01n': 'https://brymeteo.github.io/tv/Grafica/Icone/02.png',
+  '02d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
+  '02n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
+  '03d': 'https://brymeteo.github.io/tv/Grafica/Icone/21.png',
+  '03n': 'https://brymeteo.github.io/tv/Grafica/Icone/22.png',
+  '04d': 'https://brymeteo.github.io/tv/Grafica/Icone/10.png',
+  '04n': 'https://brymeteo.github.io/tv/Grafica/Icone/11.png',
+
+  // Nebbia
+  '45d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
+  '45n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png',
+
+  // Depositing rime fog
+  '48d': 'https://brymeteo.github.io/tv/Grafica/Icone/06.png',
+  '48n': 'https://brymeteo.github.io/tv/Grafica/Icone/04.png',
+
+  // Drizzle
+  '51d': 'https://brymeteo.github.io/tv/Grafica/Icone/15.png',
+  '51n': 'https://brymeteo.github.io/tv/Grafica/Icone/12.png',
+  '53d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
+  '53n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
+  '55d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.png',
+  '55n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.png',
+  '56d': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '56n': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '57d': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+  '57n': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+
+  // Rain
+  '61d': 'https://brymeteo.github.io/tv/Grafica/Icone/18.png',
+  '61n': 'https://brymeteo.github.io/tv/Grafica/Icone/18.png',
+  '63d': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+  '63n': 'https://brymeteo.github.io/tv/Grafica/Icone/19.png',
+  '65d': 'https://brymeteo.github.io/tv/Grafica/Icone/20.png',
+  '65n': 'https://brymeteo.github.io/tv/Grafica/Icone/20.png',
+  '66d': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '66n': 'https://brymeteo.github.io/tv/Grafica/Icone/56.png',
+  '67d': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+  '67n': 'https://brymeteo.github.io/tv/Grafica/Icone/57.png',
+
+  // Snow
+  '71d': 'https://brymeteo.github.io/tv/Grafica/Icone/30.png',
+  '71n': 'https://brymeteo.github.io/tv/Grafica/Icone/30.png',
+  '73d': 'https://brymeteo.github.io/tv/Grafica/Icone/31.png',
+  '73n': 'https://brymeteo.github.io/tv/Grafica/Icone/31.png',
+  '75d': 'https://brymeteo.github.io/tv/Grafica/Icone/32.png',
+  '75n': 'https://brymeteo.github.io/tv/Grafica/Icone/32.png',
+  '77d': 'https://brymeteo.github.io/tv/Grafica/Icone/77.png',
+  '77n': 'https://brymeteo.github.io/tv/Grafica/Icone/77.png',
+
+  // Showers
+  '80d': 'https://brymeteo.github.io/tv/Grafica/Icone/15.png',
+  '80n': 'https://brymeteo.github.io/tv/Grafica/Icone/12.png',
+  '81d': 'https://brymeteo.github.io/tv/Grafica/Icone/16.png',
+  '81n': 'https://brymeteo.github.io/tv/Grafica/Icone/13.png',
+  '82d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.png',
+  '82n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.png',
+
+  // Thunderstorm
+  '95d': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+  '95n': 'https://brymeteo.github.io/tv/Grafica/Icone/23.png',
+  '96d': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '96n': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '99d': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+  '99n': 'https://brymeteo.github.io/tv/Grafica/Icone/99.png',
+};
+
+const locations = [
+  { name: "Milano", lat: 45.464, lon: 9.192, x: 24, y: 59.5 },
+  { name: "Varese", lat: 45.829, lon: 8.822, x: 14.7, y: 42.8 },
+  { name: "Mantova", lat: 45.160, lon: 10.798, x: 79.7, y: 74.3 },
+  { name: "Brescia", lat: 45.525, lon: 10.227, x: 64.3, y: 56.2 },
+  { name: "Cremona", lat: 45.136, lon: 10.028, x: 57.2, y: 68.7 },
+  { name: "Bergamo", lat: 45.698, lon: 9.669, x: 47.3, y: 48.7 },
+  { name: "Pavia", lat: 45.184, lon: 9.162, x: 26.3, y: 75.5 },
+  { name: "Sondrio", lat: 46.169, lon: 9.869, x: 48.5, y: 27.1 },
+  { name: "Lodi", lat: 45.314, lon: 9.503, x: 42.5, y: 63.7 },
+  { name: "Lecco", lat: 45.853, lon: 9.390, x: 34.0, y: 35 },
+  { name: "Como", lat: 45.810, lon: 9.087, x: 27.5, y: 45.2 },
+  { name: "Monza", lat: 45.583, lon: 9.275, x: 37, y: 54.2 },
+  { name: "Vestone", lat: 45.709, lon: 10.400, x: 62, y: 41 },
+  { name: "Colico Piano", lat: 46.132, lon: 9.370, x: 33, y: 23 },
+  { name: "Grosio", lat: 46.298, lon: 10.274, x: 63, y: 20 },
+  { name: "Oltre il Colle", lat: 45.889, lon: 9.769, x: 48, y: 38 }
+];
+
+function mapWeatherCodeToIconCode(weatherCode, isDay = true) {
+  const d = isDay ? 'd' : 'n';
+  switch (weatherCode) {
+    case 0:   return '01' + d;  // Clear sky
+    case 1:   return '02' + d;  // Mainly clear
+    case 2:   return '03' + d;  // Partly cloudy
+    case 3:   return '04' + d;  // Overcast
+    case 45:  return '45' + d;  // Fog
+    case 48:  return '48' + d;  // Depositing rime fog
+    case 51:  return '51' + d;  // Light drizzle
+    case 53:  return '53' + d;  // Moderate drizzle
+    case 55:  return '55' + d;  // Dense drizzle
+    case 56:  return '56' + d;  // Light freezing drizzle
+    case 57:  return '57' + d;  // Dense freezing drizzle
+    case 61:  return '61' + d;  // Slight rain
+    case 63:  return '63' + d;  // Moderate rain
+    case 65:  return '65' + d;  // Heavy rain
+    case 66:  return '66' + d;  // Light freezing rain
+    case 67:  return '67' + d;  // Heavy freezing rain
+    case 71:  return '71' + d;  // Slight snow fall
+    case 73:  return '73' + d;  // Moderate snow fall
+    case 75:  return '75' + d;  // Heavy snow fall
+    case 77:  return '77' + d;  // Snow grains
+    case 80:  return '80' + d;  // Slight rain showers
+    case 81:  return '81' + d;  // Moderate rain showers
+    case 82:  return '82' + d;  // Violent rain showers
+    case 85:  return '85' + d;  // Slight snow showers
+    case 86:  return '86' + d;  // Heavy snow showers
+    case 95:  return '95' + d;  // Thunderstorm
+    case 96:  return '96' + d;  // Thunderstorm with slight hail
+    case 99:  return '99' + d;  // Thunderstorm with heavy hail
+    default:  return '01' + d;  // Default: clear sky
+  }
+}
+
+
+// Fetch weather data for today at 18:00
+async function fetchWeatherData(lat, lon) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode&timezone=Europe%2FRome`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const targetTime = new Date();
+ 
+  targetTime.setHours(22, 0, 0, 0);  // Oggi alle 22:00
+
+  const targetISO = targetTime.toISOString().slice(0, 16);
+
+  const index = data.hourly.time.findIndex(t => t === targetISO);
+  if (index === -1) return null;
+
+  // Ora per decidere icona giorno o notte (6-18 giorno, altro notte)
+  const hour = targetTime.getHours();
+  const isDay = hour >= 6 && hour < 18;
+
+  return {
+    temp: Math.round(data.hourly.temperature_2m[index]),
+    iconCode: mapWeatherCodeToIconCode(data.hourly.weathercode[index], isDay)
+  };
+}
+
+async function updateWeatherIcons() {
+  const map = document.getElementById('map');
+  map.innerHTML = '';
+
+  const promises = locations.map(loc =>
+    fetchWeatherData(loc.lat, loc.lon).then(data => ({ loc, data }))
+  );
+  const results = await Promise.all(promises);
+
+  results.forEach(({ loc, data }) => {
+    if (!data) return; // se dati non trovati
+
+    const iconUrl = iconUrls[data.iconCode] || iconUrls['01d'];
+    const container = document.createElement('div');
+    container.className = 'weather-container';
+    container.style.left = `${loc.x}%`;
+    container.style.top  = `${loc.y}%`;
+
+    const img = document.createElement('img');
+    img.src = iconUrl;
+    img.alt = data.iconCode;
+    img.className = 'weather-icon';
+
+    const tempSpan = document.createElement('span');
+   
+
+    container.append(img, tempSpan);
+    map.appendChild(container);
+  });
+}
+
+// Avvia la prima volta e aggiorna ogni 3 ore
+updateWeatherIcons();
+setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+
+  </script>
+</body>
+</html>
