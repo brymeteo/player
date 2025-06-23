@@ -54,16 +54,15 @@
   let defaultCenter = [12.4964, 41.9028]; // default: Roma
   let markerCoords = null;
 
-  const path = window.location.pathname;
-  const match = path.match(/\/radar\/([-+]?\d*\.\d+),([-+]?\d*\.\d+)/);
-  if (match) {
-    const lat = parseFloat(match[1]);
-    const lon = parseFloat(match[2]);
-    if (!isNaN(lat) && !isNaN(lon)) {
-      defaultCenter = [lon, lat]; // Maplibre usa [lon, lat]
-      markerCoords = [lon, lat];
-    }
-  }
+ const urlParams = new URLSearchParams(window.location.search);
+const lat = parseFloat(urlParams.get('lat'));
+const lon = parseFloat(urlParams.get('lon'));
+
+if (!isNaN(lat) && !isNaN(lon)) {
+  defaultCenter = [lon, lat];
+  markerCoords = [lon, lat];
+}
+
 
   const map = new maplibregl.Map({
     container: 'map',
@@ -304,7 +303,7 @@
   map.on('click', function (e) {
     const lat = e.lngLat.lat.toFixed(5);
     const lon = e.lngLat.lng.toFixed(5);
-    const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia.html${lat},${lon}`;
+    const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia.html?lat=${lat}&lon=${lon}`;
     window.location.href = url;
   });
 </script>
