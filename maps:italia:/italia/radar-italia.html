@@ -50,163 +50,264 @@
     <img src="https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000678-09d4909d4c/legenda-radar-5.webp" alt="Legenda meteo" style="width:18px;display:block;margin:6px 0;">
   </div>
   <script>
-    const map = new maplibregl.Map({
-      container: 'map',
-      style: 'https://api.maptiler.com/maps/streets/style.json?key=Q350PhFUuerjo5kg6aIV',
-      center: [12.4964, 41.9028], zoom: 5, pitch: 60, bearing: -17.6, attributionControl: false
+  // Leggi coordinate dal percorso URL
+  let defaultCenter = [12.4964, 41.9028]; // default: Roma
+  let markerCoords = null;
+
+  const path = window.location.pathname;
+  const match = path.match(/\/radar\/([-+]?\d*\.\d+),([-+]?\d*\.\d+)/);
+  if (match) {
+    const lat = parseFloat(match[1]);
+    const lon = parseFloat(match[2]);
+    if (!isNaN(lat) && !isNaN(lon)) {
+      defaultCenter = [lon, lat]; // Maplibre usa [lon, lat]
+      markerCoords = [lon, lat];
+    }
+  }
+
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: 'https://api.maptiler.com/maps/streets/style.json?key=Q350PhFUuerjo5kg6aIV',
+    center: defaultCenter,
+    zoom: 8,
+    pitch: 1,
+    bearing: 0,
+    attributionControl: false
+  });
+
+  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© Brymeteo' }), 'bottom-right');
+
+  let frames = [], pastLength = 0, currentIndex = 0, playInterval;
+  const evoLabel = document.getElementById('evoLabel');
+
+  // Carica metadati Radar
+  fetch('https://api.rainviewer.com/public/weather-maps.json')
+    .then(r => r.json())
+    .then(data => {
+      frames = data.radar.past.concat(data.radar.nowcast)
+        .map(f => ({ host: data.host, path: f.path, time: f.time }));
+      pastLength = data.radar.past.length;
+      currentIndex = pastLength - 1;
+      document.documentElement.style.setProperty('--past-end', pastLength / frames.length * 100);
+      initTimeline();
+      buildLegendData();
+      startMetadataRefresh();
+    })
+    .catch(console.error);
+
+  map.on('load', () => {
+    // Marker sulla posizione da URL (se presente)
+    if (markerCoords) {
+      new maplibregl.Marker({ color: 'red' })
+        .setLngLat(markerCoords)
+        .addTo(map);
+    }
+
+    // Icona grandine
+    map.loadImage('https://static.vecteezy.com/system/resources/thumbnails/019/061/836/small_2x/hail-3d-icon-png.png', (e, img) => {
+      if (!e) map.addImage('hail-icon', img);
     });
-    map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© Brymeteo' }), 'bottom-right');
 
-    let frames = [], pastLength = 0, currentIndex = 0, playInterval;
-    const evoLabel = document.getElementById('evoLabel');
-
-    // Carica metadati Radar e avvia refresh periodico
-    fetch('https://api.rainviewer.com/public/weather-maps.json')
-      .then(r => r.json())
-      .then(data => {
-        frames = data.radar.past.concat(data.radar.nowcast)
-          .map(f => ({ host: data.host, path: f.path, time: f.time }));
-        pastLength = data.radar.past.length;
-        currentIndex = pastLength - 1;
-        document.documentElement.style.setProperty('--past-end', pastLength / frames.length * 100);
-        initTimeline();
-        buildLegendData();
-        startMetadataRefresh();
-      })
-      .catch(console.error);
-
-    map.on('load', () => {
-      map.loadImage('https://static.vecteezy.com/system/resources/thumbnails/019/061/836/small_2x/hail-3d-icon-png.png', (e, img) => { if (!e) map.addImage('hail-icon', img); });
-      map.addSource('hail', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
-      map.addLayer({ id: 'hail-symbol', type: 'symbol', source: 'hail', layout: { 'icon-image': 'hail-icon','icon-size': 0.5,'icon-allow-overlap': true,'icon-ignore-placement': true }});
-      updateFrame();
-      loadLightning();
-      setInterval(loadLightning, 30000);
-
-      // Aggiorna radar quando finisce pan/zoom (debounce)
-      map.on('moveend', debounce(updateFrame, 500));
+    map.addSource('hail', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+    map.addLayer({
+      id: 'hail-symbol',
+      type: 'symbol',
+      source: 'hail',
+      layout: {
+        'icon-image': 'hail-icon',
+        'icon-size': 0.5,
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': true
+      }
     });
 
-    function initTimeline() {
-      const tl = document.getElementById('timeline'); tl.innerHTML = '';
-      frames.forEach((_, i) => {
-        const seg = document.createElement('div');
-        seg.className = 'segment ' + (i < pastLength ? 'past' : 'future');
-        seg.onclick = () => { currentIndex = i; updateUI(); };
-        tl.appendChild(seg);
-      });
-      document.getElementById('prev').onclick = () => { stopPlay(); currentIndex = (currentIndex - 1 + frames.length) % frames.length; updateUI(); };
-      document.getElementById('next').onclick = () => { stopPlay(); currentIndex = (currentIndex + 1) % frames.length; updateUI(); };
-      document.getElementById('play').onclick = () => { document.getElementById('play').disabled = true; document.getElementById('pause').disabled = false; playInterval = setInterval(() => { currentIndex = (currentIndex + 1) % frames.length; updateUI(); }, 1000); };
-      document.getElementById('pause').onclick = () => { stopPlay(); };
-      updateUI();
-    }
-    function stopPlay() { clearInterval(playInterval); document.getElementById('play').disabled = false; document.getElementById('pause').disabled = true; }
+    updateFrame();
+    loadLightning();
+    setInterval(loadLightning, 30000);
 
-    function updateUI() {
-      updateFrame();
-      document.querySelectorAll('.segment').forEach((seg, i) => seg.classList.toggle('active', i === currentIndex));
-    }
+    // Ricarica radar su movimento (debounce)
+    map.on('moveend', debounce(updateFrame, 500));
+  });
 
-    function updateFrame() {
-      const f = frames[currentIndex];
-      const url = `${f.host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`;
-      if (map.getLayer('radar')) map.removeLayer('radar');
-      if (map.getSource('radar')) map.removeSource('radar');
-      map.addSource('radar', { type: 'raster', tiles: [url], tileSize: 256 });
-      map.addLayer({ id: 'radar', type: 'raster', source: 'radar', paint: { 'raster-opacity': 0.6 } });
-      updateTimestamp(); computeHail(f);
-    }
-    function updateTimestamp() {
-      const dt = new Date(frames[currentIndex].time * 1000);
-      const str = dt.toLocaleString('it-IT',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Rome'}).replace(',','');
-      document.getElementById('timestamp').textContent = str + ' - ' + (currentIndex < pastLength ? 'Attuale' : 'Futuro');
-    }
-
-    function loadLightning() {
-      fetch('https://api.rainviewer.com/public/lightning.json')
-        .then(r => r.json())
-        .then(d => {
-          if (map.getLayer('lightning')) map.removeLayer('lightning');
-          if (map.getSource('lightning')) map.removeSource('lightning');
-          const feats = d.slice(-500).map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lng, p.lat] } }));
-          map.addSource('lightning', { type: 'geojson', data: { type: 'FeatureCollection', features: feats } });
-          map.addLayer({ id: 'lightning', type: 'circle', source: 'lightning', paint: { 'circle-radius': 3, 'circle-color': '#ffff00', 'circle-opacity': 0.7 } });
-        })
-        .catch(console.warn);
-    }
-
-    function computeHail(frame) {
-      const img = new Image(); img.crossOrigin = 'Anonymous';
-      const [z, x, y] = frame.path.split('/').slice(-5, -2).map(Number);
-      img.onload = () => {
-        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
-        const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
-        const d = ctx.getImageData(0, 0, c.width, c.height).data;
-        const feats = [], step = 8, thr = 200;
-        for (let yy = 0; yy < c.height; yy += step) {
-          for (let xx = 0; xx < c.width; xx += step) {
-            const i = (yy * c.width + xx) * 4;
-            const inten = (d[i] + d[i+1] + d[i+2]) / 3;
-            if (inten > thr) {
-              const lon = (x + xx / c.width) / Math.pow(2, z) * 360 - 180;
-              const lat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (y + yy / c.height) / Math.pow(2, z)))) * 180 / Math.PI;
-              feats.push({ type: 'Feature', geometry: { type: 'Point', coordinates: [lon, lat] } });
-            }
-          }
-        }
-        map.getSource('hail').setData({ type: 'FeatureCollection', features: feats });
+  function initTimeline() {
+    const tl = document.getElementById('timeline');
+    tl.innerHTML = '';
+    frames.forEach((_, i) => {
+      const seg = document.createElement('div');
+      seg.className = 'segment ' + (i < pastLength ? 'past' : 'future');
+      seg.onclick = () => {
+        currentIndex = i;
+        updateUI();
       };
-      img.src = `${frame.host}${frame.path}/256/${z}/${x}/${y}/2/1_1.png`;
-    }
+      tl.appendChild(seg);
+    });
 
-    function buildLegendData() {
-      fetch('https://api.rainviewer.com/public/color-schemes.json')
-        .then(r => r.json())
-        .then(s => {
-          const colors = s[4].colors;
-          const labels = ["Pioggia leggera","Pioggia moderata","Pioggia intensa","Temporale","Temporale forte","Grandine","Neve leggera","Neve intensa"];
-          const legend = document.getElementById('legend'); legend.innerHTML = '<strong>Legenda</strong><br>';
-          colors.forEach((col,i) => { if(i<labels.length){
-            const item = document.createElement('div'); item.className='legend-item';
-            const box = document.createElement('div'); box.className='legend-color'; box.style.backgroundColor=col;
-            const lbl = document.createElement('span'); lbl.textContent=labels[i];
-            item.appendChild(box); item.appendChild(lbl); legend.appendChild(item);
-          }});
+    document.getElementById('prev').onclick = () => {
+      stopPlay();
+      currentIndex = (currentIndex - 1 + frames.length) % frames.length;
+      updateUI();
+    };
+
+    document.getElementById('next').onclick = () => {
+      stopPlay();
+      currentIndex = (currentIndex + 1) % frames.length;
+      updateUI();
+    };
+
+    document.getElementById('play').onclick = () => {
+      document.getElementById('play').disabled = true;
+      document.getElementById('pause').disabled = false;
+      playInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % frames.length;
+        updateUI();
+      }, 1000);
+    };
+
+    document.getElementById('pause').onclick = stopPlay;
+    updateUI();
+  }
+
+  function stopPlay() {
+    clearInterval(playInterval);
+    document.getElementById('play').disabled = false;
+    document.getElementById('pause').disabled = true;
+  }
+
+  function updateUI() {
+    updateFrame();
+    document.querySelectorAll('.segment').forEach((seg, i) => {
+      seg.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function updateFrame() {
+    const f = frames[currentIndex];
+    const url = `${f.host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`;
+    if (map.getLayer('radar')) map.removeLayer('radar');
+    if (map.getSource('radar')) map.removeSource('radar');
+    map.addSource('radar', { type: 'raster', tiles: [url], tileSize: 256 });
+    map.addLayer({ id: 'radar', type: 'raster', source: 'radar', paint: { 'raster-opacity': 0.6 } });
+    updateTimestamp();
+    computeHail(f);
+  }
+
+  function updateTimestamp() {
+    const dt = new Date(frames[currentIndex].time * 1000);
+    const str = dt.toLocaleString('it-IT', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit',
+      hour12: false, timeZone: 'Europe/Rome'
+    }).replace(',', '');
+    document.getElementById('timestamp').textContent = str + ' - ' + (currentIndex < pastLength ? 'Attuale' : 'Futuro');
+  }
+
+  function loadLightning() {
+    fetch('https://api.rainviewer.com/public/lightning.json')
+      .then(r => r.json())
+      .then(d => {
+        if (map.getLayer('lightning')) map.removeLayer('lightning');
+        if (map.getSource('lightning')) map.removeSource('lightning');
+        const feats = d.slice(-500).map(p => ({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [p.lng, p.lat] }
+        }));
+        map.addSource('lightning', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: feats }
         });
-    }
-
-    // debounce e polling
-    function debounce(fn, delay) {
-      let timer;
-      return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
-    }
-    function startMetadataRefresh() {
-      setInterval(async () => {
-        try {
-          const r = await fetch('https://api.rainviewer.com/public/weather-maps.json');
-          const data = await r.json();
-          const newFrames = data.radar.past.concat(data.radar.nowcast).map(f => ({ host: data.host, path: f.path, time: f.time }));
-          if (newFrames.length!==frames.length || newFrames[newFrames.length-1].time!==frames[frames.length-1].time) {
-            frames=newFrames; pastLength=data.radar.past.length;
-            document.documentElement.style.setProperty('--past-end', pastLength/frames.length*100);
-            initTimeline(); currentIndex=pastLength-1; updateUI();
+        map.addLayer({
+          id: 'lightning',
+          type: 'circle',
+          source: 'lightning',
+          paint: {
+            'circle-radius': 3,
+            'circle-color': '#ffff00',
+            'circle-opacity': 0.7
           }
-        } catch(e) {
-          console.warn('Errore aggiornamento metadati radar:', e);
+        });
+      })
+      .catch(console.warn);
+  }
+
+  function computeHail(frame) {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    const [z, x, y] = frame.path.split('/').slice(-5, -2).map(Number);
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const d = ctx.getImageData(0, 0, c.width, c.height).data;
+      const feats = [], step = 8, thr = 200;
+      for (let yy = 0; yy < c.height; yy += step) {
+        for (let xx = 0; xx < c.width; xx += step) {
+          const i = (yy * c.width + xx) * 4;
+          const inten = (d[i] + d[i + 1] + d[i + 2]) / 3;
+          if (inten > thr) {
+            const lon = (x + xx / c.width) / Math.pow(2, z) * 360 - 180;
+            const lat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (y + yy / c.height) / Math.pow(2, z)))) * 180 / Math.PI;
+            feats.push({ type: 'Feature', geometry: { type: 'Point', coordinates: [lon, lat] } });
+          }
         }
-      }, 5*60*1000);
-    }
-    
-    
-    // 🔽🔽 Aggiunta per URL dinamico da clic sulla mappa 🔽🔽
+      }
+      map.getSource('hail').setData({ type: 'FeatureCollection', features: feats });
+    };
+    img.src = `${frame.host}${frame.path}/256/${z}/${x}/${y}/2/1_1.png`;
+  }
+
+  function buildLegendData() {
+    fetch('https://api.rainviewer.com/public/color-schemes.json')
+      .then(r => r.json())
+      .then(s => {
+        const colors = s[4].colors;
+        const labels = ["Pioggia leggera", "Pioggia moderata", "Pioggia intensa", "Temporale", "Temporale forte", "Grandine", "Neve leggera", "Neve intensa"];
+        const legend = document.getElementById('legend');
+        legend.innerHTML = '<strong>Legenda</strong><br>';
+        colors.forEach((col, i) => {
+          if (i < labels.length) {
+            const item = document.createElement('div'); item.className = 'legend-item';
+            const box = document.createElement('div'); box.className = 'legend-color'; box.style.backgroundColor = col;
+            const lbl = document.createElement('span'); lbl.textContent = labels[i];
+            item.appendChild(box); item.appendChild(lbl); legend.appendChild(item);
+          }
+        });
+      });
+  }
+
+  function debounce(fn, delay) {
+    let timer;
+    return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+  }
+
+  function startMetadataRefresh() {
+    setInterval(async () => {
+      try {
+        const r = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+        const data = await r.json();
+        const newFrames = data.radar.past.concat(data.radar.nowcast).map(f => ({ host: data.host, path: f.path, time: f.time }));
+        if (newFrames.length !== frames.length || newFrames[newFrames.length - 1].time !== frames[frames.length - 1].time) {
+          frames = newFrames;
+          pastLength = data.radar.past.length;
+          document.documentElement.style.setProperty('--past-end', pastLength / frames.length * 100);
+          initTimeline();
+          currentIndex = pastLength - 1;
+          updateUI();
+        }
+      } catch (e) {
+        console.warn('Errore aggiornamento metadati radar:', e);
+      }
+    }, 5 * 60 * 1000);
+  }
+
+  // 🔁 Reindirizzamento al clic sulla mappa
   map.on('click', function (e) {
     const lat = e.lngLat.lat.toFixed(5);
     const lon = e.lngLat.lng.toFixed(5);
-    const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia/${lat},${lon}`;
+    const url = `https://miosito.it/radar/${lat},${lon}`;
     window.location.href = url;
   });
-    
-  </script>
+</script>
+
 </body>
 </html>
