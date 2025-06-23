@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa 3D Radar con Animazione, Fulmini, Grandine e Timeline</title>
+  <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
+  <style>
+    html, body, #map { height: 100%; margin: 0; padding: 0; }
+    .controls { position: absolute; bottom: 80px; left: 5%; background: rgba(255,255,255,0.9); padding: 6px 10px; border-radius: 4px; font-family: sans-serif; display: flex; align-items: center; z-index: 10; }
+    .controls button { margin: 0 4px; font-size: 14px; }
+    .timestamp { margin-left: 8px; font-size: 15px; white-space: nowrap; }
+    .timeline-container { position: absolute; bottom: 60px; left: 5%; right: 5%; height: 24px; font-family: sans-serif; z-index: 10; }
+    #timeline { position: absolute; bottom: 0; left: 0; right: 0; height: 12px; display: flex; user-select: none; }
+    .segment { flex: 1; margin: 0 1px; background: #ccc; cursor: pointer; transition: background 0.2s; }
+    .segment.past { background: rgba(0,123,255,0.9); }
+    .segment.future { background: rgba(255,165,0,0.9); }
+    .segment.past.active { background: #2c67a6; }
+    .segment.future.active { background: #d28800; }
+    .future-indicator { position: absolute; bottom: 16px; font-size: 19px; color: white; background: rgba(255, 165, 0, 0.8); padding: 2px 5px; border-radius: 3px; white-space: nowrap; z-index: 11; left: calc(var(--past-end) * 1%); text-align: center; }
+    .legend { position: absolute; bottom: 120px; left: 2px; background: rgba(255,255,255,0.8); padding: 8px; font-family: sans-serif; font-size: 11px; border-radius: 4px; z-index: 10; }
+    .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
+    .legend-color { width: 14px; height: 14px; margin-right: 6px; border: 1px solid #333; }
+    @media (max-width: 600px) {
+      .controls { padding: 4px; bottom: 66px; left: 1px; }
+      .controls button { margin: 0 2px; font-size: 14px; }
+      .timestamp { font-size: 12px; }
+      .timeline-container { bottom: 45px; height: 20px; left: 2%; right: 2%; }
+      .future-indicator { font-size: 12px; bottom: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="precip-tooltip" style="position:absolute;background:rgba(0,0,0,0.7);color:white;padding:4px 6px;font-size:12px;border-radius:4px;pointer-events:none;display:none;z-index:1000;"></div>
+  <div class="controls">
+    <button id="prev">◀️</button>
+    <button id="play">▶️</button>
+    <button id="pause" disabled>⏸️</button>
+    <button id="next">▶️</button>
+    <div class="timestamp" id="timestamp">Caricamento...</div>
+  </div>
+  <div class="timeline-container">
+    <div id="timeline"></div>
+    <div class="future-indicator" id="evoLabel">Evoluzione</div>
+  </div>
+  <div id="legend" class="legend">
+    <strong></strong><br>
+    <img src="https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000678-09d4909d4c/legenda-radar-5.webp" alt="Legenda meteo" style="width:18px;display:block;margin:6px 0;">
+  </div>
+  <script>
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://api.maptiler.com/maps/streets/style.json?key=Q350PhFUuerjo5kg6aIV',
+      center: [12.4964, 41.9028], zoom: 5, pitch: 60, bearing: -17.6, attributionControl: false
+    });
+    map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© Brymeteo' }), 'bottom-right');
+
+    let frames = [], pastLength = 0, currentIndex = 0, playInterval;
+    const evoLabel = document.getElementById('evoLabel');
+
+    // Carica metadati Radar e avvia refresh periodico
+    fetch('https://api.rainviewer.com/public/weather-maps.json')
+      .then(r => r.json())
+      .then(data => {
+        frames = data.radar.past.concat(data.radar.nowcast)
+          .map(f => ({ host: data.host, path: f.path, time: f.time }));
+        pastLength = data.radar.past.length;
+        currentIndex = pastLength - 1;
+        document.documentElement.style.setProperty('--past-end', pastLength / frames.length * 100);
+        initTimeline();
+        buildLegendData();
+        startMetadataRefresh();
+      })
+      .catch(console.error);
+
+    map.on('load', () => {
+      map.loadImage('https://static.vecteezy.com/system/resources/thumbnails/019/061/836/small_2x/hail-3d-icon-png.png', (e, img) => { if (!e) map.addImage('hail-icon', img); });
+      map.addSource('hail', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({ id: 'hail-symbol', type: 'symbol', source: 'hail', layout: { 'icon-image': 'hail-icon','icon-size': 0.5,'icon-allow-overlap': true,'icon-ignore-placement': true }});
+      updateFrame();
+      loadLightning();
+      setInterval(loadLightning, 30000);
+
+      // Aggiorna radar quando finisce pan/zoom (debounce)
+      map.on('moveend', debounce(updateFrame, 500));
+    });
+
+    function initTimeline() {
+      const tl = document.getElementById('timeline'); tl.innerHTML = '';
+      frames.forEach((_, i) => {
+        const seg = document.createElement('div');
+        seg.className = 'segment ' + (i < pastLength ? 'past' : 'future');
+        seg.onclick = () => { currentIndex = i; updateUI(); };
+        tl.appendChild(seg);
+      });
+      document.getElementById('prev').onclick = () => { stopPlay(); currentIndex = (currentIndex - 1 + frames.length) % frames.length; updateUI(); };
+      document.getElementById('next').onclick = () => { stopPlay(); currentIndex = (currentIndex + 1) % frames.length; updateUI(); };
+      document.getElementById('play').onclick = () => { document.getElementById('play').disabled = true; document.getElementById('pause').disabled = false; playInterval = setInterval(() => { currentIndex = (currentIndex + 1) % frames.length; updateUI(); }, 1000); };
+      document.getElementById('pause').onclick = () => { stopPlay(); };
+      updateUI();
+    }
+    function stopPlay() { clearInterval(playInterval); document.getElementById('play').disabled = false; document.getElementById('pause').disabled = true; }
+
+    function updateUI() {
+      updateFrame();
+      document.querySelectorAll('.segment').forEach((seg, i) => seg.classList.toggle('active', i === currentIndex));
+    }
+
+    function updateFrame() {
+      const f = frames[currentIndex];
+      const url = `${f.host}${f.path}/256/{z}/{x}/{y}/2/1_1.png`;
+      if (map.getLayer('radar')) map.removeLayer('radar');
+      if (map.getSource('radar')) map.removeSource('radar');
+      map.addSource('radar', { type: 'raster', tiles: [url], tileSize: 256 });
+      map.addLayer({ id: 'radar', type: 'raster', source: 'radar', paint: { 'raster-opacity': 0.6 } });
+      updateTimestamp(); computeHail(f);
+    }
+    function updateTimestamp() {
+      const dt = new Date(frames[currentIndex].time * 1000);
+      const str = dt.toLocaleString('it-IT',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Europe/Rome'}).replace(',','');
+      document.getElementById('timestamp').textContent = str + ' - ' + (currentIndex < pastLength ? 'Attuale' : 'Futuro');
+    }
+
+    function loadLightning() {
+      fetch('https://api.rainviewer.com/public/lightning.json')
+        .then(r => r.json())
+        .then(d => {
+          if (map.getLayer('lightning')) map.removeLayer('lightning');
+          if (map.getSource('lightning')) map.removeSource('lightning');
+          const feats = d.slice(-500).map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lng, p.lat] } }));
+          map.addSource('lightning', { type: 'geojson', data: { type: 'FeatureCollection', features: feats } });
+          map.addLayer({ id: 'lightning', type: 'circle', source: 'lightning', paint: { 'circle-radius': 3, 'circle-color': '#ffff00', 'circle-opacity': 0.7 } });
+        })
+        .catch(console.warn);
+    }
+
+    function computeHail(frame) {
+      const img = new Image(); img.crossOrigin = 'Anonymous';
+      const [z, x, y] = frame.path.split('/').slice(-5, -2).map(Number);
+      img.onload = () => {
+        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+        const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
+        const d = ctx.getImageData(0, 0, c.width, c.height).data;
+        const feats = [], step = 8, thr = 200;
+        for (let yy = 0; yy < c.height; yy += step) {
+          for (let xx = 0; xx < c.width; xx += step) {
+            const i = (yy * c.width + xx) * 4;
+            const inten = (d[i] + d[i+1] + d[i+2]) / 3;
+            if (inten > thr) {
+              const lon = (x + xx / c.width) / Math.pow(2, z) * 360 - 180;
+              const lat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (y + yy / c.height) / Math.pow(2, z)))) * 180 / Math.PI;
+              feats.push({ type: 'Feature', geometry: { type: 'Point', coordinates: [lon, lat] } });
+            }
+          }
+        }
+        map.getSource('hail').setData({ type: 'FeatureCollection', features: feats });
+      };
+      img.src = `${frame.host}${frame.path}/256/${z}/${x}/${y}/2/1_1.png`;
+    }
+
+    function buildLegendData() {
+      fetch('https://api.rainviewer.com/public/color-schemes.json')
+        .then(r => r.json())
+        .then(s => {
+          const colors = s[4].colors;
+          const labels = ["Pioggia leggera","Pioggia moderata","Pioggia intensa","Temporale","Temporale forte","Grandine","Neve leggera","Neve intensa"];
+          const legend = document.getElementById('legend'); legend.innerHTML = '<strong>Legenda</strong><br>';
+          colors.forEach((col,i) => { if(i<labels.length){
+            const item = document.createElement('div'); item.className='legend-item';
+            const box = document.createElement('div'); box.className='legend-color'; box.style.backgroundColor=col;
+            const lbl = document.createElement('span'); lbl.textContent=labels[i];
+            item.appendChild(box); item.appendChild(lbl); legend.appendChild(item);
+          }});
+        });
+    }
+
+    // debounce e polling
+    function debounce(fn, delay) {
+      let timer;
+      return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+    }
+    function startMetadataRefresh() {
+      setInterval(async () => {
+        try {
+          const r = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+          const data = await r.json();
+          const newFrames = data.radar.past.concat(data.radar.nowcast).map(f => ({ host: data.host, path: f.path, time: f.time }));
+          if (newFrames.length!==frames.length || newFrames[newFrames.length-1].time!==frames[frames.length-1].time) {
+            frames=newFrames; pastLength=data.radar.past.length;
+            document.documentElement.style.setProperty('--past-end', pastLength/frames.length*100);
+            initTimeline(); currentIndex=pastLength-1; updateUI();
+          }
+        } catch(e) {
+          console.warn('Errore aggiornamento metadati radar:', e);
+        }
+      }, 5*60*1000);
+    }
+    
+    
+    // 🔽🔽 Aggiunta per URL dinamico da clic sulla mappa 🔽🔽
+  map.on('click', function (e) {
+    const lat = e.lngLat.lat.toFixed(5);
+    const lon = e.lngLat.lng.toFixed(5);
+    const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia/${lat},${lon}`;
+    window.location.href = url;
+  });
+    
+  </script>
+</body>
+</html>
