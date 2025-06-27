@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
-  <identifier>DPC_BULLETIN_2025_06_25_109458</identifier>
+  <identifier>DPC_BULLETIN_2025_06_26_109495</identifier>
   <sender>2.49.0.0.380.1</sender>
-  <sent>2025-06-25T14:33:00+02:00</sent>
+  <sent>2025-06-26T14:50:00+02:00</sent>
   <status>Actual</status>
   <msgType>Alert</msgType>
   <scope>Public</scope>
   <note>Per la giornata di oggi: nessuna
-Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporale delle criticità si rimanda ai rispettivi bollettini regionali.</note>
+Per la giornata di domani: Regione Veneto: per la validità temporale delle criticità si rimanda al bollettino regionale.</note>
+  <info>
+    <category>Met</category>
+    <event>ORDINARIA CRITICITA' PER RISCHIO IDRAULICO / ALLERTA GIALLA:</event>
+    <responseType>Prepare</responseType>
+    <urgency>Expected</urgency>
+    <severity>Moderate</severity>
+    <certainty>Likely</certainty>
+    <onset>2025-06-26T12:00:00+02:00</onset>
+    <expires>2025-06-26T23:59:59+02:00</expires>
+    <senderName>DIPARTIMENTO DI PROTEZIONE CIVILE</senderName>
+    <description>all_GIALLA PER OGGI SU:</description>
+    <area>
+      <areaDesc>Provincia Autonoma di Bolzano</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Tren-A</value>
+      </geocode>
+    </area>
+  </info>
   <info>
     <category>Met</category>
     <event>ORDINARIA CRITICITA' PER RISCHIO TEMPORALI / ALLERTA GIALLA:</event>
@@ -14,10 +33,38 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
     <urgency>Expected</urgency>
     <severity>Moderate</severity>
     <certainty>Likely</certainty>
-    <onset>2025-06-26T00:00:00+02:00</onset>
+    <onset>2025-06-26T12:00:00+02:00</onset>
     <expires>2025-06-26T23:59:59+02:00</expires>
     <senderName>DIPARTIMENTO DI PROTEZIONE CIVILE</senderName>
-    <description>all_GIALLA PER DOMANI SU:</description>
+    <description>all_GIALLA PER OGGI SU:</description>
+    <area>
+      <areaDesc>Bacino montano del Tagliamento e del Torre</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-B</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino dell'Isonzo e Pianura di Udine e Gorizia</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-C</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino del Livenza e del Lemene</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-A</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino di Levante / Carso</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-D</value>
+      </geocode>
+    </area>
     <area>
       <areaDesc>Orobie bergamasche</areaDesc>
       <geocode>
@@ -26,10 +73,31 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
       </geocode>
     </area>
     <area>
+      <areaDesc>Bassa pianura centro-orientale</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Lomb-14</value>
+      </geocode>
+    </area>
+    <area>
       <areaDesc>Appennino pavese</areaDesc>
       <geocode>
         <valueName>Zona di Allerta</valueName>
         <value>Lomb-16</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Alta pianura orientale</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Lomb-11</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bassa pianura orientale</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Lomb-15</value>
       </geocode>
     </area>
     <area>
@@ -61,10 +129,24 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
       </geocode>
     </area>
     <area>
+      <areaDesc>Laghi e Prealpi orientali</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Lomb-08</value>
+      </geocode>
+    </area>
+    <area>
       <areaDesc>Laghi e Prealpi Varesine</areaDesc>
       <geocode>
         <valueName>Zona di Allerta</valueName>
         <value>Lomb-04</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Valcamonica</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Lomb-07</value>
       </geocode>
     </area>
     <area>
@@ -93,6 +175,76 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
       <geocode>
         <valueName>Zona di Allerta</valueName>
         <value>Lomb-12</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Val Sesia, Cervo e Chiusella</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-B</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Valli Susa, Chisone, Pellice e Po</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-D</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Pianura Cuneese</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-M</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Valli Orco, Lanzo e Sangone</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-C</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Pianura Torinese e Colline</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-L</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Valle Tanaro</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-F</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Belbo e Bormida</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-G</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Toce</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-A</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Pianura settentrionale</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Piem-I</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Provincia Autonoma di Trento</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Tren-B</value>
       </geocode>
     </area>
     <area>
@@ -166,8 +318,27 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
     <urgency>Expected</urgency>
     <severity>Moderate</severity>
     <certainty>Likely</certainty>
-    <onset>2025-06-26T00:00:00+02:00</onset>
+    <onset>2025-06-26T12:00:00+02:00</onset>
     <expires>2025-06-26T23:59:59+02:00</expires>
+    <senderName>DIPARTIMENTO DI PROTEZIONE CIVILE</senderName>
+    <description>all_GIALLA PER OGGI SU:</description>
+    <area>
+      <areaDesc>Provincia Autonoma di Bolzano</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Tren-A</value>
+      </geocode>
+    </area>
+  </info>
+  <info>
+    <category>Met</category>
+    <event>ORDINARIA CRITICITA' PER RISCHIO IDRAULICO / ALLERTA GIALLA:</event>
+    <responseType>Prepare</responseType>
+    <urgency>Expected</urgency>
+    <severity>Moderate</severity>
+    <certainty>Likely</certainty>
+    <onset>2025-06-27T00:00:00+02:00</onset>
+    <expires>2025-06-27T23:59:59+02:00</expires>
     <senderName>DIPARTIMENTO DI PROTEZIONE CIVILE</senderName>
     <description>all_GIALLA PER DOMANI SU:</description>
     <area>
@@ -178,4 +349,100 @@ Per la giornata di domani: Regioni Lombardia e Veneto: per la validità temporal
       </geocode>
     </area>
   </info>
-<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="id-06acaedd096c1b54839e50b0f70a8168"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="r-id-06acaedd096c1b54839e50b0f70a8168-1" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"><dsig-filter2:XPath xmlns:dsig-filter2="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">/descendant::ds:Signature</dsig-filter2:XPath></ds:Transform><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>bJfuMB5henhDP5U50UlrgY1pOP2AuHcU+OtnYQk7um0=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-06acaedd096c1b54839e50b0f70a8168"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>ETwICHreUI4yPqHW/4ljI9bfw+K7U+ChX4M1dkGdcVo=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="value-id-06acaedd096c1b54839e50b0f70a8168">HsxY7jJC6PCiY/psKUXU7lE6vrw7ggA/X2SCvjzsLd+avA7p999d3Q+nqBaXd5YUQ+0VafwgufP4MZk5RNwmFmP+jxn8YUye1NqvrmyQRpg397mZPJc+p172TqdbPQroljb8K7AC/dn2hI1XOmnj/f0RulsJE2SqAyqL3nyeSs34yR/K6hNgNygju5Zszodk7hHH458TyF8hPqbxQif5YQznpve3lH0eoBQsGs4ZU3WQnOetOywgIaEuJNLUQXdDGYAmXFZHy3GG5jrx/Cjz2SXjXVwJb/ZW8WHjGvNvWDieX/8YqfI7NoVRyvFA+tRwj8dtntsLhSr6cspbPgK/NQ==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#id-06acaedd096c1b54839e50b0f70a8168"><xades:SignedProperties Id="xades-id-06acaedd096c1b54839e50b0f70a8168"><xades:SignedSignatureProperties><xades:SigningTime>2025-06-25T12:55:30Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Ozwzfq+ZMMdojCiPr9sE7E2S6IPFQypgS959s+rxMNQ=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>2.5.4.97=#0c1156415449542d3034353939333430393637,CN=TI Trust Technologies QTSP CA 1,OU=Qualified Trust Service Provider,O=Telecom Italia Trust Technologies S.r.l.,C=IT</ds:X509IssuerName><ds:X509SerialNumber>3535400</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#r-id-06acaedd096c1b54839e50b0f70a8168-1"><xades:MimeType>application/octet-stream</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></alert>
+  <info>
+    <category>Met</category>
+    <event>ORDINARIA CRITICITA' PER RISCHIO TEMPORALI / ALLERTA GIALLA:</event>
+    <responseType>Prepare</responseType>
+    <urgency>Expected</urgency>
+    <severity>Moderate</severity>
+    <certainty>Likely</certainty>
+    <onset>2025-06-27T00:00:00+02:00</onset>
+    <expires>2025-06-27T23:59:59+02:00</expires>
+    <senderName>DIPARTIMENTO DI PROTEZIONE CIVILE</senderName>
+    <description>all_GIALLA PER DOMANI SU:</description>
+    <area>
+      <areaDesc>Bacino dell'Isonzo e Pianura di Udine e Gorizia</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-C</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino del Livenza e del Lemene</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-A</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino montano del Tagliamento e del Torre</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-B</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Bacino di Levante / Carso</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Friu-D</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Alto Brenta-Bacchiglione-Alpone</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-B</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Alto Piave</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-A</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Basso Brenta-Bacchiglione e Fratta Gorzone</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-E</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Piave pedemontano</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-H</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Basso Piave, Sile e Bacino scolante in laguna</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-F</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Adige-Garda e monti Lessini</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-C</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Po, Fissero-Tartaro-Canalbianco e Basso Adige</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-D</value>
+      </geocode>
+    </area>
+    <area>
+      <areaDesc>Livenza, Lemene e Tagliamento</areaDesc>
+      <geocode>
+        <valueName>Zona di Allerta</valueName>
+        <value>Vene-G</value>
+      </geocode>
+    </area>
+  </info>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="id-e8f8d23df253ac17fed7426c9f2a40c3"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="r-id-e8f8d23df253ac17fed7426c9f2a40c3-1" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"><dsig-filter2:XPath xmlns:dsig-filter2="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">/descendant::ds:Signature</dsig-filter2:XPath></ds:Transform><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>QvPKc6LldnP76Rh6q3UEcke7UpEb966z+ZW500rbJTY=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-e8f8d23df253ac17fed7426c9f2a40c3"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>oriAeVkyU987FvyvXIgXtLXzYif6tYcAbBHXQ6GVe3s=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="value-id-e8f8d23df253ac17fed7426c9f2a40c3">j4265aO4ApS2cOEa7tOrODIAwCET8UlOJHhwZdFkBmXN+G/EGriP1yjPhNsrfD4mMUfMw9HKqYxfijQxO4lnGVh7mp+C65/vKADWq6Ia5wKuSBjNHLitWneknpj31xsf4S5NMPeQIb7Czk12M+052B8eSXysG8vH+OFGFMwiqX/WPK+uJLAiQspnKQ8R0aeTDVCXTxnguEidlXMj+Mg7E/PnQWUkLuoDrvsJL33H7j6AYqHu28eEFUFFaOJT+XEjCi8Nddn+Bp9XSx732MGEBFNVITKKVyC016Q4bI19ck3a66IvvHE098gIhC8/NbUJ1cn23aF+asQWQrgpgG41kg==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#id-e8f8d23df253ac17fed7426c9f2a40c3"><xades:SignedProperties Id="xades-id-e8f8d23df253ac17fed7426c9f2a40c3"><xades:SignedSignatureProperties><xades:SigningTime>2025-06-26T13:32:23Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Ozwzfq+ZMMdojCiPr9sE7E2S6IPFQypgS959s+rxMNQ=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>2.5.4.97=#0c1156415449542d3034353939333430393637,CN=TI Trust Technologies QTSP CA 1,OU=Qualified Trust Service Provider,O=Telecom Italia Trust Technologies S.r.l.,C=IT</ds:X509IssuerName><ds:X509SerialNumber>3535400</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#r-id-e8f8d23df253ac17fed7426c9f2a40c3-1"><xades:MimeType>application/octet-stream</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></alert>
