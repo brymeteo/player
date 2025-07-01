@@ -7,9 +7,13 @@
     <!-- Player -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
     <!-- Video resolution switcher -->
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
-    <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
+<script type="text/javascript"
+src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+
+<link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
+
+<link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+ 
 
     <!-- Stili esistenti -->
  <style>
@@ -69,9 +73,6 @@
             object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
             display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
         }
-        
-      
-        
         
     </style>
     
@@ -189,519 +190,10 @@
   margin-top: 4px;
   opacity: 0.85;
 }     
-</style>
 
-
-
-<style>
-  * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            overflow: hidden;
-            background: #000;
-        }
-
-
-        /* Sky TV Guide Bar Container */
-        #channel-info-bar {
-    position: absolute;
-    bottom: 15px;
-    left: 120px;
-    right: 120px;
-    z-index: 1000;
-    font-family: Arial, sans-serif;
-    animation: slideUp 0.3s ease-out;
-    zoom: 170%;
-}
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Program Description Section (Top Blue) - SEPARATA */
-     #program-description {
-    background: linear-gradient(135deg, #122c52 0%, #122c52e6 100%);
-    color: white;
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-        #program-time-title {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #fbbf24;
-}
-
-        #program-description-text {
-            font-size: 16px;
-            line-height: 1.4;
-            color: #ffffff;
-            padding-right: 120px;
-        }
-
-        /* Continua button */
-        .continua-button {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ffffff;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .continua-icon {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Channel Info Section (Middle Gray) - SEPARATA */
-      #channel-info-middle {
-    background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-    color: #18597a;
-    padding: 8px 20px;
-    display: flex
-;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 8px 8px 0 0;
-    /* margin-bottom: 8px; */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-        #channel-left-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        #channel-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #18597a;
-            min-width: 60px;
-        }
-
-        #channel-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #18597a;
-        }
-
-        #hd-indicator {
-    background: #f3f3f3;
-    color: #18597a;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: auto;
-    margin-right: 20px;
-}
-
-        #current-time {
-            font-size: 20px;
-            font-weight: 600;
-            color: #18597a;
-        }
-
-        /* Timeline Section (Bottom Blue) - BARRA PRINCIPALE ARROTONDATA */
-     #timeline-section {
-    background: linear-gradient(135deg, #122c52 0%, #122c52f0 100%);
-    color: white;
-    padding: 16px 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-
-        #program-status {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #timeline-times {
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 8px;
-}
-
-#timeline-times > * {
-    margin-right: 10px; /* Aggiungi uno spazio tra gli elementi */
-}
-
-
-        /* Progress Bar */
-        #timeline-container {
-            margin-bottom: 16px;
-        }
-
-        #timeline-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 12px;
-        }
-
-       #timeline-progress {
-    height: 100%;
-    background: linear-gradient(90deg, #00c9ff 0%, #ffffff 100%);
-    border-radius: 2px;
-    transition: width 0.3s ease;
-    position: relative;
-}
-
-        /* Program Timeline con orari sopra */
-        #program-timeline-container {
-            position: relative;
-        }
-
-        #program-times {
-            display: flex;
-            margin-bottom: 4px;
-            font-size: 14px;
-            color: #ffffff;
-        }
-
-        .program-time {
-            flex: 1;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        #program-timeline {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 16px;
-            position: relative;
-        }
-
-        .program-slot {
-            flex: 1;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 500;
-            border-radius: 8px;
-            color: white;
-            padding: 8px;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 700;
-        }
-
-        .program-slot:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-     .program-slot.current {
-    position: relative;
-    background: linear-gradient(90deg, #BF9F3D 0%, #d7ae2f 100%);
-    color: #000000;
-    font-weight: 600;
-    /* box-shadow: 0 2px 8px rgb(255 255 255 / 0%); */
     
-}
-
-.program-slot.current::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 20px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), #ffffff1a);
-    pointer-events: none;
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
-}
-
-
-        .program-slot.upcoming {
-    background: linear-gradient(135deg, #2A5287 0%, #2A5287 100%);
-    color: #ffffff;
-   
-}
-
-       .program-slot.upcoming.selected {
-    background: linear-gradient(135deg, #355077 0%, #395987 100%);
-    border: 1px solid #ffffff69;
-    box-shadow: 0 2px 8px rgb(255 255 255 / 10%);
-}
-
-        /* Frecce di navigazione */
-        .timeline-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .timeline-nav:hover {
-            background: rgba(0,0,0,0.8);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .timeline-nav.prev {
-            left: -15px;
-        }
-
-        .timeline-nav.next {
-            right: -15px;
-        }
-
-        /* Animazione di scorrimento */
-        .timeline-sliding {
-            transform: translateX(-100%);
-            opacity: 0;
-        }
-
-        .timeline-slide-in {
-            animation: slideInTimeline 0.5s ease-out forwards;
-        }
-
-        @keyframes slideInTimeline {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Control Buttons */
-        #control-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .control-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 6px 12px;
-            border-radius: 6px;
-            
-        }
-
-        .control-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-     
-        
-
-       
-
-        .control-icon {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        /* Responsive Design */
-        @media only screen and (max-width: 768px) {
-            #channel-info-bar {
-                bottom: 20px;
-                left: 20px;
-                right: 20px;
-                max-width: none;
-            }
-
-            #program-description,
-            #channel-info-middle,
-            #timeline-section {
-                padding: 12px 16px;
-            }
-
-            #channel-number {
-                font-size: 20px;
-                min-width: 50px;
-            }
-
-            #channel-title {
-                font-size: 16px;
-            }
-
-            #current-time {
-                font-size: 14px;
-            }
-
-            .control-group {
-                gap: 12px;
-            }
-
-            .control-button {
-                font-size: 12px;
-            }
-        }
-
-        @media only screen and (max-width: 480px) {
-            #channel-info-bar {
-                bottom: 15px;
-                left: 25px;
-                right: 175px;
-                zoom: 40%;
-            }
-
-            #channel-left-info {
-                gap: 12px;
-            }
-
-            #program-timeline {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .program-slot {
-                height: 24px;
-                font-size: 11px;
-            }
-
-            #control-buttons {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Loading Animation */
-        .loading {
-            opacity: 0.7;
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.7;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        #overlay-card {
-            display: none !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* Video.js loading spinner override */
-        .video-js .vjs-loading-spinner,
-        .video-js .vjs-waiting {
-            display: none !important;
-        }
-
-        /* Next program info hidden as per Sky TV design */
-        #next-program-info {
-            display: none;
-        }
-        
-
-
-
-.signal-bars {
-  display: flex;
-  align-items: flex-end;
-  
-  gap: 2px;
-  color:#18597a;
-}
-
-.signal-bars .bar {
-  width: 3px;
-  background-color: #4ade80;
-  border-radius: 2px;
-  opacity: 0.3;
-  transition: opacity 0.3s ease, height 0.3s ease;
-}
-
-/* Tacche di diverse altezze */
-.signal-bars .bar:nth-child(1) { height: 4px; }
-.signal-bars .bar:nth-child(2) { height: 7px; }
-.signal-bars .bar:nth-child(3) { height: 10px; }
-.signal-bars .bar:nth-child(4) { height: 13px; }
-
-/* Tacche attive */
-.signal-bars .bar.active {
-  opacity: 1;
-}
-
-        
-    </style>
-
+    
+  </style>
 </head>
 
 <body>
@@ -715,9 +207,7 @@
   
   <div id="player"></div>
   
- 
- 
- 
+  
  <!-- Sky TV Guide Bar -->
     <div id="channel-info-bar">
         <!-- Program Description Section - SEPARATA -->
@@ -819,7 +309,6 @@
             </div>
         </div>
     </div>
- 
 
   
   <!-- Overlay card centrale per i comandi -->
@@ -978,7 +467,8 @@
     });
   </script>
 
-  <script>
+
+<script>
     player.on(Clappr.Events.PLAYER_ERROR, function (err) {
       document.getElementById("fallback-image").style.display = "block";
       document.getElementById("player").style.display = "none";
@@ -997,7 +487,9 @@
     document.addEventListener("mousemove", resetTimer);
     document.addEventListener("keypress", resetTimer);
     resetTimer();
-  </script>
+</script>
+
+
 
 <script>
   function updateSignal(percent) {
@@ -1027,9 +519,7 @@
 </script>
 
 
-    
-    
-      <script>
+<script>
     // URL del file JSON contenente i dati EPG
     const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
     // Identificativo del canale selezionato (esempio: "canale-5")
@@ -1302,11 +792,6 @@ return;
     // Aggiorna le informazioni ogni minuto
     setInterval(updateProgramName, 60000);
 </script>
-
-
-
-
-
 
 
 
