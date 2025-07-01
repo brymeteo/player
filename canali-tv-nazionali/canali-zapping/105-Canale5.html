@@ -11,7 +11,7 @@
         src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
     <link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
 
-        <link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+ 
 
     <!-- Stili esistenti -->
  <style>
@@ -72,7 +72,129 @@
             display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
         }
         
+        /* Stile per la barra informativa del canale - migliorato con effetto 3D */
+       #channel-info-bar {
+    position: absolute;
+    bottom: 60px;
+    left: 45px;
+    background-color: rgb(19 19 19 / 0%);
+    color: white;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgb(255 255 255 / 0%);
+    overflow: hidden;
+    zoom: 160%;
+}
 
+        
+#channel-info-inner {
+    position: relative;
+    border: 3px solid rgb(37 167 182 / 53%);
+    border-radius: 4px;
+    margin: 2px;
+    padding: 8px 12px;
+    background: linear-gradient(to bottom, rgb(32 78 116), rgb(36 59 100 / 87%));
+}
+        
+        
+        #channel-name {
+            display: flex;
+            
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        #channel-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        #channel-number {
+            font-size: 22px;
+            opacity: 0.9;
+            font-weight: normal;
+            padding: 0 0 0 4px;
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            justify-content: space-between;
+            margin-left: 70px;
+        }
+        
+        #program-name {
+            font-size: 23px;
+            opacity: 0.85;
+            text-align: left;
+            margin-top: 2px;
+            padding-top: 2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+       /* -------- Responsive Design: Per dispositivi con larghezza <= 600px -------- */
+@media only screen and (max-width: 600px) {
+    #channel-info-bar {
+        bottom: 20px; /* Riduci la distanza dal bordo inferiore */
+        left: 20px;   /* Riduci il margine a sinistra */
+        zoom: 50%;   /* Ridimensiona al 100% su schermi piccoli */
+    }
+
+    #channel-info-inner {
+        padding: 5px 8px; /* Riduci i padding interni */
+        margin: 1px;
+        border: 2px solid rgba(37, 167, 182, 0.53); /* Riduci il bordo */
+    }
+
+    #channel-logo {
+        width: 50px; /* Logo più piccolo su schermi mobili */
+    }
+
+    #channel-title {
+        font-size: 20px; /* Riduci la dimensione del titolo */
+    }
+
+    #channel-number {
+        font-size: 18px;
+        margin-left: 20px; /* Riduci lo spazio tra gli elementi */
+    }
+
+    #program-name {
+        font-size: 18px; /* Riduci la dimensione del font */
+    }
+
+    #program-progress-bar {
+        height: 8px; /* Barra di avanzamento più piccola */
+    }
+}
+        
+          /* Stili per la barra di avanzamento del programma */
+    #program-progress-container {
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+    }
+    #program-progress-container > div {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    #program-progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #878787d6;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    #program-progress {
+      width: 0%;
+      height: 100%;
+      background-color: #87bdda;
+    }
+        
+        
     </style>
     
     
@@ -206,107 +328,30 @@
   
   <div id="player"></div>
   
- <!-- Sky TV Guide Bar -->
-    <div id="channel-info-bar">
-        <!-- Program Description Section - SEPARATA -->
-        <div id="program-description">
-            <div id="program-time-title" class="loading">18:00 Caricamento...</div>
-            <div id="program-description-text" class="loading">
-                [Bambini] Caricamento della descrizione del programma in corso...
-            </div>
-            <div class="continua-button">
-                <div class="continua-icon">i</div>
-                <span>Continua</span>
-            </div>
-        </div>
+  <!-- Barra informativa -->
+  <div id="channel-info-bar">
+    <div id="channel-info-inner">
+      <div id="channel-name">
+        <img id="channel-logo" src="https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark" alt="Logo canale" style="width:70px; height:auto; margin-left: -15px;">
+        <span id="channel-title">Canale 5 HD</span>
+        <span id="channel-number">105</span>
+      </div>
+      <div id="program-name">Caricamento in corso...</div>
+      <!-- Aggiungi questa riga per il programma a seguire -->
+<div id="next-program-name" style="font-size: 18px; margin-top: 4px; opacity: 0.85;">A seguire: Caricamento in corso...</div>
 
-        <!-- Channel Info Section - SEPARATA -->
-        <div id="channel-info-middle">
-            <div id="channel-left-info">
-            
-                <div id="channel-number">105</div>
-                <div id="channel-title">Canale 5 HD</div>
-            </div>
-            <div id="hd-indicator">HD</div>
-       
- <div class="signal-bars" id="signal-bars">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </div>&nbsp;&nbsp;
-  <span id="signal-percent">99%</span>
-            
-     &nbsp;&nbsp;&nbsp;&nbsp;
-            <div id="current-time">Giovedì 05 Dic 18:12</div>
+      <!-- Barra di avanzamento del programma -->
+      <div id="program-progress-container">
+        <div>
+          <span id="program-start-time">--:--</span>
+          <span id="program-end-time">--:--</span>
         </div>
-
-        <!-- Timeline Section - BARRA PRINCIPALE ARROTONDATA -->
-        <div id="timeline-section">
-            <div id="program-status">
-                <span>Iniziato da <span id="elapsed-time">-- minuti</span></span>
-                <div id="timeline-times">
-                    <span id="program-start-time">00:00</span>
-                    <span id="program-end-time">06:00</span>
-                </div>
-            </div>
-            
-            <div id="timeline-container">
-                <div id="timeline-bar">
-                    <div id="timeline-progress"></div>
-                </div>
-            </div>
-
-            <!-- Program Timeline con orari e frecce -->
-            <div id="program-timeline-container">
-             
-                
-                
-                <div id="program-timeline">
-                    <div class="program-slot current" id="current-program-slot" onclick="selectProgram(0)">
-                        <span class="loading">Caricamento...</span>
-                    </div>
-                    <div class="program-slot upcoming" id="next-program-slot-1" onclick="selectProgram(1)">
-                        <span class="loading">Prossimo</span>
-                    </div>
-                    <div class="program-slot upcoming" id="next-program-slot-2" onclick="selectProgram(2)">
-                        <span class="loading">Successivo</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Control Buttons -->
-           <div id="control-buttons">
-    <div class="control-group">
-        <div class="control-button canale">
-           <img src="https://i.ibb.co/p6ssKTbW/icona-frecce.webp" alt="Canale" class="icon" style="width: 44px; height: auto;" />
-
-            <span>Canale</span>
+        <div id="program-progress-bar">
+          <div id="program-progress"></div>
         </div>
-        <div class="control-button orario">
-            <img src="https://i.ibb.co/vCmpmjbC/icona-frecce2.webp" alt="Canale" class="icon" style="width: 34px; height: auto;" />
-            <span>Cambia con frecce o tasti 4 e 5</span>
-        </div>
-        <div class="control-button registra">
-            <img src="https://i.ibb.co/5xYc0KB3/1f535.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
-            <span>Restart (tasto 2)</span>
-        </div>
-    
-    
-        <div class="control-button canali-preferiti">
-            <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
-            <span>Microfono (tasto 3)</span>
-        </div>
+      </div>
     </div>
-</div>
-
-
-            <!-- Next Program Info -->
-            <div id="next-program-info" class="loading" style="display: none;">
-                A seguire: Caricamento del prossimo programma...
-            </div>
-        </div>
-    </div>
+  </div>
 
   
   <!-- Overlay card centrale per i comandi -->
@@ -487,307 +532,143 @@
   </script>
 
 <script>
-  function updateSignal(percent) {
-    const bars = document.querySelectorAll('#signal-bars .bar');
-    const percentText = document.getElementById('signal-percent');
+  // URL del file JSON contenente i dati EPG
+  const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+  // Identificativo del canale selezionato (esempio: "canale-5")
+  let selectedChannelId = "canale-5";
+  // URL personalizzato per il logo del canale
+  const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
 
-    // Quante tacche attivare su 4 (arrotondato in alto)
-    const activeBars = Math.ceil((percent / 100) * bars.length);
+  // Variabile globale per salvare il programma corrente
+  let currentProgramGlobal = null;
 
-    bars.forEach((bar, index) => {
-      bar.classList.toggle('active', index < activeBars);
-    });
-
-    // Aggiorna percentuale visiva
-    percentText.textContent = `${percent}%`;
+  // Funzione per determinare se una data è in ora legale (DST)
+  function isDST(date) {
+    // Confronta l'offset di gennaio e luglio per il medesimo anno
+    const january = new Date(date.getFullYear(), 0, 1);
+    const july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
   }
 
-  function getRandomSignal() {
-    return Math.floor(Math.random() * 4) + 96; // 96, 97, 98, 99
-  }
-
-  // Aggiornamento ogni 2 secondi
-  setInterval(() => {
-    const randomPercent = getRandomSignal();
-    updateSignal(randomPercent);
-  }, 2000);
-</script>
-
-
-    
-    
-      <script>
-    // URL del file JSON contenente i dati EPG
-    const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
-    // Identificativo del canale selezionato (esempio: "canale-5")
-    let selectedChannelId = "canale-5";
-    // URL personalizzato per il logo del canale
-    const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
-
-    // Variabile globale per salvare il programma corrente
-    let currentProgramGlobal = null;
-    // Variabili globali per salvare tutti i programmi
-    let allPrograms = [];
-    let selectedProgramIndex = 0;
-
-    // Funzione per troncare il titolo se troppo lungo
-    function truncateTitle(title, maxLength = 25) {
-        if (title.length > maxLength) {
-            return title.substring(0, maxLength) + "...";
-        }
-        return title;
+  // Funzione per regolare l'orario in base al periodo:
+  // - In ora legale (DST): sottrae un'ora
+  // - In ora solare: aggiunge un'ora
+  function adjustTime(dateInput) {
+    const date = new Date(dateInput);
+    if (isDST(date)) {
+      // Ora legale: sottrai un'ora
+      date.setHours(date.getHours() - 1);
+    } else {
+      // Ora solare: aggiungi un'ora
+      date.setHours(date.getHours() + 1);
     }
+    return date;
+  }
 
-    // Funzione per selezionare un programma
-    function selectProgram(index) {
-        selectedProgramIndex = index;
+  // Funzione per aggiornare la barra di avanzamento del programma
+  function updateProgressBar(currentProgram) {
+    const startTime = adjustTime(currentProgram.start);
+    const endTime = adjustTime(currentProgram.end);
+    const now = new Date();
+
+    // Calcola la durata totale e il tempo trascorso (in millisecondi)
+    const totalDuration = endTime - startTime;
+    const elapsed = now - startTime;
+    
+    // Calcola la percentuale di completamento
+    let progressPercent = (elapsed / totalDuration) * 100;
+    progressPercent = Math.max(0, Math.min(progressPercent, 100));
+    
+    // Aggiorna la larghezza della barra di avanzamento
+    document.getElementById("program-progress").style.width = progressPercent + "%";
+    
+    // Funzione per formattare l'orario in "HH:MM"
+    const formatTime = date => {
+      return date.getHours().toString().padStart(2, '0') + ":" +
+             date.getMinutes().toString().padStart(2, '0');
+    };
+    
+    // Aggiorna gli orari di inizio e fine
+    document.getElementById("program-start-time").textContent = formatTime(startTime);
+    document.getElementById("program-end-time").textContent = formatTime(endTime);
+  }
+
+  // Aggiorna il progress bar ogni secondo (se esiste un programma corrente)
+  setInterval(function(){
+    if (window.currentProgramGlobal) {
+      updateProgressBar(window.currentProgramGlobal);
+    }
+  }, 1000);
+
+  function updateProgramName() {
+    fetch(epgUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Errore nel recupero dei dati EPG");
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Trova il canale selezionato dall'array dei canali
+        const channel = data.find(ch => ch.id === selectedChannelId);
+        if (!channel) {
+          console.error("Canale non trovato");
+          return;
+        }
+
+        // Ottieni l'orario corrente
+        const now = new Date();
         
-        // Rimuovi la classe selected da tutti gli slot
-        document.querySelectorAll('.program-slot.upcoming').forEach(slot => {
-            slot.classList.remove('selected');
+        // Trova il programma corrente, regolando l'orario dei programmi
+        const currentProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          const end = adjustTime(program.end);
+          return now >= start && now < end;
         });
+
+        // Trova il prossimo programma, regolando l'orario dei programmi
+        const nextProgram = channel.programs.find(program => {
+          const start = adjustTime(program.start);
+          return start > now;
+        });
+
+        // Salva il programma corrente in una variabile globale
+        currentProgramGlobal = currentProgram;
         
-        // Se è un programma futuro, aggiungi la classe selected
-        if (index > 0) {
-            const slotId = `next-program-slot-${index}`;
-            const slot = document.getElementById(slotId);
-            if (slot) {
-                slot.classList.add('selected');
-            }
+        // Aggiorna il nome del programma in corso
+        const programNameEl = document.getElementById("program-name");
+        if (programNameEl) {
+          if (currentProgram) {
+            programNameEl.textContent = currentProgram.title;
+          } else {
+            programNameEl.textContent = "Programma non disponibile";
+          }
         }
-        
-        // Aggiorna la sezione program-description con i dettagli del programma selezionato
-        updateProgramDescription(index);
-    }
 
-    // Funzione per aggiornare la descrizione del programma
-    function updateProgramDescription(index) {
-        if (!allPrograms || allPrograms.length === 0) return;
-        
-        let selectedProgram;
-        if (index === 0) {
-            selectedProgram = currentProgramGlobal;
-        } else {
-            const upcomingPrograms = allPrograms.filter(program => {
-                const start = adjustTime(program.start);
-                const now = new Date();
-                return start > now;
-            });
-            selectedProgram = upcomingPrograms[index - 1];
+        // Aggiorna il nome del programma a seguire
+        const nextProgramNameEl = document.getElementById("next-program-name");
+        if (nextProgramNameEl) {
+          if (nextProgram) {
+            nextProgramNameEl.textContent = "A seguire » " + nextProgram.title;
+          } else {
+            nextProgramNameEl.textContent = "Programma a seguire: Non disponibile";
+          }
         }
-        
-        if (selectedProgram) {
-            const startTime = adjustTime(selectedProgram.start);
-            const formatTime = date => {
-                return date.getHours().toString().padStart(2, '0') + ":" +
-                       date.getMinutes().toString().padStart(2, '0');
-            };
-            
-            // Aggiorna il titolo con orario (titolo completo)
-            document.getElementById("program-time-title").textContent = 
-                formatTime(startTime) + " " + selectedProgram.title;
-            
-            // Aggiorna la descrizione
-            document.getElementById("program-description-text").textContent = 
-                selectedProgram.description || "Descrizione non disponibile.";
+
+        // Se esiste un programma corrente, aggiorna subito la barra di avanzamento
+        if (currentProgram) {
+          updateProgressBar(currentProgram);
         }
-    }
+      })
+      .catch(error => {
+        console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+      });
+  }
 
-    // Funzione per determinare se una data è in ora legale (DST)
-    function isDST(date) {
-        // Confronta l'offset di gennaio e luglio per il medesimo anno
-        const january = new Date(date.getFullYear(), 0, 1);
-        const july = new Date(date.getFullYear(), 6, 1);
-        return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
-    }
-
-    // Funzione per regolare l'orario in base al periodo:
-    // - In ora legale (DST): sottrae un'ora
-    // - In ora solare: aggiunge un'ora
-    function adjustTime(dateInput) {
-        const date = new Date(dateInput);
-        if (isDST(date)) {
-            // Ora legale: sottrai un'ora
-            date.setHours(date.getHours() - 1);
-        } else {
-            // Ora solare: aggiungi un'ora
-            date.setHours(date.getHours() + 1);
-        }
-        return date;
-    }
-
-    // Funzione per aggiornare la barra di avanzamento del programma
-    function updateProgressBar(currentProgram) {
-        const startTime = adjustTime(currentProgram.start);
-        const endTime = adjustTime(currentProgram.end);
-        const now = new Date();
-
-        // Calcola la durata totale e il tempo trascorso (in millisecondi)
-        const totalDuration = endTime - startTime;
-        const elapsed = now - startTime;
-        
-        // Calcola la percentuale di completamento
-        let progressPercent = (elapsed / totalDuration) * 100;
-        progressPercent = Math.max(0, Math.min(progressPercent, 100));
-        
-        // Aggiorna la larghezza della barra di avanzamento
-        document.getElementById("timeline-progress").style.width = progressPercent + "%";
-        
-        // Funzione per formattare l'orario in "HH:MM"
-        const formatTime = date => {
-            return date.getHours().toString().padStart(2, '0') + ":" +
-                   date.getMinutes().toString().padStart(2, '0');
-        };
-        
-        // Aggiorna gli orari di inizio e fine
-        document.getElementById("program-start-time").textContent = formatTime(startTime);
-        document.getElementById("program-end-time").textContent = formatTime(endTime);
-
-        // Calcola i minuti trascorsi
-        const elapsedMinutes = Math.floor(elapsed / (1000 * 60));
-        document.getElementById("elapsed-time").textContent = elapsedMinutes + " minuti";
-    }
-
-    // Funzione per aggiornare l'orario corrente
-    function updateCurrentTime() {
-        const now = new Date();
-        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-        const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
-        
-        const dayName = days[now.getDay()];
-        const day = now.getDate().toString().padStart(2, '0');
-        const month = months[now.getMonth()];
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        
-        const timeString = `${dayName} ${day} ${month} ${hours}:${minutes}`;
-        document.getElementById("current-time").textContent = timeString;
-    }
-
-    // Aggiorna il progress bar e l'orario ogni secondo
-    setInterval(function(){
-        updateCurrentTime();
-        if (window.currentProgramGlobal) {
-            updateProgressBar(window.currentProgramGlobal);
-        }
-    }, 1000);
-
-    function updateProgramName() {
-        fetch(epgUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Errore nel recupero dei dati EPG");
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Trova il canale selezionato dall'array dei canali
-              const channel = data.find(c => c.id === selectedChannelId);
-
-// Verifica che ci sia la lista programmi
-if (!channel.programs || channel.programs.length === 0) {
-console.error("Nessun programma disponibile");
-return;
-}
-
-                // Salva tutti i programmi
-                allPrograms = channel.programs;
-
-                // Ottieni l'orario corrente
-                const now = new Date();
-                
-                // Trova il programma corrente, regolando l'orario dei programmi
-                const currentProgram = channel.programs.find(program => {
-                    const start = adjustTime(program.start);
-                    const end = adjustTime(program.end);
-                    return now >= start && now < end;
-                });
-
-                // Trova i prossimi programmi
-                const upcomingPrograms = channel.programs
-                    .filter(program => {
-                        const start = adjustTime(program.start);
-                        return start > now;
-                    })
-                    .slice(0, 3);
-
-                // Salva il programma corrente in una variabile globale
-                currentProgramGlobal = currentProgram;
-                
-                // Aggiorna le informazioni del programma corrente
-                if (currentProgram) {
-                    const startTime = adjustTime(currentProgram.start);
-                    const formatTime = date => {
-                        return date.getHours().toString().padStart(2, '0') + ":" +
-                               date.getMinutes().toString().padStart(2, '0');
-                    };
-
-                    // Rimuovi le classi loading
-                    document.getElementById("program-time-title").classList.remove("loading");
-                    document.getElementById("program-description-text").classList.remove("loading");
-                    document.getElementById("current-program-slot").classList.remove("loading");
-                    document.getElementById("next-program-info").classList.remove("loading");
-
-                    // Aggiorna il titolo con orario (se è selezionato il programma corrente)
-                    if (selectedProgramIndex === 0) {
-                        document.getElementById("program-time-title").textContent = 
-                            formatTime(startTime) + " " + currentProgram.title;
-
-                        // Aggiorna la descrizione
-                        document.getElementById("program-description-text").textContent = 
-                            currentProgram.description || "Descrizione non disponibile.";
-                    }
-
-                    // Aggiorna lo slot del programma corrente (sempre titolo completo)
-                    document.getElementById("current-program-slot").innerHTML = 
-                        "<span>" + currentProgram.title + "</span>";
-
-                    // Aggiorna i prossimi programmi con titoli troncati
-                    if (upcomingPrograms.length > 0) {
-                        const start1 = adjustTime(upcomingPrograms[0].start);
-                        const truncatedTitle1 = truncateTitle(upcomingPrograms[0].title);
-                        document.getElementById("next-program-slot-1").innerHTML = 
-                            `<span>${formatTime(start1)} - ${truncatedTitle1}</span>`;
-                        document.getElementById("next-program-info").textContent = 
-                            "A seguire: " + formatTime(start1) + " - " + upcomingPrograms[0].title;
-                    }
-                    if (upcomingPrograms.length > 1) {
-                        const start2 = adjustTime(upcomingPrograms[1].start);
-                        const truncatedTitle2 = truncateTitle(upcomingPrograms[1].title);
-                        document.getElementById("next-program-slot-2").innerHTML = 
-                            `<span>${formatTime(start2)} - ${truncatedTitle2}</span>`;
-                    }
-                    
-                    // Aggiorna subito la barra di avanzamento
-                    updateProgressBar(currentProgram);
-                } else {
-                    // Rimuovi le classi loading anche in caso di errore
-                    document.getElementById("program-time-title").classList.remove("loading");
-                    document.getElementById("program-description-text").classList.remove("loading");
-                    document.getElementById("current-program-slot").classList.remove("loading");
-                    document.getElementById("next-program-info").classList.remove("loading");
-
-                    document.getElementById("program-time-title").textContent = "Programma non disponibile";
-                    document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile per il programma corrente.";
-                    document.getElementById("current-program-slot").innerHTML = "<span>Non disponibile</span>";
-                    document.getElementById("next-program-info").textContent = "A seguire: Non disponibile";
-                }
-            })
-            .catch(error => {
-                console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
-                // Rimuovi l'animazione di caricamento anche in caso di errore
-                document.getElementById("program-time-title")?.classList.remove("loading");
-                document.getElementById("program-description-text")?.classList.remove("loading");
-                document.getElementById("current-program-slot")?.classList.remove("loading");
-                document.getElementById("next-program-info")?.classList.remove("loading");
-            });
-    }
-
-    // Esegui l'aggiornamento all'avvio della pagina
-    updateCurrentTime();
-    updateProgramName();
-    // Aggiorna le informazioni ogni minuto
-    setInterval(updateProgramName, 60000);
+  // Esegui l'aggiornamento all'avvio della pagina
+  updateProgramName();
+  // Aggiorna le informazioni ogni minuto
+  setInterval(updateProgramName, 60000);
 </script>
 
 
