@@ -72,7 +72,84 @@
     text-shadow: 0 0 5px black;
   }
 
+    /* Overlay centrale */
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px; /* Dimensione font per desktop */
+}
 
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Stili per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 300px;
+    font-size: 14px; /* Dimensione font più piccola per mobile */
+  }
+  
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
+    /* Animazione spinner con cubetti */
+    .spinner-cubes {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .spinner-cubes div {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      margin: 2px;
+      animation: spinner 1s infinite ease-in-out;
+    }
+    .spinner-cubes div:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .spinner-cubes div:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .spinner-cubes div:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes spinner {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+    }
+   /* Messaggio in alto a destra per restart */
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
 
   /* Messaggio in alto a destra per restart */
   #restart-message {
@@ -107,11 +184,7 @@
     opacity: 0.85;
   }
 
-  #overlay-card {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
+
 
   /* ————————————————————————————————————————————————
      Qui sotto, nascondiamo la rotellina di Video.js (loading spinner)
@@ -238,6 +311,19 @@
         </div>
     </div>
  
+  
+  
+    <!-- Overlay card centrale per i comandi -->
+  <div id="overlay-card" class="hidden">
+    <img id="overlay-icon" src="" alt="Icona comando">
+    <!-- Contenitore per l'animazione spinner -->
+    <div id="overlay-animation" class="spinner-cubes">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p id="overlay-text"></p>
+  </div>
   
 
   
