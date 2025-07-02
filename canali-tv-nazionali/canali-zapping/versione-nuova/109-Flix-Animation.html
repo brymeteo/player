@@ -625,72 +625,78 @@ player.on('ended', () => {
   
   <script>
   // Variabili per gestire timer e stato overlay
-    
-    var overlayIcon = document.getElementById("overlay-icon");
-    var overlayText = document.getElementById("overlay-text");
-    var restartMessage = document.getElementById("restart-message");
-    var channelInfoBar = document.getElementById("channel-info-bar");
-    var overlayTimer, restartTimer, channelInfoTimer;
+var overlayCard = document.getElementById("overlay-card");
+var overlayIcon = document.getElementById("overlay-icon");
+var overlayText = document.getElementById("overlay-text");
+var restartMessage = document.getElementById("restart-message");
+var channelInfoBar = document.getElementById("channel-info-bar");
+var overlayTimer, restartTimer, channelInfoTimer;
 
-    // Funzione per mostrare l'overlay card con contenuto personalizzato
-    function showOverlay(state) {
-      clearTimeout(overlayTimer);
-      clearTimeout(restartTimer);
-      overlayCard.classList.remove("hidden");
-      // Imposta contenuto in base allo stato: "pause", "play", "restart"
-      if (state === "pause") {
-        // Usa l'icona pausa (sostituisci l'URL con quello corretto)
-        overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
-        overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
-        // L'animazione spinner (i cubetti) è già visibile nel div #overlay-animation
-      } else if (state === "play") {
-        // Aggiorna l'icona in play
-        overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
-        overlayText.innerHTML = "";
-        // Dopo 2 secondi nascondi l'overlay
-        overlayTimer = setTimeout(function () {
-          overlayCard.classList.add("hidden");
-        }, 2000);
-      } else if (state === "restart") {
-        // Per il comando rewind (indietro) mostra l'icona di restart
-        overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
-        overlayText.innerHTML = "Video messo indietro.";
-        // Nasconde la card dopo 2 secondi
-        overlayTimer = setTimeout(function () {
-          overlayCard.classList.add("hidden");
-        }, 2000);
-        // Dopo 5 secondi, mostra il messaggio in alto a destra
-        restartTimer = setTimeout(function () {
-          restartMessage.classList.remove("hidden");
-          // Nasconde il messaggio dopo 3 secondi (modifica la durata se necessario)
-          setTimeout(function () {
-            restartMessage.classList.add("hidden");
-          }, 15000);
-        }, 5000);
-      }
-    }
+// Funzione per mostrare l'overlay card con contenuto personalizzato
+function showOverlay(state) {
+  clearTimeout(overlayTimer);
+  clearTimeout(restartTimer);
+  overlayCard.classList.remove("hidden");
+  
+  // Forza la visibilità dell'overlay
+  overlayCard.style.display = 'block';
 
-    // Gestione della barra informativa del canale
-    function hideChannelInfo() {
-      channelInfoBar.style.display = "none";
-    }
-    
-    function showChannelInfo() {
-      channelInfoBar.style.display = "block";
-      clearTimeout(channelInfoTimer);
-      // Nascondi la barra informativa dopo 6 secondi
-      channelInfoTimer = setTimeout(hideChannelInfo, 9000);
-    }
-    
-    // Mostra la barra informativa al caricamento della pagina
-    showChannelInfo();
-    
-    // Mostra la barra informativa al movimento del mouse o pressione tasti
-    document.addEventListener("mousemove", showChannelInfo);
-    document.addEventListener("keypress", showChannelInfo);
+  // Imposta contenuto in base allo stato: "pause", "play", "restart"
+  if (state === "pause") {
+    // Usa l'icona pausa (sostituisci l'URL con quello corretto)
+    overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
+    overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
+    // L'animazione spinner (i cubetti) è già visibile nel div #overlay-animation
+  } else if (state === "play") {
+    // Aggiorna l'icona in play
+    overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
+    overlayText.innerHTML = "";
+    // Dopo 2 secondi nascondi l'overlay
+    overlayTimer = setTimeout(function () {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none'; // Nascondi forzatamente
+    }, 2000);
+  } else if (state === "restart") {
+    // Per il comando rewind (indietro) mostra l'icona di restart
+    overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+    overlayText.innerHTML = "Video messo indietro.";
+    // Nasconde la card dopo 2 secondi
+    overlayTimer = setTimeout(function () {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none'; // Nascondi forzatamente
+    }, 2000);
+    // Dopo 5 secondi, mostra il messaggio in alto a destra
+    restartTimer = setTimeout(function () {
+      restartMessage.classList.remove("hidden");
+      // Nasconde il messaggio dopo 15 secondi
+      setTimeout(function () {
+        restartMessage.classList.add("hidden");
+      }, 15000);
+    }, 5000);
+  }
+}
 
-    // Gestione dei comandi vocali tramite postMessage
-   window.addEventListener("message", function (event) {
+// Gestione della barra informativa del canale
+function hideChannelInfo() {
+  channelInfoBar.style.display = "none";
+}
+
+function showChannelInfo() {
+  channelInfoBar.style.display = "block";
+  clearTimeout(channelInfoTimer);
+  // Nascondi la barra informativa dopo 9 secondi
+  channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+}
+
+// Mostra la barra informativa al caricamento della pagina
+showChannelInfo();
+
+// Mostra la barra informativa al movimento del mouse o pressione tasti
+document.addEventListener("mousemove", showChannelInfo);
+document.addEventListener("keypress", showChannelInfo);
+
+// Gestione dei comandi vocali tramite postMessage
+window.addEventListener("message", function (event) {
   if (!event.data) return;
   console.log("Messaggio ricevuto:", event.data);
 
@@ -704,51 +710,50 @@ player.on('ended', () => {
     showOverlay("play");
   }
 
-if (event.data === "restart") {
-  // Se il player è già in riproduzione, riavvia l'attuale traccia
-  if (player.readyState() > 0) {
-    player.currentTime(0);
-    player.play();
-    showOverlay("restart");
-  } else {
-    // Se il player non è pronto, carica la traccia corrente dall'inizio
-    const risultato = calcolaIndexEOffset();
-    if (!risultato) return;
-    const { index } = risultato;
-    caricaVideo(index, 0);
-    showOverlay("restart");
+  if (event.data === "restart") {
+    // Se il player è già in riproduzione, riavvia l'attuale traccia
+    if (player.readyState() > 0) {
+      player.currentTime(0);
+      player.play();
+      showOverlay("restart");
+    } else {
+      // Se il player non è pronto, carica la traccia corrente dall'inizio
+      const risultato = calcolaIndexEOffset();
+      if (!risultato) return;
+      const { index } = risultato;
+      caricaVideo(index, 0);
+      showOverlay("restart");
+    }
   }
-}
 
+  // Comando "live": ricarica la sorgente live
+  else if (event.data === "live") {
+    player.load(player.options.source);
+    console.log("Comando: live eseguito, live stream ricaricato");
+    // Ricarica la pagina
+    location.reload();
+  }
 
+  // Comando "rewind"/"indietro"
+  else if ((event.data === "rewind" || event.data === "indietro") ||
+    (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+    let rewindSeconds = 10;
+    if (typeof event.data === "object" && event.data.seconds) {
+      rewindSeconds = event.data.seconds;
+    }
+    if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+      var currentTime = player.getCurrentTime();
+      var newTime = currentTime - rewindSeconds;
+      if (newTime < 0) newTime = 0;
+      player.seek(newTime);
+      console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+      showOverlay("restart");
+    } else {
+      console.log("Il comando 'indietro' non è supportato per questo live stream");
+    }
+  }
+});
 
-      // Comando "live": ricarica la sorgente live
-else if (event.data === "live") {
-  player.load(player.options.source);
-  console.log("Comando: live eseguito, live stream ricaricato");
-  // Ricarica la pagina
-  location.reload();
-}
-
-      // Comando "rewind"/"indietro"
-      else if ((event.data === "rewind" || event.data === "indietro") ||
-        (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
-        let rewindSeconds = 10;
-        if (typeof event.data === "object" && event.data.seconds) {
-          rewindSeconds = event.data.seconds;
-        }
-        if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
-          var currentTime = player.getCurrentTime();
-          var newTime = currentTime - rewindSeconds;
-          if (newTime < 0) newTime = 0;
-          player.seek(newTime);
-          console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
-          showOverlay("restart");
-        } else {
-          console.log("Il comando 'indietro' non è supportato per questo live stream");
-        }
-      }
-    });
   </script>
 
   <script>
