@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DIRETTA TV</title>
+    <meta charset="UTF-8">
+    <!-- Player -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
+    <!-- Video resolution switcher -->
+<script type="text/javascript"
+src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+
+<link href="https://brymeteo.github.io/player/Guida%20TV/guida-tv-popup-lity.css" rel="stylesheet">
+
+<link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+ 
+
+    <!-- Stili esistenti -->
+ <style>
+        #background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Imposta lo z-index in modo che lo sfondo sia dietro al resto del contenuto */
+            background: #171a45;
+        }
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            /* Personalizza dimensioni */
+            height: auto;
+            /* Personalizza dimensioni */
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+            /* Rendere il logo visibile immediatamente */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Evita la visualizzazione della barra di scorrimento */
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            /* Colore di sfondo nero per il video */
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Stile per l'immagine di fallback */
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Adatta l'immagine all'area senza deformarla */
+            display: none; /* Nascondi l'immagine di fallback per impostazione predefinita */
+        }
+        
+    </style>
+    
+    
+    <style>
+    /* Nasconde i controlli del player */
+    #player .media-control,
+    #player .player-controls,
+    #player .control-bar {
+      display: none !important;
+    }
+    </style>
+  
+  <!-- Nuovi stili per overlay e animazioni -->
+  <style>
+    /* Overlay centrale */
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px; /* Dimensione font per desktop */
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Stili per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 300px;
+    font-size: 14px; /* Dimensione font più piccola per mobile */
+  }
+  
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
+    /* Animazione spinner con cubetti */
+    .spinner-cubes {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .spinner-cubes div {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      margin: 2px;
+      animation: spinner 1s infinite ease-in-out;
+    }
+    .spinner-cubes div:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .spinner-cubes div:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .spinner-cubes div:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes spinner {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+    }
+   /* Messaggio in alto a destra per restart */
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+/* Responsive per dispositivi mobili (max-width: 600px) */
+@media only screen and (max-width: 600px) {
+    #restart-message {
+        top: 5px;
+        /* right: 5px; */
+        /* padding: 5px; */
+        font-size: 16px;
+    }
+}
+
+
+    .hidden {
+      display: none;
+    }
+    
+    
+
+         #next-program-name {
+  color: #c6ced3; /* Sostituisci con il colore desiderato */
+  font-size: 18px;
+  margin-top: 4px;
+  opacity: 0.85;
+}     
+
+    
+    
+  </style>
+</head>
+
+<body>
+    <div id="background-overlay"></div>
+    <div id="player" class="hidden"></div>
+    
+
+
+<!-- Immagine di fallback -->
+  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+  
+  <div id="player"></div>
+  
+  
+ <!-- Sky TV Guide Bar -->
+    <div id="channel-info-bar">
+        <!-- Program Description Section - SEPARATA -->
+        <div id="program-description">
+            <div id="program-time-title" class="loading">Caricamento...</div>
+            <div id="program-description-text" class="loading">
+                Caricamento della descrizione del programma in corso...
+            </div>
+            <div class="continua-button">
+                <div class="continua-icon">i</div>
+                <span>Continua</span>
+            </div>
+        </div>
+
+        <!-- Channel Info Section - SEPARATA -->
+        <div id="channel-info-middle">
+            <div id="channel-left-info">
+            
+                <div id="channel-number">216</div>
+                <div id="channel-title">Rakuten Commedia HD</div>
+            </div>
+            <div id="hd-indicator">HD</div>
+       
+ <div class="signal-bars" id="signal-bars">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>&nbsp;&nbsp;
+  <span id="signal-percent">99%</span>
+            
+     &nbsp;&nbsp;&nbsp;&nbsp;
+            <div id="current-time">Giovedì 05 Dic 18:12</div>
+        </div>
+
+        <!-- Timeline Section - BARRA PRINCIPALE ARROTONDATA -->
+        <div id="timeline-section">
+            <div id="program-status">
+                <span>Iniziato da <span id="elapsed-time">-- minuti</span></span>
+                <div id="timeline-times">
+                    <span id="program-start-time">00:00</span>
+                    <span id="program-end-time">06:00</span>
+                </div>
+            </div>
+            
+            <div id="timeline-container">
+                <div id="timeline-bar">
+                    <div id="timeline-progress"></div>
+                </div>
+            </div>
+
+            <!-- Program Timeline con orari e frecce -->
+            <div id="program-timeline-container">
+             
+                
+                
+                <div id="program-timeline">
+                    <div class="program-slot current" id="current-program-slot" onclick="selectProgram(0)">
+                        <span class="loading">Caricamento...</span>
+                    </div>
+                    <div class="program-slot upcoming" id="next-program-slot-1" onclick="selectProgram(1)">
+                        <span class="loading">Prossimo</span>
+                    </div>
+                    <div class="program-slot upcoming" id="next-program-slot-2" onclick="selectProgram(2)">
+                        <span class="loading">Successivo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+           <div id="control-buttons">
+    <div class="control-group">
+        <div class="control-button canale">
+           <img src="https://i.ibb.co/p6ssKTbW/icona-frecce.webp" alt="Canale" class="icon" style="width: 44px; height: auto;" />
+
+            <span>Canale</span>
+        </div>
+        <div class="control-button orario">
+            <img src="https://i.ibb.co/vCmpmjbC/icona-frecce2.webp" alt="Canale" class="icon" style="width: 34px; height: auto;" />
+            <span>Cambia con frecce o tasti 4 e 5</span>
+        </div>
+        <div class="control-button registra">
+            <img src="https://i.ibb.co/5xYc0KB3/1f535.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
+            <span>Restart (tasto 2)</span>
+        </div>
+    
+    
+        <div class="control-button canali-preferiti">
+            <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
+            <span>Microfono (tasto 3)</span>
+        </div>
+    </div>
+</div>
+
+
+            <!-- Next Program Info -->
+            <div id="next-program-info" class="loading" style="display: none;">
+                A seguire: Caricamento del prossimo programma...
+            </div>
+        </div>
+    </div>
+
+  
+  <!-- Overlay card centrale per i comandi -->
+  <div id="overlay-card" class="hidden">
+    <img id="overlay-icon" src="" alt="Icona comando">
+    <!-- Contenitore per l'animazione spinner -->
+    <div id="overlay-animation" class="spinner-cubes">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p id="overlay-text"></p>
+  </div>
+  
+  <!-- Messaggio in alto a destra (per il caso restart) -->
+  <div id="restart-message" class="hidden">
+    Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
+  </div>
+
+
+
+  <script>
+   var player = new Clappr.Player({
+            source: "https://b8bc6c4b9be64bd6aeb3b92aa8521ed4.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6184/master.m3u8",
+            parentId: "#player",
+            width: '100%',
+            height: '100vh',
+            controls: false,
+            autoPlay: true, // Abilita l'auto-play
+            plugins: {
+                core: [LevelSelector]
+            },
+            levelSelectorConfig: {
+                //Optional : custom labels
+                title: 'QUALITÀ VOX OS',
+                labels: {
+                    0: 'Molto Bassa 360p',
+                    1: 'Bassa 360p ',
+                    2: 'Media 480p ',
+                    3: 'Standard 520p',
+                    4: 'Medio Alta 720p',
+                    5: 'Alta 720p',
+                    6: 'Molto Alta 1080p',
+                    7: 'Super Qualità 1080p '
+                },
+            },
+        });
+      
+ // Variabili per gestire timer e stato overlay
+    var overlayCard = document.getElementById("overlay-card");
+    var overlayIcon = document.getElementById("overlay-icon");
+    var overlayText = document.getElementById("overlay-text");
+    var restartMessage = document.getElementById("restart-message");
+    var channelInfoBar = document.getElementById("channel-info-bar");
+    var overlayTimer, restartTimer, channelInfoTimer;
+
+    // Funzione per mostrare l'overlay card con contenuto personalizzato
+    function showOverlay(state) {
+      clearTimeout(overlayTimer);
+      clearTimeout(restartTimer);
+      overlayCard.classList.remove("hidden");
+      // Imposta contenuto in base allo stato: "pause", "play", "restart"
+      if (state === "pause") {
+        // Usa l'icona pausa (sostituisci l'URL con quello corretto)
+        overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
+        overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
+        // L'animazione spinner (i cubetti) è già visibile nel div #overlay-animation
+      } else if (state === "play") {
+        // Aggiorna l'icona in play
+        overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
+        overlayText.innerHTML = "";
+        // Dopo 2 secondi nascondi l'overlay
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+      } else if (state === "restart") {
+        // Per il comando rewind (indietro) mostra l'icona di restart
+        overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+        overlayText.innerHTML = "Video messo indietro.";
+        // Nasconde la card dopo 2 secondi
+        overlayTimer = setTimeout(function () {
+          overlayCard.classList.add("hidden");
+        }, 2000);
+        // Dopo 5 secondi, mostra il messaggio in alto a destra
+        restartTimer = setTimeout(function () {
+          restartMessage.classList.remove("hidden");
+          // Nasconde il messaggio dopo 3 secondi (modifica la durata se necessario)
+          setTimeout(function () {
+            restartMessage.classList.add("hidden");
+          }, 15000);
+        }, 5000);
+      }
+    }
+
+    // Gestione della barra informativa del canale
+    function hideChannelInfo() {
+      channelInfoBar.style.display = "none";
+    }
+    
+    function showChannelInfo() {
+      channelInfoBar.style.display = "block";
+      clearTimeout(channelInfoTimer);
+      // Nascondi la barra informativa dopo 6 secondi
+      channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+    }
+    
+    // Mostra la barra informativa al caricamento della pagina
+    showChannelInfo();
+    
+    // Mostra la barra informativa al movimento del mouse o pressione tasti
+    document.addEventListener("mousemove", showChannelInfo);
+    document.addEventListener("keypress", showChannelInfo);
+
+    // Gestione dei comandi vocali tramite postMessage
+    window.addEventListener("message", function (event) {
+      if (!event.data) return;
+      console.log("Messaggio ricevuto:", event.data);
+
+      // Comando "pausa"
+      if (event.data === "pause") {
+        player.pause();
+        console.log("Comando: pausa eseguito");
+        showOverlay("pause");
+      }
+      // Comando "riprendi" o "play"
+      else if (event.data === "play" || event.data === "riprendi") {
+        player.play();
+        console.log("Comando: riprendi eseguito");
+        // Se è visibile una card di pausa, trasformala in play e nascondila dopo 2 sec.
+        if (!overlayCard.classList.contains("hidden")) {
+          showOverlay("play");
+        }
+      }
+      // Comando "live": ricarica la sorgente live
+      else if (event.data === "live") {
+        player.load(player.options.source);
+        console.log("Comando: live eseguito, live stream ricaricato");
+      }
+      // Comando "rewind"/"indietro"
+      else if ((event.data === "rewind" || event.data === "indietro") ||
+        (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number")) {
+        let rewindSeconds = 10;
+        if (typeof event.data === "object" && event.data.seconds) {
+          rewindSeconds = event.data.seconds;
+        }
+        if (typeof player.getCurrentTime === "function" && typeof player.seek === "function") {
+          var currentTime = player.getCurrentTime();
+          var newTime = currentTime - rewindSeconds;
+          if (newTime < 0) newTime = 0;
+          player.seek(newTime);
+          console.log("Comando: indietro eseguito, nuovo tempo: ", newTime);
+          showOverlay("restart");
+        } else {
+          console.log("Il comando 'indietro' non è supportato per questo live stream");
+        }
+      }
+    });
+  </script>
+
+
+<script>
+    player.on(Clappr.Events.PLAYER_ERROR, function (err) {
+      document.getElementById("fallback-image").style.display = "block";
+      document.getElementById("player").style.display = "none";
+    });
+
+    var logo = document.getElementById("logo");
+    var timer;
+    function hideLogo() {
+      logo.style.display = "none";
+    }
+    function resetTimer() {
+      logo.style.display = "block";
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 6000);
+    }
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keypress", resetTimer);
+    resetTimer();
+</script>
+
+
+
+<script>
+  function updateSignal(percent) {
+    const bars = document.querySelectorAll('#signal-bars .bar');
+    const percentText = document.getElementById('signal-percent');
+
+    // Quante tacche attivare su 4 (arrotondato in alto)
+    const activeBars = Math.ceil((percent / 100) * bars.length);
+
+    bars.forEach((bar, index) => {
+      bar.classList.toggle('active', index < activeBars);
+    });
+
+    // Aggiorna percentuale visiva
+    percentText.textContent = `${percent}%`;
+  }
+
+  function getRandomSignal() {
+    return Math.floor(Math.random() * 4) + 96; // 96, 97, 98, 99
+  }
+
+  // Aggiornamento ogni 2 secondi
+  setInterval(() => {
+    const randomPercent = getRandomSignal();
+    updateSignal(randomPercent);
+  }, 2000);
+</script>
+
+
+<script>
+    // URL del file JSON contenente i dati EPG
+    const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+    // Identificativo del canale selezionato (esempio: "canale-5")
+    let selectedChannelId = "rakuten";
+    // URL personalizzato per il logo del canale
+    const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
+
+    // Variabile globale per salvare il programma corrente
+    let currentProgramGlobal = null;
+    // Variabili globali per salvare tutti i programmi
+    let allPrograms = [];
+    let selectedProgramIndex = 0;
+
+    // Funzione per troncare il titolo se troppo lungo
+    function truncateTitle(title, maxLength = 25) {
+        if (title.length > maxLength) {
+            return title.substring(0, maxLength) + "...";
+        }
+        return title;
+    }
+
+    // Funzione per selezionare un programma
+    function selectProgram(index) {
+        selectedProgramIndex = index;
+        
+        // Rimuovi la classe selected da tutti gli slot
+        document.querySelectorAll('.program-slot.upcoming').forEach(slot => {
+            slot.classList.remove('selected');
+        });
+        
+        // Se è un programma futuro, aggiungi la classe selected
+        if (index > 0) {
+            const slotId = `next-program-slot-${index}`;
+            const slot = document.getElementById(slotId);
+            if (slot) {
+                slot.classList.add('selected');
+            }
+        }
+        
+        // Aggiorna la sezione program-description con i dettagli del programma selezionato
+        updateProgramDescription(index);
+    }
+
+    // Funzione per aggiornare la descrizione del programma
+    function updateProgramDescription(index) {
+        if (!allPrograms || allPrograms.length === 0) return;
+        
+        let selectedProgram;
+        if (index === 0) {
+            selectedProgram = currentProgramGlobal;
+        } else {
+            const upcomingPrograms = allPrograms.filter(program => {
+                const start = adjustTime(program.start);
+                const now = new Date();
+                return start > now;
+            });
+            selectedProgram = upcomingPrograms[index - 1];
+        }
+        
+        if (selectedProgram) {
+            const startTime = adjustTime(selectedProgram.start);
+            const formatTime = date => {
+                return date.getHours().toString().padStart(2, '0') + ":" +
+                       date.getMinutes().toString().padStart(2, '0');
+            };
+            
+            // Aggiorna il titolo con orario (titolo completo)
+            document.getElementById("program-time-title").textContent = 
+                formatTime(startTime) + " " + selectedProgram.title;
+            
+            // Aggiorna la descrizione
+            document.getElementById("program-description-text").textContent = 
+                selectedProgram.description || "Descrizione non disponibile.";
+        }
+    }
+
+    // Funzione per determinare se una data è in ora legale (DST)
+    function isDST(date) {
+        // Confronta l'offset di gennaio e luglio per il medesimo anno
+        const january = new Date(date.getFullYear(), 0, 1);
+        const july = new Date(date.getFullYear(), 6, 1);
+        return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+    }
+
+    // Funzione per regolare l'orario in base al periodo:
+    // - In ora legale (DST): sottrae un'ora
+    // - In ora solare: aggiunge un'ora
+    function adjustTime(dateInput) {
+        const date = new Date(dateInput);
+        if (isDST(date)) {
+            // Ora legale: sottrai un'ora
+            date.setHours(date.getHours() - 1);
+        } else {
+            // Ora solare: aggiungi un'ora
+            date.setHours(date.getHours() + 1);
+        }
+        return date;
+    }
+
+    // Funzione per aggiornare la barra di avanzamento del programma
+    function updateProgressBar(currentProgram) {
+        const startTime = adjustTime(currentProgram.start);
+        const endTime = adjustTime(currentProgram.end);
+        const now = new Date();
+
+        // Calcola la durata totale e il tempo trascorso (in millisecondi)
+        const totalDuration = endTime - startTime;
+        const elapsed = now - startTime;
+        
+        // Calcola la percentuale di completamento
+        let progressPercent = (elapsed / totalDuration) * 100;
+        progressPercent = Math.max(0, Math.min(progressPercent, 100));
+        
+        // Aggiorna la larghezza della barra di avanzamento
+        document.getElementById("timeline-progress").style.width = progressPercent + "%";
+        
+        // Funzione per formattare l'orario in "HH:MM"
+        const formatTime = date => {
+            return date.getHours().toString().padStart(2, '0') + ":" +
+                   date.getMinutes().toString().padStart(2, '0');
+        };
+        
+        // Aggiorna gli orari di inizio e fine
+        document.getElementById("program-start-time").textContent = formatTime(startTime);
+        document.getElementById("program-end-time").textContent = formatTime(endTime);
+
+        // Calcola i minuti trascorsi
+        const elapsedMinutes = Math.floor(elapsed / (1000 * 60));
+        document.getElementById("elapsed-time").textContent = elapsedMinutes + " minuti";
+    }
+
+    // Funzione per aggiornare l'orario corrente
+    function updateCurrentTime() {
+        const now = new Date();
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+        
+        const dayName = days[now.getDay()];
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = months[now.getMonth()];
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        
+        const timeString = `${dayName} ${day} ${month} ${hours}:${minutes}`;
+        document.getElementById("current-time").textContent = timeString;
+    }
+
+    // Aggiorna il progress bar e l'orario ogni secondo
+    setInterval(function(){
+        updateCurrentTime();
+        if (window.currentProgramGlobal) {
+            updateProgressBar(window.currentProgramGlobal);
+        }
+    }, 1000);
+
+    function updateProgramName() {
+        fetch(epgUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore nel recupero dei dati EPG");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Trova il canale selezionato dall'array dei canali
+              const channel = data.find(c => c.id === selectedChannelId);
+
+// Verifica che ci sia la lista programmi
+if (!channel.programs || channel.programs.length === 0) {
+console.error("Nessun programma disponibile");
+return;
+}
+
+                // Salva tutti i programmi
+                allPrograms = channel.programs;
+
+                // Ottieni l'orario corrente
+                const now = new Date();
+                
+                // Trova il programma corrente, regolando l'orario dei programmi
+                const currentProgram = channel.programs.find(program => {
+                    const start = adjustTime(program.start);
+                    const end = adjustTime(program.end);
+                    return now >= start && now < end;
+                });
+
+                // Trova i prossimi programmi
+                const upcomingPrograms = channel.programs
+                    .filter(program => {
+                        const start = adjustTime(program.start);
+                        return start > now;
+                    })
+                    .slice(0, 3);
+
+                // Salva il programma corrente in una variabile globale
+                currentProgramGlobal = currentProgram;
+                
+                // Aggiorna le informazioni del programma corrente
+                if (currentProgram) {
+                    const startTime = adjustTime(currentProgram.start);
+                    const formatTime = date => {
+                        return date.getHours().toString().padStart(2, '0') + ":" +
+                               date.getMinutes().toString().padStart(2, '0');
+                    };
+
+                    // Rimuovi le classi loading
+                    document.getElementById("program-time-title").classList.remove("loading");
+                    document.getElementById("program-description-text").classList.remove("loading");
+                    document.getElementById("current-program-slot").classList.remove("loading");
+                    document.getElementById("next-program-info").classList.remove("loading");
+
+                    // Aggiorna il titolo con orario (se è selezionato il programma corrente)
+                    if (selectedProgramIndex === 0) {
+                        document.getElementById("program-time-title").textContent = 
+                            formatTime(startTime) + " " + currentProgram.title;
+
+                        // Aggiorna la descrizione
+                        document.getElementById("program-description-text").textContent = 
+                            currentProgram.description || "Descrizione non disponibile.";
+                    }
+
+                    // Aggiorna lo slot del programma corrente (sempre titolo completo)
+                    document.getElementById("current-program-slot").innerHTML = 
+                        "<span>" + currentProgram.title + "</span>";
+
+                    // Aggiorna i prossimi programmi con titoli troncati
+                    if (upcomingPrograms.length > 0) {
+                        const start1 = adjustTime(upcomingPrograms[0].start);
+                        const truncatedTitle1 = truncateTitle(upcomingPrograms[0].title);
+                        document.getElementById("next-program-slot-1").innerHTML = 
+                            `<span>${formatTime(start1)} - ${truncatedTitle1}</span>`;
+                        document.getElementById("next-program-info").textContent = 
+                            "A seguire: " + formatTime(start1) + " - " + upcomingPrograms[0].title;
+                    }
+                    if (upcomingPrograms.length > 1) {
+                        const start2 = adjustTime(upcomingPrograms[1].start);
+                        const truncatedTitle2 = truncateTitle(upcomingPrograms[1].title);
+                        document.getElementById("next-program-slot-2").innerHTML = 
+                            `<span>${formatTime(start2)} - ${truncatedTitle2}</span>`;
+                    }
+                    
+                    // Aggiorna subito la barra di avanzamento
+                    updateProgressBar(currentProgram);
+                } else {
+                    // Rimuovi le classi loading anche in caso di errore
+                    document.getElementById("program-time-title").classList.remove("loading");
+                    document.getElementById("program-description-text").classList.remove("loading");
+                    document.getElementById("current-program-slot").classList.remove("loading");
+                    document.getElementById("next-program-info").classList.remove("loading");
+
+                    document.getElementById("program-time-title").textContent = "Programma non disponibile";
+                    document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile per il programma corrente.";
+                    document.getElementById("current-program-slot").innerHTML = "<span>Non disponibile</span>";
+                    document.getElementById("next-program-info").textContent = "A seguire: Non disponibile";
+                }
+            })
+            .catch(error => {
+                console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+                // Rimuovi l'animazione di caricamento anche in caso di errore
+                document.getElementById("program-time-title")?.classList.remove("loading");
+                document.getElementById("program-description-text")?.classList.remove("loading");
+                document.getElementById("current-program-slot")?.classList.remove("loading");
+                document.getElementById("next-program-info")?.classList.remove("loading");
+            });
+    }
+
+    // Esegui l'aggiornamento all'avvio della pagina
+    updateCurrentTime();
+    updateProgramName();
+    // Aggiorna le informazioni ogni minuto
+    setInterval(updateProgramName, 60000);
+</script>
+
+
+
+  <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
