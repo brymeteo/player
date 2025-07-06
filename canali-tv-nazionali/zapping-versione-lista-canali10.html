@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applicazione Lista Canali TV con Barra Migliorata</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Main Video Player */
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    #iframe-player {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Arrow Indicator - Sky Q Style */
+    .arrow-indicator {
+      position: fixed;
+      left: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0;
+      transform: translateY(-50%) translateX(-2rem);
+    }
+
+    .arrow-indicator.show {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .arrow-button {
+      background: linear-gradient(135deg, #0066cc, #004499);
+      border: none;
+      padding: 1.2rem;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 
+        0 8px 32px rgba(0, 102, 204, 0.4),
+        0 0 0 2px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arrow-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .arrow-button:hover::before {
+      left: 100%;
+    }
+
+    .arrow-button:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 12px 40px rgba(0, 102, 204, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .arrow-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: white;
+      fill: currentColor;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Channel List Container - Sky Q Style */
+    .channel-list-container {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 420px;
+      background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.98) 0%,
+        rgba(30, 41, 59, 0.95) 50%,
+        rgba(15, 23, 42, 0.98) 100%);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-right: 1px solid rgba(148, 163, 184, 0.1);
+      color: white;
+      z-index: 40;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform: translateX(-100%);
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .channel-list-container.open {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Header Controls - Sky Q Style */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 1.5rem 1rem;
+      background: linear-gradient(135deg, 
+        rgba(30, 41, 59, 0.8) 0%,
+        rgba(51, 65, 85, 0.6) 100%);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .controls-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      letter-spacing: 0.025em;
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .control-button {
+      background: linear-gradient(135deg, 
+        rgba(51, 65, 85, 0.8) 0%,
+        rgba(71, 85, 105, 0.6) 100%);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .control-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .control-button:hover {
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.8) 0%,
+        rgba(37, 99, 235, 0.6) 100%);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .control-button:hover::before {
+      left: 100%;
+    }
+
+    .control-button.voice-active {
+      background: linear-gradient(135deg, 
+        rgba(239, 68, 68, 0.8) 0%,
+        rgba(220, 38, 38, 0.6) 100%);
+      border-color: rgba(239, 68, 68, 0.4);
+      animation: pulse-voice 1s infinite;
+    }
+
+    @keyframes pulse-voice {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      50% { 
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+      }
+    }
+
+    .control-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    /* Channel List - Sky Q Style */
+    .channel-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+    }
+
+    .channel-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .channel-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .channel-list::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+
+    .channel-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+
+    .category-title {
+      background: linear-gradient(135deg, 
+        rgba(51, 65, 85, 0.9) 0%,
+        rgba(71, 85, 105, 0.7) 100%);
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+      margin: 0.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    .channel-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .channel-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .channel-item:hover {
+      background: linear-gradient(135deg, 
+        rgba(51, 65, 85, 0.6) 0%,
+        rgba(71, 85, 105, 0.4) 100%);
+      transform: translateX(8px);
+    }
+
+    .channel-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    .channel-item.selected {
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.2) 0%,
+        rgba(37, 99, 235, 0.1) 100%);
+      border-color: rgba(59, 130, 246, 0.3);
+      transform: translateX(8px);
+      box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .channel-item.selected::before {
+      transform: scaleY(1);
+      background: linear-gradient(180deg, #60a5fa, #3b82f6);
+    }
+
+    .channel-logo {
+    width: 4rem;
+    height: 3rem;
+    object-fit: contain;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    padding: 0.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: all 0.3s ease;
+    zoom: 140%;
+}
+
+    .channel-item:hover .channel-logo,
+    .channel-item.selected .channel-logo {
+      border-color: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .channel-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .channel-number {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .channel-name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+    }
+
+    .channel-item.selected .channel-number {
+      color: #60a5fa;
+    }
+
+    .channel-item.selected .channel-name {
+      color: #ffffff;
+    }
+
+    /* Fullscreen Button - Sky Q Style */
+    .fullscreen-button {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 50;
+      background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.9) 0%,
+        rgba(30, 41, 59, 0.8) 100%);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .fullscreen-button:hover {
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.8) 0%,
+        rgba(37, 99, 235, 0.6) 100%);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .fullscreen-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    /* Voice Recognition Overlay - Sky Q Style */
+    .voice-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.95) 0%,
+        rgba(30, 41, 59, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 60;
+    }
+
+    .voice-overlay.active {
+      display: flex;
+    }
+
+    .voice-content {
+      text-align: center;
+      color: white;
+      max-width: 400px;
+      padding: 2rem;
+    }
+
+    .voice-icon-container {
+      position: relative;
+      width: 8rem;
+      height: 8rem;
+      margin: 0 auto 2rem;
+    }
+
+    .voice-spinner {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #3b82f6, #1d4ed8, #3b82f6);
+      animation: spin 3s linear infinite;
+      opacity: 0.8;
+    }
+    
+    
+       .icon-0-2-266 {
+      width: 20px;
+      margin-right: 10px;
+      vertical-align: -5px;
+    }
+    
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .voice-icon-bg {
+      position: relative;
+      width: 8rem;
+      height: 8rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, 
+        rgba(15, 23, 42, 0.9) 0%,
+        rgba(30, 41, 59, 0.8) 100%);
+      border: 2px solid rgba(59, 130, 246, 0.6);
+      box-shadow: 
+        0 0 40px rgba(59, 130, 246, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      position: relative;
+    }
+
+    .voice-mic-icon {
+      width: 3rem;
+      height: 3rem;
+      color: #60a5fa;
+      animation: pulse-mic 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-mic {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% { 
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    .voice-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    .voice-subtitle {
+      font-size: 1rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .channel-list-container {
+        width: 90%;
+      }
+      
+      .voice-icon-container {
+        width: 6rem;
+        height: 6rem;
+      }
+      
+      .voice-icon-bg {
+        width: 6rem;
+        height: 6rem;
+      }
+      
+      .voice-mic-icon {
+        width: 2rem;
+        height: 2rem;
+      }
+      
+      .voice-title {
+        font-size: 1.25rem;
+      }
+      
+      .voice-subtitle {
+        font-size: 0.875rem;
+      }
+    }
+
+    /* Smooth animations */
+    * {
+      transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+      transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition-duration: 300ms;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Video Player -->
+  <div class="video-container">
+    <iframe id="iframe-player" src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/101-Rai1.html" allowfullscreen></iframe>
+  </div>
+
+  <!-- Arrow Indicator -->
+  <div class="arrow-indicator" id="arrow-indicator">
+    <button class="arrow-button" onclick="showChannelList()">
+      <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9,18 15,12 9,6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Channel List Container -->
+  <div class="channel-list-container" id="channel-list-container">
+    <!-- Controls -->
+    <div class="controls">
+      <div class="controls-title">Canali TV</div>
+      <div class="control-buttons">
+        <button class="control-button" onclick="navigateChannel(-1)" title="Canale precedente">
+          <svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18,15 12,9 6,15"></polyline>
+          </svg>
+        </button>
+        
+        <button class="control-button" onclick="rewindIframe()" title="Riavvia">
+          <svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+        </button>
+        
+        <button class="control-button" id="voice-button" onclick="startVoiceRecognition()" title="Ricerca vocale">
+          <svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </button>
+        
+        <button class="control-button" onclick="navigateChannel(1)" title="Canale successivo">
+          <svg class="control-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Channel List -->
+    <div class="channel-list" id="channel-list">
+      <!-- Nazionali -->
+      <div class="category-title"> <img class="icon-0-2-266" src="https://i.ibb.co/443bkqh/Featured-Copy.png" alt="Intrattenimento">Nazionali</div>
+  
+      <div class="channel-item selected" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/101-Rai1.html" data-number="101">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/217/logo?width=320&theme=dark" alt="Rai 1 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">101</div>
+          <div class="channel-name">Rai 1 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/102-Rai2.html" data-number="102">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/218/logo?width=320&theme=dark" alt="Rai 2 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">102</div>
+          <div class="channel-name">Rai 2 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/103-Rai3.html" data-number="103">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/219/logo?width=320&theme=dark" alt="Rai 3 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">103</div>
+          <div class="channel-name">Rai 3 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/104-Rete4.html" data-number="104">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/189/logo?width=320&theme=dark" alt="Rete 4 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">104</div>
+          <div class="channel-name">Rete 4 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/105-Canale5.html" data-number="105">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark" alt="Canale 5 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">105</div>
+          <div class="channel-name">Canale 5 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/106-Italia1.html" data-number="106">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/188/logo?width=320&theme=dark" alt="Italia 1 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">106</div>
+          <div class="channel-name">Italia 1 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/107-La7.html" data-number="107">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/253/logo?width=320&theme=dark" alt="La7 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">107</div>
+          <div class="channel-name">La7 HD</div>
+        </div>
+      </div>
+
+      <!-- Show & Serie -->
+      <div class="category-title"><img class="icon-0-2-266" src="https://i.ibb.co/B3YhYn1/svg-Image-Url-1636912584809.png" alt="Intrattenimento">Show & Serie</div>
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/108-Flix.html" data-number="108">
+        <img class="channel-logo" src="https://i.ibb.co/k6zC0xN/logo.png" alt="Vox Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">108</div>
+          <div class="channel-name">Flix HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/109-Flix-Animation.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">109</div>
+          <div class="channel-name">Flix Animation HD</div>
+        </div>
+      </div>
+      
+      
+          <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/110-Flix-Sori.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">110</div>
+          <div class="channel-name">Flix Sori HD</div>
+        </div>
+      </div>
+
+      
+        <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/111-Flix-Sori-24.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">111</div>
+          <div class="channel-name">Flix Sori +24 HD</div>
+        </div>
+      </div>
+      
+      
+       <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/112-Flix-Joi.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">112</div>
+          <div class="channel-name">Flix Joi HD</div>
+        </div>
+      </div>
+      
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/113-Flix-Joi-24.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">113</div>
+          <div class="channel-name">Flix Joi +24 HD</div>
+        </div>
+      </div>
+      
+       <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/114-Flix-Crime.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">114</div>
+          <div class="channel-name">Flix Crime HD</div>
+        </div>
+      </div>
+      
+      
+       <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/115-Flix-Crime-24.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">115</div>
+          <div class="channel-name">Flix Crime +24 HD</div>
+        </div>
+      </div>
+      
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/116-Flix-Serie.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">116</div>
+          <div class="channel-name">Flix Serie HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/117-Bry-Natura.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">117</div>
+          <div class="channel-name">Bry Natura HD</div>
+        </div>
+      </div>
+      
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/118-Geographic.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">118</div>
+          <div class="channel-name">Geographic HD</div>
+        </div>
+      </div>
+      
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/119-Tv8.html" data-number="109">
+        <img class="channel-logo" src="https://i.ibb.co/35YbR8bp/logo.png" alt="Flix Animation Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">119</div>
+          <div class="channel-name">Tv8 HD</div>
+        </div>
+      </div>
+      
+
+      <!-- Sport -->
+      <div class="category-title"><img class="icon-0-2-266" src="https://images-0.rakuten.tv/storage/live-channel-category/icon_img/3b138108-343f-4b09-8a74-3af0f400242f-live_channel_category-1644403549.png">Sport</div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/150-Brysport24.html" data-number="150">
+        <img class="channel-logo" src="https://i.ibb.co/x5v83XD/logo.png" alt="Bry Sport 24 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">150</div>
+          <div class="channel-name">Bry Sport 24 HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/152-Sportitalia.html" data-number="152">
+        <img class="channel-logo" src="https://i.ibb.co/qsKy4tb/logo.png" alt="Sport Italia Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">152</div>
+          <div class="channel-name">Sport Italia HD</div>
+        </div>
+      </div>
+
+      <!-- Cinema -->
+      <div class="category-title"><img class="icon-0-2-266" src="https://images-2.rakuten.tv/storage/live-channel-category/icon_img/aea198b1-bcd3-43c7-93f8-bc3828d111ec-live_channel_category-1644403493.png">Cinema</div>
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/200-BryCinemaTrailers.html" data-number="200">
+        <img class="channel-logo" src="https://i.ibb.co/zWdfJnZ/logo-1.png" alt="Premiere Cinema Trailers Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">200</div>
+          <div class="channel-name">Premiere Cinema Trailers HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/prova-cinema-uno.html" data-number="201">
+        <img class="channel-logo" src="https://i.ibb.co/S62L7GM/logo-1.png" alt="Premiere Cinema Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">201</div>
+          <div class="channel-name">Premiere Cinema HD</div>
+        </div>
+      </div>
+
+      <!-- Bambini & Ragazzi -->
+      <div class="category-title"><img class="icon-0-2-266" src="https://images-2.rakuten.tv/storage/live-channel-category/icon_img/92e98439-8c9b-4d43-a9d6-3d7e9ea1f62e-live_channel_category-1644403620.png">Bambini & Ragazzi</div>
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/501-Boing.html" data-number="501">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/195/logo?width=320" alt="Boing Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">501</div>
+          <div class="channel-name">Boing HD</div>
+        </div>
+      </div>
+      
+      <div class="channel-item" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/502-K2.html" data-number="502">
+        <img class="channel-logo" src="https://api.superguidatv.it/v1/channels/245/logo?width=320" alt="K2 Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA2NCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNDgiIGZpbGw9IiNmM2Y0ZjYiLz48L3N2Zz4='">
+        <div class="channel-info">
+          <div class="channel-number">502</div>
+          <div class="channel-name">K2 HD</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Button -->
+  <button class="fullscreen-button" onclick="toggleFullScreen()">
+    <svg class="fullscreen-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+    </svg>
+  </button>
+
+  <!-- Voice Recognition Overlay -->
+  <div class="voice-overlay" id="voice-overlay">
+    <div class="voice-content">
+      <div class="voice-icon-container">
+        <div class="voice-spinner"></div>
+        <div class="voice-icon-bg">
+          <svg class="voice-mic-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </div>
+      </div>
+      <div class="voice-title">Ricerca Vocale Attiva</div>
+      <div class="voice-subtitle">Pronuncia il nome del canale o il numero</div>
+    </div>
+  </div>
+
+  <script>
+    // Variables
+    let channels = [];
+    let selectedChannelIndex = 0;
+    let isChannelListOpen = false;
+    let isVoiceActive = false;
+    let showArrow = false;
+    let hideTimeout;
+    let recognition;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      channels = Array.from(document.querySelectorAll('.channel-item'));
+      setupEventListeners();
+      setupVoiceRecognition();
+      hideChannelList();
+    });
+
+    // Event Listeners
+    function setupEventListeners() {
+      // Mouse movement for arrow
+      document.addEventListener('mousemove', function(e) {
+        const shouldShow = e.clientX < 100 && !isChannelListOpen;
+        const arrow = document.getElementById('arrow-indicator');
+        if (shouldShow !== showArrow) {
+          showArrow = shouldShow;
+          arrow.classList.toggle('show', showArrow);
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        switch (e.key) {
+          case 'ArrowRight':
+            if (!isChannelListOpen) {
+              showChannelList();
+            }
+            e.preventDefault();
+            break;
+          case 'ArrowUp':
+            if (isChannelListOpen && selectedChannelIndex > 0) {
+              selectChannel(selectedChannelIndex - 1);
+              resetHideTimeout();
+            }
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+            if (isChannelListOpen && selectedChannelIndex < channels.length - 1) {
+              selectChannel(selectedChannelIndex + 1);
+              resetHideTimeout();
+            }
+            e.preventDefault();
+            break;
+          case 'Enter':
+            if (isChannelListOpen) {
+              changeChannel(selectedChannelIndex);
+              hideChannelList();
+            }
+            e.preventDefault();
+            break;
+          case 'f':
+            toggleFullScreen();
+            e.preventDefault();
+            break;
+        }
+      });
+
+      // Channel item clicks
+      channels.forEach((channel, index) => {
+        channel.addEventListener('click', function() {
+          selectChannel(index);
+          changeChannel(index);
+          hideChannelList();
+        });
+      });
+    }
+
+    // Channel List Functions
+    function showChannelList() {
+      isChannelListOpen = true;
+      document.getElementById('channel-list-container').classList.add('open');
+      document.getElementById('arrow-indicator').classList.remove('show');
+      showArrow = false;
+      resetHideTimeout();
+    }
+
+    function hideChannelList() {
+      isChannelListOpen = false;
+      document.getElementById('channel-list-container').classList.remove('open');
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+    }
+
+    function resetHideTimeout() {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+      hideTimeout = setTimeout(hideChannelList, 94000);
+    }
+
+    function selectChannel(index) {
+      if (index < 0 || index >= channels.length) return;
+      
+      channels.forEach(c => c.classList.remove('selected'));
+      channels[index].classList.add('selected');
+      selectedChannelIndex = index;
+      
+      // Scroll into view
+      channels[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function changeChannel(index) {
+      const channel = channels[index];
+      const url = channel.getAttribute('data-url');
+      document.getElementById('iframe-player').src = url;
+      
+      // Save to localStorage
+      const channelNumber = channel.getAttribute('data-number');
+      localStorage.setItem('selectedChannel', channelNumber);
+    }
+
+    function navigateChannel(direction) {
+      if (!isChannelListOpen) {
+        showChannelList();
+        return;
+      }
+      
+      const newIndex = selectedChannelIndex + direction;
+      if (newIndex >= 0 && newIndex < channels.length) {
+        selectChannel(newIndex);
+        resetHideTimeout();
+      }
+    }
+
+    // Voice Recognition
+    function setupVoiceRecognition() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'it-IT';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+          isVoiceActive = true;
+          document.getElementById('voice-button').classList.add('voice-active');
+          document.getElementById('voice-overlay').classList.add('active');
+        };
+
+        recognition.onresult = function(event) {
+          const spokenText = event.results[0][0].transcript.toLowerCase().trim();
+          console.log('Riconosciuto:', spokenText);
+          
+          // Search for channel by name or number
+          const foundChannelIndex = channels.findIndex(channel => {
+            const channelName = channel.querySelector('.channel-name').textContent.toLowerCase();
+            const channelNumber = channel.getAttribute('data-number');
+            return channelName.includes(spokenText) || channelNumber === spokenText;
+          });
+          
+          if (foundChannelIndex !== -1) {
+            selectChannel(foundChannelIndex);
+            changeChannel(foundChannelIndex);
+            hideChannelList();
+          }
+        };
+
+        recognition.onend = function() {
+          isVoiceActive = false;
+          document.getElementById('voice-button').classList.remove('voice-active');
+          document.getElementById('voice-overlay').classList.remove('active');
+        };
+
+        recognition.onerror = function() {
+          isVoiceActive = false;
+          document.getElementById('voice-button').classList.remove('voice-active');
+          document.getElementById('voice-overlay').classList.remove('active');
+        };
+      }
+    }
+
+    function startVoiceRecognition() {
+      if (recognition && !isVoiceActive) {
+        recognition.start();
+      }
+    }
+
+    // Utility Functions
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function rewindIframe() {
+      const iframe = document.getElementById("iframe-player");
+      iframe.contentWindow.postMessage("rewind", "*");
+    }
+
+    // Load saved channel on startup
+    window.addEventListener('load', function() {
+      const savedChannel = localStorage.getItem('selectedChannel');
+      if (savedChannel) {
+        const savedChannelIndex = channels.findIndex(channel => 
+          channel.getAttribute('data-number') === savedChannel
+        );
+        if (savedChannelIndex !== -1) {
+          selectChannel(savedChannelIndex);
+          changeChannel(savedChannelIndex);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
