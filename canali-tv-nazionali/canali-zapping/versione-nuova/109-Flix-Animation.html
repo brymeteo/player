@@ -1032,9 +1032,10 @@ return;
                             currentProgram.description || "Descrizione non disponibile.";
                     }
 
-                    // Aggiorna lo slot del programma corrente (sempre titolo completo)
-                    document.getElementById("current-program-slot").innerHTML = 
-                        "<span>" + currentProgram.title + "</span>";
+                     // Titolo troncato per lo slot corrente
+const truncatedCurrentTitle = truncateTitle(currentProgram.title);
+document.getElementById("current-program-slot").innerHTML = 
+    "<span>" + truncatedCurrentTitle + "</span>";
 
                     // Aggiorna i prossimi programmi con titoli troncati
                     if (upcomingPrograms.length > 0) {
