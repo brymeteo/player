@@ -670,7 +670,21 @@ setInterval(updateProgramName, 60000);
 </script>
 
 
+<script>
+window.addEventListener('message', function(event) {
+  // Sicurezza: controlla la provenienza
+  if (event.origin !== 'https://brymeteo.github.io') return;
 
+  const message = event.data;
+
+  if (message.type === 'set-audio') {
+    const video = document.querySelector('video'); // o altro player
+    if (video) {
+      video.muted = !message.enable;
+    }
+  }
+});
+</script>
 
 
 
