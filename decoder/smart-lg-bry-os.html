@@ -159,7 +159,6 @@
       height: auto;
       margin-bottom: -40px;
       position: relative;
-      animation: logoGlow 2s ease-in-out infinite;
     }
 
     .custom-logo {
@@ -167,41 +166,6 @@
       height: auto;
       margin-bottom: 40px;
       position: relative;
-      animation: logoGlow 2s ease-in-out infinite;
-    }
-
-    .reboot-logo::after {
-      content: '';
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 30px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      border-radius: 50%;
-      animation: logo-glow-effect 3s ease-in-out infinite;
-      filter: blur(8px);
-    }
-
-    @keyframes logoGlow {
-      0%, 100% { 
-        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
-      }
-      50% { 
-        filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8));
-      }
-    }
-
-    @keyframes logo-glow-effect {
-      0%, 100% { 
-        opacity: 0.3;
-        transform: translateX(-50%) scaleX(0.8);
-      }
-      50% { 
-        opacity: 0.8;
-        transform: translateX(-50%) scaleX(1.2);
-      }
     }
 
     .reboot-text {
@@ -447,17 +411,6 @@
       transform: translateY(-1px);
     }
 
-    @keyframes elegantGlow {
-      0%, 100% { 
-        filter: drop-shadow(0 0 30px rgba(79, 195, 247, 0.6));
-        transform: scale(1);
-      }
-      50% { 
-        filter: drop-shadow(0 0 60px rgba(79, 195, 247, 0.9));
-        transform: scale(1.08);
-      }
-    }
-
     /* Player principale */
     .main-player {
       position: fixed;
@@ -513,15 +466,17 @@
       height: 100%;
       background: linear-gradient(135deg, #003d82 0%, #122c3fe8 100%);
       z-index: 1000;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
       display: flex;
       flex-direction: column;
       zoom: 110%;
     }
 
     .sky-panel.active {
-      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
     }
 
     /* Header Sky */
@@ -904,12 +859,6 @@
       justify-content: center;
       margin: 0 auto 30px;
       box-shadow: 0 0 40px rgba(0, 120, 212, 0.5);
-      animation: voicePulse 2s ease-in-out infinite;
-    }
-
-    @keyframes voicePulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
     }
 
     .voice-icon img {
@@ -1007,15 +956,16 @@
       height: 100%;
       background: linear-gradient(135deg, #0a1428 0%, #1e3a5ff7 50%, #2d5aa02e 100%);
       z-index: 1500;
-      display: none;
-      flex-direction: column;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .mosaic-overlay.active {
-      display: flex;
       opacity: 1;
+      visibility: visible;
     }
 
     .mosaic-header {
@@ -1322,37 +1272,6 @@
 
       .mosaic-header, .mosaic-controls {
         padding: 15px 20px;
-      }
-    }
-
-    /* Animazioni di ingresso ridotte */
-    .channel-item {
-      animation: slideInLeft 0.2s ease forwards;
-    }
-
-    @keyframes slideInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .mosaic-card {
-      animation: fadeInUp 0.3s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
       }
     }
 
