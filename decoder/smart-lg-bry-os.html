@@ -1777,7 +1777,7 @@
           </div>
           
           
-          <div class="channel-item" data-channel="video19.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-tv-nazionali/canali-zapping/versione-nuova/126-La5.html" data-number="126" data-category="generali" data-epg-url="https://brymeteo.github.io/tv/dati_programmi.json" data-epg-id="la-5">
+          <div class="channel-item" data-channel="video19.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/126-La5.html" data-number="126" data-category="generali" data-epg-url="https://brymeteo.github.io/tv/dati_programmi.json" data-epg-id="la-5">
             <img src="https://api.superguidatv.it/v1/channels/190/logo?width=320&theme=dark" alt="La 5" class="channel-logo">
             <div class="channel-details">
               <div class="channel-name-main">La5 HD</div>
@@ -3693,7 +3693,7 @@
       }
     }
 
-   // ===== SISTEMA MOSAICO EPG CORRETTO =====
+  // ===== SISTEMA MOSAICO EPG CORRETTO =====
 class MosaicSystem {
   constructor() {
     this.isActive = false;
@@ -3709,8 +3709,22 @@ class MosaicSystem {
     document.getElementById('mosaic-nav-btn').addEventListener('click', () => this.toggleMosaic());
     document.getElementById('mosaic-close').addEventListener('click', () => this.closeMosaic());
     
+    // 🚀 MODIFICA: Precarica i dati EPG all'avvio per averli pronti
+    this.preloadEPGData();
+    
     // Avvia aggiornamento periodico
     this.startPeriodicUpdate();
+  }
+
+  // 🆕 NUOVO METODO: Precarica i dati EPG in background
+  async preloadEPGData() {
+    try {
+      console.log('🔄 Precaricamento dati EPG...');
+      await this.loadEPGData();
+      console.log('✅ Dati EPG precaricati con successo');
+    } catch (error) {
+      console.error('❌ Errore durante il precaricamento EPG:', error);
+    }
   }
 
   async toggleMosaic() {
@@ -3721,34 +3735,38 @@ class MosaicSystem {
     }
   }
 
- async openMosaic() {
-  this.isActive = true;
-  document.getElementById('mosaic-overlay').classList.add('active');
-  
-  // Mostra l'indicatore di caricamento
-  this.showLoading(true);
-  
-  try {
-    // Carica i dati EPG e genera le card
-    await this.loadEPGData();
-    this.generateMosaicCards();
+  async openMosaic() {
+    this.isActive = true;
+    document.getElementById('mosaic-overlay').classList.add('active');
     
-    // Seleziona la prima card
-    this.selectedCardIndex = 0;
-    this.updateCardSelection();
+    // Mostra l'indicatore di caricamento solo brevemente
+    this.showLoading(true);
     
-    // Avvia aggiornamento delle barre di progresso
-    this.startProgressUpdates();
-    
-  } catch (error) {
-    console.error('Errore durante il caricamento del mosaico:', error);
-  } finally {
-    // Nascondi l'indicatore di caricamento
-    this.showLoading(false);
+    try {
+      // 🚀 MODIFICA: Se i dati non sono ancora caricati, caricali immediatamente
+      if (this.epgData.size === 0) {
+        console.log('📡 Caricamento immediato dati EPG...');
+        await this.loadEPGData();
+      }
+      
+      // Genera le card con i dati disponibili
+      this.generateMosaicCards();
+      
+      // Seleziona la prima card
+      this.selectedCardIndex = 0;
+      this.updateCardSelection();
+      
+      // Avvia aggiornamento delle barre di progresso
+      this.startProgressUpdates();
+      
+    } catch (error) {
+      console.error('Errore durante il caricamento del mosaico:', error);
+    } finally {
+      // Nascondi l'indicatore di caricamento
+      this.showLoading(false);
+    }
   }
-}
 
-// ✅ AGGIUNGI QUESTI DUE METODI QUI:
   showLoading(show) {
     const loadingElement = document.getElementById('mosaic-loading');
     const contentElement = document.getElementById('mosaic-content');
@@ -3769,7 +3787,6 @@ class MosaicSystem {
     // Ferma gli aggiornamenti
     this.stopProgressUpdates();
   }
-  
   
   async loadEPGData() {
     const channels = document.querySelectorAll('.channel-item');
@@ -3843,26 +3860,56 @@ class MosaicSystem {
     };
   }
 
- // 🔧 CORREZIONE: Sottrai 1 ora dai dati EPG solo per canali che non sono flix-animation
-getCurrentProgram(channelData, channelNumber = null) {
-  if (!channelData || !channelData.programs) return null;
+  // 🔧 CORREZIONE: Sottrai 1 ora dai dati EPG solo per canali che non sono flix-animation
+  getCurrentProgram(channelData, channelNumber = null) {
+    if (!channelData || !channelData.programs) return null;
 
-  const now = new Date();
-  
-  // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
-  const flixAnimationChannels = [
-    '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
-    '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
-    '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
-  ];
-  
-  const isFlixAnimation = flixAnimationChannels.includes(channelNumber) || 
-                         (channelData.id && channelData.id.includes('flix-animation'));
+    const now = new Date();
+    
+    // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber) || 
+                           (channelData.id && channelData.id.includes('flix-animation'));
 
-  return channelData.programs.find(program => {
+    return channelData.programs.find(program => {
+      const startTime = new Date(program.start);
+      const endTime = new Date(program.end);
+
+      // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
+      if (isFlixAnimation) {
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
+      } else {
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
+      }
+
+      return now >= startTime && now <= endTime;
+    });
+  }
+
+  // 🔧 CORREZIONE: Calcola il progresso con l'ora corretta
+  calculateProgress(program, channelNumber = null) {
+    if (!program) return 0;
+    
+    const now = new Date();
     const startTime = new Date(program.start);
     const endTime = new Date(program.end);
-
+    
+    // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+    
     // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
     if (isFlixAnimation) {
       startTime.setHours(startTime.getHours() - 2);
@@ -3871,132 +3918,102 @@ getCurrentProgram(channelData, channelNumber = null) {
       startTime.setHours(startTime.getHours() - 1);
       endTime.setHours(endTime.getHours() - 1);
     }
-
-    return now >= startTime && now <= endTime;
-  });
-}
-
-// 🔧 CORREZIONE: Calcola il progresso con l'ora corretta
-calculateProgress(program, channelNumber = null) {
-  if (!program) return 0;
-  
-  const now = new Date();
-  const startTime = new Date(program.start);
-  const endTime = new Date(program.end);
-  
-  // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
-  const flixAnimationChannels = [
-    '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
-    '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
-    '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
-  ];
-  
-  const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
-  
-  // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
-  if (isFlixAnimation) {
-    startTime.setHours(startTime.getHours() - 2);
-    endTime.setHours(endTime.getHours() - 2);
-  } else {
-    startTime.setHours(startTime.getHours() - 1);
-    endTime.setHours(endTime.getHours() - 1);
-  }
-  
-  if (now < startTime) return 0;
-  if (now > endTime) return 100;
-  
-  const totalDuration = endTime.getTime() - startTime.getTime();
-  const elapsed = now.getTime() - startTime.getTime();
-  
-  return Math.round((elapsed / totalDuration) * 100);
-}
-
-// 🔧 CORREZIONE: Formatta l'ora sottraendo 1 ora solo se necessario
-formatTime(dateString, channelNumber = null) {
-  const date = new Date(dateString);
-  
-  // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
-  const flixAnimationChannels = [
-    '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
-    '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
-    '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
-  ];
-  
-  const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
-  
-  // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
-  if (isFlixAnimation) {
-    date.setHours(date.getHours() - 2);
-  } else {
-    date.setHours(date.getHours() - 1);
-  }
-  
-  return date.toLocaleTimeString('it-IT', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-}
-
-// 🎯 FUNZIONE HELPER: Verifica se un canale è di tipo flix-animation
-isFlixAnimationChannel(channelNumber, channelData = null) {
-  const flixAnimationChannels = [
-    '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
-    '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
-    '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
-  ];
-  
-  return flixAnimationChannels.includes(channelNumber) || 
-         (channelData && channelData.id && channelData.id.includes('flix-animation'));
-}
-
-// 📋 CONFIGURAZIONE: Mappa dei canali flix-animation con i loro nomi
-getFlixAnimationChannelInfo() {
-  return {
-    '109': 'Flix Animation 1',
-    '108': 'Flix Animation 2', 
-    '110': 'Flix Animation 3',
-    '111': 'Flix Animation 4',
-    '112': 'Flix Animation 5',
-    '113': 'Flix Animation 6',
-    '114': 'Flix Animation 7',
-    '115': 'Flix Animation 8',
-    '116': 'Flix Animation 9',
-    '117': 'Flix Animation 10',
-    '118': 'Flix Animation 11',
-    '200': 'Flix Animation 12',
-    '201': 'Flix Animation 13',
-    '202': 'Flix Animation 14',
-    '203': 'Flix Animation 15',
-    '204': 'Flix Animation 16',
-    '205': 'Flix Animation 17',
-    '206': 'Flix Animation 18',
-    '207': 'Flix Animation 19',
-    '303': 'Flix Animation 20',
-    '308': 'Flix Animation 21',
-    '405': 'Flix Animation 22',
-    '508': 'Flix Animation 23',
-    '509': 'Flix Animation 24',
-    '510': 'Flix Animation 25',
-    '511': 'Flix Animation 26',
-    '512': 'Flix Animation 27',
-    '605': 'Flix Animation 28',
-    '606': 'Flix Animation 29',
-    '150': 'Flix Animation 30'
-  };
-}
-
- generateMosaicCards() {
-  const mosaicGrid = document.getElementById('mosaic-grid');
-  
-  // Mostra un messaggio se non ci sono canali
-  if (this.epgData.size === 0) {
-    mosaicGrid.innerHTML = '<div style="color: white; text-align: center; padding: 50px; font-size: 18px;">Nessun canale disponibile</div>';
-    return;
-  }
-  
-  mosaicGrid.innerHTML = '';
-  this.mosaicCards = [];
     
+    if (now < startTime) return 0;
+    if (now > endTime) return 100;
+    
+    const totalDuration = endTime.getTime() - startTime.getTime();
+    const elapsed = now.getTime() - startTime.getTime();
+    
+    return Math.round((elapsed / totalDuration) * 100);
+  }
+
+  // 🔧 CORREZIONE: Formatta l'ora sottraendo 1 ora solo se necessario
+  formatTime(dateString, channelNumber = null) {
+    const date = new Date(dateString);
+    
+    // 📺 Lista completa dei canali flix-animation (30 canali + quello originale)
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+    
+    // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
+    if (isFlixAnimation) {
+      date.setHours(date.getHours() - 2);
+    } else {
+      date.setHours(date.getHours() - 1);
+    }
+    
+    return date.toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  // 🎯 FUNZIONE HELPER: Verifica se un canale è di tipo flix-animation
+  isFlixAnimationChannel(channelNumber, channelData = null) {
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    return flixAnimationChannels.includes(channelNumber) || 
+           (channelData && channelData.id && channelData.id.includes('flix-animation'));
+  }
+
+  // 📋 CONFIGURAZIONE: Mappa dei canali flix-animation con i loro nomi
+  getFlixAnimationChannelInfo() {
+    return {
+      '109': 'Flix Animation 1',
+      '108': 'Flix Animation 2', 
+      '110': 'Flix Animation 3',
+      '111': 'Flix Animation 4',
+      '112': 'Flix Animation 5',
+      '113': 'Flix Animation 6',
+      '114': 'Flix Animation 7',
+      '115': 'Flix Animation 8',
+      '116': 'Flix Animation 9',
+      '117': 'Flix Animation 10',
+      '118': 'Flix Animation 11',
+      '200': 'Flix Animation 12',
+      '201': 'Flix Animation 13',
+      '202': 'Flix Animation 14',
+      '203': 'Flix Animation 15',
+      '204': 'Flix Animation 16',
+      '205': 'Flix Animation 17',
+      '206': 'Flix Animation 18',
+      '207': 'Flix Animation 19',
+      '303': 'Flix Animation 20',
+      '308': 'Flix Animation 21',
+      '405': 'Flix Animation 22',
+      '508': 'Flix Animation 23',
+      '509': 'Flix Animation 24',
+      '510': 'Flix Animation 25',
+      '511': 'Flix Animation 26',
+      '512': 'Flix Animation 27',
+      '605': 'Flix Animation 28',
+      '606': 'Flix Animation 29',
+      '150': 'Flix Animation 30'
+    };
+  }
+
+  generateMosaicCards() {
+    const mosaicGrid = document.getElementById('mosaic-grid');
+    
+    // Mostra un messaggio se non ci sono canali
+    if (this.epgData.size === 0) {
+      mosaicGrid.innerHTML = '<div style="color: white; text-align: center; padding: 50px; font-size: 18px;">Nessun canale disponibile</div>';
+      return;
+    }
+    
+    mosaicGrid.innerHTML = '';
+    this.mosaicCards = [];
+      
     const channels = document.querySelectorAll('.channel-item');
     
     channels.forEach((channel, index) => {
@@ -4008,16 +4025,16 @@ getFlixAnimationChannelInfo() {
       if (channelNumber === '100') return;
       
       const channelData = this.epgData.get(channelNumber);
-      const currentProgram = this.getCurrentProgram(channelData, channelNumber); // ✅ Aggiunto channelNumber
+      const currentProgram = this.getCurrentProgram(channelData, channelNumber);
       
       const card = document.createElement('div');
       card.className = 'mosaic-card';
       card.dataset.channelNumber = channelNumber;
       card.dataset.channelIndex = index;
       
-      const progress = this.calculateProgress(currentProgram, channelNumber); // ✅ Aggiunto channelNumber
+      const progress = this.calculateProgress(currentProgram, channelNumber);
       const progressText = currentProgram ? 
-        `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}` : // ✅ Aggiunto channelNumber
+        `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}` :
         'Orario non disponibile';
       
       card.innerHTML = `
@@ -4234,7 +4251,7 @@ getFlixAnimationChannelInfo() {
       if (this.isActive) {
         this.updateProgressBars();
       }
-    }, 30000); // Aggiorna ogni 30 secondi
+    }, 30000); // 🔧 MODIFICA: Aggiorna ogni 30 secondi invece di 120
   }
 
   stopProgressUpdates() {
@@ -4266,16 +4283,32 @@ getFlixAnimationChannelInfo() {
   }
 
   startPeriodicUpdate() {
-    // Ricarica i dati EPG ogni 10 minuti
+    // 🔧 MODIFICA: Ricarica i dati EPG ogni 2 minuti invece di 10
     setInterval(async () => {
+      console.log('🔄 Aggiornamento periodico dati EPG...');
+      
+      // Svuota la cache per forzare il ricaricamento
+      this.epgData.clear();
+      
+      // Ricarica i dati EPG
+      await this.loadEPGData();
+      
+      // Se il mosaico è attivo, aggiorna le card
       if (this.isActive) {
-        await this.loadEPGData();
         this.generateMosaicCards();
         this.updateCardSelection();
+        console.log('✅ Card del mosaico aggiornate');
       }
-    }, 10 * 60 * 1000); // 10 minuti
+      
+      console.log('✅ Aggiornamento periodico completato');
+    }, 2 * 60 * 1000); // 🔧 MODIFICA: 2 minuti invece di 10
   }
 }
+
+// 🚀 Inizializza il sistema quando il DOM è pronto
+document.addEventListener('DOMContentLoaded', () => {
+  window.mosaicSystem = new MosaicSystem();
+});
 
 // Inizializza i sistemi
 const setupSystem = new SetupSystem();
