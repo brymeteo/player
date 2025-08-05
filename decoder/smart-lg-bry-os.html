@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bry OS</title>
+   <title>Bry OS</title>
 
 <link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="any">
 <link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="16x16">
@@ -1205,6 +1205,381 @@
       pointer-events: none;
     }
 
+    /* ===== STILI MOSAICO FILTRATO (TASTO 7) ===== */
+    .filtered-mosaic-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1428 0%, #1e3a5ff7 50%, #2d5aa02e 100%);
+      z-index: 1600;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtered-mosaic-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .filtered-mosaic-header {
+      background: linear-gradient(90deg, #001f3f 0%, #003d82 100%);
+      padding: 20px 40px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filtered-mosaic-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .filtered-mosaic-close {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .filtered-mosaic-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .filtered-mosaic-content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Sidebar filtri per mosaico */
+    .filtered-mosaic-sidebar {
+      width: 300px;
+      background: rgba(0, 0, 0, 0.4);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtered-mosaic-sidebar-header {
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .filtered-mosaic-sidebar-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .filtered-mosaic-sidebar-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .filtered-category-item {
+      padding: 18px 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+
+    .filtered-category-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .filtered-category-item.active {
+      background: linear-gradient(90deg, rgba(0, 120, 212, 0.4) 0%, rgba(0, 120, 212, 0.2) 100%);
+      border-left: 4px solid #0078d4;
+    }
+
+    .filtered-category-item.focused {
+      background: rgba(255, 255, 255, 0.15);
+      border-left: 4px solid #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .filtered-category-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+}
+
+    .filtered-category-name {
+    font-weight: 500;
+    font-size: 19px;
+    flex: 1;
+}
+
+    .filtered-category-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    min-width: 24px;
+    text-align: center;
+}
+
+    /* Area principale del mosaico filtrato */
+    .filtered-mosaic-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .filtered-mosaic-main-header {
+      padding: 25px 30px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .filtered-mosaic-main-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .filtered-mosaic-main-subtitle {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .filtered-mosaic-grid-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .filtered-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 2fr));
+    gap: 20px;
+    max-width: 100%;
+}
+
+    .filtered-mosaic-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtered-mosaic-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.3);
+      border-color: rgba(0, 120, 212, 0.5);
+    }
+
+    .filtered-mosaic-card.selected {
+      border-color: #0078d4;
+      box-shadow: 0 0 20px rgba(0, 120, 212, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .filtered-mosaic-card-header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .filtered-mosaic-channel-logo {
+    /* height: 60px; */
+    width: 130px;
+    object-fit: contain;
+    border-radius: 6px;
+    margin-right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+    .filtered-mosaic-channel-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .filtered-mosaic-channel-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    .filtered-mosaic-channel-number {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+    .filtered-mosaic-program-poster {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d5aa0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+    }
+
+    .filtered-mosaic-program-info {
+      padding: 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filtered-mosaic-program-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+    .filtered-mosaic-program-time {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 12px;
+}
+
+    .filtered-mosaic-progress-container {
+      margin-top: auto;
+    }
+
+    .filtered-mosaic-progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+    .filtered-mosaic-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0078d4 0%, #4fc3f7 100%);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .filtered-mosaic-progress-text {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+}
+
+    .filtered-mosaic-controls {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .filtered-mosaic-hint {
+      background: rgba(22, 71, 103, 0.6);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* Indicatore di caricamento per il mosaico filtrato */
+    .filtered-mosaic-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .filtered-mosaic-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #0078d4;
+      border-radius: 50%;
+      animation: filteredMosaicSpin 1s linear infinite;
+    }
+
+    @keyframes filteredMosaicSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .filtered-mosaic-loading-text {
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .filtered-mosaic-grid-container.loading {
+      position: relative;
+    }
+
+    .filtered-mosaic-grid-container.loading .filtered-mosaic-grid {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .sky-content {
@@ -1271,6 +1646,36 @@
       }
 
       .mosaic-header, .mosaic-controls {
+        padding: 15px 20px;
+      }
+
+      /* Responsive per mosaico filtrato */
+      .filtered-mosaic-content {
+        flex-direction: column;
+      }
+      
+      .filtered-mosaic-sidebar {
+        width: 100%;
+        height: 200px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        flex-direction: row;
+      }
+      
+      .filtered-category-item {
+        min-width: 200px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none;
+        flex-shrink: 0;
+      }
+      
+      .filtered-mosaic-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      
+      .filtered-mosaic-header, .filtered-mosaic-controls {
         padding: 15px 20px;
       }
     }
@@ -2530,7 +2935,7 @@
       </div>
       
       <div class="navigation-hint">
-        <div>← → Categorie | ↑ ↓ Canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico</div>
+        <div>← → Categorie | ↑ ↓ Canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
       </div>
       
       <div class="control-group">
@@ -2575,6 +2980,127 @@
     <div class="mosaic-controls">
       <div class="mosaic-hint">
         ← → ↑ ↓ Naviga tra i canali | INVIO Seleziona canale | ESC Chiudi mosaico | 6 Chiudi
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay Mosaico Filtrato (TASTO 7) -->
+  <div class="filtered-mosaic-overlay" id="filtered-mosaic-overlay">
+    <div class="filtered-mosaic-header">
+      <div class="filtered-mosaic-title">
+        <div class="sky-logo">
+          <img src="https://i.ibb.co/wFgnHn3m/bry-logo-ufficiale5.png" alt="Sky Decoder Logo">
+        </div>
+        Mosaico Filtrato per Categoria
+      </div>
+      <button class="filtered-mosaic-close" id="filtered-mosaic-close">×</button>
+    </div>
+    
+    <div class="filtered-mosaic-content">
+      <!-- Sidebar filtri -->
+      <div class="filtered-mosaic-sidebar">
+        <div class="filtered-mosaic-sidebar-header">
+          <div class="filtered-mosaic-sidebar-title">Filtra per Categoria</div>
+          
+        </div>
+        
+        <div class="filtered-category-item active focused" data-filter-category="tutti">
+          <img class="filtered-category-icon" src="https://images-2.rakuten.tv/storage/live-channel-category/icon_img/5b32c853-642f-4065-a0f2-668d4b5e369f-live_channel_category-1644409517.png" alt="Tutti">
+          <span class="filtered-category-name">Tutti i Canali</span>
+          <span class="filtered-category-count" id="count-tutti">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="nazionali">
+          <img class="filtered-category-icon" src="https://i.ibb.co/443bkqh/Featured-Copy.png" alt="Nazionali">
+          <span class="filtered-category-name">Nazionali</span>
+          <span class="filtered-category-count" id="count-nazionali">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="show">
+          <img class="filtered-category-icon" src="https://i.ibb.co/B3YhYn1/svg-Image-Url-1636912584809.png" alt="Show">
+          <span class="filtered-category-name">Show & Serie</span>
+          <span class="filtered-category-count" id="count-show">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="generali">
+          <img class="filtered-category-icon" src="https://images-1.rakuten.tv/storage/live-channel-category/icon_img/565cb4c0-89f6-450e-9536-08ac90ded10c-live_channel_category-1644403535.png" alt="Generali">
+          <span class="filtered-category-name">Generali</span>
+          <span class="filtered-category-count" id="count-generali">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="sport">
+          <img class="filtered-category-icon" src="https://images-0.rakuten.tv/storage/live-channel-category/icon_img/3b138108-343f-4b09-8a74-3af0f400242f-live_channel_category-1644403549.png" alt="Sport">
+          <span class="filtered-category-name">Sport</span>
+          <span class="filtered-category-count" id="count-sport">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="cinema">
+          <img class="filtered-category-icon" src="https://images-2.rakuten.tv/storage/live-channel-category/icon_img/aea198b1-bcd3-43c7-93f8-bc3828d111ec-live_channel_category-1644403493.png" alt="Cinema">
+          <span class="filtered-category-name">Cinema</span>
+          <span class="filtered-category-count" id="count-cinema">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="documentari">
+          <img class="filtered-category-icon" src="https://images-0.rakuten.tv/storage/live-channel-category/icon_img/29980e21-8ed7-4295-bb34-47a81733f3ff-live_channel_category-1644403705.png" alt="Documentari">
+          <span class="filtered-category-name">Documentari</span>
+          <span class="filtered-category-count" id="count-documentari">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="cucina">
+          <img class="filtered-category-icon" src="https://images-0.rakuten.tv/storage/live-channel-category/icon_img/1efcc183-53ea-4d2e-be52-984d5d46e8f6-live_channel_category-1644403582.png" alt="Cucina">
+          <span class="filtered-category-name">Cucina</span>
+          <span class="filtered-category-count" id="count-cucina">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="news">
+          <img class="filtered-category-icon" src="https://images-0.rakuten.tv/storage/live-channel-category/icon_img/d206f902-c713-42db-b472-b9442f2dbb28-live_channel_category-1644403719.png" alt="News">
+          <span class="filtered-category-name">News & Meteo</span>
+          <span class="filtered-category-count" id="count-news">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="bambini">
+          <img class="filtered-category-icon" src="https://images-2.rakuten.tv/storage/live-channel-category/icon_img/92e98439-8c9b-4d43-a9d6-3d7e9ea1f62e-live_channel_category-1644403620.png" alt="Bambini">
+          <span class="filtered-category-name">Bambini</span>
+          <span class="filtered-category-count" id="count-bambini">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="musica">
+          <img class="filtered-category-icon" src="https://images-1.rakuten.tv/storage/live-channel-category/icon_img/dddd10c5-89f0-4a50-8f19-dbd46e0ee2cb-live_channel_category-1644403607.png" alt="Musica">
+          <span class="filtered-category-name">Musica & Radio</span>
+          <span class="filtered-category-count" id="count-musica">0</span>
+        </div>
+        
+        <div class="filtered-category-item" data-filter-category="preferiti">
+          <img class="filtered-category-icon" src="https://www.rakuten.tv/static/media/Heart.a811332e.svg" alt="Preferiti">
+          <span class="filtered-category-name">Preferiti</span>
+          <span class="filtered-category-count" id="count-preferiti">0</span>
+        </div>
+      </div>
+      
+      <!-- Area principale -->
+      <div class="filtered-mosaic-main">
+        <div class="filtered-mosaic-main-header">
+          <div class="filtered-mosaic-main-title" id="filtered-mosaic-category-title">TUTTI I CANALI</div>
+          <div class="filtered-mosaic-main-subtitle" id="filtered-mosaic-category-subtitle">Visualizzazione di tutti i canali disponibili</div>
+        </div>
+        
+        <div class="filtered-mosaic-grid-container" id="filtered-mosaic-grid-container">
+          <!-- Indicatore di caricamento -->
+          <div class="filtered-mosaic-loading" id="filtered-mosaic-loading" style="display: none;">
+            <div class="filtered-mosaic-spinner"></div>
+            <div class="filtered-mosaic-loading-text">Caricamento canali filtrati...</div>
+          </div>
+          
+          <div class="filtered-mosaic-grid" id="filtered-mosaic-grid">
+            <!-- Le card filtrate verranno generate dinamicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="filtered-mosaic-controls">
+      <div class="filtered-mosaic-hint">
+        ← → Naviga categorie | ↑ ↓ Naviga canali | INVIO Seleziona | ESC Chiudi | 7 Chiudi
       </div>
     </div>
   </div>
@@ -4224,15 +4750,740 @@ class MosaicSystem {
   }
 }
 
-// 🚀 Inizializza il sistema quando il DOM è pronto
+// ===== SISTEMA MOSAICO FILTRATO (TASTO 7) =====
+class FilteredMosaicSystem {
+  constructor() {
+    this.isActive = false;
+    this.selectedCategoryIndex = 0;
+    this.selectedCardIndex = 0;
+    this.navigationMode = 'categories'; // 'categories' o 'cards'
+    this.filteredCards = [];
+    this.currentFilter = 'tutti';
+    this.epgData = new Map(); // Condivide i dati EPG con il mosaico normale
+    this.updateInterval = null;
+    this.init();
+  }
+
+  init() {
+    // Event listeners
+    document.getElementById('filtered-mosaic-close').addEventListener('click', () => this.closeMosaic());
+    
+    // Setup categorie
+    this.setupCategories();
+    
+    // Precarica i dati EPG
+    this.preloadEPGData();
+    
+    // Avvia aggiornamento periodico
+    this.startPeriodicUpdate();
+  }
+
+  setupCategories() {
+    const categoryItems = document.querySelectorAll('.filtered-category-item');
+    
+    categoryItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        this.selectedCategoryIndex = index;
+        this.selectCategory(item.dataset.filterCategory);
+      });
+    });
+  }
+
+  async preloadEPGData() {
+    try {
+      console.log('🔄 Precaricamento dati EPG per mosaico filtrato...');
+      await this.loadEPGData();
+      console.log('✅ Dati EPG precaricati per mosaico filtrato');
+    } catch (error) {
+      console.error('❌ Errore precaricamento EPG mosaico filtrato:', error);
+    }
+  }
+
+  async loadEPGData() {
+    const channels = document.querySelectorAll('.channel-item');
+    
+    for (const channel of channels) {
+      const channelNumber = channel.dataset.number;
+      const epgUrl = channel.dataset.epgUrl;
+      const epgId = channel.dataset.epgId;
+      
+      if (epgUrl && !this.epgData.has(channelNumber)) {
+        try {
+          const response = await fetch(epgUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          let channelData = null;
+          
+          if (Array.isArray(data)) {
+            channelData = data.find(ch => ch.id === epgId);
+          } else if (data.id) {
+            channelData = data;
+          }
+          
+          if (channelData && channelData.programs) {
+            this.epgData.set(channelNumber, channelData);
+          } else {
+            this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+          }
+          
+        } catch (error) {
+          console.error(`Errore caricamento EPG per canale ${channelNumber}:`, error);
+          this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+        }
+      } else if (!epgUrl) {
+        this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+      }
+    }
+  }
+
+  getFallbackEPGData(channelNumber) {
+    const now = new Date();
+    const startTime = new Date(now.getTime() - (30 * 60 * 1000));
+    const endTime = new Date(now.getTime() + (90 * 60 * 1000));
+    
+    return {
+      id: `channel-${channelNumber}`,
+      name: `Canale ${channelNumber}`,
+      logo: '',
+      programs: [{
+        start: startTime.toISOString(),
+        end: endTime.toISOString(),
+        title: 'Programmazione in corso',
+        description: 'Informazioni sul programma non disponibili',
+        poster: '',
+        channel: `channel-${channelNumber}`
+      }]
+    };
+  }
+
+  getCurrentProgram(channelData, channelNumber = null) {
+    if (!channelData || !channelData.programs) return null;
+
+    const now = new Date();
+    
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber) || 
+                           (channelData.id && channelData.id.includes('flix-animation'));
+
+    return channelData.programs.find(program => {
+      const startTime = new Date(program.start);
+      const endTime = new Date(program.end);
+
+      if (isFlixAnimation) {
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
+      } else {
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
+      }
+
+      return now >= startTime && now <= endTime;
+    });
+  }
+
+  calculateProgress(program, channelNumber = null) {
+    if (!program) return 0;
+    
+    const now = new Date();
+    const startTime = new Date(program.start);
+    const endTime = new Date(program.end);
+    
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+    
+    if (isFlixAnimation) {
+      startTime.setHours(startTime.getHours() - 2);
+      endTime.setHours(endTime.getHours() - 2);
+    } else {
+      startTime.setHours(startTime.getHours() - 1);
+      endTime.setHours(endTime.getHours() - 1);
+    }
+    
+    if (now < startTime) return 0;
+    if (now > endTime) return 100;
+    
+    const totalDuration = endTime.getTime() - startTime.getTime();
+    const elapsed = now.getTime() - startTime.getTime();
+    
+    return Math.round((elapsed / totalDuration) * 100);
+  }
+
+  formatTime(dateString, channelNumber = null) {
+    const date = new Date(dateString);
+    
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+    
+    if (isFlixAnimation) {
+      date.setHours(date.getHours() - 2);
+    } else {
+      date.setHours(date.getHours() - 1);
+    }
+    
+    return date.toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  async toggleMosaic() {
+    if (this.isActive) {
+      this.closeMosaic();
+    } else {
+      await this.openMosaic();
+    }
+  }
+
+  async openMosaic() {
+    this.isActive = true;
+    document.getElementById('filtered-mosaic-overlay').classList.add('active');
+    
+    // Mostra indicatore di caricamento
+    this.showLoading(true);
+    
+    try {
+      // Carica i dati EPG se necessario
+      if (this.epgData.size === 0) {
+        await this.loadEPGData();
+      }
+      
+      // Aggiorna i contatori delle categorie
+      this.updateCategoryCounts();
+      
+      // Carica la categoria salvata o default
+      const savedCategory = localStorage.getItem('filteredMosaicCategory') || 'tutti';
+      this.selectCategory(savedCategory);
+      
+      // Imposta la navigazione iniziale sulle categorie
+      this.navigationMode = 'categories';
+      this.updateCategorySelection();
+      
+      // Avvia aggiornamenti
+      this.startProgressUpdates();
+      
+    } catch (error) {
+      console.error('Errore apertura mosaico filtrato:', error);
+    } finally {
+      this.showLoading(false);
+    }
+  }
+
+  closeMosaic() {
+    this.isActive = false;
+    document.getElementById('filtered-mosaic-overlay').classList.remove('active');
+    
+    // Ferma gli aggiornamenti
+    this.stopProgressUpdates();
+  }
+
+  showLoading(show) {
+    const loadingElement = document.getElementById('filtered-mosaic-loading');
+    const containerElement = document.getElementById('filtered-mosaic-grid-container');
+    
+    if (show) {
+      loadingElement.style.display = 'flex';
+      containerElement.classList.add('loading');
+    } else {
+      loadingElement.style.display = 'none';
+      containerElement.classList.remove('loading');
+    }
+  }
+
+  updateCategoryCounts() {
+    const channels = document.querySelectorAll('.channel-item');
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    const counts = {
+      tutti: 0,
+      nazionali: 0,
+      show: 0,
+      generali: 0,
+      sport: 0,
+      cinema: 0,
+      documentari: 0,
+      cucina: 0,
+      news: 0,
+      bambini: 0,
+      musica: 0,
+      preferiti: favorites.length
+    };
+
+    channels.forEach(channel => {
+      const category = channel.dataset.category;
+      const channelNumber = channel.dataset.number;
+      
+      // Salta il canale di configurazione
+      if (channelNumber === '100') return;
+      
+      counts.tutti++;
+      if (counts[category] !== undefined) {
+        counts[category]++;
+      }
+    });
+
+    // Aggiorna i contatori nell'interfaccia
+    Object.keys(counts).forEach(category => {
+      const countElement = document.getElementById(`count-${category}`);
+      if (countElement) {
+        countElement.textContent = counts[category];
+      }
+    });
+  }
+
+  selectCategory(categoryName) {
+    this.currentFilter = categoryName;
+    
+    // Salva la categoria selezionata
+    localStorage.setItem('filteredMosaicCategory', categoryName);
+    
+    // Aggiorna l'interfaccia delle categorie
+    const categoryItems = document.querySelectorAll('.filtered-category-item');
+    categoryItems.forEach(item => {
+      item.classList.remove('active');
+      if (item.dataset.filterCategory === categoryName) {
+        item.classList.add('active');
+      }
+    });
+    
+    // Aggiorna il titolo
+    this.updateCategoryTitle(categoryName);
+    
+    // Genera le card filtrate
+    this.generateFilteredCards(categoryName);
+    
+    // Reset selezione card
+    this.selectedCardIndex = 0;
+    this.navigationMode = 'cards';
+    this.updateCardSelection();
+  }
+
+  updateCategoryTitle(categoryName) {
+    const titles = {
+      'tutti': 'TUTTI I CANALI',
+      'nazionali': 'CANALI NAZIONALI',
+      'show': 'SHOW & SERIE',
+      'generali': 'CANALI GENERALI',
+      'sport': 'CANALI SPORT',
+      'cinema': 'CANALI CINEMA',
+      'documentari': 'DOCUMENTARI & LIFESTYLE',
+      'cucina': 'CUCINA & LIFESTYLE',
+      'news': 'NEWS & METEO',
+      'bambini': 'BAMBINI & RAGAZZI',
+      'musica': 'MUSICA & RADIO',
+      'preferiti': 'CANALI PREFERITI'
+    };
+
+    const subtitles = {
+      'tutti': 'Visualizzazione di tutti i canali disponibili',
+      'nazionali': 'Canali televisivi nazionali italiani',
+      'show': 'Serie TV, show e intrattenimento',
+      'generali': 'Canali di intrattenimento generale',
+      'sport': 'Canali dedicati allo sport',
+      'cinema': 'Film e contenuti cinematografici',
+      'documentari': 'Documentari e programmi educativi',
+      'cucina': 'Programmi di cucina e gastronomia',
+      'news': 'Notizie, informazione e meteo',
+      'bambini': 'Contenuti per bambini e ragazzi',
+      'musica': 'Musica, radio e intrattenimento musicale',
+      'preferiti': 'I tuoi canali preferiti salvati'
+    };
+
+    document.getElementById('filtered-mosaic-category-title').textContent = titles[categoryName] || 'CATEGORIA';
+    document.getElementById('filtered-mosaic-category-subtitle').textContent = subtitles[categoryName] || 'Canali filtrati per categoria';
+  }
+
+  generateFilteredCards(categoryName) {
+    const grid = document.getElementById('filtered-mosaic-grid');
+    grid.innerHTML = '';
+    this.filteredCards = [];
+
+    const channels = document.querySelectorAll('.channel-item');
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+    channels.forEach((channel, index) => {
+      const channelNumber = channel.dataset.number;
+      const channelCategory = channel.dataset.category;
+      const channelName = channel.querySelector('.channel-name-main').textContent;
+      const channelLogo = channel.querySelector('.channel-logo').src;
+      
+      // Salta il canale di configurazione
+      if (channelNumber === '100') return;
+      
+      // Applica il filtro
+      let shouldShow = false;
+      
+      if (categoryName === 'tutti') {
+        shouldShow = true;
+      } else if (categoryName === 'preferiti') {
+        shouldShow = favorites.includes(channelNumber);
+      } else {
+        shouldShow = channelCategory === categoryName;
+      }
+      
+      if (!shouldShow) return;
+      
+      // Crea la card
+      const channelData = this.epgData.get(channelNumber);
+      const currentProgram = this.getCurrentProgram(channelData, channelNumber);
+      
+      const card = document.createElement('div');
+      card.className = 'filtered-mosaic-card';
+      card.dataset.channelNumber = channelNumber;
+      card.dataset.channelIndex = index;
+      
+      const progress = this.calculateProgress(currentProgram, channelNumber);
+      const progressText = currentProgram ? 
+        `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}` :
+        'Orario non disponibile';
+      
+      card.innerHTML = `
+        <div class="filtered-mosaic-card-header">
+          <img src="${channelLogo}" alt="${channelName}" class="filtered-mosaic-channel-logo" 
+               onerror="this.style.display='none'">
+          <div class="filtered-mosaic-channel-info">
+            <div class="filtered-mosaic-channel-name">${channelName}</div>
+            <div class="filtered-mosaic-channel-number">Canale ${channelNumber}</div>
+          </div>
+        </div>
+        
+        <div class="filtered-mosaic-program-poster">
+          ${currentProgram && currentProgram.poster ? 
+            `<img src="${currentProgram.poster}" alt="Poster programma" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;\\'>Immagine non disponibile</div>'">` :
+            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;">Immagine non disponibile</div>'
+          }
+        </div>
+        
+        <div class="filtered-mosaic-program-info">
+          <div class="filtered-mosaic-program-title">
+            ${currentProgram ? currentProgram.title : 'Programma non disponibile'}
+          </div>
+          <div class="filtered-mosaic-program-time">${progressText}</div>
+          
+          <div class="filtered-mosaic-progress-container">
+            <div class="filtered-mosaic-progress-bar">
+              <div class="filtered-mosaic-progress-fill" style="width: ${progress}%"></div>
+            </div>
+            <div class="filtered-mosaic-progress-text">${progress}% completato</div>
+          </div>
+        </div>
+      `;
+      
+      // Event listener per selezione canale
+      card.addEventListener('click', () => {
+        this.selectChannel(channelNumber);
+      });
+      
+      grid.appendChild(card);
+      this.filteredCards.push(card);
+    });
+
+    // Se non ci sono canali per questa categoria
+    if (this.filteredCards.length === 0) {
+      grid.innerHTML = `
+        <div style="color: white; text-align: center; padding: 50px; font-size: 18px; grid-column: 1 / -1;">
+          Nessun canale disponibile per questa categoria
+        </div>
+      `;
+    }
+  }
+
+  updateCategorySelection() {
+    const categoryItems = document.querySelectorAll('.filtered-category-item');
+    
+    // Assicurati che l'indice sia valido
+    if (this.selectedCategoryIndex < 0) {
+      this.selectedCategoryIndex = 0;
+    } else if (this.selectedCategoryIndex >= categoryItems.length) {
+      this.selectedCategoryIndex = categoryItems.length - 1;
+    }
+
+    categoryItems.forEach((item, index) => {
+      item.classList.toggle('focused', index === this.selectedCategoryIndex);
+    });
+    
+    // Scroll alla categoria selezionata
+    if (categoryItems[this.selectedCategoryIndex]) {
+      categoryItems[this.selectedCategoryIndex].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }
+
+  updateCardSelection() {
+    if (this.filteredCards.length === 0) return;
+    
+    // Assicurati che l'indice sia valido
+    if (this.selectedCardIndex < 0) {
+      this.selectedCardIndex = 0;
+    } else if (this.selectedCardIndex >= this.filteredCards.length) {
+      this.selectedCardIndex = this.filteredCards.length - 1;
+    }
+
+    this.filteredCards.forEach((card, index) => {
+      card.classList.toggle('selected', index === this.selectedCardIndex);
+    });
+    
+    // Scroll alla card selezionata
+    if (this.filteredCards[this.selectedCardIndex]) {
+      this.filteredCards[this.selectedCardIndex].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
+  }
+
+  navigate(direction) {
+    if (!this.isActive) return;
+
+    if (this.navigationMode === 'categories') {
+      this.navigateCategories(direction);
+    } else if (this.navigationMode === 'cards') {
+      this.navigateCards(direction);
+    }
+  }
+
+  navigateCategories(direction) {
+    const categoryItems = document.querySelectorAll('.filtered-category-item');
+    
+    switch (direction) {
+      case 'up':
+        if (this.selectedCategoryIndex > 0) {
+          this.selectedCategoryIndex--;
+        } else {
+          this.selectedCategoryIndex = categoryItems.length - 1;
+        }
+        break;
+        
+      case 'down':
+        if (this.selectedCategoryIndex < categoryItems.length - 1) {
+          this.selectedCategoryIndex++;
+        } else {
+          this.selectedCategoryIndex = 0;
+        }
+        break;
+        
+      case 'right':
+        // Passa alla navigazione delle card
+        this.navigationMode = 'cards';
+        this.updateCardSelection();
+        return;
+    }
+    
+    this.updateCategorySelection();
+  }
+
+  navigateCards(direction) {
+    if (this.filteredCards.length === 0) return;
+    
+    // Calcola il numero di colonne
+    const grid = document.getElementById('filtered-mosaic-grid');
+    const gridRect = grid.getBoundingClientRect();
+    const firstCard = this.filteredCards[0];
+    
+    if (!firstCard) return;
+    
+    const cardRect = firstCard.getBoundingClientRect();
+    const cardWidth = cardRect.width;
+    const gridStyle = window.getComputedStyle(grid);
+    const gap = parseInt(gridStyle.gap) || 20;
+    
+    const availableWidth = gridRect.width;
+    const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
+    const rows = Math.ceil(this.filteredCards.length / cols);
+    
+    const currentRow = Math.floor(this.selectedCardIndex / cols);
+    const currentCol = this.selectedCardIndex % cols;
+    
+    let newIndex = this.selectedCardIndex;
+    
+    switch (direction) {
+      case 'left':
+        if (currentCol > 0) {
+          newIndex = this.selectedCardIndex - 1;
+        } else {
+          // Torna alla navigazione delle categorie
+          this.navigationMode = 'categories';
+          this.updateCategorySelection();
+          return;
+        }
+        break;
+        
+      case 'right':
+        if (currentCol < cols - 1 && this.selectedCardIndex + 1 < this.filteredCards.length) {
+          newIndex = this.selectedCardIndex + 1;
+        } else {
+          if (currentRow < rows - 1) {
+            newIndex = (currentRow + 1) * cols;
+            if (newIndex >= this.filteredCards.length) {
+              newIndex = this.filteredCards.length - 1;
+            }
+          } else {
+            newIndex = 0;
+          }
+        }
+        break;
+        
+      case 'up':
+        if (currentRow > 0) {
+          newIndex = Math.max(0, this.selectedCardIndex - cols);
+        } else {
+          const lastRowStartIndex = (rows - 1) * cols;
+          const targetIndex = lastRowStartIndex + currentCol;
+          if (targetIndex >= this.filteredCards.length) {
+            newIndex = this.filteredCards.length - 1;
+          } else {
+            newIndex = targetIndex;
+          }
+        }
+        break;
+        
+      case 'down':
+        if (currentRow < rows - 1) {
+          const targetIndex = this.selectedCardIndex + cols;
+          if (targetIndex < this.filteredCards.length) {
+            newIndex = targetIndex;
+          } else {
+            newIndex = this.filteredCards.length - 1;
+          }
+        } else {
+          newIndex = currentCol;
+          if (newIndex >= this.filteredCards.length) {
+            newIndex = 0;
+          }
+        }
+        break;
+    }
+    
+    newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
+    
+    if (newIndex !== this.selectedCardIndex) {
+      this.selectedCardIndex = newIndex;
+      this.updateCardSelection();
+    }
+  }
+
+  selectCurrentItem() {
+    if (this.navigationMode === 'categories') {
+      // Seleziona la categoria corrente
+      const categoryItems = document.querySelectorAll('.filtered-category-item');
+      const selectedCategory = categoryItems[this.selectedCategoryIndex];
+      if (selectedCategory) {
+        const categoryName = selectedCategory.dataset.filterCategory;
+        this.selectCategory(categoryName);
+      }
+    } else if (this.navigationMode === 'cards') {
+      // Seleziona il canale corrente
+      if (this.filteredCards[this.selectedCardIndex]) {
+        const channelNumber = this.filteredCards[this.selectedCardIndex].dataset.channelNumber;
+        this.selectChannel(channelNumber);
+      }
+    }
+  }
+
+  selectChannel(channelNumber) {
+    // Chiudi il mosaico
+    this.closeMosaic();
+    
+    // Seleziona il canale
+    const channel = document.querySelector(`[data-number="${channelNumber}"]`);
+    if (channel) {
+      const channels = document.querySelectorAll('.channel-item');
+      const index = Array.from(channels).indexOf(channel);
+      selectChannel(index);
+      changeVideo(index);
+    }
+  }
+
+  startProgressUpdates() {
+    this.updateInterval = setInterval(() => {
+      if (this.isActive) {
+        this.updateProgressBars();
+      }
+    }, 30000);
+  }
+
+  stopProgressUpdates() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
+    }
+  }
+
+  updateProgressBars() {
+    this.filteredCards.forEach(card => {
+      const channelNumber = card.dataset.channelNumber;
+      const channelData = this.epgData.get(channelNumber);
+      const currentProgram = this.getCurrentProgram(channelData, channelNumber);
+      
+      if (currentProgram) {
+        const progress = this.calculateProgress(currentProgram, channelNumber);
+        const progressFill = card.querySelector('.filtered-mosaic-progress-fill');
+        const progressText = card.querySelector('.filtered-mosaic-progress-text');
+        
+        if (progressFill) {
+          progressFill.style.width = progress + '%';
+        }
+        if (progressText) {
+          progressText.textContent = progress + '% completato';
+        }
+      }
+    });
+  }
+
+  startPeriodicUpdate() {
+    setInterval(async () => {
+      console.log('🔄 Aggiornamento periodico dati EPG mosaico filtrato...');
+      
+      // Svuota la cache per forzare il ricaricamento
+      this.epgData.clear();
+      
+      // Ricarica i dati EPG
+      await this.loadEPGData();
+      
+      // Se il mosaico è attivo, aggiorna le card
+      if (this.isActive) {
+        this.updateCategoryCounts();
+        this.generateFilteredCards(this.currentFilter);
+        this.updateCardSelection();
+        console.log('✅ Card del mosaico filtrato aggiornate');
+      }
+      
+    }, 2 * 60 * 1000); // 2 minuti
+  }
+}
+
+// 🚀 Inizializza i sistemi quando il DOM è pronto
 document.addEventListener('DOMContentLoaded', () => {
   window.mosaicSystem = new MosaicSystem();
+  window.filteredMosaicSystem = new FilteredMosaicSystem();
 });
 
 // Inizializza i sistemi
 const setupSystem = new SetupSystem();
 const pinAuth = new PinAuthSystem();
 const mosaicSystem = new MosaicSystem();
+const filteredMosaicSystem = new FilteredMosaicSystem();
 
     // ===== RESTO DEL CODICE ORIGINALE =====
     let channels = document.querySelectorAll('.channel-item');
@@ -4380,6 +5631,15 @@ const mosaicSystem = new MosaicSystem();
       
       if (currentCategory === 'preferiti') {
         filterChannelsByCategory('preferiti');
+      }
+      
+      // Aggiorna i contatori nel mosaico filtrato se è attivo
+      if (filteredMosaicSystem.isActive) {
+        filteredMosaicSystem.updateCategoryCounts();
+        if (filteredMosaicSystem.currentFilter === 'preferiti') {
+          filteredMosaicSystem.generateFilteredCards('preferiti');
+          filteredMosaicSystem.updateCardSelection();
+        }
       }
     }
 
@@ -4676,14 +5936,21 @@ document.addEventListener('keydown', (e) => {
 
   // Resto della gestione tastiera normale (solo se non si sta inserendo il PIN)
   
-  // Tasto 6 - Mosaico
+  // Tasto 6 - Mosaico normale
   if (e.key === '6') {
     mosaicSystem.toggleMosaic();
     e.preventDefault();
     return;
   }
 
-  // Gestione navigazione mosaico
+  // ✅ NUOVO: Tasto 7 - Mosaico filtrato
+  if (e.key === '7') {
+    filteredMosaicSystem.toggleMosaic();
+    e.preventDefault();
+    return;
+  }
+
+  // Gestione navigazione mosaico normale
   if (mosaicSystem.isActive) {
     if (e.key === 'ArrowLeft') {
       mosaicSystem.navigateMosaic('left');
@@ -4707,6 +5974,35 @@ document.addEventListener('keydown', (e) => {
       return;
     } else if (e.key === 'Escape') {
       mosaicSystem.closeMosaic();
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // ✅ NUOVO: Gestione navigazione mosaico filtrato
+  if (filteredMosaicSystem.isActive) {
+    if (e.key === 'ArrowLeft') {
+      filteredMosaicSystem.navigate('left');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowRight') {
+      filteredMosaicSystem.navigate('right');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowUp') {
+      filteredMosaicSystem.navigate('up');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowDown') {
+      filteredMosaicSystem.navigate('down');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'Enter') {
+      filteredMosaicSystem.selectCurrentItem();
+      e.preventDefault();
+      return;
+    } else if (e.key === 'Escape') {
+      filteredMosaicSystem.closeMosaic();
       e.preventDefault();
       return;
     }
@@ -4769,14 +6065,14 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // ✅ MODIFICA: Gestione frecce quando il mosaico è aperto
-  if (mosaicSystem.isActive) {
+  // ✅ MODIFICA: Gestione frecce quando i mosaici sono aperti
+  if (mosaicSystem.isActive || filteredMosaicSystem.isActive) {
     // Nel mosaico, le frecce sono già gestite sopra, quindi non fare nient'altro
     return;
   }
 
-  // ✅ MODIFICA: Apri menu con frecce SOLO se il mosaico NON è aperto
-  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !isMenuOpen && !mosaicSystem.isActive) {
+  // ✅ MODIFICA: Apri menu con frecce SOLO se nessun mosaico è aperto
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !isMenuOpen && !mosaicSystem.isActive && !filteredMosaicSystem.isActive) {
     openMenu();
     navigationMode = 'categories';
     selectCategory(selectedCategoryIndex);
@@ -4989,9 +6285,15 @@ document.addEventListener('keydown', (e) => {
       }
 
       function processVoiceCommand(spokenText) {
-        // Comando mosaico
+        // Comando mosaico normale
         if (spokenText.includes('mosaico')) {
           mosaicSystem.toggleMosaic();
+          return;
+        }
+
+        // ✅ NUOVO: Comando mosaico filtrato
+        if (spokenText.includes('filtro') || spokenText.includes('filtri') || spokenText.includes('categoria')) {
+          filteredMosaicSystem.toggleMosaic();
           return;
         }
 
@@ -5141,6 +6443,9 @@ document.addEventListener('keydown', (e) => {
             }
           } else if (key === '6' && !isPinInputActive) {
             mosaicSystem.toggleMosaic();
+          } else if (key === '7' && !isPinInputActive) {
+            // ✅ NUOVO: Gestione tasto 7 da iframe
+            filteredMosaicSystem.toggleMosaic();
           }
         }
       }
