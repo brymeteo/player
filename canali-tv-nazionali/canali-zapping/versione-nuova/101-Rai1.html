@@ -303,7 +303,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     
         <div class="control-button canali-preferiti">
             <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
-            <span>Microfono (tasto 3)</span>
+            <span>Microfono (tasto 0)</span>
         </div>
     </div>
 </div>
@@ -339,28 +339,13 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
   <script>
   // Istanza del player Clappr
    var player = new Clappr.Player({
-        source: "https://cache1b.netplus.ch/tok_eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNzU0NDkxNTY4Iiwic2lwIjoiIiwicGF0aCI6Ii9saXZlL2Vkcy9yYWkxL2Jyb3dzZXItSExTOC8iLCJzZXNzaW9uX2Nkbl9pZCI6IjdlMjNlZGQ1M2YxZTI5MDQiLCJzZXNzaW9uX2lkIjoiIiwiY2xpZW50X2lkIjoiIiwiZGV2aWNlX2lkIjoiIiwibWF4X3Nlc3Npb25zIjowLCJzZXNzaW9uX2R1cmF0aW9uIjowLCJ1cmwiOiJodHRwczovLzEwLjAuMjI5LjE5Iiwic2Vzc2lvbl90aW1lb3V0IjowLCJhdWQiOiIzOCIsInNvdXJjZXMiOls0OF19.44BKzcaSthum85kQx0o-F4e2Jg04TLwLGHcA-8JehzZRch9pOejiKivMggUTkWJYg6La0CHJirLjkLSABgXstw==/live/eds/rai1/browser-HLS8/rai1.m3u8",
+        source: "https://raiuno1-dash-live.akamaized.net/dash/live/652296/raiuno1/manifest.mpd",
         parentId: "#player",
         width: '100%',
         height: '100vh',
         controls: false,
         autoPlay: true, // Abilita l'auto-play
-        plugins: {
-            core: [LevelSelector]
-        },
-        levelSelectorConfig: {
-            title: 'QUALITÀ VOX OS',
-            labels: {
-                0: 'Molto Bassa 360p',
-                1: 'Bassa 360p ',
-                2: 'Media 480p ',
-                3: 'Standard 520p',
-                4: 'Medio Alta 720p',
-                5: 'Alta 720p',
-                6: 'Molto Alta 1080p',
-                7: 'Super Qualità 1080p '
-            },
-        },
+        plugins: [LevelSelector, ClapprPip.PipButton, ClapprPip.PipPlugin, DashShakaPlayback],
     });
     
     
