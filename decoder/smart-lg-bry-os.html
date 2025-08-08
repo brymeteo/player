@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bry OS</title>
+   <title>Bry OS</title>
 
 <link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="any">
 <link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="16x16">
@@ -4138,7 +4138,7 @@
       }
     }
 
-  // ===== SISTEMA MOSAICO EPG CORRETTO =====
+  // ===== SISTEMA MOSAICO EPG CORRETTO - CARICAMENTO UNICO =====
 class MosaicSystem {
   constructor() {
     this.isActive = false;
@@ -4146,6 +4146,7 @@ class MosaicSystem {
     this.mosaicCards = [];
     this.epgData = new Map(); // Cache per i dati EPG
     this.updateInterval = null;
+    this.epgLoaded = false; // Flag per tracciare se i dati sono stati caricati
     this.init();
   }
 
@@ -4154,21 +4155,27 @@ class MosaicSystem {
     document.getElementById('mosaic-nav-btn').addEventListener('click', () => this.toggleMosaic());
     document.getElementById('mosaic-close').addEventListener('click', () => this.closeMosaic());
     
-    // 🚀 MODIFICA: Precarica i dati EPG all'avvio per averli pronti
-    this.preloadEPGData();
+    // 🚀 MODIFICA PRINCIPALE: Carica i dati EPG UNA SOLA VOLTA all'avvio
+    this.loadEPGDataOnce();
     
-    // Avvia aggiornamento periodico
-    this.startPeriodicUpdate();
+    // 🚫 RIMOSSO: Non avviare più aggiornamenti periodici automatici
+    // this.startPeriodicUpdate();
   }
 
-  // 🆕 NUOVO METODO: Precarica i dati EPG in background
-  async preloadEPGData() {
+  // 🆕 NUOVO METODO: Carica i dati EPG una sola volta
+  async loadEPGDataOnce() {
+    if (this.epgLoaded) {
+      console.log('✅ Dati EPG già caricati, utilizzo cache esistente');
+      return;
+    }
+
     try {
-      console.log('🔄 Precaricamento dati EPG...');
+      console.log('🔄 Caricamento UNICO dei dati EPG...');
       await this.loadEPGData();
-      console.log('✅ Dati EPG precaricati con successo');
+      this.epgLoaded = true;
+      console.log('✅ Dati EPG caricati con successo e memorizzati permanentemente');
     } catch (error) {
-      console.error('❌ Errore durante il precaricamento EPG:', error);
+      console.error('❌ Errore durante il caricamento EPG:', error);
     }
   }
 
@@ -4184,16 +4191,14 @@ class MosaicSystem {
     this.isActive = true;
     document.getElementById('mosaic-overlay').classList.add('active');
     
-    // Mostra l'indicatore di caricamento solo brevemente
-    this.showLoading(true);
+    // 🚀 MODIFICA: Mostra indicatore solo se i dati non sono ancora stati caricati
+    if (!this.epgLoaded) {
+      this.showLoading(true);
+      await this.loadEPGDataOnce();
+      this.showLoading(false);
+    }
     
     try {
-      // 🚀 MODIFICA: Se i dati non sono ancora caricati, caricali immediatamente
-      if (this.epgData.size === 0) {
-        console.log('📡 Caricamento immediato dati EPG...');
-        await this.loadEPGData();
-      }
-      
       // Genera le card con i dati disponibili
       this.generateMosaicCards();
       
@@ -4201,14 +4206,11 @@ class MosaicSystem {
       this.selectedCardIndex = 0;
       this.updateCardSelection();
       
-      // Avvia aggiornamento delle barre di progresso
+      // 🚀 MODIFICA: Avvia solo aggiornamento delle barre di progresso (non ricarica dati)
       this.startProgressUpdates();
       
     } catch (error) {
       console.error('Errore durante il caricamento del mosaico:', error);
-    } finally {
-      // Nascondi l'indicatore di caricamento
-      this.showLoading(false);
     }
   }
 
@@ -4241,6 +4243,7 @@ class MosaicSystem {
       const epgUrl = channel.dataset.epgUrl;
       const epgId = channel.dataset.epgId;
       
+      // 🚀 MODIFICA: Non sovrascrivere i dati se già esistono
       if (epgUrl && !this.epgData.has(channelNumber)) {
         try {
           console.log(`Caricamento EPG per canale ${channelNumber} da ${epgUrl}`);
@@ -4265,21 +4268,23 @@ class MosaicSystem {
           
           if (channelData && channelData.programs) {
             this.epgData.set(channelNumber, channelData);
-            console.log(`EPG caricato per canale ${channelNumber}:`, channelData);
+            console.log(`✅ EPG caricato per canale ${channelNumber}:`, channelData);
           } else {
-            console.warn(`Nessun programma trovato per canale ${channelNumber}`);
+            console.warn(`⚠️ Nessun programma trovato per canale ${channelNumber}, uso fallback`);
             // Usa dati di fallback
             this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
           }
           
         } catch (error) {
-          console.error(`Errore caricamento EPG per canale ${channelNumber}:`, error);
+          console.error(`❌ Errore caricamento EPG per canale ${channelNumber}:`, error);
           // Usa dati di fallback in caso di errore
           this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
         }
       } else if (!epgUrl) {
         // Nessun URL EPG specificato, usa dati di fallback
-        this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+        if (!this.epgData.has(channelNumber)) {
+          this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+        }
       }
     }
   }
@@ -4397,55 +4402,6 @@ class MosaicSystem {
       hour: '2-digit',
       minute: '2-digit'
     });
-  }
-
-  // 🎯 FUNZIONE HELPER: Verifica se un canale è di tipo flix-animation
-  isFlixAnimationChannel(channelNumber, channelData = null) {
-    const flixAnimationChannels = [
-      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
-      '118', '200', '201', '202', '203', '204', '205', '206', '207', '302', '303',
-      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
-    ];
-    
-    return flixAnimationChannels.includes(channelNumber) || 
-           (channelData && channelData.id && channelData.id.includes('flix-animation'));
-  }
-
-  // 📋 CONFIGURAZIONE: Mappa dei canali flix-animation con i loro nomi
-  getFlixAnimationChannelInfo() {
-    return {
-      '109': 'Flix Animation 1',
-      '108': 'Flix Animation 2', 
-      '110': 'Flix Animation 3',
-      '111': 'Flix Animation 4',
-      '112': 'Flix Animation 5',
-      '113': 'Flix Animation 6',
-      '114': 'Flix Animation 7',
-      '115': 'Flix Animation 8',
-      '116': 'Flix Animation 9',
-      '117': 'Flix Animation 10',
-      '118': 'Flix Animation 11',
-      '200': 'Flix Animation 12',
-      '201': 'Flix Animation 13',
-      '202': 'Flix Animation 14',
-      '203': 'Flix Animation 15',
-      '204': 'Flix Animation 16',
-      '205': 'Flix Animation 17',
-      '206': 'Flix Animation 18',
-      '207': 'Flix Animation 19',
-      '302': 'Flix Animation 20',
-      '303': 'Flix Animation 21',
-      '308': 'Flix Animation 22',
-      '405': 'Flix Animation 23',
-      '508': 'Flix Animation 24',
-      '509': 'Flix Animation 25',
-      '510': 'Flix Animation 26',
-      '511': 'Flix Animation 27',
-      '512': 'Flix Animation 28',
-      '605': 'Flix Animation 29',
-      '606': 'Flix Animation 30',
-      '150': 'Flix Animation 31'
-    };
   }
 
   generateMosaicCards() {
@@ -4693,11 +4649,12 @@ class MosaicSystem {
   }
 
   startProgressUpdates() {
+    // 🚀 MODIFICA: Aggiorna solo le barre di progresso, NON ricarica i dati EPG
     this.updateInterval = setInterval(() => {
       if (this.isActive) {
         this.updateProgressBars();
       }
-    }, 30000); // 🔧 MODIFICA: Aggiorna ogni 30 secondi invece di 120
+    }, 30000); // Aggiorna ogni 30 secondi
   }
 
   stopProgressUpdates() {
@@ -4708,6 +4665,7 @@ class MosaicSystem {
   }
 
   updateProgressBars() {
+    // 🚀 MODIFICA: Aggiorna solo le barre di progresso usando i dati EPG esistenti
     this.mosaicCards.forEach(card => {
       const channelNumber = card.dataset.channelNumber;
       const channelData = this.epgData.get(channelNumber);
@@ -4728,30 +4686,25 @@ class MosaicSystem {
     });
   }
 
-  startPeriodicUpdate() {
-    // 🔧 MODIFICA: Ricarica i dati EPG ogni 2 minuti invece di 10
-    setInterval(async () => {
-      console.log('🔄 Aggiornamento periodico dati EPG...');
-      
-      // Svuota la cache per forzare il ricaricamento
-      this.epgData.clear();
-      
-      // Ricarica i dati EPG
-      await this.loadEPGData();
-      
-      // Se il mosaico è attivo, aggiorna le card
-      if (this.isActive) {
-        this.generateMosaicCards();
-        this.updateCardSelection();
-        console.log('✅ Card del mosaico aggiornate');
-      }
-      
-      console.log('✅ Aggiornamento periodico completato');
-    }, 2 * 60 * 1000); // 🔧 MODIFICA: 2 minuti invece di 10
+  // 🚫 RIMOSSO: Non più necessario l'aggiornamento periodico automatico
+  // startPeriodicUpdate() { ... }
+
+  // 🆕 NUOVO METODO: Forza il ricaricamento manuale dei dati EPG (se necessario)
+  async forceReloadEPG() {
+    console.log('🔄 Ricaricamento manuale dei dati EPG...');
+    this.epgData.clear();
+    this.epgLoaded = false;
+    await this.loadEPGDataOnce();
+    
+    if (this.isActive) {
+      this.generateMosaicCards();
+      this.updateCardSelection();
+      console.log('✅ Mosaico aggiornato con nuovi dati EPG');
+    }
   }
 }
 
-// ===== SISTEMA MOSAICO FILTRATO (TASTO 7) =====
+// ===== SISTEMA MOSAICO FILTRATO (TASTO 7) - CARICAMENTO UNICO =====
 class FilteredMosaicSystem {
   constructor() {
     this.isActive = false;
@@ -4760,8 +4713,9 @@ class FilteredMosaicSystem {
     this.navigationMode = 'categories'; // 'categories' o 'cards'
     this.filteredCards = [];
     this.currentFilter = 'tutti';
-    this.epgData = new Map(); // Condivide i dati EPG con il mosaico normale
+    this.epgData = new Map(); // Cache per i dati EPG
     this.updateInterval = null;
+    this.epgLoaded = false; // Flag per tracciare se i dati sono stati caricati
     this.init();
   }
 
@@ -4772,11 +4726,11 @@ class FilteredMosaicSystem {
     // Setup categorie
     this.setupCategories();
     
-    // Precarica i dati EPG
-    this.preloadEPGData();
+    // 🚀 MODIFICA PRINCIPALE: Carica i dati EPG UNA SOLA VOLTA all'avvio
+    this.loadEPGDataOnce();
     
-    // Avvia aggiornamento periodico
-    this.startPeriodicUpdate();
+    // 🚫 RIMOSSO: Non avviare più aggiornamenti periodici automatici
+    // this.startPeriodicUpdate();
   }
 
   setupCategories() {
@@ -4790,13 +4744,20 @@ class FilteredMosaicSystem {
     });
   }
 
-  async preloadEPGData() {
+  // 🆕 NUOVO METODO: Carica i dati EPG una sola volta
+  async loadEPGDataOnce() {
+    if (this.epgLoaded) {
+      console.log('✅ Dati EPG già caricati per mosaico filtrato, utilizzo cache esistente');
+      return;
+    }
+
     try {
-      console.log('🔄 Precaricamento dati EPG per mosaico filtrato...');
+      console.log('🔄 Caricamento UNICO dei dati EPG per mosaico filtrato...');
       await this.loadEPGData();
-      console.log('✅ Dati EPG precaricati per mosaico filtrato');
+      this.epgLoaded = true;
+      console.log('✅ Dati EPG caricati con successo per mosaico filtrato');
     } catch (error) {
-      console.error('❌ Errore precaricamento EPG mosaico filtrato:', error);
+      console.error('❌ Errore caricamento EPG mosaico filtrato:', error);
     }
   }
 
@@ -4808,6 +4769,7 @@ class FilteredMosaicSystem {
       const epgUrl = channel.dataset.epgUrl;
       const epgId = channel.dataset.epgId;
       
+      // 🚀 MODIFICA: Non sovrascrivere i dati se già esistono
       if (epgUrl && !this.epgData.has(channelNumber)) {
         try {
           const response = await fetch(epgUrl);
@@ -4835,7 +4797,7 @@ class FilteredMosaicSystem {
           console.error(`Errore caricamento EPG per canale ${channelNumber}:`, error);
           this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
         }
-      } else if (!epgUrl) {
+      } else if (!epgUrl && !this.epgData.has(channelNumber)) {
         this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
       }
     }
@@ -4958,15 +4920,14 @@ class FilteredMosaicSystem {
     this.isActive = true;
     document.getElementById('filtered-mosaic-overlay').classList.add('active');
     
-    // Mostra indicatore di caricamento
-    this.showLoading(true);
+    // 🚀 MODIFICA: Mostra indicatore solo se i dati non sono ancora stati caricati
+    if (!this.epgLoaded) {
+      this.showLoading(true);
+      await this.loadEPGDataOnce();
+      this.showLoading(false);
+    }
     
     try {
-      // Carica i dati EPG se necessario
-      if (this.epgData.size === 0) {
-        await this.loadEPGData();
-      }
-      
       // Aggiorna i contatori delle categorie
       this.updateCategoryCounts();
       
@@ -4978,13 +4939,11 @@ class FilteredMosaicSystem {
       this.navigationMode = 'categories';
       this.updateCategorySelection();
       
-      // Avvia aggiornamenti
+      // 🚀 MODIFICA: Avvia solo aggiornamento delle barre di progresso
       this.startProgressUpdates();
       
     } catch (error) {
       console.error('Errore apertura mosaico filtrato:', error);
-    } finally {
-      this.showLoading(false);
     }
   }
 
@@ -5417,6 +5376,7 @@ class FilteredMosaicSystem {
   }
 
   startProgressUpdates() {
+    // 🚀 MODIFICA: Aggiorna solo le barre di progresso, NON ricarica i dati EPG
     this.updateInterval = setInterval(() => {
       if (this.isActive) {
         this.updateProgressBars();
@@ -5432,6 +5392,7 @@ class FilteredMosaicSystem {
   }
 
   updateProgressBars() {
+    // 🚀 MODIFICA: Aggiorna solo le barre di progresso usando i dati EPG esistenti
     this.filteredCards.forEach(card => {
       const channelNumber = card.dataset.channelNumber;
       const channelData = this.epgData.get(channelNumber);
@@ -5452,25 +5413,22 @@ class FilteredMosaicSystem {
     });
   }
 
-  startPeriodicUpdate() {
-    setInterval(async () => {
-      console.log('🔄 Aggiornamento periodico dati EPG mosaico filtrato...');
-      
-      // Svuota la cache per forzare il ricaricamento
-      this.epgData.clear();
-      
-      // Ricarica i dati EPG
-      await this.loadEPGData();
-      
-      // Se il mosaico è attivo, aggiorna le card
-      if (this.isActive) {
-        this.updateCategoryCounts();
-        this.generateFilteredCards(this.currentFilter);
-        this.updateCardSelection();
-        console.log('✅ Card del mosaico filtrato aggiornate');
-      }
-      
-    }, 2 * 60 * 1000); // 2 minuti
+  // 🚫 RIMOSSO: Non più necessario l'aggiornamento periodico automatico
+  // startPeriodicUpdate() { ... }
+
+  // 🆕 NUOVO METODO: Forza il ricaricamento manuale dei dati EPG (se necessario)
+  async forceReloadEPG() {
+    console.log('🔄 Ricaricamento manuale dei dati EPG per mosaico filtrato...');
+    this.epgData.clear();
+    this.epgLoaded = false;
+    await this.loadEPGDataOnce();
+    
+    if (this.isActive) {
+      this.updateCategoryCounts();
+      this.generateFilteredCards(this.currentFilter);
+      this.updateCardSelection();
+      console.log('✅ Mosaico filtrato aggiornato con nuovi dati EPG');
+    }
   }
 }
 
@@ -6478,6 +6436,19 @@ document.addEventListener('keydown', (e) => {
         return await onlineTracker.getRealTimeStats();
       }
       return { onlineUsers: 0, topChannels: [] };
+    };
+
+    // 🆕 NUOVE FUNZIONI GLOBALI: Per forzare il ricaricamento manuale dei dati EPG
+    window.forceReloadMosaicEPG = () => {
+      if (mosaicSystem) {
+        mosaicSystem.forceReloadEPG();
+      }
+    };
+
+    window.forceReloadFilteredMosaicEPG = () => {
+      if (filteredMosaicSystem) {
+        filteredMosaicSystem.forceReloadEPG();
+      }
     };
 
     // Log delle statistiche ogni 5 minuti (solo per debug)
