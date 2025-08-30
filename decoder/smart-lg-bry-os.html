@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Bry OS</title>
-
-<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="any">
-<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="16x16">
-<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538">
-<link rel="apple-touch-icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538">
+  <title>TV Decoder - Esperienza Bry Style</title>
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -343,9 +338,8 @@
 
     /* Schermata scadenza abbonamento */
     .subscription-expired {
-      background: linear-gradient(135deg, rgba(139, 69, 19, 0.95) 0%, rgba(160, 82, 45, 0.95) 50%, rgba(205, 133, 63, 0.95) 100%),
-                  url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-    }
+    background: linear-gradient(135deg, rgb(19 62 139) 0%, rgb(11 61 119) 50%, rgb(2 68 138) 100%), url(https://brymeteo.github.io/player/decoder/immagini/schermata-home-bry.png);
+}
 
     .subscription-expired .pin-title {
       color: #ffeb3b;
@@ -546,14 +540,9 @@
     }
 
     .days-remaining.critical {
-      color: #ff6b6b;
-      animation: blink 1s infinite;
-    }
+  color: #ff6b6b;
+}
 
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.5; }
-    }
 
     .sky-nav {
       display: flex;
@@ -3620,13 +3609,28 @@
         } else {
           pinAuth.hideAuthScreen();
           // Avvia l'applicazione principale
-          this.startMainApp();
+          this.startMainApp(authData);
+
         }
       }
 
-      startMainApp() {
-        // Inizializza l'applicazione principale
-        setTimeout(() => {
+      async startMainApp(authData = null) {
+  // ✅ CORREZIONE: Avvia il tracciamento utenti online anche per PIN già memorizzato
+  if (authData && authData.streamingPin) {
+    try {
+      await onlineTracker.startTracking({
+        streamingPin: authData.streamingPin,
+        userName: authData.userName || 'Utente Premium'
+      });
+      console.log('✅ Tracciamento utenti avviato per PIN memorizzato');
+    } catch (error) {
+      console.error('❌ Errore avvio tracciamento per PIN memorizzato:', error);
+    }
+  }
+  
+  // Inizializza l'applicazione principale
+  setTimeout(() => {
+
           loadFavorites();
           
           const savedCategory = localStorage.getItem('currentCategory') || 'tutti';
@@ -6456,6 +6460,82 @@ document.addEventListener('keydown', (e) => {
       const stats = await window.getRealTimeStats();
       console.log('📊 Statistiche Real-Time:', stats);
     }, 5 * 60 * 1000); // 5 minuti
+    
+    
+    
+    // ===== FUNZIONI PER VISUALIZZARE STATISTICHE FIREBASE =====
+
+// Funzione per visualizzare utenti online in tempo reale
+window.showOnlineUsers = async () => {
+  try {
+    const activeUsers = await db.collection('onlineUsers')
+      .where('isActive', '==', true)
+      .get();
+
+    console.log('👥 UTENTI ONLINE ATTUALMENTE:');
+    console.log('Totale utenti online:', activeUsers.size);
+    
+    activeUsers.forEach(doc => {
+      const userData = doc.data();
+      console.log(`- ${userData.userName} (PIN: ${userData.userId}) - Canale: ${userData.currentChannel || 'N/A'}`);
+    });
+    
+    return activeUsers.size;
+  } catch (error) {
+    console.error('❌ Errore recupero utenti online:', error);
+    return 0;
+  }
+};
+
+// Funzione per visualizzare statistiche canali più visti
+window.showChannelStats = async () => {
+  try {
+    const stats = await db.collection('channelStats')
+      .orderBy('totalViews', 'desc')
+      .limit(10)
+      .get();
+
+    console.log('📊 TOP 10 CANALI PIÙ VISTI:');
+    
+    stats.forEach((doc, index) => {
+      const data = doc.data();
+      console.log(`${index + 1}. Canale ${data.channelNumber} - ${data.totalViews} visualizzazioni - ${data.currentViewers || 0} spettatori attuali`);
+    });
+    
+    return stats.docs.map(doc => doc.data());
+  } catch (error) {
+    console.error('❌ Errore recupero statistiche canali:', error);
+    return [];
+  }
+};
+
+// Funzione per visualizzare tutte le statistiche insieme
+window.showAllStats = async () => {
+  console.log('📈 === STATISTICHE COMPLETE FIREBASE ===');
+  
+  const onlineCount = await window.showOnlineUsers();
+  console.log('');
+  await window.showChannelStats();
+  
+  console.log('');
+  console.log('🔄 Per aggiornare le statistiche, richiama: showAllStats()');
+  
+  return {
+    onlineUsers: onlineCount,
+    channelStats: await window.showChannelStats()
+  };
+};
+
+// Avvia monitoraggio automatico ogni 2 minuti
+setInterval(async () => {
+  const stats = await window.getRealTimeStats();
+  console.log('📊 Aggiornamento automatico statistiche:', {
+    utentiOnline: stats.onlineUsers,
+    topCanali: stats.topChannels.slice(0, 3) // Mostra solo i primi 3
+  });
+}, 2 * 60 * 1000); // Ogni 2 minuti
+
+    
 </script>
 
 
