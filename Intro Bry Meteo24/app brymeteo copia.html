@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -61,23 +62,23 @@
         }
 
         .app-logo {
-            width: 120px;
-            height: 120px;
+            width: 160px;
+            height: 160px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
+            margin: 0 auto 2rem auto;
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .app-logo svg {
-            width: 60px;
-            height: 60px;
-            fill: white;
+        .app-logo img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
         }
 
         .loading-spinner {
@@ -137,6 +138,12 @@
             align-items: center;
             gap: 0.5rem;
             letter-spacing: -0.5px;
+        }
+
+        .app-title img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
         }
 
         .nav-buttons {
@@ -1282,9 +1289,7 @@
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
             <div class="app-logo">
-                <svg viewBox="0 0 24 24">
-                    <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
-                </svg>
+                <img src="https://i.ibb.co/rRNz74tn/safari-pinned-taby.png" alt="Logo App" />
             </div>
             <div class="loading-spinner"></div>
             <div class="loading-text">Caricamento previsioni in corso...</div>
@@ -1297,10 +1302,8 @@
         <header class="app-header">
             <div class="header-content">
                 <div class="app-title">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
-                    </svg>
-                    MeteoItalia
+                    <img src="https://i.ibb.co/rRNz74tn/safari-pinned-taby.png" alt="Logo" />
+                    Meteo Italia
                 </div>
                 <div class="nav-buttons">
                     <button class="nav-btn active" id="homeBtn">Home</button>
