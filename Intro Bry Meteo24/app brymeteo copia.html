@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -22,6 +21,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             overflow-x: hidden;
             line-height: 1.6;
+            padding-bottom: 100px; /* Spazio per il menu fisso */
         }
 
         /* Loading Screen Styles */
@@ -127,7 +127,7 @@
             margin: 0 auto;
             padding: 0 1rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -146,31 +146,6 @@
             object-fit: contain;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-weight: 500;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-btn:hover, .nav-btn.active {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
         /* Search Section - Always Visible */
         .search-section {
             max-width: 600px;
@@ -186,7 +161,7 @@
 
         .search-input {
             width: 100%;
-            padding: 1.2rem 1.8rem;
+            padding: 1.2rem 3.5rem 1.2rem 1.8rem;
             font-size: 1.1rem;
             border: 2px solid rgba(255, 255, 255, 0.8);
             border-radius: 50px;
@@ -207,6 +182,23 @@
         .search-input::placeholder {
             color: #666;
             font-weight: 400;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .search-icon:hover {
+            color: #5a6fd8;
+            transform: translateY(-50%) scale(1.1);
         }
 
         .search-suggestions {
@@ -264,6 +256,74 @@
             color: #ffd700;
         }
 
+        /* Bottom Navigation Menu */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
+            padding: 1rem 0 calc(1rem + env(safe-area-inset-bottom, 0px));
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 15px;
+            min-width: 60px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            fill: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active .nav-icon {
+            fill: white;
+            transform: scale(1.1);
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active .nav-label {
+            color: white;
+            font-weight: 600;
+        }
+
         /* Radar Section Styles */
         .radar-section {
             max-width: 1200px;
@@ -278,6 +338,13 @@
             border-radius: 20px 20px 0 0;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .radar-title-section {
+            flex: 1;
         }
 
         .radar-title {
@@ -293,6 +360,59 @@
             margin-top: 0.5rem;
         }
 
+        .radar-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .radar-tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .radar-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .radar-tab-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
         .radar-wrapper {
             width: 100%;
             background: white;
@@ -300,6 +420,7 @@
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
         }
 
         .radar-iframe {
@@ -307,6 +428,80 @@
             height: 780px;
             border: none;
             display: block;
+            transition: all 0.3s ease;
+        }
+
+        .radar-iframe.hidden {
+            display: none;
+        }
+
+        /* Fullscreen Modal */
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .fullscreen-modal.active {
+            display: flex;
+        }
+
+        .fullscreen-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .fullscreen-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .fullscreen-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .close-fullscreen-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .fullscreen-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .fullscreen-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* Altezza ridotta per dispositivi mobili */
@@ -321,6 +516,26 @@
             
             .radar-header {
                 padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .radar-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .radar-tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+
+            .fullscreen-header {
+                padding: 1rem;
+            }
+
+            .fullscreen-title {
+                font-size: 1.2rem;
             }
         }
 
@@ -1003,11 +1218,6 @@
                 min-width: 107px;
             }
 
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
             .favorites-grid {
                 grid-template-columns: 1fr;
             }
@@ -1195,11 +1405,6 @@
                 padding: 0.8rem 0.6rem;
             }
 
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
             .favorites-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
@@ -1365,11 +1570,6 @@
                     <img src="https://i.ibb.co/mCbXr7c4/safari-pinned-taby.png" alt="Logo" />
                     Meteo Località
                 </div>
-                <div class="nav-buttons">
-                    <button class="nav-btn active" id="homeBtn">Home</button>
-                    <button class="nav-btn" id="favoritesBtn">Preferiti</button>
-                    <button class="nav-btn" id="radarBtn">Radar</button>
-                </div>
             </div>
         </header>
 
@@ -1383,6 +1583,9 @@
                     placeholder="Cerca una località italiana..."
                     autocomplete="off"
                 >
+                <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
                 <div id="searchSuggestions" class="search-suggestions"></div>
             </div>
         </div>
@@ -1452,14 +1655,72 @@
         <!-- Radar Section -->
         <div id="radarSection" class="radar-section hidden">
             <div class="radar-header">
-                <h2 class="radar-title">Radar Piogge</h2>
-                <p class="radar-subtitle" id="radarSubtitle">Seleziona una località per visualizzare il radar</p>
+                <div class="radar-title-section">
+                    <h2 class="radar-title">Radar & Fulmini</h2>
+                    <p class="radar-subtitle" id="radarSubtitle">Seleziona una località per visualizzare radar e fulmini</p>
+                </div>
+                <div class="radar-controls">
+                    <button class="radar-tab-btn active" id="radarTab" onclick="switchRadarTab('radar')">
+                        Radar Piogge
+                    </button>
+                    <button class="radar-tab-btn" id="lightningTab" onclick="switchRadarTab('lightning')">
+                        ⚡ Fulmini Live
+                    </button>
+                    <button class="fullscreen-btn" onclick="openFullscreen()" title="Schermo intero">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="radar-wrapper">
                 <iframe 
                     id="radarIframe"
                     class="radar-iframe" 
                     src="https://brymeteo.github.io/player/maps:italia:/italia/radar-italia3.html?lat=45.46533&lon=9.19566&zoom=7.8&pitch=1.0&bearing=0.0" 
+                    scrolling="no" 
+                    allowfullscreen>
+                </iframe>
+                <iframe 
+                    id="lightningIframe"
+                    class="radar-iframe hidden" 
+                    src="https://map.blitzortung.org/#7.07/44.773/10.644/0/15" 
+                    scrolling="no" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Fullscreen Modal -->
+        <div id="fullscreenModal" class="fullscreen-modal">
+            <div class="fullscreen-header">
+                <div class="fullscreen-title" id="fullscreenTitle">Radar Piogge</div>
+                <div class="fullscreen-controls">
+                    <button class="radar-tab-btn active" id="fullscreenRadarTab" onclick="switchFullscreenTab('radar')">
+                        Radar
+                    </button>
+                    <button class="radar-tab-btn" id="fullscreenLightningTab" onclick="switchFullscreenTab('lightning')">
+                        ⚡ Fulmini
+                    </button>
+                    <button class="close-fullscreen-btn" onclick="closeFullscreen()" title="Chiudi schermo intero">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="fullscreen-content">
+                <iframe 
+                    id="fullscreenRadarIframe"
+                    class="fullscreen-iframe" 
+                    src="" 
+                    scrolling="no" 
+                    allowfullscreen>
+                </iframe>
+                <iframe 
+                    id="fullscreenLightningIframe"
+                    class="fullscreen-iframe hidden" 
+                    src="" 
                     scrolling="no" 
                     allowfullscreen>
                 </iframe>
@@ -1520,6 +1781,49 @@
                 </table>
             </div>
         </div>
+
+        <!-- Bottom Navigation Menu -->
+        <nav class="bottom-nav">
+            <div class="nav-container">
+                <div class="nav-item active" id="homeNavBtn">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    <span class="nav-label">Home</span>
+                </div>
+                
+                <div class="nav-item" id="favoritesNavBtn">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                    <span class="nav-label">Preferiti</span>
+                </div>
+                
+              <div class="nav-item" id="radarNavBtn">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" fill="none"></circle>
+        <circle cx="12" cy="12" r="6" fill="none"></circle>
+        <circle cx="12" cy="12" r="2" fill="none"></circle>
+    </svg>
+    <span class="nav-label">Radar</span>
+</div>
+
+                
+                <div class="nav-item" id="mapNavBtn">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                    </svg>
+                    <span class="nav-label">Mappe</span>
+                </div>
+                
+                <div class="nav-item" id="settingsNavBtn">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    <span class="nav-label">Impostazioni</span>
+                </div>
+            </div>
+        </nav>
     </div>
 
     <script>
@@ -1620,6 +1924,7 @@
         let selectedInterval = 3;
         let currentHourIndex = 0;
         let sunriseSunset = { sunrise: '05:34', sunset: '21:16' };
+        let currentRadarTab = 'radar'; // 'radar' or 'lightning'
         
         // Cache per i dati meteo delle località preferite
         let weatherCache = new Map();
@@ -1633,9 +1938,88 @@
         const forecastBoard = document.getElementById('forecastBoard');
         const locationSearch = document.getElementById('locationSearch');
         const searchSuggestions = document.getElementById('searchSuggestions');
-        const homeBtn = document.getElementById('homeBtn');
-        const favoritesBtn = document.getElementById('favoritesBtn');
-        const radarBtn = document.getElementById('radarBtn');
+        
+        // Bottom navigation elements
+        const homeNavBtn = document.getElementById('homeNavBtn');
+        const favoritesNavBtn = document.getElementById('favoritesNavBtn');
+        const radarNavBtn = document.getElementById('radarNavBtn');
+        const mapNavBtn = document.getElementById('mapNavBtn');
+        const settingsNavBtn = document.getElementById('settingsNavBtn');
+
+        // Radar and Lightning functions
+        function switchRadarTab(tab) {
+            currentRadarTab = tab;
+            const radarIframe = document.getElementById('radarIframe');
+            const lightningIframe = document.getElementById('lightningIframe');
+            const radarTab = document.getElementById('radarTab');
+            const lightningTab = document.getElementById('lightningTab');
+
+            if (tab === 'radar') {
+                radarIframe.classList.remove('hidden');
+                lightningIframe.classList.add('hidden');
+                radarTab.classList.add('active');
+                lightningTab.classList.remove('active');
+            } else {
+                radarIframe.classList.add('hidden');
+                lightningIframe.classList.remove('hidden');
+                radarTab.classList.remove('active');
+                lightningTab.classList.add('active');
+            }
+        }
+
+        function switchFullscreenTab(tab) {
+            const fullscreenRadarIframe = document.getElementById('fullscreenRadarIframe');
+            const fullscreenLightningIframe = document.getElementById('fullscreenLightningIframe');
+            const fullscreenRadarTab = document.getElementById('fullscreenRadarTab');
+            const fullscreenLightningTab = document.getElementById('fullscreenLightningTab');
+            const fullscreenTitle = document.getElementById('fullscreenTitle');
+
+            if (tab === 'radar') {
+                fullscreenRadarIframe.classList.remove('hidden');
+                fullscreenLightningIframe.classList.add('hidden');
+                fullscreenRadarTab.classList.add('active');
+                fullscreenLightningTab.classList.remove('active');
+                fullscreenTitle.textContent = 'Radar Piogge';
+            } else {
+                fullscreenRadarIframe.classList.add('hidden');
+                fullscreenLightningIframe.classList.remove('hidden');
+                fullscreenRadarTab.classList.remove('active');
+                fullscreenLightningTab.classList.add('active');
+                fullscreenTitle.textContent = 'Fulmini Live';
+            }
+        }
+
+        function openFullscreen() {
+            const modal = document.getElementById('fullscreenModal');
+            const fullscreenRadarIframe = document.getElementById('fullscreenRadarIframe');
+            const fullscreenLightningIframe = document.getElementById('fullscreenLightningIframe');
+            
+            // Copy current iframe sources to fullscreen iframes
+            const radarIframe = document.getElementById('radarIframe');
+            const lightningIframe = document.getElementById('lightningIframe');
+            
+            fullscreenRadarIframe.src = radarIframe.src;
+            fullscreenLightningIframe.src = lightningIframe.src;
+            
+            // Set correct tab state
+            switchFullscreenTab(currentRadarTab);
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreen() {
+            const modal = document.getElementById('fullscreenModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close fullscreen on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+            }
+        });
 
         // Initialize app
         function initApp() {
@@ -1662,20 +2046,27 @@
             }, 5000);
         }
 
-        // Funzione per aggiornare la mappa radar con le coordinate della località
+        // Funzione per aggiornare le mappe radar e fulmini con le coordinate della località
         function updateRadarLocation() {
             if (currentLocation) {
                 const radarIframe = document.getElementById('radarIframe');
+                const lightningIframe = document.getElementById('lightningIframe');
                 const radarSubtitle = document.getElementById('radarSubtitle');
                 
                 // Costruisci l'URL del radar con le coordinate della località
                 const radarUrl = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia3.html?lat=${currentLocation.lat}&lon=${currentLocation.lon}&zoom=7.8&pitch=1.0&bearing=0.0`;
                 
-                // Aggiorna l'iframe
+                // Costruisci l'URL dei fulmini con le coordinate della località
+                // Calcola il livello di zoom appropriato per la mappa dei fulmini
+                const lightningZoom = 7.07;
+                const lightningUrl = `https://map.blitzortung.org/#${lightningZoom}/${currentLocation.lat}/${currentLocation.lon}/0/15`;
+                
+                // Aggiorna gli iframe
                 radarIframe.src = radarUrl;
+                lightningIframe.src = lightningUrl;
                 
                 // Aggiorna il sottotitolo
-                radarSubtitle.textContent = `Radar piogge per ${currentLocation.name}, ${currentLocation.region}`;
+                radarSubtitle.textContent = `Radar piogge e fulmini per ${currentLocation.name}, ${currentLocation.region}`;
             }
         }
 
@@ -1748,7 +2139,7 @@
             hideSuggestions();
             showWeatherView();
             fetchWeatherData(city.lat, city.lon);
-            updateRadarLocation(); // Aggiorna anche il radar
+            updateRadarLocation(); // Aggiorna anche radar e fulmini
         }
 
         // Favorites functionality
@@ -1964,9 +2355,7 @@
             favoritesSection.classList.add('hidden');
             radarSection.classList.add('hidden');
             forecastBoard.classList.add('hidden');
-            homeBtn.classList.remove('active');
-            favoritesBtn.classList.remove('active');
-            radarBtn.classList.remove('active');
+            updateNavButtons('home');
         }
 
         function showWeatherView() {
@@ -1975,9 +2364,7 @@
             favoritesSection.classList.add('hidden');
             radarSection.classList.add('hidden');
             forecastBoard.classList.remove('hidden');
-            homeBtn.classList.add('active');
-            favoritesBtn.classList.remove('active');
-            radarBtn.classList.remove('active');
+            updateNavButtons('home');
         }
 
         function showFavoritesView() {
@@ -1986,9 +2373,7 @@
             favoritesSection.classList.remove('hidden');
             radarSection.classList.add('hidden');
             forecastBoard.classList.add('hidden');
-            homeBtn.classList.remove('active');
-            favoritesBtn.classList.add('active');
-            radarBtn.classList.remove('active');
+            updateNavButtons('favorites');
         }
 
         function showRadarView() {
@@ -1997,13 +2382,47 @@
             favoritesSection.classList.add('hidden');
             radarSection.classList.remove('hidden');
             forecastBoard.classList.add('hidden');
-            homeBtn.classList.remove('active');
-            favoritesBtn.classList.remove('active');
-            radarBtn.classList.add('active');
+            updateNavButtons('radar');
         }
 
-        // Event listeners
-        homeBtn.addEventListener('click', () => {
+        function showMapView() {
+            // Placeholder per la vista mappe
+            alert('Funzione Mappe in arrivo!');
+        }
+
+        function showSettingsView() {
+            // Placeholder per le impostazioni
+            alert('Impostazioni in arrivo!');
+        }
+
+        function updateNavButtons(activeView) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Add active class to current view
+            switch(activeView) {
+                case 'home':
+                    homeNavBtn.classList.add('active');
+                    break;
+                case 'favorites':
+                    favoritesNavBtn.classList.add('active');
+                    break;
+                case 'radar':
+                    radarNavBtn.classList.add('active');
+                    break;
+                case 'map':
+                    mapNavBtn.classList.add('active');
+                    break;
+                case 'settings':
+                    settingsNavBtn.classList.add('active');
+                    break;
+            }
+        }
+
+        // Event listeners for bottom navigation
+        homeNavBtn.addEventListener('click', () => {
             if (currentLocation) {
                 showWeatherView();
             } else {
@@ -2011,12 +2430,20 @@
             }
         });
 
-        favoritesBtn.addEventListener('click', () => {
+        favoritesNavBtn.addEventListener('click', () => {
             showFavoritesView();
         });
 
-        radarBtn.addEventListener('click', () => {
+        radarNavBtn.addEventListener('click', () => {
             showRadarView();
+        });
+
+        mapNavBtn.addEventListener('click', () => {
+            showMapView();
+        });
+
+        settingsNavBtn.addEventListener('click', () => {
+            showSettingsView();
         });
 
         // Function to get background image based on weather code and hour
