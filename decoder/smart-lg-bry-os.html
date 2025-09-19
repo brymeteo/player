@@ -422,7 +422,7 @@
       border: none;
     }
 
-    /* Pulsante menu principale - Animazioni ridotte */
+    /* Pulsante menu principale - MODIFICA: Inizialmente invisibile */
     .menu-trigger {
       position: fixed;
       left: 30px;
@@ -437,6 +437,7 @@
       font-size: 24px;
       cursor: pointer;
       opacity: 0;
+      visibility: hidden;
       transition: all 0.2s ease;
       z-index: 300;
       box-shadow: 0 4px 20px rgba(0, 120, 212, 0.4);
@@ -449,6 +450,7 @@
 
     .menu-trigger.visible {
       opacity: 1;
+      visibility: visible;
     }
 
     /* Pannello principale stile Sky - Transizioni ridotte */
@@ -784,7 +786,7 @@
       filter: brightness(0) invert(1);
     }
 
-    /* Hint di navigazione */
+    /* Hint di navigazione - MODIFICA: Aggiornato per includere le frecce */
     .navigation-hint {
       background: rgb(22 71 103 / 60%);
       color: white;
@@ -2924,7 +2926,7 @@
       </div>
       
       <div class="navigation-hint">
-        <div>← → Categorie | ↑ ↓ Canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
+        <div>← → Categorie | ↑ ↓ Canali | ← → Naviga canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
       </div>
       
       <div class="control-group">
@@ -5017,7 +5019,7 @@ class FilteredMosaicSystem {
     this.currentFilter = categoryName;
     
     // Salva la categoria selezionata
-    localStorage.setItem('filteredMosaicCategory', categoryName);
+    localStorage.setItem('filteredMosaic Category', categoryName);
     
     // Aggiorna l'interfaccia delle categorie
     const categoryItems = document.querySelectorAll('.filtered-category-item');
@@ -5675,6 +5677,7 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
       }
     }
 
+    // MODIFICA: Funzione per mostrare il trigger solo al passaggio del mouse
     function showTrigger() {
       menuTrigger.classList.add('visible');
       clearTimeout(mouseTimer);
@@ -5692,6 +5695,11 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
           closeMenu();
         }
       }, 10000);
+    }
+
+    // MODIFICA: Funzione per verificare se ci sono elementi aperti
+    function hasOpenElements() {
+      return mosaicSystem.isActive || filteredMosaicSystem.isActive || isMenuOpen || isPinInputActive;
     }
 
     // Event listeners
@@ -5871,7 +5879,7 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-   // Gestione tastiera con controllo PIN
+   // MODIFICA: Gestione tastiera con controllo PIN e navigazione frecce migliorata
 document.addEventListener('keydown', (e) => {
   // Se si sta inserendo il PIN, blocca tutti i comandi tranne quelli necessari per il PIN
   if (isPinInputActive) {
@@ -6000,6 +6008,27 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
+  // MODIFICA: Gestione frecce destra/sinistra per navigazione canali
+  if (e.key === 'ArrowRight' && !hasOpenElements()) {
+    if (favoritesMode) {
+      scrollFavorites('down');
+    } else {
+      scrollChannels('down');
+    }
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === 'ArrowLeft' && !hasOpenElements()) {
+    if (favoritesMode) {
+      scrollFavorites('up');
+    } else {
+      scrollChannels('up');
+    }
+    e.preventDefault();
+    return;
+  }
+
   // Tasto 2 - Restart
   if (e.key === '2') {
     rewindIframe();
@@ -6034,8 +6063,8 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // ✅ MODIFICA: Apri menu con frecce SOLO se nessun mosaico è aperto
-  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !isMenuOpen && !mosaicSystem.isActive && !filteredMosaicSystem.isActive) {
+  // ✅ MODIFICA: Apri menu con frecce SOLO se nessun elemento è aperto
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !hasOpenElements()) {
     openMenu();
     navigationMode = 'categories';
     selectCategory(selectedCategoryIndex);
