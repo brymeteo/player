@@ -41,6 +41,48 @@ let allMusic = [
         img: "music-24",
         src: "music-24"
     },
+       {
+        name: "Disco Inferno (Instrumental)",
+        artist: "The Trammps",
+        img: "music-25",
+        src: "music-25"
+    },
+     {
+        name: "Whiskey, cola tequila",
+        artist: "Maco Mamuko",
+        img: "music-26",
+        src: "music-26"
+    },
+    {
+        name: "Rock This Party (Everybody Dance Now)",
+        artist: "Bob Sinclar",
+        img: "music-27",
+        src: "music-27"
+    },
+    {
+        name: "Move Your Body (Official Instrumental)",
+        artist: "Eiffel 65",
+        img: "music-28",
+        src: "music-28"
+    },
+    {
+        name: "Right Round (feat. Ke$ha)",
+        artist: "Flo Rida",
+        img: "music-29",
+        src: "music-29"
+    },
+    {
+        name: "Captain (whistle) (Restricted Remix)",
+        artist: "Nutcass",
+        img: "music-30",
+        src: "music-30"
+    },
+    {
+        name: "Pressure Off",
+        artist: "Duran Duran",
+        img: "music-31",
+        src: "music-31"
+    },
     {
         name: "Bara Bada Bastu Instrumental",
         artist: "KAJ",
