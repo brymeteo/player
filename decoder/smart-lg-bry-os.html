@@ -453,6 +453,97 @@
       visibility: visible;
     }
 
+    /* ===== NUOVI STILI PER LA SELEZIONE NUMERICA ===== */
+    
+    /* Banner informativo modalità numerica */
+    .numeric-mode-banner {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      z-index: 2500;
+      box-shadow: 0 4px 20px rgba(0, 120, 212, 0.4);
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      min-width: 400px;
+    }
+
+    .numeric-mode-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .numeric-mode-banner .banner-icon {
+      font-size: 20px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .numeric-input-overlay {
+    position: fixed;
+    top: 63.9%;
+    left: 14.9%;
+    transform: translate(-50%, -50%);
+    background: rgb(255 255 255 / 95%);
+    color: #18597a;
+    padding: 6px 1px;
+    border-radius: 12px;
+    font-size: 42px;
+    font-weight: 600;
+    z-index: 3000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s 
+ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 120, 212, 0.3);
+    min-width: 150px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+    .numeric-input-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Overlay di errore per canale non trovato */
+    .channel-error-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ff4444;
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      z-index: 3000;
+      box-shadow: 0 8px 32px rgba(255, 68, 68, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      text-align: center;
+      min-width: 300px;
+    }
+
+    .channel-error-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
     /* Pannello principale stile Sky - Transizioni ridotte */
     .sky-panel {
       position: fixed;
@@ -1669,6 +1760,25 @@
       .filtered-mosaic-header, .filtered-mosaic-controls {
         padding: 15px 20px;
       }
+
+      /* Responsive per overlay numerici */
+      .numeric-mode-banner {
+        min-width: 300px;
+        font-size: 14px;
+        padding: 12px 20px;
+      }
+
+      .numeric-input-overlay {
+        font-size: 36px;
+        padding: 15px 25px;
+        min-width: 150px;
+      }
+
+      .channel-error-overlay {
+        font-size: 18px;
+        padding: 15px 20px;
+        min-width: 250px;
+      }
     }
 
     /* Indicatore di caricamento */
@@ -1717,6 +1827,24 @@
   
   <!-- Statistiche canali nascoste -->
   <div class="channel-stats" id="channel-stats"></div>
+
+  <!-- ===== NUOVI ELEMENTI PER LA SELEZIONE NUMERICA ===== -->
+  
+  <!-- Banner modalità numerica -->
+  <div class="numeric-mode-banner" id="numeric-mode-banner">
+    <span class="banner-icon">🔢</span>
+    <span>Modalità selezione numerica attiva - Digita il numero del canale</span>
+  </div>
+
+  <!-- Overlay per la digitazione dei numeri -->
+  <div class="numeric-input-overlay" id="numeric-input-overlay">
+    <span id="numeric-display">---</span>
+  </div>
+
+  <!-- Overlay di errore per canale non trovato -->
+  <div class="channel-error-overlay" id="channel-error-overlay">
+    <span>Canale non trovato</span>
+  </div>
 
   <!-- Schermata di benvenuto iniziale -->
   <div class="welcome-screen" id="welcome-screen">
@@ -2926,7 +3054,7 @@
       </div>
       
       <div class="navigation-hint">
-        <div>← → Categorie | ↑ ↓ Canali | ← → Naviga canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
+        <div>← → Categorie | ↑ Modalità numerica | ← → Naviga canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
       </div>
       
       <div class="control-group">
@@ -3450,6 +3578,232 @@
 
     // Variabile globale per tracciare se si sta inserendo il PIN
     let isPinInputActive = false;
+
+    // ===== NUOVO SISTEMA DI SELEZIONE NUMERICA CANALI =====
+    class NumericChannelSelector {
+      constructor() {
+        this.isActive = false;
+        this.currentInput = '';
+        this.inputTimeout = null;
+        this.maxDigits = 3; // Massimo 3 cifre per i numeri di canale
+        this.inputDelay = 1500; // 1.5 secondi di attesa dopo l'ultimo numero digitato
+        
+        this.banner = document.getElementById('numeric-mode-banner');
+        this.overlay = document.getElementById('numeric-input-overlay');
+        this.display = document.getElementById('numeric-display');
+        this.errorOverlay = document.getElementById('channel-error-overlay');
+        
+        this.init();
+      }
+
+      init() {
+        console.log('🔢 Sistema selezione numerica inizializzato');
+      }
+
+      toggleMode() {
+        if (this.isActive) {
+          this.deactivate();
+        } else {
+          this.activate();
+        }
+      }
+
+      activate() {
+        this.isActive = true;
+        this.currentInput = '';
+        this.updateDisplay();
+        
+        // Mostra il banner informativo
+        this.banner.classList.add('show');
+        
+        console.log('🔢 Modalità selezione numerica ATTIVATA');
+        
+        // Nascondi il banner dopo 3 secondi
+        setTimeout(() => {
+          if (this.isActive) {
+            this.banner.classList.remove('show');
+          }
+        }, 3000);
+      }
+
+      deactivate() {
+        this.isActive = false;
+        this.currentInput = '';
+        
+        // Nascondi tutti gli overlay
+        this.banner.classList.remove('show');
+        this.overlay.classList.remove('show');
+        this.errorOverlay.classList.remove('show');
+        
+        // Cancella eventuali timeout
+        if (this.inputTimeout) {
+          clearTimeout(this.inputTimeout);
+          this.inputTimeout = null;
+        }
+        
+        console.log('🔢 Modalità selezione numerica DISATTIVATA');
+      }
+
+      addDigit(digit) {
+        if (!this.isActive) return false;
+        
+        // Verifica che sia un numero valido
+        if (!/^[0-9]$/.test(digit)) return false;
+        
+        // Verifica che non superi il massimo di cifre
+        if (this.currentInput.length >= this.maxDigits) return false;
+        
+        // Aggiungi la cifra
+        this.currentInput += digit;
+        this.updateDisplay();
+        
+        // Mostra l'overlay con il numero
+        this.overlay.classList.add('show');
+        
+        // Cancella il timeout precedente
+        if (this.inputTimeout) {
+          clearTimeout(this.inputTimeout);
+        }
+        
+        // Imposta un nuovo timeout per il cambio canale
+        this.inputTimeout = setTimeout(() => {
+          this.processChannelChange();
+        }, this.inputDelay);
+        
+        console.log('🔢 Cifra aggiunta:', digit, '- Input corrente:', this.currentInput);
+        return true;
+      }
+
+      updateDisplay() {
+        if (!this.currentInput) {
+          this.display.textContent = '---';
+          return;
+        }
+        
+        // Crea la visualizzazione con le linee
+        let displayText = '';
+        for (let i = 0; i < 3; i++) {
+          if (i < this.currentInput.length) {
+            displayText += this.currentInput[i];
+          } else {
+            displayText += '-';
+          }
+          if (i < 2) displayText += ' ';
+        }
+        
+        this.display.textContent = displayText;
+      }
+
+      processChannelChange() {
+        if (!this.currentInput) return;
+        
+        const channelNumber = this.currentInput;
+        console.log('🔢 Tentativo cambio canale:', channelNumber);
+        
+        // Cerca il canale
+        const channel = document.querySelector(`[data-number="${channelNumber}"]`);
+        
+        if (channel) {
+          // Canale trovato - cambia canale
+          console.log('✅ Canale trovato:', channelNumber);
+          
+          // Nascondi l'overlay di input
+          this.overlay.classList.remove('show');
+          
+          // Cambia il canale
+          const channels = document.querySelectorAll('.channel-item');
+          const index = Array.from(channels).indexOf(channel);
+          selectChannel(index);
+          changeVideo(index);
+          
+          // Disattiva la modalità numerica
+          this.deactivate();
+          
+        } else {
+          // Canale non trovato - mostra errore
+          console.log('❌ Canale non trovato:', channelNumber);
+          this.showError();
+        }
+      }
+
+      showError() {
+        // Nascondi l'overlay di input
+        this.overlay.classList.remove('show');
+        
+        // Mostra l'overlay di errore
+        this.errorOverlay.classList.add('show');
+        
+        // Nascondi l'errore dopo 2 secondi
+        setTimeout(() => {
+          this.errorOverlay.classList.remove('show');
+          
+          // Reset dell'input
+          this.currentInput = '';
+          this.updateDisplay();
+          
+          // Se la modalità è ancora attiva, mostra di nuovo l'overlay di input
+          if (this.isActive) {
+            setTimeout(() => {
+              this.overlay.classList.add('show');
+            }, 300);
+          }
+        }, 2000);
+      }
+
+      // Metodo per verificare se un numero è valido in tempo reale
+      isValidChannelStart(input) {
+        if (!input) return true;
+        
+        const channels = document.querySelectorAll('.channel-item');
+        for (let channel of channels) {
+          const channelNumber = channel.dataset.number;
+          if (channelNumber && channelNumber.startsWith(input)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      // Metodo per cancellare l'ultimo numero
+      backspace() {
+        if (!this.isActive || !this.currentInput) return false;
+        
+        this.currentInput = this.currentInput.slice(0, -1);
+        this.updateDisplay();
+        
+        // Cancella il timeout se presente
+        if (this.inputTimeout) {
+          clearTimeout(this.inputTimeout);
+          this.inputTimeout = null;
+        }
+        
+        // Se c'è ancora input, riavvia il timeout
+        if (this.currentInput) {
+          this.inputTimeout = setTimeout(() => {
+            this.processChannelChange();
+          }, this.inputDelay);
+        }
+        
+        console.log('🔢 Backspace - Input corrente:', this.currentInput);
+        return true;
+      }
+
+      // Metodo per forzare il cambio canale immediato
+      forceChannelChange() {
+        if (!this.isActive || !this.currentInput) return false;
+        
+        if (this.inputTimeout) {
+          clearTimeout(this.inputTimeout);
+          this.inputTimeout = null;
+        }
+        
+        this.processChannelChange();
+        return true;
+      }
+    }
+
+    // Inizializza il sistema di selezione numerica
+    const numericSelector = new NumericChannelSelector();
 
     // ===== SISTEMA SETUP INIZIALE =====
     class SetupSystem {
@@ -4702,6 +5056,7 @@ class MosaicSystem {
     this.epgLoaded = false;
     await this.loadEPGDataOnce();
     
+    
     if (this.isActive) {
       this.generateMosaicCards();
       this.updateCardSelection();
@@ -4715,6 +5070,7 @@ class FilteredMosaicSystem {
   constructor() {
     this.isActive = false;
     this.selectedCategoryIndex = 0;
+    
     this.selectedCardIndex = 0;
     this.navigationMode = 'categories'; // 'categories' o 'cards'
     this.filteredCards = [];
@@ -5699,7 +6055,7 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
 
     // MODIFICA: Funzione per verificare se ci sono elementi aperti
     function hasOpenElements() {
-      return mosaicSystem.isActive || filteredMosaicSystem.isActive || isMenuOpen || isPinInputActive;
+      return mosaicSystem.isActive || filteredMosaicSystem.isActive || isMenuOpen || isPinInputActive || numericSelector.isActive;
     }
 
     // Event listeners
@@ -5879,7 +6235,7 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-   // MODIFICA: Gestione tastiera con controllo PIN e navigazione frecce migliorata
+   // ===== GESTIONE TASTIERA MODIFICATA CON SELEZIONE NUMERICA =====
 document.addEventListener('keydown', (e) => {
   // Se si sta inserendo il PIN, blocca tutti i comandi tranne quelli necessari per il PIN
   if (isPinInputActive) {
@@ -5901,6 +6257,51 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Backspace' || e.key === 'Tab') {
       return;
     }
+    e.preventDefault();
+    return;
+  }
+
+  // ===== GESTIONE SELEZIONE NUMERICA =====
+  
+  // Tasti numerici - aggiungi alla selezione numerica se attiva
+  if (/^[0-9]$/.test(e.key) && numericSelector.isActive) {
+    const handled = numericSelector.addDigit(e.key);
+    if (handled) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // Backspace - cancella ultimo numero nella selezione numerica
+  if (e.key === 'Backspace' && numericSelector.isActive) {
+    const handled = numericSelector.backspace();
+    if (handled) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // Enter - forza il cambio canale immediato nella selezione numerica
+  if (e.key === 'Enter' && numericSelector.isActive) {
+    const handled = numericSelector.forceChannelChange();
+    if (handled) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // ===== GESTIONE FRECCE MODIFICATA =====
+  
+  // ✅ MODIFICA PRINCIPALE: Freccia SU attiva/disattiva modalità numerica
+  if (e.key === 'ArrowUp' && !hasOpenElements()) {
+    numericSelector.toggleMode();
+    e.preventDefault();
+    return;
+  }
+
+  // ✅ MODIFICA PRINCIPALE: Freccia GIÙ non apre più il pannello dei canali
+  if (e.key === 'ArrowDown' && !hasOpenElements()) {
+    // Non fare nulla - la freccia giù non apre più il menu
     e.preventDefault();
     return;
   }
@@ -6008,7 +6409,7 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // MODIFICA: Gestione frecce destra/sinistra per navigazione canali
+  // MODIFICA: Gestione frecce destra/sinistra per navigazione canali (solo se modalità numerica non attiva)
   if (e.key === 'ArrowRight' && !hasOpenElements()) {
     if (favoritesMode) {
       scrollFavorites('down');
@@ -6057,17 +6458,19 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
+  // ✅ MODIFICA: Tasto 0 per comando vocale (solo se modalità numerica non attiva)
+  if (e.key === '0' && !numericSelector.isActive && !isPinInputActive) {
+    if (recognition) {
+      startVoiceRecognition();
+    }
+    e.preventDefault();
+    return;
+  }
+
   // ✅ MODIFICA: Gestione frecce quando i mosaici sono aperti
   if (mosaicSystem.isActive || filteredMosaicSystem.isActive) {
     // Nel mosaico, le frecce sono già gestite sopra, quindi non fare nient'altro
     return;
-  }
-
-  // ✅ MODIFICA: Apri menu con frecce SOLO se nessun elemento è aperto
-  if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !hasOpenElements()) {
-    openMenu();
-    navigationMode = 'categories';
-    selectCategory(selectedCategoryIndex);
   }
   
   if (isMenuOpen) {
@@ -6400,12 +6803,6 @@ document.addEventListener('keydown', (e) => {
       }
 
       document.getElementById('voice-btn').addEventListener('click', startVoiceRecognition);
-      
-      document.addEventListener('keydown', (event) => {
-        if (event.key === '0' && !isPinInputActive) {
-          startVoiceRecognition();
-        }
-      });
     }
 
     // Gestione messaggi da iframe
