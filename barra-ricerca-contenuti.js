@@ -2372,7 +2372,7 @@
     {
         titolo: "Aquaman - collezione",
         descrizione: "Box film",
-        url: "/bry-replay/detail/film/21-saghe.html",
+        url: "/bry-replay/detail/collezioni/aquaman.html",
         locandina: "https://www.themoviedb.org/t/p/w1280/rNQompSTfAG5O2iXSH8Phay4L45.jpg",
         lightbox: false
       },
