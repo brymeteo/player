@@ -544,6 +544,119 @@ ease;
       visibility: visible;
     }
 
+    /* ===== NUOVO POPUP PER PROGRAMMAZIONE CANALE ===== */
+    .schedule-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+    }
+
+    .schedule-popup.show {
+      display: flex;
+    }
+
+    .schedule-popup-content {
+      background: linear-gradient(135deg, #003d82 0%, #1e4a72 100%);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      color: white;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .schedule-popup-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #ffd700;
+    }
+
+    .schedule-popup-subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .schedule-popup-program-info {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .schedule-popup-program-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .schedule-popup-program-time {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .schedule-popup-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .schedule-popup-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      min-width: 140px;
+    }
+
+    .schedule-popup-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .schedule-popup-btn.primary {
+      background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+      color: #000;
+      border-color: #ffd700;
+    }
+
+    .schedule-popup-btn.primary:hover {
+      background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .schedule-popup-btn.focused {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .schedule-popup-btn.primary.focused {
+      background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    }
+
     /* Pannello principale stile Sky - Transizioni ridotte */
     .sky-panel {
       position: fixed;
@@ -1450,6 +1563,9 @@ ease;
       padding: 25px 30px;
       background: rgba(0, 0, 0, 0.2);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .filtered-mosaic-main-title {
@@ -1463,6 +1579,62 @@ ease;
       color: rgba(255, 255, 255, 0.7);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    /* ===== NUOVI STILI PER LA FASCIA ORARIA ===== */
+    .time-navigation {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .time-nav-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .time-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .time-nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .time-nav-btn.focused {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .current-time-display {
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .time-indicator {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 2px;
     }
 
     .filtered-mosaic-grid-container {
@@ -1503,6 +1675,22 @@ ease;
     box-shadow: 0 0 20px rgb(255 255 255 / 60%);
     transform: translateY(-2px);
 }
+
+    /* ===== NUOVO STILE PER PROGRAMMI FUTURI ===== */
+    .filtered-mosaic-card.future-program {
+      border-color: #ffd700;
+      
+    }
+
+    .filtered-mosaic-card.future-program:hover {
+      border-color: #ffed4e;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.6);
+    }
+
+    .filtered-mosaic-card.future-program .filtered-mosaic-program-time {
+      color: #ffd700;
+      font-weight: 600;
+    }
 
     .filtered-mosaic-card-header {
       display: flex;
@@ -1785,6 +1973,35 @@ ease;
         padding: 15px 20px;
         min-width: 250px;
       }
+
+      /* Responsive per popup programmazione */
+      .schedule-popup-content {
+        padding: 20px;
+        max-width: 400px;
+      }
+
+      .schedule-popup-title {
+        font-size: 20px;
+      }
+
+      .schedule-popup-buttons {
+        flex-direction: column;
+      }
+
+      .schedule-popup-btn {
+        min-width: auto;
+      }
+
+      /* Responsive per navigazione temporale */
+      .time-navigation {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+      }
+
+      .current-time-display {
+        min-width: auto;
+      }
     }
 
     /* Indicatore di caricamento */
@@ -1850,6 +2067,31 @@ ease;
   <!-- Overlay di errore per canale non trovato -->
   <div class="channel-error-overlay" id="channel-error-overlay">
     <span>Canale non trovato</span>
+  </div>
+
+  <!-- ===== NUOVO POPUP PER PROGRAMMAZIONE CANALE ===== -->
+  <div class="schedule-popup" id="schedule-popup">
+    <div class="schedule-popup-content">
+      <div class="schedule-popup-title">Programma Futuro Selezionato</div>
+      <div class="schedule-popup-subtitle">Questo programma inizierà in futuro. Cosa desideri fare?</div>
+      
+      <div class="schedule-popup-program-info" id="schedule-popup-program-info">
+        <div class="schedule-popup-program-title" id="schedule-popup-program-title">Nome Programma</div>
+        <div class="schedule-popup-program-time" id="schedule-popup-program-time">Orario</div>
+      </div>
+      
+      <div class="schedule-popup-buttons">
+        <button class="schedule-popup-btn primary" id="schedule-btn">
+          📅 Programma Cambio Canale
+        </button>
+        <button class="schedule-popup-btn" id="watch-now-btn">
+          ▶️ Guarda Ora
+        </button>
+        <button class="schedule-popup-btn" id="cancel-schedule-btn">
+          ❌ Annulla
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Schermata di benvenuto iniziale -->
@@ -2506,7 +2748,7 @@ ease;
           
           
           
-           <div class="channel-item" data-channel="video49.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/218-Rakuten-film-top.html" data-number="218" data-category="cinema" data-epg-url="https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-rakuten.json" data-epg-id="rakuten">
+           <div class="channel-item" data-channel="video49.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/218-777Rakuten-film-top.html" data-number="218" data-category="cinema" data-epg-url="https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-rakuten.json" data-epg-id="rakuten">
             <img src="https://i.ibb.co/tYLjxbJ/logo-1.png" alt="Rakuten Film Top" class="channel-logo">
             <div class="channel-details">
               <div class="channel-name-main">Rakuten Film Top HD</div>
@@ -3205,8 +3447,28 @@ ease;
       <!-- Area principale -->
       <div class="filtered-mosaic-main">
         <div class="filtered-mosaic-main-header">
-          <div class="filtered-mosaic-main-title" id="filtered-mosaic-category-title">TUTTI I CANALI</div>
-          <div class="filtered-mosaic-main-subtitle" id="filtered-mosaic-category-subtitle">Visualizzazione di tutti i canali disponibili</div>
+          <div>
+            <div class="filtered-mosaic-main-title" id="filtered-mosaic-category-title">TUTTI I CANALI</div>
+            <div class="filtered-mosaic-main-subtitle" id="filtered-mosaic-category-subtitle">Visualizzazione di tutti i canali disponibili</div>
+          </div>
+          
+          <!-- ===== NUOVA FASCIA ORARIA ===== -->
+          <div class="time-navigation" id="time-navigation">
+            <button class="time-nav-btn" id="time-prev-btn">
+              <span>◀</span>
+              <span>Precedente</span>
+            </button>
+            
+            <div>
+              <div class="current-time-display" id="current-time-display">Ora Corrente</div>
+              <div class="time-indicator" id="time-indicator">Programmi in corso</div>
+            </div>
+            
+            <button class="time-nav-btn" id="time-next-btn">
+              <span>Successivo</span>
+              <span>▶</span>
+            </button>
+          </div>
         </div>
         
         <div class="filtered-mosaic-grid-container" id="filtered-mosaic-grid-container">
@@ -3225,7 +3487,7 @@ ease;
     
     <div class="filtered-mosaic-controls">
       <div class="filtered-mosaic-hint">
-        ← → Naviga categorie | ↑ ↓ Naviga canali | INVIO Seleziona | ESC Chiudi | 7 Chiudi
+        ← → Naviga categorie/tempo | ↑ ↓ Naviga canali | INVIO Seleziona | ESC Chiudi | 7 Chiudi
       </div>
     </div>
   </div>
@@ -4855,6 +5117,8 @@ class MosaicSystem {
       this.selectedCardIndex = this.mosaicCards.length - 1;
     }
 
+    
+
     this.mosaicCards.forEach((card, index) => {
       card.classList.toggle('selected', index === this.selectedCardIndex);
     });
@@ -5071,19 +5335,26 @@ class MosaicSystem {
   }
 }
 
-// ===== SISTEMA MOSAICO FILTRATO (TASTO 7) - CARICAMENTO UNICO =====
+// ===== SISTEMA MOSAICO FILTRATO CON NAVIGAZIONE TEMPORALE (TASTO 7) =====
 class FilteredMosaicSystem {
   constructor() {
     this.isActive = false;
     this.selectedCategoryIndex = 0;
-    
     this.selectedCardIndex = 0;
-    this.navigationMode = 'categories'; // 'categories' o 'cards'
+    this.selectedPopupButtonIndex = 0; // ✅ NUOVO: Indice per navigazione popup
+    this.navigationMode = 'categories'; // 'categories', 'cards', 'time', 'popup'
     this.filteredCards = [];
     this.currentFilter = 'tutti';
     this.epgData = new Map(); // Cache per i dati EPG
     this.updateInterval = null;
     this.epgLoaded = false; // Flag per tracciare se i dati sono stati caricati
+    
+    // ===== NUOVE PROPRIETÀ PER NAVIGAZIONE TEMPORALE =====
+    this.currentTimeOffset = 0; // Offset in ore dalla ora corrente (0 = ora corrente, 1 = +1 ora, -1 = -1 ora)
+    this.maxTimeOffset = 12; // Massimo 12 ore nel futuro
+    this.minTimeOffset = -6; // Massimo 6 ore nel passato
+    this.scheduledChannels = new Map(); // Mappa dei canali programmati
+    
     this.init();
   }
 
@@ -5094,11 +5365,18 @@ class FilteredMosaicSystem {
     // Setup categorie
     this.setupCategories();
     
+    // ===== NUOVI EVENT LISTENERS PER NAVIGAZIONE TEMPORALE =====
+    document.getElementById('time-prev-btn').addEventListener('click', () => this.navigateTime(-1));
+    document.getElementById('time-next-btn').addEventListener('click', () => this.navigateTime(1));
+    
+    // Setup popup programmazione
+    this.setupSchedulePopup();
+    
     // 🚀 MODIFICA PRINCIPALE: Carica i dati EPG UNA SOLA VOLTA all'avvio
     this.loadEPGDataOnce();
     
-    // 🚫 RIMOSSO: Non avviare più aggiornamenti periodici automatici
-    // this.startPeriodicUpdate();
+    // Carica i canali programmati salvati
+    this.loadScheduledChannels();
   }
 
   setupCategories() {
@@ -5109,6 +5387,374 @@ class FilteredMosaicSystem {
         this.selectedCategoryIndex = index;
         this.selectCategory(item.dataset.filterCategory);
       });
+    });
+  }
+
+  // ===== NUOVI METODI PER NAVIGAZIONE TEMPORALE =====
+  
+  navigateTime(direction) {
+    const newOffset = this.currentTimeOffset + direction;
+    
+    // Verifica i limiti
+    if (newOffset > this.maxTimeOffset || newOffset < this.minTimeOffset) {
+      return;
+    }
+    
+    this.currentTimeOffset = newOffset;
+    this.updateTimeDisplay();
+    this.generateFilteredCards(this.currentFilter);
+    this.updateCardSelection();
+    
+    console.log('🕒 Navigazione temporale:', direction > 0 ? 'futuro' : 'passato', '- Offset:', this.currentTimeOffset);
+  }
+
+  updateTimeDisplay() {
+    const currentTimeDisplay = document.getElementById('current-time-display');
+    const timeIndicator = document.getElementById('time-indicator');
+    const prevBtn = document.getElementById('time-prev-btn');
+    const nextBtn = document.getElementById('time-next-btn');
+    
+    const now = new Date();
+    const targetTime = new Date(now.getTime() + (this.currentTimeOffset * 60 * 60 * 1000));
+    
+    // Formatta l'ora
+    const timeString = targetTime.toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    currentTimeDisplay.textContent = timeString;
+    
+    // Aggiorna l'indicatore
+    if (this.currentTimeOffset === 0) {
+      timeIndicator.textContent = 'Programmi in corso';
+    } else if (this.currentTimeOffset > 0) {
+      timeIndicator.textContent = `Programmi tra ${this.currentTimeOffset} ora${this.currentTimeOffset > 1 ? 'e' : ''}`;
+    } else {
+      timeIndicator.textContent = `Programmi di ${Math.abs(this.currentTimeOffset)} ora${Math.abs(this.currentTimeOffset) > 1 ? 'e' : ''} fa`;
+    }
+    
+    // Aggiorna lo stato dei pulsanti
+    prevBtn.disabled = this.currentTimeOffset <= this.minTimeOffset;
+    nextBtn.disabled = this.currentTimeOffset >= this.maxTimeOffset;
+    
+    // ✅ NUOVO: Aggiorna focus sui pulsanti temporali se in modalità time
+    if (this.navigationMode === 'time') {
+      this.updateTimeButtonSelection();
+    }
+  }
+
+  // ✅ NUOVO: Aggiorna la selezione dei pulsanti temporali
+  updateTimeButtonSelection() {
+    const prevBtn = document.getElementById('time-prev-btn');
+    const nextBtn = document.getElementById('time-next-btn');
+    
+    // Rimuovi focus da entrambi
+    prevBtn.classList.remove('focused');
+    nextBtn.classList.remove('focused');
+    
+    // Non aggiungere focus se siamo ai limiti
+    // Il focus verrà gestito dalla navigazione
+  }
+
+  // Ottieni il programma per un orario specifico
+  getProgramAtTime(channelData, channelNumber, timeOffset) {
+    if (!channelData || !channelData.programs) return null;
+
+    const targetTime = new Date(Date.now() + (timeOffset * 60 * 60 * 1000));
+    
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '302', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber) || 
+                           (channelData.id && channelData.id.includes('flix-animation'));
+
+    return channelData.programs.find(program => {
+      const startTime = new Date(program.start);
+      const endTime = new Date(program.end);
+
+      if (isFlixAnimation) {
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
+      } else {
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
+      }
+
+      return targetTime >= startTime && targetTime <= endTime;
+    });
+  }
+
+  // Verifica se un programma è futuro
+  isProgramFuture(program, channelNumber) {
+    if (!program) return false;
+    
+    const now = new Date();
+    const startTime = new Date(program.start);
+    
+    const flixAnimationChannels = [
+      '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+      '118', '200', '201', '202', '203', '204', '205', '206', '207', '302', '303',
+      '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+    ];
+    
+    const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+    
+    if (isFlixAnimation) {
+      startTime.setHours(startTime.getHours() - 2);
+    } else {
+      startTime.setHours(startTime.getHours() - 1);
+    }
+    
+    return startTime > now;
+  }
+
+  // ✅ NUOVO: Setup del popup di programmazione con navigazione
+  setupSchedulePopup() {
+    const popup = document.getElementById('schedule-popup');
+    const scheduleBtn = document.getElementById('schedule-btn');
+    const watchNowBtn = document.getElementById('watch-now-btn');
+    const cancelBtn = document.getElementById('cancel-schedule-btn');
+    
+    // Array dei pulsanti per la navigazione
+    this.popupButtons = [scheduleBtn, watchNowBtn, cancelBtn];
+    
+    scheduleBtn.addEventListener('click', () => {
+      this.scheduleChannelChange();
+      this.hideSchedulePopup();
+    });
+    
+    watchNowBtn.addEventListener('click', () => {
+      this.watchChannelNow();
+      this.hideSchedulePopup();
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+      this.hideSchedulePopup();
+    });
+    
+    // Chiudi popup cliccando fuori
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        this.hideSchedulePopup();
+      }
+    });
+  }
+
+  // ✅ MODIFICATO: Mostra il popup di programmazione con navigazione
+  showSchedulePopup(channelNumber, program) {
+    const popup = document.getElementById('schedule-popup');
+    const programTitle = document.getElementById('schedule-popup-program-title');
+    const programTime = document.getElementById('schedule-popup-program-time');
+    
+    // Memorizza i dati per l'azione
+    popup.dataset.channelNumber = channelNumber;
+    popup.dataset.programData = JSON.stringify(program);
+    
+    // Aggiorna le informazioni del programma
+    programTitle.textContent = program.title;
+    programTime.textContent = `${this.formatTime(program.start, channelNumber)} - ${this.formatTime(program.end, channelNumber)}`;
+    
+    // Imposta modalità navigazione popup
+    this.navigationMode = 'popup';
+    this.selectedPopupButtonIndex = 0;
+    this.updatePopupButtonSelection();
+    
+    // Mostra il popup
+    popup.classList.add('show');
+  }
+
+  // ✅ NUOVO: Nascondi popup e torna alla navigazione precedente
+  hideSchedulePopup() {
+    const popup = document.getElementById('schedule-popup');
+    popup.classList.remove('show');
+    
+    // Torna alla navigazione delle card
+    this.navigationMode = 'cards';
+    this.updateCardSelection();
+  }
+
+  // ✅ NUOVO: Aggiorna la selezione dei pulsanti nel popup
+  updatePopupButtonSelection() {
+    // Assicurati che l'indice sia valido
+    if (this.selectedPopupButtonIndex < 0) {
+      this.selectedPopupButtonIndex = 0;
+    } else if (this.selectedPopupButtonIndex >= this.popupButtons.length) {
+      this.selectedPopupButtonIndex = this.popupButtons.length - 1;
+    }
+
+    this.popupButtons.forEach((button, index) => {
+      button.classList.toggle('focused', index === this.selectedPopupButtonIndex);
+    });
+  }
+
+  // ✅ NUOVO: Naviga tra i pulsanti del popup
+  navigatePopupButtons(direction) {
+    switch (direction) {
+      case 'up':
+        if (this.selectedPopupButtonIndex > 0) {
+          this.selectedPopupButtonIndex--;
+        } else {
+          this.selectedPopupButtonIndex = this.popupButtons.length - 1;
+        }
+        break;
+        
+      case 'down':
+        if (this.selectedPopupButtonIndex < this.popupButtons.length - 1) {
+          this.selectedPopupButtonIndex++;
+        } else {
+          this.selectedPopupButtonIndex = 0;
+        }
+        break;
+    }
+    
+    this.updatePopupButtonSelection();
+  }
+
+  // ✅ NUOVO: Seleziona il pulsante corrente nel popup
+  selectCurrentPopupButton() {
+    if (this.popupButtons[this.selectedPopupButtonIndex]) {
+      this.popupButtons[this.selectedPopupButtonIndex].click();
+    }
+  }
+
+  // Programma il cambio canale
+  scheduleChannelChange() {
+    const popup = document.getElementById('schedule-popup');
+    const channelNumber = popup.dataset.channelNumber;
+    const program = JSON.parse(popup.dataset.programData);
+    
+    // Salva la programmazione
+    this.scheduledChannels.set(channelNumber, {
+      program: program,
+      scheduledAt: Date.now(),
+      channelNumber: channelNumber
+    });
+    
+    this.saveScheduledChannels();
+    
+    // Mostra notifica
+    this.showScheduleNotification(`Cambio canale programmato per ${this.formatTime(program.start, channelNumber)}`);
+    
+    console.log('📅 Canale programmato:', channelNumber, 'per', this.formatTime(program.start, channelNumber));
+  }
+
+  // Guarda il canale ora
+  watchChannelNow() {
+    const popup = document.getElementById('schedule-popup');
+    const channelNumber = popup.dataset.channelNumber;
+    
+    // Chiudi il mosaico e cambia canale
+    this.closeMosaic();
+    
+    const channel = document.querySelector(`[data-number="${channelNumber}"]`);
+    if (channel) {
+      const channels = document.querySelectorAll('.channel-item');
+      const index = Array.from(channels).indexOf(channel);
+      selectChannel(index);
+      changeVideo(index);
+    }
+  }
+
+  // Mostra notifica di programmazione
+  showScheduleNotification(message) {
+    const notification = document.getElementById('favorites-notification');
+    const notificationText = document.getElementById('notification-text');
+    const notificationIcon = document.getElementById('notification-icon');
+    
+    // Rimuovi eventuali timeout precedenti
+    if (window.scheduleNotificationTimeout) {
+      clearTimeout(window.scheduleNotificationTimeout);
+    }
+    
+    // Imposta il messaggio e l'icona
+    notificationIcon.textContent = '📅';
+    notificationText.textContent = message;
+    notification.classList.remove('favorites-mode');
+    notification.classList.add('show');
+    
+    // Nascondi dopo 4 secondi
+    window.scheduleNotificationTimeout = setTimeout(() => {
+      notification.classList.remove('show');
+    }, 4000);
+  }
+
+  // Salva i canali programmati
+  saveScheduledChannels() {
+    const scheduledData = Array.from(this.scheduledChannels.entries());
+    localStorage.setItem('scheduledChannels', JSON.stringify(scheduledData));
+  }
+
+  // Carica i canali programmati
+  loadScheduledChannels() {
+    try {
+      const savedData = localStorage.getItem('scheduledChannels');
+      if (savedData) {
+        const scheduledData = JSON.parse(savedData);
+        this.scheduledChannels = new Map(scheduledData);
+        
+        // Avvia il controllo periodico per i canali programmati
+        this.startScheduleChecker();
+      }
+    } catch (error) {
+      console.error('Errore caricamento canali programmati:', error);
+    }
+  }
+
+  // Controllo periodico per i canali programmati
+  startScheduleChecker() {
+    setInterval(() => {
+      this.checkScheduledChannels();
+    }, 30000); // Controlla ogni 30 secondi
+  }
+
+  // Verifica se è ora di cambiare canale
+  checkScheduledChannels() {
+    const now = new Date();
+    
+    this.scheduledChannels.forEach((scheduledData, channelNumber) => {
+      const program = scheduledData.program;
+      const startTime = new Date(program.start);
+      
+      // Applica la correzione oraria
+      const flixAnimationChannels = [
+        '109', '108', '110', '111', '112', '113', '114', '115', '116', '117',
+        '118', '200', '201', '202', '203', '204', '205', '206', '207', '302', '303',
+        '308', '405', '508', '509', '510', '511', '512', '605', '606', '150'
+      ];
+      
+      const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
+      
+      if (isFlixAnimation) {
+        startTime.setHours(startTime.getHours() - 2);
+      } else {
+        startTime.setHours(startTime.getHours() - 1);
+      }
+      
+      // Se è ora di cambiare canale (con tolleranza di 1 minuto)
+      const timeDiff = Math.abs(now.getTime() - startTime.getTime());
+      if (timeDiff <= 60000) { // 1 minuto di tolleranza
+        console.log('🔔 È ora di cambiare canale:', channelNumber);
+        
+        // Cambia canale
+        const channel = document.querySelector(`[data-number="${channelNumber}"]`);
+        if (channel) {
+          const channels = document.querySelectorAll('.channel-item');
+          const index = Array.from(channels).indexOf(channel);
+          selectChannel(index);
+          changeVideo(index);
+          
+          // Mostra notifica
+          this.showScheduleNotification(`Cambio automatico su canale ${channelNumber}`);
+          
+          // Rimuovi dalla programmazione
+          this.scheduledChannels.delete(channelNumber);
+          this.saveScheduledChannels();
+        }
+      }
     });
   }
 
@@ -5299,6 +5945,10 @@ class FilteredMosaicSystem {
       // Aggiorna i contatori delle categorie
       this.updateCategoryCounts();
       
+      // Inizializza la visualizzazione temporale
+      this.currentTimeOffset = 0;
+      this.updateTimeDisplay();
+      
       // Carica la categoria salvata o default
       const savedCategory = localStorage.getItem('filteredMosaicCategory') || 'tutti';
       this.selectCategory(savedCategory);
@@ -5321,6 +5971,9 @@ class FilteredMosaicSystem {
     
     // Ferma gli aggiornamenti
     this.stopProgressUpdates();
+    
+    // Nascondi il popup se aperto
+    this.hideSchedulePopup();
   }
 
   showLoading(show) {
@@ -5469,18 +6122,24 @@ class FilteredMosaicSystem {
       
       if (!shouldShow) return;
       
-      // Crea la card
+      // ===== MODIFICA PRINCIPALE: Usa il programma per l'orario selezionato =====
       const channelData = this.epgData.get(channelNumber);
-      const currentProgram = this.getCurrentProgram(channelData, channelNumber);
+      const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
       
       const card = document.createElement('div');
       card.className = 'filtered-mosaic-card';
       card.dataset.channelNumber = channelNumber;
       card.dataset.channelIndex = index;
       
-      const progress = this.calculateProgress(currentProgram, channelNumber);
-      const progressText = currentProgram ? 
-        `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}` :
+      // ===== VERIFICA SE IL PROGRAMMA È FUTURO =====
+      const isFuture = this.isProgramFuture(program, channelNumber);
+      if (isFuture) {
+        card.classList.add('future-program');
+      }
+      
+      const progress = this.calculateProgress(program, channelNumber);
+      const progressText = program ? 
+        `${this.formatTime(program.start, channelNumber)} - ${this.formatTime(program.end, channelNumber)}` :
         'Orario non disponibile';
       
       card.innerHTML = `
@@ -5494,15 +6153,15 @@ class FilteredMosaicSystem {
         </div>
         
         <div class="filtered-mosaic-program-poster">
-          ${currentProgram && currentProgram.poster ? 
-            `<img src="${currentProgram.poster}" alt="Poster programma" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;\\'>Immagine non disponibile</div>'">` :
+          ${program && program.poster ? 
+            `<img src="${program.poster}" alt="Poster programma" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;\\'>Immagine non disponibile</div>'">` :
             '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;">Immagine non disponibile</div>'
           }
         </div>
         
         <div class="filtered-mosaic-program-info">
           <div class="filtered-mosaic-program-title">
-            ${currentProgram ? currentProgram.title : 'Programma non disponibile'}
+            ${program ? program.title : 'Programma non disponibile'}
           </div>
           <div class="filtered-mosaic-program-time">${progressText}</div>
           
@@ -5515,9 +6174,15 @@ class FilteredMosaicSystem {
         </div>
       `;
       
-      // Event listener per selezione canale
+      // ===== EVENT LISTENER MODIFICATO PER GESTIRE PROGRAMMI FUTURI =====
       card.addEventListener('click', () => {
-        this.selectChannel(channelNumber);
+        if (isFuture && this.currentTimeOffset > 0) {
+          // Mostra popup per programmi futuri
+          this.showSchedulePopup(channelNumber, program);
+        } else {
+          // Comportamento normale per programmi correnti
+          this.selectChannel(channelNumber);
+        }
       });
       
       grid.appendChild(card);
@@ -5581,13 +6246,24 @@ class FilteredMosaicSystem {
     }
   }
 
+  // ✅ MODIFICATO: Gestione navigazione principale con supporto popup
   navigate(direction) {
     if (!this.isActive) return;
+
+    // ✅ NUOVO: Gestione navigazione nel popup
+    if (this.navigationMode === 'popup') {
+      if (direction === 'up' || direction === 'down') {
+        this.navigatePopupButtons(direction);
+      }
+      return;
+    }
 
     if (this.navigationMode === 'categories') {
       this.navigateCategories(direction);
     } else if (this.navigationMode === 'cards') {
       this.navigateCards(direction);
+    } else if (this.navigationMode === 'time') {
+      this.navigateTimeButtons(direction);
     }
   }
 
@@ -5621,10 +6297,46 @@ class FilteredMosaicSystem {
     this.updateCategorySelection();
   }
 
+  // ✅ MODIFICATO: Navigazione card con gestione tasti 4 e 5
   navigateCards(direction) {
     if (this.filteredCards.length === 0) return;
     
-    // Calcola il numero di colonne
+    // ===== GESTIONE FRECCE SINISTRA/DESTRA =====
+    if (direction === 'left' || direction === 'right') {
+      // Se siamo nella prima colonna e andiamo a sinistra, torna alle categorie
+      const grid = document.getElementById('filtered-mosaic-grid');
+      const gridRect = grid.getBoundingClientRect();
+      const firstCard = this.filteredCards[0];
+      
+      if (firstCard) {
+        const cardRect = firstCard.getBoundingClientRect();
+        const cardWidth = cardRect.width;
+        const gridStyle = window.getComputedStyle(grid);
+        const gap = parseInt(gridStyle.gap) || 20;
+        
+        const availableWidth = gridRect.width;
+        const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
+        const currentCol = this.selectedCardIndex % cols;
+        
+        if (direction === 'left' && currentCol === 0) {
+          // Torna alla navigazione delle categorie
+          this.navigationMode = 'categories';
+          this.updateCategorySelection();
+          return;
+        }
+      }
+      
+      // Navigazione orizzontale tra le card
+      this.navigateCardsHorizontal(direction);
+      return;
+    }
+    
+    // Navigazione verticale tra le card
+    this.navigateCardsVertical(direction);
+  }
+
+  // ✅ NUOVO: Navigazione orizzontale tra le card
+  navigateCardsHorizontal(direction) {
     const grid = document.getElementById('filtered-mosaic-grid');
     const gridRect = grid.getBoundingClientRect();
     const firstCard = this.filteredCards[0];
@@ -5645,62 +6357,34 @@ class FilteredMosaicSystem {
     
     let newIndex = this.selectedCardIndex;
     
-    switch (direction) {
-      case 'left':
-        if (currentCol > 0) {
-          newIndex = this.selectedCardIndex - 1;
-        } else {
-          // Torna alla navigazione delle categorie
-          this.navigationMode = 'categories';
-          this.updateCategorySelection();
-          return;
-        }
-        break;
-        
-      case 'right':
-        if (currentCol < cols - 1 && this.selectedCardIndex + 1 < this.filteredCards.length) {
-          newIndex = this.selectedCardIndex + 1;
-        } else {
-          if (currentRow < rows - 1) {
-            newIndex = (currentRow + 1) * cols;
-            if (newIndex >= this.filteredCards.length) {
-              newIndex = this.filteredCards.length - 1;
-            }
-          } else {
-            newIndex = 0;
-          }
-        }
-        break;
-        
-      case 'up':
+    if (direction === 'left') {
+      if (currentCol > 0) {
+        newIndex = this.selectedCardIndex - 1;
+      } else {
+        // Vai alla fine della riga precedente
         if (currentRow > 0) {
-          newIndex = Math.max(0, this.selectedCardIndex - cols);
+          const prevRowLastIndex = Math.min(this.filteredCards.length - 1, (currentRow * cols) - 1);
+          newIndex = prevRowLastIndex;
         } else {
-          const lastRowStartIndex = (rows - 1) * cols;
-          const targetIndex = lastRowStartIndex + currentCol;
-          if (targetIndex >= this.filteredCards.length) {
-            newIndex = this.filteredCards.length - 1;
-          } else {
-            newIndex = targetIndex;
-          }
+          // Vai all'ultima card dell'ultima riga
+          newIndex = this.filteredCards.length - 1;
         }
-        break;
-        
-      case 'down':
+      }
+    } else if (direction === 'right') {
+      if (currentCol < cols - 1 && this.selectedCardIndex + 1 < this.filteredCards.length) {
+        newIndex = this.selectedCardIndex + 1;
+      } else {
+        // Vai all'inizio della riga successiva
         if (currentRow < rows - 1) {
-          const targetIndex = this.selectedCardIndex + cols;
-          if (targetIndex < this.filteredCards.length) {
-            newIndex = targetIndex;
-          } else {
+          newIndex = (currentRow + 1) * cols;
+          if (newIndex >= this.filteredCards.length) {
             newIndex = this.filteredCards.length - 1;
           }
         } else {
-          newIndex = currentCol;
-          if (newIndex >= this.filteredCards.length) {
-            newIndex = 0;
-          }
+          // Vai alla prima card
+          newIndex = 0;
         }
-        break;
+      }
     }
     
     newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
@@ -5711,7 +6395,80 @@ class FilteredMosaicSystem {
     }
   }
 
+  // ✅ NUOVO: Navigazione verticale tra le card
+  navigateCardsVertical(direction) {
+    const grid = document.getElementById('filtered-mosaic-grid');
+    const gridRect = grid.getBoundingClientRect();
+    const firstCard = this.filteredCards[0];
+    
+    if (!firstCard) return;
+    
+    const cardRect = firstCard.getBoundingClientRect();
+    const cardWidth = cardRect.width;
+    const gridStyle = window.getComputedStyle(grid);
+    const gap = parseInt(gridStyle.gap) || 20;
+    
+    const availableWidth = gridRect.width;
+    const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
+    const rows = Math.ceil(this.filteredCards.length / cols);
+    
+    const currentRow = Math.floor(this.selectedCardIndex / cols);
+    const currentCol = this.selectedCardIndex % cols;
+    
+    let newIndex = this.selectedCardIndex;
+    
+    if (direction === 'up') {
+      if (currentRow > 0) {
+        newIndex = Math.max(0, this.selectedCardIndex - cols);
+      } else {
+        const lastRowStartIndex = (rows - 1) * cols;
+        const targetIndex = lastRowStartIndex + currentCol;
+        if (targetIndex >= this.filteredCards.length) {
+          newIndex = this.filteredCards.length - 1;
+        } else {
+          newIndex = targetIndex;
+        }
+      }
+    } else if (direction === 'down') {
+      if (currentRow < rows - 1) {
+        const targetIndex = this.selectedCardIndex + cols;
+        if (targetIndex < this.filteredCards.length) {
+          newIndex = targetIndex;
+        } else {
+          newIndex = this.filteredCards.length - 1;
+        }
+      } else {
+        newIndex = currentCol;
+        if (newIndex >= this.filteredCards.length) {
+          newIndex = 0;
+        }
+      }
+    }
+    
+    newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
+    
+    if (newIndex !== this.selectedCardIndex) {
+      this.selectedCardIndex = newIndex;
+      this.updateCardSelection();
+    }
+  }
+
+  // ✅ NUOVO: Gestione navigazione temporale con tasti 4 e 5
+  handleTimeNavigation(direction) {
+    if (direction === 'prev') {
+      this.navigateTime(-1);
+    } else if (direction === 'next') {
+      this.navigateTime(1);
+    }
+  }
+
   selectCurrentItem() {
+    // ✅ NUOVO: Gestione selezione nel popup
+    if (this.navigationMode === 'popup') {
+      this.selectCurrentPopupButton();
+      return;
+    }
+
     if (this.navigationMode === 'categories') {
       // Seleziona la categoria corrente
       const categoryItems = document.querySelectorAll('.filtered-category-item');
@@ -5721,10 +6478,22 @@ class FilteredMosaicSystem {
         this.selectCategory(categoryName);
       }
     } else if (this.navigationMode === 'cards') {
-      // Seleziona il canale corrente
+      // ===== GESTIONE SELEZIONE CARD MODIFICATA =====
       if (this.filteredCards[this.selectedCardIndex]) {
         const channelNumber = this.filteredCards[this.selectedCardIndex].dataset.channelNumber;
-        this.selectChannel(channelNumber);
+        const channelData = this.epgData.get(channelNumber);
+        const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
+        
+        // Verifica se il programma è futuro
+        const isFuture = this.isProgramFuture(program, channelNumber);
+        
+        if (isFuture && this.currentTimeOffset > 0) {
+          // Mostra popup per programmi futuri
+          this.showSchedulePopup(channelNumber, program);
+        } else {
+          // Comportamento normale per programmi correnti
+          this.selectChannel(channelNumber);
+        }
       }
     }
   }
@@ -5764,10 +6533,10 @@ class FilteredMosaicSystem {
     this.filteredCards.forEach(card => {
       const channelNumber = card.dataset.channelNumber;
       const channelData = this.epgData.get(channelNumber);
-      const currentProgram = this.getCurrentProgram(channelData, channelNumber);
+      const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
       
-      if (currentProgram) {
-        const progress = this.calculateProgress(currentProgram, channelNumber);
+      if (program) {
+        const progress = this.calculateProgress(program, channelNumber);
         const progressFill = card.querySelector('.filtered-mosaic-progress-fill');
         const progressText = card.querySelector('.filtered-mosaic-progress-text');
         
@@ -6241,7 +7010,7 @@ const filteredMosaicSystem = new FilteredMosaicSystem();
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-   // ===== GESTIONE TASTIERA MODIFICATA CON SELEZIONE NUMERICA =====
+   // ===== GESTIONE TASTIERA MODIFICATA CON NAVIGAZIONE FRECCE =====
 document.addEventListener('keydown', (e) => {
   // Se si sta inserendo il PIN, blocca tutti i comandi tranne quelli necessari per il PIN
   if (isPinInputActive) {
@@ -6357,7 +7126,7 @@ document.addEventListener('keydown', (e) => {
     }
   }
 
-  // ✅ NUOVO: Gestione navigazione mosaico filtrato
+  // ✅ NUOVO: Gestione navigazione mosaico filtrato con frecce direzionali
   if (filteredMosaicSystem.isActive) {
     if (e.key === 'ArrowLeft') {
       filteredMosaicSystem.navigate('left');
@@ -6393,9 +7162,11 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // Tasto 4 - Canale precedente (senza aprire menu)
+  // ✅ MODIFICATO: Tasto 4 - Navigazione temporale nel mosaico filtrato, altrimenti canale precedente
   if (e.key === '4') {
-    if (favoritesMode) {
+    if (filteredMosaicSystem.isActive) {
+      filteredMosaicSystem.handleTimeNavigation('prev');
+    } else if (favoritesMode) {
       scrollFavorites('up');
     } else {
       scrollChannels('up');
@@ -6404,9 +7175,11 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // Tasto 5 - Canale successivo (senza aprire menu)
+  // ✅ MODIFICATO: Tasto 5 - Navigazione temporale nel mosaico filtrato, altrimenti canale successivo
   if (e.key === '5') {
-    if (favoritesMode) {
+    if (filteredMosaicSystem.isActive) {
+      filteredMosaicSystem.handleTimeNavigation('next');
+    } else if (favoritesMode) {
       scrollFavorites('down');
     } else {
       scrollChannels('down');
@@ -6811,7 +7584,7 @@ document.addEventListener('keydown', (e) => {
       document.getElementById('voice-btn').addEventListener('click', startVoiceRecognition);
     }
 
-    // Gestione messaggi da iframe
+    // ✅ MODIFICATO: Gestione messaggi da iframe con supporto tasto 7
     window.addEventListener("message", function(event) {
       if (event.data && event.data.action) {
         if (event.data.action === "toggleFullscreen") {
@@ -6825,13 +7598,17 @@ document.addEventListener('keydown', (e) => {
           } else if (key === '1' && !isPinInputActive) {
             toggleCurrentChannelFavorite();
           } else if (key === '4' && !isPinInputActive) {
-            if (favoritesMode) {
+            if (filteredMosaicSystem.isActive) {
+              filteredMosaicSystem.handleTimeNavigation('prev');
+            } else if (favoritesMode) {
               scrollFavorites('up');
             } else {
               scrollChannels('up');
             }
           } else if (key === '5' && !isPinInputActive) {
-            if (favoritesMode) {
+            if (filteredMosaicSystem.isActive) {
+              filteredMosaicSystem.handleTimeNavigation('next');
+            } else if (favoritesMode) {
               scrollFavorites('down');
             } else {
               scrollChannels('down');
