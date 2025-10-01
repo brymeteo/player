@@ -5377,6 +5377,7 @@ class FilteredMosaicSystem {
     
     // Carica i canali programmati salvati
     this.loadScheduledChannels();
+    this.startScheduleChecker();
   }
 
   setupCategories() {
@@ -5734,9 +5735,9 @@ class FilteredMosaicSystem {
         startTime.setHours(startTime.getHours() - 1);
       }
       
-      // Se è ora di cambiare canale (con tolleranza di 1 minuto)
+      // Se è ora di cambiare canale (con tolleranza di 3 minuto)
       const timeDiff = Math.abs(now.getTime() - startTime.getTime());
-      if (timeDiff <= 60000) { // 1 minuto di tolleranza
+      if (timeDiff <= 180000) { // 3 minuti di tolleranza
         console.log('🔔 È ora di cambiare canale:', channelNumber);
         
         // Cambia canale
@@ -6579,7 +6580,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const setupSystem = new SetupSystem();
 const pinAuth = new PinAuthSystem();
 const mosaicSystem = new MosaicSystem();
-const filteredMosaicSystem = new FilteredMosaicSystem();
+
 
     // ===== RESTO DEL CODICE ORIGINALE =====
     let channels = document.querySelectorAll('.channel-item');
