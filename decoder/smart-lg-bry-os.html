@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TV Decoder - Esperienza Bry Style</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bry OS</title>
+
+<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="any">
+<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538" type="image/svg+xml" sizes="16x16">
+<link rel="icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538">
+<link rel="apple-touch-icon" href="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001011-85d3e85d42/1j3767-0.ico?ph=7e11bb4538">
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -4960,8 +4965,8 @@ class MosaicSystem {
 
       // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() - 2);
-        endTime.setHours(endTime.getHours() - 2);
+        startTime.setHours(startTime.getHours() + 2);
+        endTime.setHours(endTime.getHours() + 2);
       } else {
         startTime.setHours(startTime.getHours() - 1);
         endTime.setHours(endTime.getHours() - 1);
@@ -4990,8 +4995,8 @@ class MosaicSystem {
     
     // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() - 2);
-      endTime.setHours(endTime.getHours() - 2);
+      startTime.setHours(startTime.getHours() + 2);
+      endTime.setHours(endTime.getHours() + 2);
     } else {
       startTime.setHours(startTime.getHours() - 1);
       endTime.setHours(endTime.getHours() - 1);
@@ -5021,7 +5026,7 @@ class MosaicSystem {
     
     // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
     if (isFlixAnimation) {
-      date.setHours(date.getHours() - 2);
+      date.setHours(date.getHours() + 2);
     } else {
       date.setHours(date.getHours() - 1);
     }
@@ -5478,11 +5483,11 @@ class FilteredMosaicSystem {
       const endTime = new Date(program.end);
 
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() - 2);
-        endTime.setHours(endTime.getHours() - 2);
+        startTime.setHours(startTime.getHours() + 0);
+        endTime.setHours(endTime.getHours() + 0);
       } else {
-        startTime.setHours(startTime.getHours() - 1);
-        endTime.setHours(endTime.getHours() - 1);
+        startTime.setHours(startTime.getHours() + 0);
+        endTime.setHours(endTime.getHours() + 0);
       }
 
       return targetTime >= startTime && targetTime <= endTime;
@@ -5505,9 +5510,9 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() - 2);
+      startTime.setHours(startTime.getHours() + 0);
     } else {
-      startTime.setHours(startTime.getHours() - 1);
+      startTime.setHours(startTime.getHours() + 0);
     }
     
     return startTime > now;
@@ -5730,9 +5735,9 @@ class FilteredMosaicSystem {
       const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
       
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() - 2);
+        startTime.setHours(startTime.getHours() + 0);
       } else {
-        startTime.setHours(startTime.getHours() - 1);
+        startTime.setHours(startTime.getHours() + 0);
       }
       
       // Se è ora di cambiare canale (con tolleranza di 3 minuto)
@@ -5857,11 +5862,11 @@ class FilteredMosaicSystem {
       const endTime = new Date(program.end);
 
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() - 2);
-        endTime.setHours(endTime.getHours() - 2);
+        startTime.setHours(startTime.getHours() + 0);
+        endTime.setHours(endTime.getHours() + 0);
       } else {
-        startTime.setHours(startTime.getHours() - 1);
-        endTime.setHours(endTime.getHours() - 1);
+        startTime.setHours(startTime.getHours() + 0);
+        endTime.setHours(endTime.getHours() + 0);
       }
 
       return now >= startTime && now <= endTime;
@@ -5884,11 +5889,11 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() - 2);
-      endTime.setHours(endTime.getHours() - 2);
+      startTime.setHours(startTime.getHours() + 0);
+      endTime.setHours(endTime.getHours() + 0);
     } else {
-      startTime.setHours(startTime.getHours() - 1);
-      endTime.setHours(endTime.getHours() - 1);
+      startTime.setHours(startTime.getHours() + 0);
+      endTime.setHours(endTime.getHours() + 0);
     }
     
     if (now < startTime) return 0;
@@ -5912,9 +5917,9 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      date.setHours(date.getHours() - 2);
+      date.setHours(date.getHours() + 0);
     } else {
-      date.setHours(date.getHours() - 1);
+      date.setHours(date.getHours() + 0);
     }
     
     return date.toLocaleTimeString('it-IT', {
