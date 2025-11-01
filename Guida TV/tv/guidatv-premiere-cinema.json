@@ -3,83 +3,11 @@
   "name": "Premiere Cinema",
   "epgName": "Premiere Cinema",
   "logo": "https://upload.wikimedia.org/...png",
-  "m3uLink": "https://6f81cede.movie-halloween.pages.dev/Halloween%20(2018)%201080p/output.m3u8",
+  "m3uLink": "https://f596ed0c.movie-halloween.pages.dev/Un%20Fantasma%20Per%20Amico%20[m1440p]%20[2K]%20(2014)/output.m3u8",
   "programs": [
     {
-      "start": "2025-10-30T01:00:36.000Z",
-      "end": "2025-10-30T02:46:23.000Z",
-      "title": "Halloween (2018)",
-      "description": "Sono passati 40 anni da quando Laurie Strode è sopravvissuta agli assalti dell'assassino Michael Myers durante la notte di Halloween. Quando questi fugge dal carcere, la donna affronta una terrificante resa dei conti.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/czRXzKy5YcvoVhRUb8RQsFHUDi1.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T02:46:59.000Z",
-      "end": "2025-10-30T04:26:39.000Z",
-      "title": "Casper (1995)",
-      "description": "Nel Maine c'è un castello in cui è custodito un tesoro. Quando l'intrigante Carrigan lo acquista decide di sbarazzarsi delle ingombranti presenze. Contatta allora un cacciatore di fantasmi, il dottor Harvey.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/7jRnqRTiE1WmPWN0zmMlF7s52Ap.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T04:27:13.000Z",
-      "end": "2025-10-30T06:06:24.000Z",
-      "title": "La vedova Winchester (2018)",
-      "description": "Nascosta nella propria enorme villa californiana, l'eccentrica ereditiera Sarah Winchester crede di essere perseguitata dalle anime delle persone uccise dal fucile grazie al quale la sua famiglia si è arricchita.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/d4wnMDSrQonB9iArMzd90WqaoJ4.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T06:07:00.000Z",
-      "end": "2025-10-30T07:40:10.000Z",
-      "title": "La famiglia Addams 2 (2021)",
-      "description": "Con l'obiettivo in mente di diventare una famiglia più unita, Gomez, Morticia e il resto del gruppo Addams si imbarcano in un avventuroso viaggio su un'orribile e gigantesca roulotte.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/9e6wp707XMouPG939o2fHunXXJR.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T07:40:46.000Z",
-      "end": "2025-10-30T09:24:24.000Z",
-      "title": "Hubie Halloween (2020)",
-      "description": "I vicini lo deridono mentre la polizia lo ignora, ma Hubie sospetta che Halloween a Salem sarà davvero spaventoso quest'anno.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/sZHCqJlCO6a6fWxgz9MQv8Sz2TN.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T09:25:00.000Z",
-      "end": "2025-10-30T11:20:48.000Z",
-      "title": "Sweeney Todd - Il diabolico barbiere di Fleet Street (2007)",
-      "description": "Il barbiere Sweeney Todd viene accusato e messo in prigione per un crimine non commesso. Una volta uscito, decide di vendicarsi con l'aiuto di una complice.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/cIrWJ0AdlZMjdcXV0Abh9LfKT46.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T11:21:24.000Z",
-      "end": "2025-10-30T12:56:41.000Z",
-      "title": "100% lupo (2020)",
-      "description": "Freddy Lupin appartiene a un'orgogliosa famiglia di lupi mannari. Fiducioso che presto diventerà uno dei lupi mannari più temuti, Freddy è scioccato quando scopre che non è così feroce come si aspettava.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/vgXPK6pfhdwBdI6ON4uGZrF7k9l.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T12:57:17.000Z",
-      "end": "2025-10-30T14:30:11.000Z",
-      "title": "Monster Family (2017)",
-      "description": "Durante una festa in maschera i Wishbone restano vittime di un incantesimo lanciato dalla perfida strega Baba Yaga, che li trasforma nei mostri rappresentati dai loro costumi.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/t5ZTLzn0ASdOhY3S8o3vzj57Myg.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T14:30:47.000Z",
-      "end": "2025-10-30T15:58:54.000Z",
+      "start": "2025-11-01T05:00:36.000Z",
+      "end": "2025-11-01T06:28:43.000Z",
       "title": "Un Fantasma Per Amico (2013)",
       "description": "Un fantasmino annoiato e triste infesta la soffitta del castello di Eulenstein, ormai divenuto un museo. L'incontro con un piccolo visitatore, Karl, un bambino impacciato e spesso deriso dai compagni, cambia la vita di entrambi.",
       "category": "Film",
@@ -87,296 +15,8 @@
       "channel": "premiere-cinema"
     },
     {
-      "start": "2025-10-30T15:59:30.000Z",
-      "end": "2025-10-30T17:31:01.000Z",
-      "title": "Hotel Transylvania (2012)",
-      "description": "Per festeggiare i 118 anni della figlia Mavis, Dracula organizza una festa nel castello che ospita solo mostri ed è bandito agli umani, considerati un pericolo. Un simpatico ventenne giunge per caso al castello e Dracula è costretto a dissimularne l'aspetto umano e a far di tutto affinché il ragazzo stia lontano da Mavis, che non conosce per niente il mondo degli umani.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/wzDzeGiauWJVTce9L0AiEf4OPYt.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T17:31:37.000Z",
-      "end": "2025-10-30T19:14:53.000Z",
-      "title": "Piccoli brividi (2015)",
-      "description": "Stine tiene a bada i mostri che lo perseguitano imprigionandoli nelle pagine dei suoi libri. Questi saranno però liberati da Zach, nuovo vicino di casa innamorato di Hannah, figlia di Stine. I tre, insieme al migliore amico di Zach, dovranno cercare di rinchiudere nuovamente le scatenate bestie nelle pagine prima che distruggano la città.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/6mPe4rBHzDMal2oL6hVgOBkaHz9.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T19:15:29.000Z",
-      "end": "2025-10-30T20:44:47.000Z",
-      "title": "Hotel Transylvania 2 (2015)",
-      "description": "Dopo aver finalmente aperto le porte dell'Hotel Transylvania agli esseri umani, Dracula comincia a temere che il nipote Dennis stia perdendo le proprie qualità di vampiro e contatta gli amici del giovane per spingerlo a frequentare un corso per diventare un mostro perfetto, ma i piani non vanno esattamente come previsto.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/kFPWoBFBkVi3YDG8MyOOTrwGxPF.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T20:45:23.000Z",
-      "end": "2025-10-30T22:30:10.000Z",
-      "title": "Ghostbusters (Acchiappafantasmi) (1984)",
-      "description": "Peter, Raymond ed Egon sono stati cacciati dall'università, ma il loro sodalizio contro i fantasmi che popolano New York funziona a meraviglia. E' una lotta dura, ma i nostri eroi non temono nulla, neppure il maligno Gozer il Gozeriano.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/zh223GP6noPG7cuRX2FcYcuuTNf.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-30T22:30:44.000Z",
-      "end": "2025-10-31T00:42:14.000Z",
-      "title": "Van Helsing (2004)",
-      "description": "Il cacciatore di vampiri Van Helsing giunge in una remota regione dell'Europa orientale per sconfiggere il Conte Dracula, l'Uomo Lupo e la creatura di Frankenstein.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/d72ROyJqXQtw2OupW0l15eicRAF.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T00:42:48.000Z",
-      "end": "2025-10-31T02:21:59.000Z",
-      "title": "La vedova Winchester (2018)",
-      "description": "Nascosta nella propria enorme villa californiana, l'eccentrica ereditiera Sarah Winchester crede di essere perseguitata dalle anime delle persone uccise dal fucile grazie al quale la sua famiglia si è arricchita.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/d4wnMDSrQonB9iArMzd90WqaoJ4.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T02:22:35.000Z",
-      "end": "2025-10-31T03:53:49.000Z",
-      "title": "Nightmare - Dal profondo della notte (1984)",
-      "description": "Cinque amici adolescenti sognano un uomo dal volto sfigurato, con una voce spaventosa e un guanto da giardiniere con dei coltelli al posto delle dita. Si rendono conto che quello che accade nei loro sogni accade davvero, e che l'unico modo per sopravvivere è non addormentarsi.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/nzSjTiecdosBfwMGAdpt9CxltCI.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T03:54:25.000Z",
-      "end": "2025-10-31T05:25:56.000Z",
-      "title": "Hotel Transylvania (2012)",
-      "description": "Per festeggiare i 118 anni della figlia Mavis, Dracula organizza una festa nel castello che ospita solo mostri ed è bandito agli umani, considerati un pericolo. Un simpatico ventenne giunge per caso al castello e Dracula è costretto a dissimularne l'aspetto umano e a far di tutto affinché il ragazzo stia lontano da Mavis, che non conosce per niente il mondo degli umani.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/wzDzeGiauWJVTce9L0AiEf4OPYt.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T05:26:32.000Z",
-      "end": "2025-10-31T07:14:09.000Z",
-      "title": "Ghostbusters II (Acchiappafantasmi II) (1989)",
-      "description": "Dopo quattro anni, gli acchiappafantasmi devono tornare all'opera per riuscire a combattere una presenza malefica che sta infestando le viscere di New York.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/hZXN43WYyEpEa9H1CTXetBSDJCp.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T07:14:45.000Z",
-      "end": "2025-10-31T08:45:02.000Z",
-      "title": "Monster House (2006)",
-      "description": "Due bambini alla vigilia di Halloween incontrano per un caso una gentile coetanea e, cercando di affascinarla, si ritrovano nella casa di fronte alla strada, che si dice essere 'magica'.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/aiRESjcG3Vi3W9WAGgMJSjGX1HQ.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T08:45:38.000Z",
-      "end": "2025-10-31T10:29:27.000Z",
-      "title": "Le streghe (2020)",
-      "description": "Un giovane orfano, alla fine del 1967, va a vivere con la sua adorata nonna a Demopolis, una cittadina rurale dell'Alabama. Il ragazzo e sua nonna si imbattono in alcune streghe diaboliche.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/8rIoyM6zYXJNjzGseT3MRusMPWl.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T10:30:03.000Z",
-      "end": "2025-10-31T11:49:35.000Z",
-      "title": "Vampiretto (2017)",
-      "description": "Rudolph è un giovane vampiro che vive in Transilvania, apparentemente indisturbato, ma il perfido Rookery, cacciatore di vampiri, è in agguato e riesce a fare prigioniera quasi tutta la sua famiglia.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/ikmVp2UQnsVLdMddQpmYvu4g0BR.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T11:50:11.000Z",
-      "end": "2025-10-31T13:23:05.000Z",
-      "title": "Monster Family (2017)",
-      "description": "Durante una festa in maschera i Wishbone restano vittime di un incantesimo lanciato dalla perfida strega Baba Yaga, che li trasforma nei mostri rappresentati dai loro costumi.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/t5ZTLzn0ASdOhY3S8o3vzj57Myg.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T13:23:41.000Z",
-      "end": "2025-10-31T15:03:36.000Z",
-      "title": "La famiglia Addams (1991)",
-      "description": "Lo zio Fester, da lungo tempo scomparso, fa ritorno a casa in circostanze sospette. La piccola Mercoledì si accorge subito che c'è qualcosa che non quadra.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/8Yku72WYuC1E5GFv2l6y1oZAvbI.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T15:04:12.000Z",
-      "end": "2025-10-31T16:41:35.000Z",
-      "title": "Hotel Transylvania 3 - Una vacanza mostruosa (2018)",
-      "description": "La famiglia di mostri più famosa del pianeta parte per una crociera di lusso. La vacanza si trasforma presto in un incubo quando Mavis scope che Drac si è innamorato del misterioso capitano della nave, una donna che nasconde un pericoloso segreto.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/m03jul0YdVEOFXEQVUv6pOVQYGL.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T16:42:11.000Z",
-      "end": "2025-10-31T17:59:22.000Z",
-      "title": "La sposa cadavere (2005)",
-      "description": "Nell'Europa dell'Ottocento, un giovane e talentuoso pianista infila, senza saperlo, un anello di fidanzamento al dito di una donna morta. Quando questa si risveglia, conduce Victor nel mondo dell'aldilà.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/iDcUg57jxtDmeZv0zHowNDQHkCJ.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T17:59:58.000Z",
-      "end": "2025-10-31T19:34:10.000Z",
-      "title": "La famiglia Addams 2 (1992)",
-      "description": "Dopo la nascita del terzo figlio, Morticia e Gomez assumono una tata ambiziosa e malefica. La donna entra a far parte della famiglia con un piano sinistro: sposare lo zio Fester per poi ucciderlo e prendersi la sua eredità.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/vfTVWSOzHw6b1RCOMsbkLOFQhm5.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T19:34:46.000Z",
-      "end": "2025-10-31T21:14:54.000Z",
-      "title": "Casper (1995)",
-      "description": "Nel Maine c'è un castello in cui è custodito un tesoro. Quando l'intrigante Carrigan lo acquista decide di sbarazzarsi delle ingombranti presenze. Contatta allora un cacciatore di fantasmi, il dottor Harvey.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/7jRnqRTiE1WmPWN0zmMlF7s52Ap.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T21:15:30.000Z",
-      "end": "2025-10-31T22:50:20.000Z",
-      "title": "Sono solo fantasmi (2019)",
-      "description": "Alla morte del padre, tre bizzarri fratellastri decidono di aprire una agenzia di acchiappafantasmi per sfruttare la credulità popolare dei napoletani, sino a che non si rendono conto che gli spiriti esistono davvero.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/A83MEXSrcgE20P9JVuZuQ0tUt7i.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-10-31T22:50:56.000Z",
-      "end": "2025-11-01T01:03:50.000Z",
-      "title": "La nona porta (1999)",
-      "description": "Dean Corso, esperto di libri rari, viene incaricato dal ricco collezionista Boris Balkan di verificare se un prezioso volume dedicato all'esoterismo, datato 1666 e ora parte della sua collezione, sia autentico.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/fw0tNttaJkwZBJA35AqgCPNGE6b.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T01:04:24.000Z",
-      "end": "2025-11-01T03:00:12.000Z",
-      "title": "Sweeney Todd - Il diabolico barbiere di Fleet Street (2007)",
-      "description": "Il barbiere Sweeney Todd viene accusato e messo in prigione per un crimine non commesso. Una volta uscito, decide di vendicarsi con l'aiuto di una complice.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/cIrWJ0AdlZMjdcXV0Abh9LfKT46.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T03:00:48.000Z",
-      "end": "2025-11-01T05:04:44.000Z",
-      "title": "Ghostbusters - Legacy (2021)",
-      "description": "Dopo essersi trasferiti in una piccola città, una madre e i suoi due figli iniziano a scoprire la loro connessione con gli Acchiappafantasmi originali e la segreta eredità lasciata dal nonno.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/ihGn6vzoKDLPE7zb8oQqDbVi2qC.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T05:05:20.000Z",
-      "end": "2025-11-01T06:38:55.000Z",
-      "title": "Pay the Ghost (2015)",
-      "description": "In seguito alla scomparsa del figlio, Mike è ossessionato da visioni terrificanti. Insieme alla moglie comincia a indagare fino a scoprire l'esistenza di un feroce fantasma che rapisce i bambini.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/wDoK81M5L0oMlMNHtLtPdBRtKA8.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T06:39:31.000Z",
-      "end": "2025-11-01T08:52:25.000Z",
-      "title": "La nona porta (1999)",
-      "description": "Dean Corso, esperto di libri rari, viene incaricato dal ricco collezionista Boris Balkan di verificare se un prezioso volume dedicato all'esoterismo, datato 1666 e ora parte della sua collezione, sia autentico.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/fw0tNttaJkwZBJA35AqgCPNGE6b.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T08:53:01.000Z",
-      "end": "2025-11-01T10:37:31.000Z",
-      "title": "Coco (2017)",
-      "description": "Miguel, un giovanissimo aspirante musicista, intraprende un viaggio verso la terra dei propri antenati per scoprire i misteri nascosti dietro i racconti e le tradizioni della famiglia.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/bnkf3C2ZMF6i7MLOemWqEHDMqfh.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T10:38:07.000Z",
-      "end": "2025-11-01T12:21:56.000Z",
-      "title": "Le streghe (2020)",
-      "description": "Un giovane orfano, alla fine del 1967, va a vivere con la sua adorata nonna a Demopolis, una cittadina rurale dell'Alabama. Il ragazzo e sua nonna si imbattono in alcune streghe diaboliche.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/8rIoyM6zYXJNjzGseT3MRusMPWl.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T12:22:32.000Z",
-      "end": "2025-11-01T14:02:27.000Z",
-      "title": "La famiglia Addams (1991)",
-      "description": "Lo zio Fester, da lungo tempo scomparso, fa ritorno a casa in circostanze sospette. La piccola Mercoledì si accorge subito che c'è qualcosa che non quadra.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/8Yku72WYuC1E5GFv2l6y1oZAvbI.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T14:03:03.000Z",
-      "end": "2025-11-01T15:40:26.000Z",
-      "title": "Hotel Transylvania 3 - Una vacanza mostruosa (2018)",
-      "description": "La famiglia di mostri più famosa del pianeta parte per una crociera di lusso. La vacanza si trasforma presto in un incubo quando Mavis scope che Drac si è innamorato del misterioso capitano della nave, una donna che nasconde un pericoloso segreto.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/m03jul0YdVEOFXEQVUv6pOVQYGL.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T15:41:02.000Z",
-      "end": "2025-11-01T17:08:33.000Z",
-      "title": "Hotel Transylvania - Uno scambio mostruoso (2022)",
-      "description": "La nuova misteriosa invenzione di Van Helsing trasforma Drac e i suoi amici in umani e Johnny in un mostro. Con i loro nuovi corpi, Drac e il branco devono trovare un modo per tornare indietro prima che le loro trasformazioni diventino permanenti.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/ep1urICLqtwwV1sTPHP9WXV4Uto.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T17:09:09.000Z",
-      "end": "2025-11-01T18:36:05.000Z",
-      "title": "Frankenweenie (2012)",
-      "description": "Un ragazzo usa la scienza per riportare in vita il proprio amato compagno, il cane Sparky, ma le conseguenze del suo gesto sono imprevedibili.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/yfTZ2MSRWc06cBrFOsAF4Lebi4.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T18:36:41.000Z",
-      "end": "2025-11-01T20:39:39.000Z",
-      "title": "La casa dei fantasmi (2023) 4K",
-      "description": "Una donna e suo figlio si trasferiscono in una villa abbandonata per trasformarla in un albergo, ma scoprono che è infestata da fantasmi. Assumono così un gruppo di cosiddetti esperti spirituali per liberare la loro casa da presenze maligne.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/mzlZAMjE2yk2sW3f9HTeBM3B3jw.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T20:40:15.000Z",
-      "end": "2025-11-01T22:08:11.000Z",
-      "title": "La casa dei fantasmi (2003)",
-      "description": "Un agente immobiliare è contattato da un uomo che gli propone di vedere un misterioso maniero che si rivela non essere affatto un investimento facile.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/bz7bdPMzBQcWTsyiT7LrLm0S4rL.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-01T22:08:47.000Z",
-      "end": "2025-11-01T23:40:53.000Z",
+      "start": "2025-11-01T06:29:19.000Z",
+      "end": "2025-11-01T08:01:25.000Z",
       "title": "Beetlejuice - Spiritello porcello (1988)",
       "description": "Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.",
       "category": "Film",
@@ -384,260 +24,8 @@
       "channel": "premiere-cinema"
     },
     {
-      "start": "2025-11-01T23:41:29.000Z",
-      "end": "2025-11-02T01:26:59.000Z",
-      "title": "Il mistero di Sleepy Hollow (1999)",
-      "description": "Il giovane agente di polizia Ichabod Crane viene inviato nel nebbioso e sperduto villaggio di Sleepy Hollow per investigare su una serie di omicidi commessi dal leggendario Cavaliere senza testa.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/oeyiYvEsxWiWV2NXlAM7dMjRbxw.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T01:27:35.000Z",
-      "end": "2025-11-02T03:42:17.000Z",
-      "title": "It (2017)",
-      "description": "Un gruppo di adolescenti scopre l'esistenza di un'entità malvagia che si nutre delle paure degli esseri umani e che ha le sembianze di un pagliaccio di nome Pennywise. L'essere, che dimora nelle profondità della rete fognaria, è solo uno dei volti della creatura millenaria nota come It",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/A7TCkbeRAiD9I8UWBvavMGWxBpb.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T03:42:53.000Z",
-      "end": "2025-11-02T05:17:43.000Z",
-      "title": "Sono solo fantasmi (2019)",
-      "description": "Alla morte del padre, tre bizzarri fratellastri decidono di aprire una agenzia di acchiappafantasmi per sfruttare la credulità popolare dei napoletani, sino a che non si rendono conto che gli spiriti esistono davvero.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/A83MEXSrcgE20P9JVuZuQ0tUt7i.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T05:18:19.000Z",
-      "end": "2025-11-02T06:58:55.000Z",
-      "title": "Coraline e la porta magica (2009)",
-      "description": "Coraline con i genitori si trasferisce in una nuova casa. Un giorno si accorge di una porta che non aveva mai visto e che conduce ad un universo parallelo.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/jGb86jx8M04vMjlxQQITmqlCKYg.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T06:59:31.000Z",
-      "end": "2025-11-02T08:16:10.000Z",
-      "title": "Nightmare Before Christmas (1993)",
-      "description": "Jack è il re della città di Halloween che ogni anno organizza l'omonima festa. Quando casualmente scopre il Natale, decide di portarlo ai suoi concittadini, con esiti del tutto imprevisti.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/yjJlS0gxWJ7gDe9lX8iL3tMhXN8.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T08:16:46.000Z",
-      "end": "2025-11-02T09:44:42.000Z",
-      "title": "La casa dei fantasmi (2003)",
-      "description": "Un agente immobiliare è contattato da un uomo che gli propone di vedere un misterioso maniero che si rivela non essere affatto un investimento facile.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/bz7bdPMzBQcWTsyiT7LrLm0S4rL.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T09:45:18.000Z",
-      "end": "2025-11-02T11:30:25.000Z",
-      "title": "Halloween Kills (2021)",
-      "description": "Laurie Strode lascia il mostro mascherato Michael Myers rinchiuso nel suo seminterrato, convinta di essersi finalmente liberata di lui. Ma quando Michael riesce a liberarsi dalla trappola di Laurie, la sua carneficina continua.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/zMpSkS9MrIIkEg0p8e5QQMzSKbd.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T11:31:01.000Z",
-      "end": "2025-11-02T13:03:07.000Z",
-      "title": "Beetlejuice - Spiritello porcello (1988)",
-      "description": "Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/mzkCdaWQggqM5SQ6KfMh01SpGPa.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T13:03:43.000Z",
-      "end": "2025-11-02T14:31:39.000Z",
-      "title": "La casa dei fantasmi (2003)",
-      "description": "Un agente immobiliare è contattato da un uomo che gli propone di vedere un misterioso maniero che si rivela non essere affatto un investimento facile.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/bz7bdPMzBQcWTsyiT7LrLm0S4rL.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T14:32:15.000Z",
-      "end": "2025-11-02T16:05:25.000Z",
-      "title": "La famiglia Addams 2 (2021)",
-      "description": "Con l'obiettivo in mente di diventare una famiglia più unita, Gomez, Morticia e il resto del gruppo Addams si imbarcano in un avventuroso viaggio su un'orribile e gigantesca roulotte.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/9e6wp707XMouPG939o2fHunXXJR.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T16:06:01.000Z",
-      "end": "2025-11-02T17:22:40.000Z",
-      "title": "Nightmare Before Christmas (1993)",
-      "description": "Jack è il re della città di Halloween che ogni anno organizza l'omonima festa. Quando casualmente scopre il Natale, decide di portarlo ai suoi concittadini, con esiti del tutto imprevisti.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/yjJlS0gxWJ7gDe9lX8iL3tMhXN8.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T17:23:16.000Z",
-      "end": "2025-11-02T18:52:43.000Z",
-      "title": "Piccoli Brividi 2 - I fantasmi di Halloween (2018)",
-      "description": "I migliori amici Sonny e Sam incrociano Slappy, che ad Halloween risveglia terribili demoni. Mentre la città viene invasa da mostri, i ragazzi uniscono le forze per sventare il piano malvagio.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/h5BvesqaxL7V3vl1CmaR8waGyiM.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T18:53:19.000Z",
-      "end": "2025-11-02T20:37:08.000Z",
-      "title": "Le streghe (2020)",
-      "description": "Un giovane orfano, alla fine del 1967, va a vivere con la sua adorata nonna a Demopolis, una cittadina rurale dell'Alabama. Il ragazzo e sua nonna si imbattono in alcune streghe diaboliche.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/8rIoyM6zYXJNjzGseT3MRusMPWl.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T20:37:44.000Z",
-      "end": "2025-11-02T22:22:23.000Z",
-      "title": "Beetlejuice Beetlejuice (2024)",
-      "description": "Lo spiritello porcello è tornato per un esilarante e irriverente sequel. In questo capitolo, il fantasma reclutato per aiutare a infestare una casa condividerà un'avventura con la figlia di Lydia.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/2rtU9sQcBmj0jiC04rvKSRUZ4p1.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-02T22:22:59.000Z",
-      "end": "2025-11-03T00:06:37.000Z",
-      "title": "Hubie Halloween (2020)",
-      "description": "I vicini lo deridono mentre la polizia lo ignora, ma Hubie sospetta che Halloween a Salem sarà davvero spaventoso quest'anno.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/sZHCqJlCO6a6fWxgz9MQv8Sz2TN.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T00:07:13.000Z",
-      "end": "2025-11-03T01:37:30.000Z",
-      "title": "Monster House (2006)",
-      "description": "Due bambini alla vigilia di Halloween incontrano per un caso una gentile coetanea e, cercando di affascinarla, si ritrovano nella casa di fronte alla strada, che si dice essere 'magica'.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/aiRESjcG3Vi3W9WAGgMJSjGX1HQ.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T01:38:06.000Z",
-      "end": "2025-11-03T03:23:36.000Z",
-      "title": "Il mistero di Sleepy Hollow (1999)",
-      "description": "Il giovane agente di polizia Ichabod Crane viene inviato nel nebbioso e sperduto villaggio di Sleepy Hollow per investigare su una serie di omicidi commessi dal leggendario Cavaliere senza testa.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/oeyiYvEsxWiWV2NXlAM7dMjRbxw.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T03:24:12.000Z",
-      "end": "2025-11-03T05:03:17.000Z",
-      "title": "Ghosthunters – Gli acchiappafantasmi (2015)",
-      "description": "Il piccolo e solitario Tom scopre nella sua cantina un piccolo fantasma verde e gelatinoso, che gli racconta di essere dovuto fuggire dal maniero dove abitava a causa dell'arrivo di uno spirito malvagio. Tom decide di chiedere aiuto alla scontrosa Hetty, un'acchiappafantasmi appena licenziata dalla sua organizzazione segreta, con la quale riusciranno a sconfiggere il terribile nemico",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/32QlmroPigEH88WmXlCnnVq5Po0.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T05:03:53.000Z",
-      "end": "2025-11-03T06:47:31.000Z",
-      "title": "Hubie Halloween (2020)",
-      "description": "I vicini lo deridono mentre la polizia lo ignora, ma Hubie sospetta che Halloween a Salem sarà davvero spaventoso quest'anno.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/sZHCqJlCO6a6fWxgz9MQv8Sz2TN.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T06:48:07.000Z",
-      "end": "2025-11-03T08:20:13.000Z",
-      "title": "Beetlejuice - Spiritello porcello (1988)",
-      "description": "Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/mzkCdaWQggqM5SQ6KfMh01SpGPa.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T08:20:49.000Z",
-      "end": "2025-11-03T09:52:03.000Z",
-      "title": "Nightmare - Dal profondo della notte (1984)",
-      "description": "Cinque amici adolescenti sognano un uomo dal volto sfigurato, con una voce spaventosa e un guanto da giardiniere con dei coltelli al posto delle dita. Si rendono conto che quello che accade nei loro sogni accade davvero, e che l'unico modo per sopravvivere è non addormentarsi.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/nzSjTiecdosBfwMGAdpt9CxltCI.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T09:52:39.000Z",
-      "end": "2025-11-03T11:20:10.000Z",
-      "title": "Hotel Transylvania - Uno scambio mostruoso (2022)",
-      "description": "La nuova misteriosa invenzione di Van Helsing trasforma Drac e i suoi amici in umani e Johnny in un mostro. Con i loro nuovi corpi, Drac e il branco devono trovare un modo per tornare indietro prima che le loro trasformazioni diventino permanenti.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/ep1urICLqtwwV1sTPHP9WXV4Uto.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T11:20:46.000Z",
-      "end": "2025-11-03T12:52:17.000Z",
-      "title": "Hotel Transylvania (2012)",
-      "description": "Per festeggiare i 118 anni della figlia Mavis, Dracula organizza una festa nel castello che ospita solo mostri ed è bandito agli umani, considerati un pericolo. Un simpatico ventenne giunge per caso al castello e Dracula è costretto a dissimularne l'aspetto umano e a far di tutto affinché il ragazzo stia lontano da Mavis, che non conosce per niente il mondo degli umani.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/wzDzeGiauWJVTce9L0AiEf4OPYt.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T12:52:53.000Z",
-      "end": "2025-11-03T14:12:25.000Z",
-      "title": "Vampiretto (2017)",
-      "description": "Rudolph è un giovane vampiro che vive in Transilvania, apparentemente indisturbato, ma il perfido Rookery, cacciatore di vampiri, è in agguato e riesce a fare prigioniera quasi tutta la sua famiglia.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/ikmVp2UQnsVLdMddQpmYvu4g0BR.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T14:13:01.000Z",
-      "end": "2025-11-03T15:42:19.000Z",
-      "title": "Hotel Transylvania 2 (2015)",
-      "description": "Dopo aver finalmente aperto le porte dell'Hotel Transylvania agli esseri umani, Dracula comincia a temere che il nipote Dennis stia perdendo le proprie qualità di vampiro e contatta gli amici del giovane per spingerlo a frequentare un corso per diventare un mostro perfetto, ma i piani non vanno esattamente come previsto.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/kFPWoBFBkVi3YDG8MyOOTrwGxPF.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T15:42:55.000Z",
-      "end": "2025-11-03T17:23:31.000Z",
-      "title": "Coraline e la porta magica (2009)",
-      "description": "Coraline con i genitori si trasferisce in una nuova casa. Un giorno si accorge di una porta che non aveva mai visto e che conduce ad un universo parallelo.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/jGb86jx8M04vMjlxQQITmqlCKYg.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T17:24:07.000Z",
-      "end": "2025-11-03T18:52:14.000Z",
-      "title": "Un Fantasma Per Amico (2013)",
-      "description": "Un fantasmino annoiato e triste infesta la soffitta del castello di Eulenstein, ormai divenuto un museo. L'incontro con un piccolo visitatore, Karl, un bambino impacciato e spesso deriso dai compagni, cambia la vita di entrambi.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/iqqMsZ5lzgEUsrFJYYTxKWpTmbY.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T18:52:50.000Z",
-      "end": "2025-11-03T20:10:01.000Z",
-      "title": "La sposa cadavere (2005)",
-      "description": "Nell'Europa dell'Ottocento, un giovane e talentuoso pianista infila, senza saperlo, un anello di fidanzamento al dito di una donna morta. Quando questa si risveglia, conduce Victor nel mondo dell'aldilà.",
-      "category": "Film",
-      "poster": "https://image.tmdb.org/t/p/original/iDcUg57jxtDmeZv0zHowNDQHkCJ.jpg",
-      "channel": "premiere-cinema"
-    },
-    {
-      "start": "2025-11-03T20:10:37.000Z",
-      "end": "2025-11-03T22:50:47.000Z",
+      "start": "2025-11-01T08:02:01.000Z",
+      "end": "2025-11-01T10:42:11.000Z",
       "title": "Wicked (2024)",
       "description": "Un'improbabile amicizia nasce tra Elphaba e Glinda, due streghe in conflitto nella magica terra di Oz. Elphaba è stata ingiustamente etichettata come strega cattiva mentre cerca di smascherare il mago corrotto e fraudolento che governa la terra.",
       "category": "Film",
@@ -645,12 +33,363 @@
       "channel": "premiere-cinema"
     },
     {
-      "start": "2025-11-03T22:51:23.000Z",
-      "end": "2025-11-04T00:08:02.000Z",
+      "start": "2025-11-01T10:42:47.000Z",
+      "end": "2025-11-01T12:26:25.000Z",
+      "title": "Hocus Pocus 2 (2022)",
+      "description": "Dopo 29 anni, la candela dalla fiamma nera è stata accesa riportando in vita le sorelle del XVII secolo, che ora cercano vendetta. Tocca a tre liceali impedire alle vendicative streghe di scatenare di nuovo scompiglio su Salem.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/ml8YBTJq7UkALfI022FWscCQuQW.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T12:27:01.000Z",
+      "end": "2025-11-01T14:10:39.000Z",
+      "title": "Hubie Halloween (2020)",
+      "description": "I vicini lo deridono mentre la polizia lo ignora, ma Hubie sospetta che Halloween a Salem sarà davvero spaventoso quest'anno.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/sZHCqJlCO6a6fWxgz9MQv8Sz2TN.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T14:11:15.000Z",
+      "end": "2025-11-01T15:55:04.000Z",
+      "title": "Le streghe (2020)",
+      "description": "Un giovane orfano, alla fine del 1967, va a vivere con la sua adorata nonna a Demopolis, una cittadina rurale dell'Alabama. Il ragazzo e sua nonna si imbattono in alcune streghe diaboliche.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/8rIoyM6zYXJNjzGseT3MRusMPWl.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T15:55:40.000Z",
+      "end": "2025-11-01T17:35:35.000Z",
+      "title": "La famiglia Addams (1991)",
+      "description": "Lo zio Fester, da lungo tempo scomparso, fa ritorno a casa in circostanze sospette. La piccola Mercoledì si accorge subito che c'è qualcosa che non quadra.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/8Yku72WYuC1E5GFv2l6y1oZAvbI.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T17:36:11.000Z",
+      "end": "2025-11-01T18:55:43.000Z",
+      "title": "Vampiretto (2017)",
+      "description": "Rudolph è un giovane vampiro che vive in Transilvania, apparentemente indisturbato, ma il perfido Rookery, cacciatore di vampiri, è in agguato e riesce a fare prigioniera quasi tutta la sua famiglia.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/ikmVp2UQnsVLdMddQpmYvu4g0BR.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T18:56:19.000Z",
+      "end": "2025-11-01T20:39:35.000Z",
+      "title": "Piccoli brividi (2015)",
+      "description": "Stine tiene a bada i mostri che lo perseguitano imprigionandoli nelle pagine dei suoi libri. Questi saranno però liberati da Zach, nuovo vicino di casa innamorato di Hannah, figlia di Stine. I tre, insieme al migliore amico di Zach, dovranno cercare di rinchiudere nuovamente le scatenate bestie nelle pagine prima che distruggano la città.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/6mPe4rBHzDMal2oL6hVgOBkaHz9.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T20:40:11.000Z",
+      "end": "2025-11-01T22:16:19.000Z",
+      "title": "Hocus Pocus (1993)",
+      "description": "Tre streghe vissute nel XVII secolo tornano ai giorni nostri per fare fuco e fiamme, in quel di Salem nel Massachusetts, nel momento in cui i loro inquieti spiriti vengono accidentalmente evocati nella notte di Halloween.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/jfcHLLQVw9qgzLAh3e8JNl8W7a7.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-01T22:16:55.000Z",
+      "end": "2025-11-02T00:02:16.000Z",
+      "title": "Il mistero della casa del tempo (2018)",
+      "description": "Lewis, dieci anni, va a vivere con lo zio in una vecchia casa. Presto il ragazzino scopre che il parente e la sua esuberante vicina sono maghi e risveglia accidentalmente i morti della città.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/tQvvRReWhrXnj28s4AIp2PblByg.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T00:02:50.000Z",
+      "end": "2025-11-02T01:36:25.000Z",
+      "title": "Pay the Ghost (2015)",
+      "description": "In seguito alla scomparsa del figlio, Mike è ossessionato da visioni terrificanti. Insieme alla moglie comincia a indagare fino a scoprire l'esistenza di un feroce fantasma che rapisce i bambini.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/wDoK81M5L0oMlMNHtLtPdBRtKA8.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T01:36:59.000Z",
+      "end": "2025-11-02T03:51:41.000Z",
+      "title": "It (2017)",
+      "description": "Un gruppo di adolescenti scopre l'esistenza di un'entità malvagia che si nutre delle paure degli esseri umani e che ha le sembianze di un pagliaccio di nome Pennywise. L'essere, che dimora nelle profondità della rete fognaria, è solo uno dei volti della creatura millenaria nota come It",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/A7TCkbeRAiD9I8UWBvavMGWxBpb.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T03:52:17.000Z",
+      "end": "2025-11-02T05:38:04.000Z",
+      "title": "Halloween (2018)",
+      "description": "Sono passati 40 anni da quando Laurie Strode è sopravvissuta agli assalti dell'assassino Michael Myers durante la notte di Halloween. Quando questi fugge dal carcere, la donna affronta una terrificante resa dei conti.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/czRXzKy5YcvoVhRUb8RQsFHUDi1.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T05:38:40.000Z",
+      "end": "2025-11-02T07:12:15.000Z",
+      "title": "Pay the Ghost (2015)",
+      "description": "In seguito alla scomparsa del figlio, Mike è ossessionato da visioni terrificanti. Insieme alla moglie comincia a indagare fino a scoprire l'esistenza di un feroce fantasma che rapisce i bambini.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/wDoK81M5L0oMlMNHtLtPdBRtKA8.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T07:12:51.000Z",
+      "end": "2025-11-02T08:52:59.000Z",
+      "title": "Casper (1995)",
+      "description": "Nel Maine c'è un castello in cui è custodito un tesoro. Quando l'intrigante Carrigan lo acquista decide di sbarazzarsi delle ingombranti presenze. Contatta allora un cacciatore di fantasmi, il dottor Harvey.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/7jRnqRTiE1WmPWN0zmMlF7s52Ap.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T08:53:35.000Z",
+      "end": "2025-11-02T10:10:46.000Z",
+      "title": "La sposa cadavere (2005)",
+      "description": "Nell'Europa dell'Ottocento, un giovane e talentuoso pianista infila, senza saperlo, un anello di fidanzamento al dito di una donna morta. Quando questa si risveglia, conduce Victor nel mondo dell'aldilà.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/iDcUg57jxtDmeZv0zHowNDQHkCJ.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T10:11:22.000Z",
+      "end": "2025-11-02T11:38:53.000Z",
+      "title": "Hotel Transylvania - Uno scambio mostruoso (2022)",
+      "description": "La nuova misteriosa invenzione di Van Helsing trasforma Drac e i suoi amici in umani e Johnny in un mostro. Con i loro nuovi corpi, Drac e il branco devono trovare un modo per tornare indietro prima che le loro trasformazioni diventino permanenti.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/ep1urICLqtwwV1sTPHP9WXV4Uto.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T11:39:29.000Z",
+      "end": "2025-11-02T13:11:00.000Z",
+      "title": "Hotel Transylvania (2012)",
+      "description": "Per festeggiare i 118 anni della figlia Mavis, Dracula organizza una festa nel castello che ospita solo mostri ed è bandito agli umani, considerati un pericolo. Un simpatico ventenne giunge per caso al castello e Dracula è costretto a dissimularne l'aspetto umano e a far di tutto affinché il ragazzo stia lontano da Mavis, che non conosce per niente il mondo degli umani.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/wzDzeGiauWJVTce9L0AiEf4OPYt.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T13:11:36.000Z",
+      "end": "2025-11-02T14:50:41.000Z",
+      "title": "Ghosthunters – Gli acchiappafantasmi (2015)",
+      "description": "Il piccolo e solitario Tom scopre nella sua cantina un piccolo fantasma verde e gelatinoso, che gli racconta di essere dovuto fuggire dal maniero dove abitava a causa dell'arrivo di uno spirito malvagio. Tom decide di chiedere aiuto alla scontrosa Hetty, un'acchiappafantasmi appena licenziata dalla sua organizzazione segreta, con la quale riusciranno a sconfiggere il terribile nemico",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/32QlmroPigEH88WmXlCnnVq5Po0.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T14:51:17.000Z",
+      "end": "2025-11-02T16:19:13.000Z",
+      "title": "La casa dei fantasmi (2003)",
+      "description": "Un agente immobiliare è contattato da un uomo che gli propone di vedere un misterioso maniero che si rivela non essere affatto un investimento facile.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/bz7bdPMzBQcWTsyiT7LrLm0S4rL.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T16:19:49.000Z",
+      "end": "2025-11-02T18:03:27.000Z",
+      "title": "Hocus Pocus 2 (2022)",
+      "description": "Dopo 29 anni, la candela dalla fiamma nera è stata accesa riportando in vita le sorelle del XVII secolo, che ora cercano vendetta. Tocca a tre liceali impedire alle vendicative streghe di scatenare di nuovo scompiglio su Salem.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/ml8YBTJq7UkALfI022FWscCQuQW.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T18:04:03.000Z",
+      "end": "2025-11-02T19:33:30.000Z",
+      "title": "Piccoli Brividi 2 - I fantasmi di Halloween (2018)",
+      "description": "I migliori amici Sonny e Sam incrociano Slappy, che ad Halloween risveglia terribili demoni. Mentre la città viene invasa da mostri, i ragazzi uniscono le forze per sventare il piano malvagio.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/h5BvesqaxL7V3vl1CmaR8waGyiM.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T19:34:06.000Z",
+      "end": "2025-11-02T21:37:04.000Z",
+      "title": "La casa dei fantasmi (2023) 4K",
+      "description": "Una donna e suo figlio si trasferiscono in una villa abbandonata per trasformarla in un albergo, ma scoprono che è infestata da fantasmi. Assumono così un gruppo di cosiddetti esperti spirituali per liberare la loro casa da presenze maligne.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/mzlZAMjE2yk2sW3f9HTeBM3B3jw.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T21:37:40.000Z",
+      "end": "2025-11-02T23:05:36.000Z",
+      "title": "La casa dei fantasmi (2003)",
+      "description": "Un agente immobiliare è contattato da un uomo che gli propone di vedere un misterioso maniero che si rivela non essere affatto un investimento facile.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/bz7bdPMzBQcWTsyiT7LrLm0S4rL.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-02T23:06:12.000Z",
+      "end": "2025-11-03T00:45:23.000Z",
+      "title": "La vedova Winchester (2018)",
+      "description": "Nascosta nella propria enorme villa californiana, l'eccentrica ereditiera Sarah Winchester crede di essere perseguitata dalle anime delle persone uccise dal fucile grazie al quale la sua famiglia si è arricchita.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/d4wnMDSrQonB9iArMzd90WqaoJ4.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T00:45:57.000Z",
+      "end": "2025-11-03T02:39:01.000Z",
+      "title": "Dark Shadows (2012)",
+      "description": "Alla fine del Settecento, il ricco e prepotente Barnabas, figlio di una coppia di inglesi immigrati negli Stati Uniti, viene trasformato in un vampiro e seppellito. Due secoli più tardi, uscito dalla bara, si mette alla ricerca dei suoi discendenti.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/vn5LeJzhy8N4FW3FNRJrhdWiU5p.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T02:39:35.000Z",
+      "end": "2025-11-03T04:10:49.000Z",
+      "title": "Nightmare - Dal profondo della notte (1984)",
+      "description": "Cinque amici adolescenti sognano un uomo dal volto sfigurato, con una voce spaventosa e un guanto da giardiniere con dei coltelli al posto delle dita. Si rendono conto che quello che accade nei loro sogni accade davvero, e che l'unico modo per sopravvivere è non addormentarsi.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/nzSjTiecdosBfwMGAdpt9CxltCI.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T04:11:25.000Z",
+      "end": "2025-11-03T05:46:42.000Z",
+      "title": "100% lupo (2020)",
+      "description": "Freddy Lupin appartiene a un'orgogliosa famiglia di lupi mannari. Fiducioso che presto diventerà uno dei lupi mannari più temuti, Freddy è scioccato quando scopre che non è così feroce come si aspettava.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/vgXPK6pfhdwBdI6ON4uGZrF7k9l.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T05:47:18.000Z",
+      "end": "2025-11-03T07:24:41.000Z",
+      "title": "Hotel Transylvania 3 - Una vacanza mostruosa (2018)",
+      "description": "La famiglia di mostri più famosa del pianeta parte per una crociera di lusso. La vacanza si trasforma presto in un incubo quando Mavis scope che Drac si è innamorato del misterioso capitano della nave, una donna che nasconde un pericoloso segreto.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/m03jul0YdVEOFXEQVUv6pOVQYGL.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T07:25:17.000Z",
+      "end": "2025-11-03T08:55:34.000Z",
+      "title": "Monster House (2006)",
+      "description": "Due bambini alla vigilia di Halloween incontrano per un caso una gentile coetanea e, cercando di affascinarla, si ritrovano nella casa di fronte alla strada, che si dice essere 'magica'.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/aiRESjcG3Vi3W9WAGgMJSjGX1HQ.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T08:56:10.000Z",
+      "end": "2025-11-03T10:36:46.000Z",
+      "title": "Coraline e la porta magica (2009)",
+      "description": "Coraline con i genitori si trasferisce in una nuova casa. Un giorno si accorge di una porta che non aveva mai visto e che conduce ad un universo parallelo.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/jGb86jx8M04vMjlxQQITmqlCKYg.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T10:37:22.000Z",
+      "end": "2025-11-03T12:09:28.000Z",
+      "title": "Beetlejuice - Spiritello porcello (1988)",
+      "description": "Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/mzkCdaWQggqM5SQ6KfMh01SpGPa.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T12:10:04.000Z",
+      "end": "2025-11-03T13:44:54.000Z",
+      "title": "Sono solo fantasmi (2019)",
+      "description": "Alla morte del padre, tre bizzarri fratellastri decidono di aprire una agenzia di acchiappafantasmi per sfruttare la credulità popolare dei napoletani, sino a che non si rendono conto che gli spiriti esistono davvero.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/A83MEXSrcgE20P9JVuZuQ0tUt7i.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T13:45:30.000Z",
+      "end": "2025-11-03T15:25:10.000Z",
+      "title": "Casper (1995)",
+      "description": "Nel Maine c'è un castello in cui è custodito un tesoro. Quando l'intrigante Carrigan lo acquista decide di sbarazzarsi delle ingombranti presenze. Contatta allora un cacciatore di fantasmi, il dottor Harvey.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/7jRnqRTiE1WmPWN0zmMlF7s52Ap.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T15:25:46.000Z",
+      "end": "2025-11-03T17:06:22.000Z",
+      "title": "Coraline e la porta magica (2009)",
+      "description": "Coraline con i genitori si trasferisce in una nuova casa. Un giorno si accorge di una porta che non aveva mai visto e che conduce ad un universo parallelo.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/jGb86jx8M04vMjlxQQITmqlCKYg.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T17:06:58.000Z",
+      "end": "2025-11-03T18:33:54.000Z",
+      "title": "Frankenweenie (2012)",
+      "description": "Un ragazzo usa la scienza per riportare in vita il proprio amato compagno, il cane Sparky, ma le conseguenze del suo gesto sono imprevedibili.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/yfTZ2MSRWc06cBrFOsAF4Lebi4.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T18:34:30.000Z",
+      "end": "2025-11-03T19:51:41.000Z",
+      "title": "La sposa cadavere (2005)",
+      "description": "Nell'Europa dell'Ottocento, un giovane e talentuoso pianista infila, senza saperlo, un anello di fidanzamento al dito di una donna morta. Quando questa si risveglia, conduce Victor nel mondo dell'aldilà.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/iDcUg57jxtDmeZv0zHowNDQHkCJ.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T19:52:17.000Z",
+      "end": "2025-11-03T21:08:56.000Z",
       "title": "Nightmare Before Christmas (1993)",
       "description": "Jack è il re della città di Halloween che ogni anno organizza l'omonima festa. Quando casualmente scopre il Natale, decide di portarlo ai suoi concittadini, con esiti del tutto imprevisti.",
       "category": "Film",
       "poster": "https://image.tmdb.org/t/p/original/yjJlS0gxWJ7gDe9lX8iL3tMhXN8.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T21:09:32.000Z",
+      "end": "2025-11-03T22:41:38.000Z",
+      "title": "Beetlejuice - Spiritello porcello (1988)",
+      "description": "Una coppia di felici coniugi fantasmi è alle prese con una famiglia di chiassosi e petulanti snob che hanno occupato la loro casa.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/mzkCdaWQggqM5SQ6KfMh01SpGPa.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-03T22:42:14.000Z",
+      "end": "2025-11-04T00:26:53.000Z",
+      "title": "Beetlejuice Beetlejuice (2024)",
+      "description": "Lo spiritello porcello è tornato per un esilarante e irriverente sequel. In questo capitolo, il fantasma reclutato per aiutare a infestare una casa condividerà un'avventura con la figlia di Lydia.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/2rtU9sQcBmj0jiC04rvKSRUZ4p1.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-04T00:27:29.000Z",
+      "end": "2025-11-04T02:12:59.000Z",
+      "title": "Il mistero di Sleepy Hollow (1999)",
+      "description": "Il giovane agente di polizia Ichabod Crane viene inviato nel nebbioso e sperduto villaggio di Sleepy Hollow per investigare su una serie di omicidi commessi dal leggendario Cavaliere senza testa.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/oeyiYvEsxWiWV2NXlAM7dMjRbxw.jpg",
+      "channel": "premiere-cinema"
+    },
+    {
+      "start": "2025-11-04T02:13:33.000Z",
+      "end": "2025-11-04T04:09:21.000Z",
+      "title": "Sweeney Todd - Il diabolico barbiere di Fleet Street (2007)",
+      "description": "Il barbiere Sweeney Todd viene accusato e messo in prigione per un crimine non commesso. Una volta uscito, decide di vendicarsi con l'aiuto di una complice.",
+      "category": "Film",
+      "poster": "https://image.tmdb.org/t/p/original/cIrWJ0AdlZMjdcXV0Abh9LfKT46.jpg",
       "channel": "premiere-cinema"
     }
   ]
