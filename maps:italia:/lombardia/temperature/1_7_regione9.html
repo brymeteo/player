@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Meteo Lombardia - Previsioni offset</title>
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    #map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: url('https://brymeteo.github.io/tv/Grafica/cartine/meteo-regione-lombardia.png') no-repeat center center;
+      background-size: cover;
+    }
+
+      .weather-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background-color: #007BFF; /* Colore blu semi-trasparente */
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      color: white;
+      font-size: 17px;
+      text-align: center;
+    }
+
+
+      /* Sovraimpressione per la scritta Massime */
+    .header {
+      position: absolute;
+      top: 13px;
+      left: 0;
+      width: 90px;
+      background-color: #007BFF; /* Colore blu semi-trasparente */
+      color: white;
+      text-align: center;
+      padding: 3px 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+
+
+    /* Adatta i cerchi per schermi piccoli */
+    @media (max-width: 500px) {
+      .weather-container {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+      }
+    }
+
+    .low-temp {
+      background-color: #007BFF; /* Blu per temperature basse */
+    }
+
+    .medium-temp {
+      background-color: #007BFF; /* Giallo per temperature medie */
+    }
+
+    .high-temp {
+      background-color: #007BFF; /* Rosso per temperature alte */
+    }
+
+    #loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #64a7de;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #loading-spinner.show {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .loading-message {
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+
+<script src="https://brymeteo.github.io/player/maps:italia:/config.js"></script>
+
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+    <div id="loading-spinner">
+      <div class="spinner"></div>
+      <div class="loading-message">Caricamento in corso<br>Riprova tra poco</div>
+    </div>
+    <div class="header">Minime</div>
+  </div>
+
+  <script>
+    const locations = [
+      { name: "Milano", lat: 45.464, lon: 9.192, x: 24, y: 59.5 },
+      { name: "Varese", lat: 45.829, lon: 8.822, x: 14.7, y: 42.8 },
+      { name: "Mantova", lat: 45.160, lon: 10.798, x: 79.7, y: 74.3 },
+      { name: "Brescia", lat: 45.525, lon: 10.227, x: 64.3, y: 56.2 },
+      { name: "Cremona", lat: 45.136, lon: 10.028, x: 57.2, y: 68.7 },
+      { name: "Bergamo", lat: 45.698, lon: 9.669, x: 47.3, y: 48.7 },
+      { name: "Pavia",   lat: 45.184, lon: 9.162, x: 26.3, y: 75.5 },
+      { name: "Sondrio", lat: 46.169, lon: 9.869, x: 48.5, y: 27.1 },
+      { name: "Lodi",    lat: 45.314, lon: 9.503, x: 42.5, y: 63.7 },
+      { name: "Lecco",   lat: 45.853, lon: 9.390, x: 34.0, y: 35   },
+      { name: "Como",    lat: 45.810, lon: 9.087, x: 27.5, y: 45.2 },
+      { name: "Monza",   lat: 45.583, lon: 9.275, x: 37,   y: 54.2 },
+      { name: "Vestone", lat: 45.709, lon: 10.400,x: 62,   y: 41   },
+      { name: "Colico Piano", lat: 46.132, lon: 9.370, x: 33, y: 23 },
+      { name: "Grosio",  lat: 46.298, lon: 10.274,x: 63,   y: 20   },
+      { name: "Oltre il Colle", lat: 45.889, lon: 9.769, x: 48, y: 38 }
+    ];
+
+
+    /**
+     * Fetch forecast for offset days ahead at given hour (here +5 giorni alle 03:00)
+     */
+    async function fetchWeatherData(lat, lon) {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,precipitation,precipitation_probability,weathercode,windspeed_10m,winddirection_10m,relativehumidity_2m,uv_index,pressure_msl&timezone=Europe%2FRome&forecast_days=9`;
+      const data = await fetch(url).then(res => res.json());
+
+      // Calcola la data a offset di 5 giorni alle 03:00
+      const d = new Date();
+      d.setDate(d.getDate() + 0);
+      d.setHours(15, 0, 0, 0);
+      const yyyy = d.getFullYear();
+      const mm   = String(d.getMonth() + 1).padStart(2, '0');
+      const dd   = String(d.getDate()).padStart(2, '0');
+      const targetTime = `${yyyy}-${mm}-${dd}T07:00`;
+
+      // Trova l'indice nel array time che corrisponde al target
+      const timeIndex = data.hourly.time.findIndex(t => t === targetTime);
+
+      let temp = null;
+      if (timeIndex !== -1) {
+        temp = Math.round(data.hourly.temperature_2m[timeIndex]);
+      } else {
+        // Fallback: prendi la temperatura più vicina
+        const targetDate = new Date(d);
+        let closestIndex = 0;
+        let closestDiff = Infinity;
+
+        data.hourly.time.forEach((time, index) => {
+          const timeDate = new Date(time);
+          const diff = Math.abs(timeDate - targetDate);
+          if (diff < closestDiff) {
+            closestDiff = diff;
+            closestIndex = index;
+          }
+        });
+
+        temp = Math.round(data.hourly.temperature_2m[closestIndex]);
+      }
+
+      return {
+        temp: temp,
+        description: "Open-Meteo"
+      };
+    }
+
+    async function updateWeatherIcons() {
+      const map = document.getElementById('map');
+      const spinner = document.getElementById('loading-spinner');
+      map.innerHTML = '';
+
+      let spinnerTimeout;
+      spinnerTimeout = setTimeout(() => {
+        spinner.classList.add('show');
+      }, 1000);
+
+      const promises = locations.map(loc =>
+        fetchWeatherData(loc.lat, loc.lon).then(data => ({ loc, data }))
+      );
+      const results = await Promise.all(promises);
+
+      clearTimeout(spinnerTimeout);
+      spinner.classList.remove('show');
+
+      results.forEach(({ loc, data }) => {
+        const container = document.createElement('div');
+        container.className = 'weather-container';
+        container.style.left = `${loc.x}%`;
+        container.style.top  = `${loc.y}%`;
+        container.textContent = `${data.temp}°C`;
+        map.appendChild(container);
+      });
+    }
+
+    updateWeatherIcons();
+    setInterval(updateWeatherIcons, 3 * 60 * 60 * 1000);
+  </script>
+</body>
+</html>
