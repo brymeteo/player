@@ -1,3 +1,11 @@
+   <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/level-selector@latest/dist/level-selector.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clappr-pip@latest/dist/clappr-pip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/clappr/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -226,7 +234,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
         <div id="channel-info-middle">
             <div id="channel-left-info">
             
-                <div id="channel-number">121</div>
+                <div id="channel-number">307</div>
                 <div id="channel-title">Gambero Rosso HD</div>
             </div>
             <div id="hd-indicator">HD</div>
@@ -331,31 +339,15 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 
 
   <script>
-     var player = new Clappr.Player({
-            source: "https://streamcdnl1-2018f6355a15442ebb37007fa4f6c064.msvdn.net/live/S7530969/XWerenuxbSdW/chunklist.m3u8",
+    var player = new Clappr.Player({
+            source: "https://live2.eu-north-1b.cf.dmcdn.net/sec2(9SzrryZucTRD8HntuB8EqwpSZ22cJ-R2ERicijpfY1vS_KZn1bdbBQsUEre_-7B_gc7EEBl1yRdLrTN88Dh9ozCx9N8WWxWz5Sdtgrdz-Ns-g850R0HD2sCcDckp9lZz)/dm/3/x9u215s/live.mpd",
             parentId: "#player",
             width: '100%',
             height: '100vh',
             controls: false,
             autoPlay: true, // Abilita l'auto-play
-            plugins: {
-                core: [LevelSelector]
-            },
-            levelSelectorConfig: {
-                //Optional : custom labels
-                title: 'QUALITÀ VOX OS',
-                labels: {
-                    0: 'Molto Bassa 360p',
-                    1: 'Bassa 360p ',
-                    2: 'Media 480p ',
-                    3: 'Standard 520p',
-                    4: 'Medio Alta 720p',
-                    5: 'Alta 720p',
-                    6: 'Molto Alta 1080p',
-                    7: 'Super Qualità 1080p '
-                },
-            },
-        });
+           plugins: [LevelSelector, ClapprPip.PipButton, ClapprPip.PipPlugin, DashShakaPlayback],
+    });
       
  // Variabili per gestire timer e stato overlay
     var overlayCard = document.getElementById("overlay-card");
