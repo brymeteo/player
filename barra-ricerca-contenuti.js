@@ -5,13 +5,11 @@
 
 
 
-
-
  {
         titolo: "Zootropolis",
         descrizione: "T 2016 ‧ Animazione, Avventura, Famiglia, Commedia ‧ 1h 48m",
-        url: "/bry-replay/detail/film/269149.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/1TnCEV8ERTHCxRtu3eIBJlN8ZnW.jpg",
+        url: "casatv.269149-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/rXJyhLrsUIrVGL7tgvAVKsofFu0.jpg",
         lightbox: false
       },
 
@@ -23,8 +21,8 @@
     {
         titolo: "Wish",
         descrizione: "T 2023 ‧ Animazione, Famiglia, Fantasy, Avventura ‧ 1h 35m",
-        url: "/bry-replay/detail/film/1022796.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/vKGXtXkoCRWWlONmyRi6xRwwwKN.jpg",
+        url: "casatv.1022796-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/bg7FAcLTLSNR0dlq1nEbdiHaJPo.jpg",
         lightbox: false
       },
 
@@ -35,8 +33,8 @@
     {
         titolo: "Uno zoo in fuga",
         descrizione: "T 2006 ‧ Famiglia, Animazione ‧ 1h 34m",
-        url: "/bry-replay/detail/film/9904.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/cpBXffoDPrXuAXtOSpMUGwFoJok.jpg",
+        url: "casatv.9904-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/kTyXZFsOEfmxSZB6swOfoJFtjNk.jpg",
         lightbox: false
       },
 
@@ -47,8 +45,8 @@
 {
         titolo: "Soul",
         descrizione: "T 2020 ‧ Avventura, Commedia, Famiglia, Fantasy ‧ 1h 40m",
-        url: "/bry-replay/detail/film/508442.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/AcGqIA7Xns6NpK3e8zORP8iUTLa.jpg",
+        url: "casatv.508442-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/6fFLWJwtLkXipVkYaFxjiHkNnrQ.jpg",
         lightbox: false
       },
 
@@ -58,8 +56,8 @@
 {
         titolo: "Ritorno al Bosco dei 100 Acri",
         descrizione: "T 2018 ‧ Avventura, Commedia, Famiglia, Fantasy ‧ 1h 44m",
-        url: "/bry-replay/detail/film/420814.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/2wfbvtXe8pSpRGmoRwvIDa4pTpH.jpg",
+        url: "casatv.420814-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/tWLdfYiBCqFU9XtsMIH09TrV0BN.jpg",
         lightbox: false
       },
 
@@ -70,8 +68,8 @@
 {
         titolo: "Pinocchio",
         descrizione: "T 2022 ‧ Fantasy, Avventura, Famiglia ‧ 1h 45m",
-        url: "/bry-replay/detail/film/532639.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/h32gl4a3QxQWNiNaR4Fc1uvLBkV.jpg",
+        url: "casatv.532639-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/86iP2aVUA9sQpN7yw9LYp7EzC2d.jpg",
         lightbox: false
       },
 
@@ -83,8 +81,8 @@
 {
         titolo: "Onward - Oltre la magia",
         descrizione: "T 2020 ‧ Famiglia, Animazione, Avventura, Commedia, Fantasy ‧ 1h 54m",
-        url: "/bry-replay/detail/film/508439.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/33Qh1gJzxBdaBZ5MOrLZ39CZAQc.jpg",
+        url: "casatv.508439-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/e90Iv9ZnHbwLDvvNxXpiZtQEBqn.jpg",
         lightbox: false
       },
 
@@ -96,8 +94,8 @@
 {
         titolo: "Oceania",
         descrizione: "T 2016 ‧ Avventura, Commedia, Famiglia, Animazione ‧ 1h 47m",
-        url: "/bry-replay/detail/film/277834.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/aoLH8P7RTGkX11ADz0RP00ODYmi.jpg",
+        url: "casatv.277834-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/wH9fgMe0m9Cj2W0KdXTRlQstBFh.jpg",
         lightbox: false
       },
 
@@ -107,8 +105,8 @@
 {
         titolo: "Mary Poppins",
         descrizione: "T 1964 ‧ Commedia, Famiglia, Fantasy ‧ 2h 20m",
-        url: "/bry-replay/detail/film/433.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/6troxTnsZ7d9fCfrADaERWDo7Wi.jpg",
+        url: "casatv.433-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/58FpoJOrlVJ1Geug4VxOqoHvxnZ.jpg",
         lightbox: false
       },
 
@@ -118,8 +116,8 @@
 {
         titolo: "Maleficent - Signora del male",
         descrizione: "T 2019 ‧ Famiglia, Fantasy, Avventura, Azione ‧ 1h 58m",
-        url: "/bry-replay/detail/film/420809.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/icyy6A2vvGKymk4mqfCezyC4B0v.jpg",
+        url: "casatv.420809-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/fL8FV1ULKdMDd5UxagNY3jm4FHS.jpg",
         lightbox: false
       },
 
@@ -129,8 +127,8 @@
 {
         titolo: "Maleficent",
         descrizione: "T 2014 ‧ Fantasy, Avventura, Azione, Famiglia, Romance ‧ 1h 37m",
-        url: "/bry-replay/detail/film/102651.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/c2g83Ux98pi1fGAs42xUYfJHf4Q.jpg",
+        url: "casatv.102651-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/f53e93af-c21d-4b83-b7de-a3ede67af3b0/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },
 
@@ -142,8 +140,8 @@
 {
         titolo: "Luca",
         descrizione: "T 2021 ‧ Animazione, Commedia, Fantasy, Avventura, Famiglia ‧ 1h 36m",
-        url: "/bry-replay/detail/film/508943.html",
-        locandina: "https://image.tmdb.org/t/p/w1280/8tABCBpzu3mZbzMB3sRzMEHEvJi.jpg",
+        url: "casatv.508943-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/wiqOdWT643wYXSGvSGLjdQSkwpM.jpg",
         lightbox: false
       },
 
@@ -155,8 +153,8 @@
 {
         titolo: "La sirenetta",
         descrizione: "T 1989 ‧ Animazione, Famiglia, Fantasy ‧ 1h 22m",
-        url: "/bry-replay/detail/film/10144.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/lSrnMhK2ZHhSkOOxsQfibrapJhQ.jpg",
+        url: "casatv.10144-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/wTnrftFZgJ9PLYsbRmiswx5USkH.jpg",
         lightbox: false
       },
 
@@ -166,8 +164,8 @@
 {
         titolo: "La principessa e il ranocchio",
         descrizione: "T 2009 ‧ Animazione, Romance, Fantasy, Famiglia ‧ 1h 37m",
-        url: "/bry-replay/detail/film/10198.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/yz0MyuQQZsihsZJkpZ5xCoLeGwZ.jpg",
+        url: "casatv.10198-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/bCzzv6SiH9DeFB1jd9fL0TRMnHy.jpg",
         lightbox: false
       },
 
@@ -178,8 +176,8 @@
 {
         titolo: "La bella e la bestia",
         descrizione: "T 2017 ‧ Famiglia, Fantasy, Romance ‧ 2h 9m",
-        url: "/bry-replay/detail/film/321612.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/ysEgMEWgdJYRRgYFBJOWZM2Rbug.jpg",
+        url: "casatv.321612-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/d46ac024-fff2-45d9-b819-d9ca0fcb931c/scale?format=webp&width=1800",
         lightbox: false
       },
 
@@ -189,8 +187,8 @@
 {
         titolo: "Into the Woods",
         descrizione: "T 2014 ‧ Fantasy, Commedia ‧ 2h 5m",
-        url: "/bry-replay/detail/film/224141.html",
-        locandina: "https://image.tmdb.org/t/p/w1280/fDvPiswo5col2rnsOPuPudKYAlP.jpg",
+        url: "casatv.224141-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/x4YXsFat0MwOKHrL6nTSUmlb0i5.jpg",
         lightbox: false
       },
 
@@ -199,8 +197,8 @@
 {
         titolo: "Indiana Jones e il quadrante del destino",
         descrizione: "T 2023 ‧ Avventura, Azione ‧ 2h 34m",
-        url: "/bry-replay/detail/film/335977.html",
-        locandina: "https://image.tmdb.org/t/p/w1280/zXaBZ4zILO7O6hnAfld8KMztwr7.jpg",
+        url: "casatv.335977-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/x8q1eiGIVQ2n8hDMT8FjZG4TIO.jpg",
         lightbox: false
       },
 
@@ -211,8 +209,8 @@
 {
         titolo: "Il viaggio di Arlo",
         descrizione: "T 2015 ‧ Avventura, Animazione, Famiglia ‧ 1h 41m",
-        url: "/bry-replay/detail/film/105864.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/lswuF8UFREKp7KRwwTQla6kHAvz.jpg",
+        url: "casatv.105864-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/dOcYLOvKqZYPIIBjlqlxZw6ha8o.jpg",
         lightbox: false
       },
 
@@ -222,8 +220,8 @@
 {
         titolo: "Il ritorno di Mary Poppins",
         descrizione: "T 2018 ‧ Fantasy, Famiglia, Commedia ‧ 2h 10m",
-        url: "/bry-replay/detail/film/400650.html",
-        locandina: "https://image.tmdb.org/t/p/original/ce18QfduwAA2I3LHlCL8DiG1UuT.jpg",
+        url: "casatv.400650-film.html",
+        locandina: "https://image.tmdb.org/t/p/original/ffQdmzZd2jhBcmW6uoQd2eT680A.jpg",
         lightbox: false
       }, 
 
@@ -234,8 +232,8 @@
 {
         titolo: "Gli Incredibili 2",
         descrizione: "T 2018 ‧ Azione, Avventura, Animazione, Famiglia ‧ 1h 58m",
-        url: "/bry-replay/detail/film/260513.html",
-        locandina: "https://image.tmdb.org/t/p/w1280/pR0ebVPL5MFoj6dCtniOW41mF23.jpg",
+        url: "casatv.260513-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/7a51fe0f-ecbd-4d24-a4d3-979bda644305/compose?aspectRatio=1.78&format=webp&width=1800",
         lightbox: false
       }, 
 
@@ -245,8 +243,8 @@
 {
         titolo: "Gli Incredibili - Una normale famiglia di supereroi",
         descrizione: "T 2004 ‧ Azione, Avventura, Animazione, Famiglia ‧ 1h 55m",
-        url: "/bry-replay/detail/film/9806.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/YC2HuIkt6JOyOInuSRnRR9iVLE.jpg",
+        url: "casatv.9806-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/96fa5e94-88e1-49d0-b7b9-e379169ffb31/scale?format=webp&width=1800",
         lightbox: false
       }, 
 
@@ -256,8 +254,8 @@
 {
         titolo: "Frozen II - Il segreto di Arendelle",
         descrizione: "T 2019 ‧ Famiglia, Animazione, Avventura, Commedia, Fantasy ‧ 1h 43m",
-        url: "/bry-replay/detail/film/330457.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/lLieiMb0bQ0Ys2Vwkc2vHrXTY5d.jpg",
+        url: "casatv.330457-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/c9992413-c93c-465e-8475-d1a19111afe9/compose?aspectRatio=1.78&format=webp&width=1800",
         lightbox: false
       }, 
 
@@ -267,8 +265,8 @@
 {
         titolo: "Frozen - Il regno di ghiaccio",
         descrizione: "T 2013 ‧ Animazione, Famiglia, Avventura, Fantasy ‧ 1h 42m",
-        url: "/bry-replay/detail/film/109445.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/kWsuNQ3z9aj7Bu8M7X90b30NjAw.jpg",
+        url: "casatv.109445-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/d41e0078-1ba1-4cec-930e-cbd9950a5e89/compose?aspectRatio=1.78&format=webp&width=1800",
         lightbox: false
       }, 
 
@@ -280,8 +278,8 @@
 {
         titolo: "Frankenweenie",
         descrizione: "T 2012 ‧ Animazione, Commedia, Famiglia ‧ 1h 27m",
-        url: "/bry-replay/detail/film/62214.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/hzqMIdCuPTCdu4RDfZ1SuUnHZoP.jpg",
+        url: "casatv.62214-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/5297ab75-f475-4c31-9d2f-6a5eee52e2c1/compose?aspectRatio=1.78&format=webp&width=1800",
         lightbox: false
       }, 
 
@@ -294,8 +292,8 @@
 {
         titolo: "Come d'incanto",
         descrizione: "T 2007 ‧ Commedia, Famiglia, Fantasy, Romance ‧ 1h 47m",
-        url: "/bry-replay/detail/film/4523.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/wx422jUbOHWM4u262CbbqeR7L4T.jpg",
+        url: "casatv.4523-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/f092dced-8f96-4047-bfa0-936db6d9c9cc/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       }, 
 
@@ -307,8 +305,8 @@
 {
         titolo: "Coco",
         descrizione: "T 2017 ‧ Famiglia, Animazione, Musica, Avventura ‧ 1h 49m",
-        url: "/bry-replay/detail/film/354912.html",
-        locandina: "https://image.tmdb.org/t/p/original/98G7zRNJBGuJiJmWcCTv0whXltA.jpg",
+        url: "casatv.354912-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/e6afc380-3951-4222-a5d2-dd3e586ea21c/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       }, 
 
@@ -318,8 +316,8 @@
 {
         titolo: "Cenerentola",
         descrizione: "T 2015 ‧ Romance, Fantasy, Famiglia, Dramma ‧ 1h 45m",
-        url: "/bry-replay/detail/film/150689.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/e5ptdIKFxaWVanL2b05CIrU8zMx.jpg",
+        url: "casatv.150689-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/22780779-99b4-4338-843c-2ec5ebc53fa1/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       }, 
 
@@ -331,8 +329,8 @@
 {
         titolo: "Cenerentola - Il gioco del destino",
         descrizione: "T 2007 ‧ Famiglia, Animazione, Romance, Fantasy ‧ 1h 10m",
-        url: "/bry-replay/detail/film/16119.html",
-        locandina: "https://image.tmdb.org/t/p/original/imOYy27I1Q0xvxu3JLpYPWBqpX7.jpg",
+        url: "casatv.16119-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/019b256e-d324-773e-80e3-a296563bdafd/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       }, 
 
@@ -343,8 +341,8 @@
 {
         titolo: "Cenerentola II - Quando i sogni diventano realtà",
         descrizione: "T 2002 ‧ Famiglia, Animazione, Romance, Fantasy ‧ 1h 13m",
-        url: "/bry-replay/detail/film/14128.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/w1cvOa9LyoTXelDZrnezxlUazmY.jpg",
+        url: "casatv.14128-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/6c69693d-b4d7-4c1d-b887-bdf1c7306598/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },  
 
@@ -355,8 +353,8 @@
 {
         titolo: "Cenerentola",
         descrizione: "T 1950 ‧ Famiglia, Fantasy, Animazione, Romance ‧ 1h 14m",
-        url: "/bry-replay/detail/film/11224.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/ul6u8FzIHK9rNrYpWsROePdND6N.jpg",
+        url: "casatv.11224-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/61c74a6f-8f93-4f54-a4d0-d660124f620f/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },  
 
@@ -366,8 +364,8 @@
 {
         titolo: "Beverly Hills Chihuahua",
         descrizione: "T 2008 ‧ Commedia, Famiglia, Avventura, Romance ‧ 1h 31m",
-        url: "/bry-replay/detail/film/14405.html",
-        locandina: "https://image.tmdb.org/t/p/original/2aRvqtLoE06hTjG93lASvO7r1as.jpg",
+        url: "casatv.14405-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/019b2e6f-a093-7fca-95a0-103065834c8d/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },  
 
@@ -379,8 +377,8 @@
 {
         titolo: "Aladdin",
         descrizione: "T 2019 ‧ Avventura, Fantasy, Romance, Famiglia ‧ 2h 8m",
-        url: "/bry-replay/detail/film/420817.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/3q3801i63sL9cuUulFr5PSYmExi.jpg",
+        url: "casatv.420817-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/8d5158ab-a91c-4018-b57b-61ee337c9817/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },  
 
@@ -392,8 +390,8 @@
 {
         titolo: "A Bug's Life - Megaminimondo",
         descrizione: "T 1998 ‧ Famiglia, Animazione, Avventura, Commedia ‧ 1h 34m",
-        url: "/bry-replay/detail/film/9487.html",
-        locandina: "https://www.themoviedb.org/t/p/w1280/8onpzxE56ykUeWEStz5LjdQJGDp.jpg",
+        url: "casatv.9487-film.html",
+        locandina: "https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/019ba042-4a5a-7ab4-8e56-c7e7b3a7120d/compose?aspectRatio=1.78&format=webp&width=1200",
         lightbox: false
       },  
 
@@ -406,11 +404,10 @@
 {
         titolo: "Viaggio nell'isola misteriosa",
         descrizione: "T 2012 ‧ Avventura, Azione, Fantascienza ‧ 1h 34m",
-        url: "/bry-replay/detail/film/72545.html",
-        locandina: "https://image.tmdb.org/t/p/w1280/jDMkFYh2rgeKl4e2n7rX10ibOy1.jpg",
+        url: "casatv.72545-film.html",
+        locandina: "https://m.media-amazon.com/images/S/pv-target-images/3278bbb197c3273eb82de4c8339da60a7fd80778d77e82e1cd3f9f1b4adefd10.jpg",
         lightbox: false
       },  
-
 
 
 
