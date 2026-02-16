@@ -7,6 +7,7 @@
 
  {
         titolo: "Zootropolis",
+        genere: ["animazione","famiglia"], // 🔥 nuovo campo
         descrizione: "T 2016 ‧ Animazione, Avventura, Famiglia, Commedia ‧ 1h 48m",
         url: "casatv.269149-film.html",
         locandina: "https://image.tmdb.org/t/p/original/rXJyhLrsUIrVGL7tgvAVKsofFu0.jpg",
