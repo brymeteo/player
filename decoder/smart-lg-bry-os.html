@@ -4968,8 +4968,8 @@ class MosaicSystem {
         startTime.setHours(startTime.getHours() + 2);
         endTime.setHours(endTime.getHours() + 2);
       } else {
-        startTime.setHours(startTime.getHours() - 1);
-        endTime.setHours(endTime.getHours() - 1);
+        startTime.setHours(startTime.getHours() - 0);
+        endTime.setHours(endTime.getHours() - 0);
       }
 
       return now >= startTime && now <= endTime;
@@ -4998,8 +4998,8 @@ class MosaicSystem {
       startTime.setHours(startTime.getHours() + 2);
       endTime.setHours(endTime.getHours() + 2);
     } else {
-      startTime.setHours(startTime.getHours() - 1);
-      endTime.setHours(endTime.getHours() - 1);
+      startTime.setHours(startTime.getHours() - 0);
+      endTime.setHours(endTime.getHours() - 0);
     }
     
     if (now < startTime) return 0;
@@ -5028,7 +5028,7 @@ class MosaicSystem {
     if (isFlixAnimation) {
       date.setHours(date.getHours() + 2);
     } else {
-      date.setHours(date.getHours() - 1);
+      date.setHours(date.getHours() - 0);
     }
     
     return date.toLocaleTimeString('it-IT', {
