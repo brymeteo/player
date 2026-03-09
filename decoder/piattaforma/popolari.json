@@ -58,6 +58,7 @@
     "title": "Super Mario Bros. - Il film",
     "cardTitle": "Brothers",
     "entityType": "Movie",
+    "genere": ["animazione","famiglia"], // 🔥 nuovo campo
     "imageWebp": "https://image.tmdb.org/t/p/original/ceOlzNRzyo6eklMjEgNDPmcA7Pg.jpg",
     "imageJpg": "https://www.themoviedb.org/t/p/original/e7dsDG4r5VtwMOjlD0pH0ztwNqV.jpg",
     "link": "/bry-replay/detail/film/502356.html",
