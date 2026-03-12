@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,7 +11,18 @@
   <style>
     html, body, #map { height: 100%; margin: 0; padding: 0; }
     .controls { position: absolute; bottom: 80px; left: 5%; background: rgba(255,255,255,0.9); padding: 6px 10px; border-radius: 4px; font-family: sans-serif; display: flex; align-items: center; z-index: 10; }
-    .controls button { margin: 0 4px; font-size: 14px; }
+    .controls button {
+  margin: 0 4px;
+  font-size: 14px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 6px;
+  color: #000;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
     .timestamp { margin-left: 8px; font-size: 15px; white-space: nowrap; }
     .timeline-container { position: absolute; bottom: 60px; left: 5%; right: 5%; height: 24px; font-family: sans-serif; z-index: 10; }
     #timeline { position: absolute; bottom: 0; left: 0; right: 0; height: 12px; display: flex; user-select: none; }
@@ -23,7 +36,7 @@
     .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
     .legend-color { width: 14px; height: 14px; margin-right: 6px; border: 1px solid #333; }
     @media (max-width: 600px) {
-      .controls { padding: 4px; bottom: 66px; left: 1px; }
+      .controls { padding: 4px;  left: 1px; }
       .controls button { margin: 0 2px; font-size: 14px; }
       .timestamp { font-size: 12px; }
       .timeline-container { bottom: 45px; height: 20px; left: 2%; right: 2%; }
@@ -49,32 +62,73 @@
     <strong></strong><br>
     <img src="https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000678-09d4909d4c/legenda-radar-5.webp" alt="Legenda meteo" style="width:18px;display:block;margin:6px 0;">
   </div>
+  
+  <div style="position:absolute; bottom:10px; left:10px; z-index:10; background:rgba(255,255,255,0.7); padding:4px; border-radius:4px; font-size:12px;">
+  © Brymeteo - Radar Live
+</div>
+
+  
   <script>
   // Leggi coordinate dal percorso URL
-  let defaultCenter = [12.4964, 41.9028]; // default: Roma
-  let markerCoords = null;
+  let defaultCenter = [12.4964, 41.9028]; // Roma
+let defaultZoom = 8;
+let defaultPitch = 1;
+let defaultBearing = 0;
+let markerCoords = null;
 
- const urlParams = new URLSearchParams(window.location.search);
+const urlParams = new URLSearchParams(window.location.search);
 const lat = parseFloat(urlParams.get('lat'));
 const lon = parseFloat(urlParams.get('lon'));
+const zoom = parseFloat(urlParams.get('zoom'));
+const pitch = parseFloat(urlParams.get('pitch'));
+const bearing = parseFloat(urlParams.get('bearing'));
 
 if (!isNaN(lat) && !isNaN(lon)) {
   defaultCenter = [lon, lat];
   markerCoords = [lon, lat];
 }
+if (!isNaN(zoom)) defaultZoom = zoom;
+if (!isNaN(pitch)) defaultPitch = pitch;
+if (!isNaN(bearing)) defaultBearing = bearing;
 
 
-  const map = new maplibregl.Map({
-    container: 'map',
-    style: 'https://api.maptiler.com/maps/streets/style.json?key=Q350PhFUuerjo5kg6aIV',
-    center: defaultCenter,
-    zoom: 8,
-    pitch: 1,
-    bearing: 0,
-    attributionControl: false
-  });
 
-  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© Brymeteo' }), 'bottom-right');
+  // Crea la mappa
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://api.maptiler.com/maps/streets/style.json?key=NZtaSdszEIjlbOcH7syp',
+  center: defaultCenter,
+  zoom: defaultZoom,
+  pitch: defaultPitch,
+  bearing: defaultBearing,
+  attributionControl: false
+});
+
+// Aggiungi l'attribuzione in modo compatto
+const attribution = new maplibregl.AttributionControl({
+  compact: true,
+  customAttribution: '© Brymeteo'
+});
+map.addControl(attribution, 'bottom-right');
+
+// Nascondi inizialmente il contenitore dell'attribuzione
+document.addEventListener('DOMContentLoaded', () => {
+  const attrContainer = document.querySelector('.maplibregl-ctrl-attrib');
+  if (attrContainer) {
+    attrContainer.style.display = 'none';
+  }
+
+  // Aggiungi il comportamento al click del pulsante
+  const showAttrBtn = document.getElementById('showAttribution');
+  if (showAttrBtn) {
+    showAttrBtn.addEventListener('click', () => {
+      if (attrContainer) {
+        attrContainer.style.display = 'block';
+      }
+    });
+  }
+});
+
 
   let frames = [], pastLength = 0, currentIndex = 0, playInterval;
   const evoLabel = document.getElementById('evoLabel');
@@ -300,12 +354,16 @@ if (!isNaN(lat) && !isNaN(lon)) {
   }
 
   // 🔁 Reindirizzamento al clic sulla mappa
-  map.on('click', function (e) {
-    const lat = e.lngLat.lat.toFixed(5);
-    const lon = e.lngLat.lng.toFixed(5);
-    const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia.html?lat=${lat}&lon=${lon}`;
-    window.location.href = url;
-  });
+ map.on('click', function (e) {
+  const lat = e.lngLat.lat.toFixed(5);
+  const lon = e.lngLat.lng.toFixed(5);
+  const zoom = map.getZoom().toFixed(1);
+  const pitch = map.getPitch().toFixed(1);
+  const bearing = map.getBearing().toFixed(1);
+  const url = `https://brymeteo.github.io/player/maps:italia:/italia/radar-italia3.html?lat=${lat}&lon=${lon}&zoom=${zoom}&pitch=${pitch}&bearing=${bearing}`;
+  window.location.href = url;
+});
+
 </script>
 
 </body>
