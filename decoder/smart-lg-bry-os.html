@@ -4785,7 +4785,7 @@ ease;
       }
     }
 
-  // ===== SISTEMA MOSAICO EPG CORRETTO - CARICAMENTO UNICO =====
+// ===== SISTEMA MOSAICO EPG CORRETTO - CARICAMENTO UNICO =====
 class MosaicSystem {
   constructor() {
     this.isActive = false;
@@ -4979,11 +4979,11 @@ class MosaicSystem {
 
       // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() + 2);
-        endTime.setHours(endTime.getHours() + 2);
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
       } else {
-        startTime.setHours(startTime.getHours() - 0);
-        endTime.setHours(endTime.getHours() - 0);
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
       }
 
       return now >= startTime && now <= endTime;
@@ -5009,11 +5009,11 @@ class MosaicSystem {
     
     // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() + 2);
-      endTime.setHours(endTime.getHours() + 2);
+      startTime.setHours(startTime.getHours() - 2);
+      endTime.setHours(endTime.getHours() - 2);
     } else {
-      startTime.setHours(startTime.getHours() - 0);
-      endTime.setHours(endTime.getHours() - 0);
+      startTime.setHours(startTime.getHours() - 1);
+      endTime.setHours(endTime.getHours() - 1);
     }
     
     if (now < startTime) return 0;
@@ -5040,9 +5040,9 @@ class MosaicSystem {
     
     // 💡 CORREZIONE: Per flix-animation aggiungi 2 ore (UTC+2), per altri sottrai 1 ora
     if (isFlixAnimation) {
-      date.setHours(date.getHours() + 2);
+      date.setHours(date.getHours() - 2);
     } else {
-      date.setHours(date.getHours() - 0);
+      date.setHours(date.getHours() - 1);
     }
     
     return date.toLocaleTimeString('it-IT', {
@@ -5497,11 +5497,11 @@ class FilteredMosaicSystem {
       const endTime = new Date(program.end);
 
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() + 0);
-        endTime.setHours(endTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
       } else {
-        startTime.setHours(startTime.getHours() + 0);
-        endTime.setHours(endTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
       }
 
       return targetTime >= startTime && targetTime <= endTime;
@@ -5524,9 +5524,9 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() + 0);
+      startTime.setHours(startTime.getHours() - 2);
     } else {
-      startTime.setHours(startTime.getHours() + 0);
+      startTime.setHours(startTime.getHours() - 1);
     }
     
     return startTime > now;
@@ -5749,9 +5749,9 @@ class FilteredMosaicSystem {
       const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
       
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 2);
       } else {
-        startTime.setHours(startTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 1);
       }
       
       // Se è ora di cambiare canale (con tolleranza di 3 minuto)
@@ -5876,11 +5876,11 @@ class FilteredMosaicSystem {
       const endTime = new Date(program.end);
 
       if (isFlixAnimation) {
-        startTime.setHours(startTime.getHours() + 0);
-        endTime.setHours(endTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 2);
+        endTime.setHours(endTime.getHours() - 2);
       } else {
-        startTime.setHours(startTime.getHours() + 0);
-        endTime.setHours(endTime.getHours() + 0);
+        startTime.setHours(startTime.getHours() - 1);
+        endTime.setHours(endTime.getHours() - 1);
       }
 
       return now >= startTime && now <= endTime;
@@ -5903,11 +5903,11 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      startTime.setHours(startTime.getHours() + 0);
-      endTime.setHours(endTime.getHours() + 0);
+      startTime.setHours(startTime.getHours() - 2);
+      endTime.setHours(endTime.getHours() - 2);
     } else {
-      startTime.setHours(startTime.getHours() + 0);
-      endTime.setHours(endTime.getHours() + 0);
+      startTime.setHours(startTime.getHours() - 1);
+      endTime.setHours(endTime.getHours() - 1);
     }
     
     if (now < startTime) return 0;
@@ -5931,9 +5931,9 @@ class FilteredMosaicSystem {
     const isFlixAnimation = flixAnimationChannels.includes(channelNumber);
     
     if (isFlixAnimation) {
-      date.setHours(date.getHours() + 0);
+      date.setHours(date.getHours() - 2);
     } else {
-      date.setHours(date.getHours() + 0);
+      date.setHours(date.getHours() - 1);
     }
     
     return date.toLocaleTimeString('it-IT', {
