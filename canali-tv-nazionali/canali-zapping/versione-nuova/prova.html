@@ -686,42 +686,33 @@
 
         if (key === 'ArrowRight') {
             if (selectedProgramIndex < allPrograms.length - 1) {
+                showChannelInfo(true);
                 if (!isNavigating) {
-                    showChannelInfo(true);
+                    isNavigating = true;
+                    resetAutoResetTimer();
                 }
-                isNavigating = true;
-                clearTimeout(channelInfoTimer);
                 selectProgram(selectedProgramIndex + 1);
-                resetAutoResetTimer();
             } else {
-                if (!isNavigating) {
-                    showChannelInfo(false);
-                }
+                showChannelInfo(false);
             }
         }
         else if (key === 'ArrowLeft') {
             if (selectedProgramIndex > currentProgramIndexInAll) {
+                showChannelInfo(true);
                 if (!isNavigating) {
-                    showChannelInfo(true);
+                    isNavigating = true;
+                    resetAutoResetTimer();
                 }
-                isNavigating = true;
-                clearTimeout(channelInfoTimer);
                 selectProgram(selectedProgramIndex - 1);
-                resetAutoResetTimer();
             } else {
-                if (!isNavigating) {
-                    showChannelInfo(false);
-                }
+                showChannelInfo(false);
             }
         }
         else if (key === '4') {
-            if (!isNavigating) {
-                showChannelInfo(false);
-            }
+            showChannelInfo(false);
             toggleDescription();
-            if (isDescriptionOpen) {
+            if (isDescriptionOpen && !isNavigating) {
                 isNavigating = true;
-                clearTimeout(channelInfoTimer);
                 resetAutoResetTimer();
             }
         }
@@ -1289,33 +1280,30 @@
                 e.preventDefault();
                 if (!allPrograms || allPrograms.length === 0) return;
                 if (selectedProgramIndex < allPrograms.length - 1) {
+                    showChannelInfo(true);
                     if (!isNavigating) {
-                        showChannelInfo(true);
+                        isNavigating = true;
+                        resetAutoResetTimer();
                     }
-                    isNavigating = true;
-                    clearTimeout(channelInfoTimer);
                     selectProgram(selectedProgramIndex + 1);
                 }
             } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
                 if (!allPrograms || allPrograms.length === 0) return;
                 if (selectedProgramIndex > currentProgramIndexInAll) {
+                    showChannelInfo(true);
                     if (!isNavigating) {
-                        showChannelInfo(true);
+                        isNavigating = true;
+                        resetAutoResetTimer();
                     }
-                    isNavigating = true;
-                    clearTimeout(channelInfoTimer);
                     selectProgram(selectedProgramIndex - 1);
                 }
             } else if (e.key === '4') {
                 e.preventDefault();
-                if (!isNavigating) {
-                    showChannelInfo(false);
-                }
+                showChannelInfo(false);
                 toggleDescription();
-                if (isDescriptionOpen) {
+                if (isDescriptionOpen && !isNavigating) {
                     isNavigating = true;
-                    clearTimeout(channelInfoTimer);
                     resetAutoResetTimer();
                 }
             }
@@ -1324,11 +1312,11 @@
         document.getElementById('scroll-left').addEventListener('click', () => {
             if (!allPrograms || allPrograms.length === 0) return;
             if (selectedProgramIndex > currentProgramIndexInAll) {
+                showChannelInfo(true);
                 if (!isNavigating) {
-                    showChannelInfo(true);
+                    isNavigating = true;
+                    resetAutoResetTimer();
                 }
-                isNavigating = true;
-                clearTimeout(channelInfoTimer);
                 selectProgram(selectedProgramIndex - 1);
             }
         });
@@ -1336,11 +1324,11 @@
         document.getElementById('scroll-right').addEventListener('click', () => {
             if (!allPrograms || allPrograms.length === 0) return;
             if (selectedProgramIndex < allPrograms.length - 1) {
+                showChannelInfo(true);
                 if (!isNavigating) {
-                    showChannelInfo(true);
+                    isNavigating = true;
+                    resetAutoResetTimer();
                 }
-                isNavigating = true;
-                clearTimeout(channelInfoTimer);
                 selectProgram(selectedProgramIndex + 1);
             }
         });
