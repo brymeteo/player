@@ -834,8 +834,7 @@ function showMenuPopup() {
   clearTimeout(menuTimer);
   menuPopup.classList.remove("hidden");
   menuPopup.style.display = 'block';
-
-
+}
 
 function hideMenuPopup() {
   menuPopup.classList.add("hidden");
@@ -878,18 +877,17 @@ window.addEventListener("message", function (event) {
 
   console.log("Messaggio ricevuto:", key);
 
-  // ===== MENU CONTROL =====
-if (key === "openMenu") {
-  showMenuPopup();
-  isMenuOpen = true;
-  return;
-}
-
-if (key === "closeMenu") {
-  hideMenuPopup();
-  isMenuOpen = false;
-  return;
-}
+  // ===== TASTO 2 → TOGGLE MENU =====
+  if (key === "2" || key === "menu" || key === "openMenu") {
+    if (isMenuOpen) {
+      hideMenuPopup();
+      isMenuOpen = false;
+    } else {
+      showMenuPopup();
+      isMenuOpen = true;
+    }
+    return;
+  }
 
   // ===== SE MENU APERTO → USA SOLO 3-4-5-6 =====
   if (isMenuOpen) {
@@ -900,24 +898,21 @@ if (key === "closeMenu") {
     player.currentTime(newTime);
     showOverlay("restart");
   }
-
   else if (key === "4") {
     player.currentTime(0);
     player.play();
     showOverlay("fromStart");
   }
-
   else if (key === "5") {
     player.pause();
     showOverlay("pause");
   }
-
   else if (key === "6") {
     player.play();
     showOverlay("play");
   }
 
-  // 🔥 CHIUSURA AUTOMATICA DOPO AZIONE
+  // 🔥 RESET DOPO AZIONE
   hideMenuPopup();
   isMenuOpen = false;
 
