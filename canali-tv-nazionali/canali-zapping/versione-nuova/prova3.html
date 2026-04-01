@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canale TV Live Simulato</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet" />
+<link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+
+  <style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  #background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background: #171a45;
+  }
+
+  .video-js {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .logo-overlay {
+  position: absolute;
+  top: 5%;
+  right: 4%;
+  width: 15%;
+  max-width: 26%;
+  height: auto !important;
+  pointer-events: none;
+  z-index: 997;
+  opacity: 1;
+  filter: drop-shadow(0 0 3px rgba(0,0,0,0.1));
+}
+
+  .video-js .vjs-control-bar {
+    display: none !important;
+  }
+
+  .vjs-fullscreen-control {
+    z-index: 15;
+  }
+
+  #fallback-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
+
+  h1 {
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    z-index: 60;
+    color: white;
+    text-shadow: 0 0 5px black;
+  }
+
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px;
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+  #overlay-card {
+    width: 300px;
+    font-size: 14px;
+  }
+
+  #overlay-card img {
+    width: 50px;
+  }
+}
+
+    .spinner-cubes {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    .spinner-cubes div {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      margin: 2px;
+      animation: spinner 1s infinite ease-in-out;
+    }
+    .spinner-cubes div:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .spinner-cubes div:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .spinner-cubes div:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes spinner {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(0.5);
+      }
+    }
+
+#restart-message {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgb(30 75 121 / 98%);
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10000;
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
+  @media only screen and (max-width: 600px) {
+    #restart-message {
+      top: 5px;
+      font-size: 16px;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  #next-program-name {
+    color: #c6ced3;
+    font-size: 18px;
+    margin-top: 4px;
+    opacity: 0.85;
+  }
+
+  .video-js .vjs-loading-spinner {
+    display: none !important;
+  }
+  .video-js .vjs-waiting {
+    display: none !important;
+  }
+
+  #menu-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(30 75 121 / 98%);
+    padding: 30px;
+    border-radius: 15px;
+    color: #fff;
+    z-index: 10000;
+    width: 600px;
+    font-family: sans-serif;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+
+  #menu-popup h2 {
+    margin: 0 0 25px 0;
+    font-size: 26px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .menu-option {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .menu-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+  }
+
+  .menu-option-number {
+    font-size: 28px;
+    font-weight: bold;
+    width: 50px;
+    text-align: center;
+    color: #ffd700;
+  }
+
+  .menu-option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-option-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .menu-option-desc {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  @media only screen and (max-width: 600px) {
+    #menu-popup {
+      width: 90%;
+      padding: 20px;
+    }
+
+    #menu-popup h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .menu-option {
+      padding: 12px 15px;
+    }
+
+    .menu-option-number {
+      font-size: 24px;
+      width: 40px;
+    }
+
+    .menu-option-title {
+      font-size: 16px;
+    }
+
+    .menu-option-desc {
+      font-size: 12px;
+    }
+  }
+</style>
+
+</head>
+<body>
+
+
+<div id="background-overlay"></div>
+
+ <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001628-737e1737e3/Bry%20Animation%20hd.png?ph=7e11bb4538" alt="Logo" class="logo-overlay hidden" id="main-logo" />
+
+ <div id="channel-info-bar">
+        <div id="program-description">
+            <div id="program-time-title" class="loading">Caricamento...</div>
+            <div id="program-description-text" class="loading">
+                [Descrizione] Caricamento della descrizione del programma in corso...
+            </div>
+            <div class="continua-button">
+                <div class="continua-icon">i</div>
+                <span>Continua</span>
+            </div>
+        </div>
+
+        <div id="channel-info-middle">
+            <div id="channel-left-info">
+
+                <div id="channel-number">109</div>
+                <div id="channel-title">Bry Animation HD</div>
+            </div>
+            <div id="hd-indicator">HD</div>
+
+ <div class="signal-bars" id="signal-bars">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>&nbsp;&nbsp;
+  <span id="signal-percent">99%</span>
+
+     &nbsp;&nbsp;&nbsp;&nbsp;
+            <div id="current-time">Giovedì 05 Dic 18:12</div>
+        </div>
+
+        <div id="timeline-section">
+            <div id="program-status">
+                <span>Iniziato da <span id="elapsed-time">-- minuti</span></span>
+                <div id="timeline-times">
+                    <span id="program-start-time">00:00</span>
+                    <span id="program-end-time">06:00</span>
+                </div>
+            </div>
+
+            <div id="timeline-container">
+                <div id="timeline-bar">
+                    <div id="timeline-progress"></div>
+                </div>
+            </div>
+
+            <div id="program-timeline-container">
+                <div id="program-timeline">
+                    <div class="program-slot current" id="current-program-slot" onclick="selectProgram(0)">
+                        <span class="loading">Caricamento...</span>
+                    </div>
+                    <div class="program-slot upcoming" id="next-program-slot-1" onclick="selectProgram(1)">
+                        <span class="loading">Prossimo</span>
+                    </div>
+                    <div class="program-slot upcoming" id="next-program-slot-2" onclick="selectProgram(2)">
+                        <span class="loading">Successivo</span>
+                    </div>
+                </div>
+            </div>
+
+           <div id="control-buttons">
+    <div class="control-group">
+        <div class="control-button canale">
+           <img src="https://i.ibb.co/p6ssKTbW/icona-frecce.webp" alt="Canale" class="icon" style="width: 44px; height: auto;" />
+
+            <span>Canale</span>
+        </div>
+        <div class="control-button orario">
+            <img src="https://i.ibb.co/vCmpmjbC/icona-frecce2.webp" alt="Canale" class="icon" style="width: 34px; height: auto;" />
+            <span>Cambia con frecce o tasti 4 e 5</span>
+        </div>
+        <div class="control-button registra">
+            <img src="https://i.ibb.co/5xYc0KB3/1f535.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
+            <span>Restart (tasto 2)</span>
+        </div>
+
+
+        <div class="control-button canali-preferiti">
+            <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon" style="width: 25px; height: auto;" />
+            <span>Microfono (tasto 0)</span>
+        </div>
+    </div>
+</div>
+
+            <div id="next-program-info" class="loading" style="display: none;">
+                A seguire: Caricamento del prossimo programma...
+            </div>
+        </div>
+    </div>
+
+
+
+  <div id="overlay-card" class="hidden">
+    <img id="overlay-icon" src="" alt="Icona comando">
+    <div id="overlay-animation" class="spinner-cubes">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p id="overlay-text"></p>
+  </div>
+
+  <div id="menu-popup" class="hidden">
+    <h2>Azioni Disponibili</h2>
+    <div class="menu-options">
+      <div class="menu-option" data-action="3">
+        <div class="menu-option-number">3</div>
+        <div class="menu-option-content">
+          <div class="menu-option-title">Indietro 10 secondi</div>
+          <div class="menu-option-desc">Riporta il video indietro di 10 secondi</div>
+        </div>
+      </div>
+      <div class="menu-option" data-action="4">
+        <div class="menu-option-number">4</div>
+        <div class="menu-option-content">
+          <div class="menu-option-title">Riavvolgi dall'inizio</div>
+          <div class="menu-option-desc">Ricomincia il video dal principio</div>
+        </div>
+      </div>
+      <div class="menu-option" data-action="5">
+        <div class="menu-option-number">5</div>
+        <div class="menu-option-content">
+          <div class="menu-option-title">Pausa</div>
+          <div class="menu-option-desc">Metti in pausa la riproduzione</div>
+        </div>
+      </div>
+      <div class="menu-option" data-action="6">
+        <div class="menu-option-number">6</div>
+        <div class="menu-option-content">
+          <div class="menu-option-title">Play</div>
+          <div class="menu-option-desc">Avvia la riproduzione del video</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="restart-message" class="hidden">
+    Il contenuto non è in live. Per accedervi, premi il tasto 3 e pronuncia "live".
+  </div>
+
+  <video
+    id="videoPlayer"
+    class="video-js vjs-default-skin"
+    autoplay
+    preload="auto"
+    data-setup='{}'
+  ></video>
+
+  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+
+<script src="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<script>
+const orarioInizioStreaming = new Date("2025-08-06T06:00:00");
+
+const palinsesto = [
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    description: "",
+    poster: "",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep1 St34 - Habemus tartaruga",
+    url: "https://ms-037.host-cdn.net/hls/llzeeicbqyhnmttc2qy4p3ge3s7wvzwvsmmdd53t6etoc3hzoyjjz4ds4jdq/index-v1-a1.m3u8",
+    description: "Homer viene deriso da tutti per la sua scarsa intelligenza. Quando Marge lo consola portandolo allo zoo, si accorge che Lento Leonard, la tartaruga centenaria, è scomparsa.",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/--U5OTGirg8KmQbhOEfWGg/680x382-190.jpg",
+    duration: 1298
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    description: "",
+    poster: "",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep2 St34 - La parola alla giurata Lisa",
+    url: "https://ms-037.host-cdn.net/hls/llzef3cpqyhnmttc2qy4p36oyicoqyfxf6fj2syrszeogxsvppvbp3lgthc4/index-v1-a1.m3u8",
+    description: "Marge riceve una bike da spinning per il suo compleanno e comincia ad allenarsi con un istruttore online. La sua passione si trasforma pero' in ossessione.",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/YYHKDNb5l8JMQGS-bA4mhg/680x382-190.jpg",
+    duration: 1299
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    description: "",
+    poster: "",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep3 St34 - Lisa il boy scout",
+    url: "https://ms-037.host-cdn.net/hls/llzel3cmqyhnmttc2qzmp5ge36rrxfbonupjkgi6m56hckcpwtndgtfezr6a/index-v1-a1.m3u8",
+    description: "Due hacker entrano nel database di Disney e diffondono una serie di video de I Simpson che non avrebbero dovuto essere di dominio pubblico.",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/z4P90GeyuhCobq8-5zQgDg/680x382-190.jpg",
+    duration: 1300
+  },
+  {
+    title: "Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1d3562da7e36071496720a47489641b13d59bdac.m3u8",
+    description: "",
+    poster: "",
+    duration: 7
+  },
+  {
+    title: "I Simpson Ep4 St34 - Il re della gentilezza",
+    url: "https://ms-037.host-cdn.net/hls/llzele2jqyhnmttc2qzmpmozz44tyka5gkxjsvcp3efkvh7qbt7x3g7rgqcq/index-v1-a1.m3u8",
+    description: "Marge lavora come autore televisivo per un talk show del daytime. Inizialmente trova il suo nuovo incarico molto appagante, ma poi cambia idea.",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/24cvZRW4twIo4d7Bt4GiiA/680x382-190.jpg",
+    duration: 1299
+  },
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    description: "",
+    poster: "",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep7 St34 - Dalla birra alla paternità",
+    url: "https://ms-010x.host-cdn.net/hls/llzeehduqyhnmttc2qzmp4ue2yryg2oni7fyehrpi2guwnt4djmded7lxuq/index-v1-a1.m3u8",
+    description: "Quando Homer diventa l'eroe di Duffman, i due intraprendendo un viaggio in macchina con Lisa che rischia di mettere a nudo la terribile educazione di Homer.",
+    poster: "https://is1-ssl.mzstatic.com/image/thumb/bbzhxBEtPcfnpMdBgQ6uWQ/680x382-190.jpg",
+    duration: 1299
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    description: "",
+    poster: "",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio American Dad + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1fc4e4ad0bb29fe6e825ddf4e53cb7127372c4d0.m3u8",
+    description: "",
+    poster: "",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E01 -  Il compagno di viaggio",
+    url: "https://ms-055.host-cdn.net/hls/llzeenqprahnmttc2tp4jz6mz67qswgqk3vupho4u3ficoph7ebtk2gtvnrq/index-v1-a1.m3u8",
+    description: "Un passo falso dovuto alla luna costringe Roger a una deviazione inaspettata verso il New Mexico.",
+    poster: "https://image.tmdb.org/t/p/original/hxez7Xn6Xc5bTtK3oTSnl594XYr.jpg",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad",
+    url: "https://embed-cloudfront.wistia.com/deliveries/5b34374c6e3e2b1c598896c9a0d0324458ecdfdc.m3u8",
+    description: "",
+    poster: "",
+    duration: 8
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E02 -  Il professore e l'allenatore",
+    url: "https://ms-025x.host-cdn.net/hls/llzeemiprahnmttc2tp4j6wd3kbuabbc4o4v5yjdcxy5dqs5ynqgtttGfNdbq/index-v1-a1.m3u8",
+    description: "Hayley cerca di aiutare Roger a scrivere un libro.",
+    poster: "https://image.tmdb.org/t/p/original/hxez7Xn6Xc5bTtK3oTSnl594XYr.jpg",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad",
+    url: "https://embed-cloudfront.wistia.com/deliveries/5b34374c6e3e2b1c598896c9a0d0324458ecdfdc.m3u8",
+    description: "",
+    poster: "",
+    duration: 8
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E03 -  Il passato del preside",
+    url: "https://ms-041.host-cdn.net/hls/llzeknyfrahnmttc2tp4jn63yb6iysgq3ubo42zf5rlxnay3424hyng55uca/index-v1-a1.m3u8",
+    description: "Steve e il preside Lewis si ritrovano coinvolti in una situazione pericolosa a scuola. Il resto della famiglia stringe una nuova adorabile amicizia.",
+    poster: "https://image.tmdb.org/t/p/original/hxez7Xn6Xc5bTtK3oTSnl594XYr.jpg",
+    duration: 1269
+  },
+  {
+    title: "Sigla+ Inizio American Dad + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/1fc4e4ad0bb29fe6e825ddf4e53cb7127372c4d0.m3u8",
+    description: "",
+    poster: "",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "American Dad S20 E04 -  L'evocazione piacevole a casa Smith",
+    url: "https://ms-037.host-cdn.net/hls/llzeemifrahnmttc2tp4jzw2rxhuiw3fc34edofkh7ndaudrqvykmqgt7bxa/index-v1-a1.m3u8",
+    description: "L'amicizia tra Klaus e Jeff è minacciata dalla fidanzata di Klaus, proveniente da un altro regno.",
+    poster: "https://image.tmdb.org/t/p/original/hxez7Xn6Xc5bTtK3oTSnl594XYr.jpg",
+    duration: 1269
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    description: "",
+    poster: "",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio The Cleveland Show + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/8020875bb8ee5a3b7c8c854473aa753ff981a873.m3u8",
+    description: "",
+    poster: "",
+    duration: 18
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "The Cleveland Show S1 E01 -  Ritorno a casa",
+    url: "https://ms-050.host-cdn.net/hls/llzeootmqyhnmttc2qy4p5mp26lfpmowv6fq6gye2mdxyzpord33mhgtbneq/index-v1-a1.m3u8",
+    description: "Cleveland Brown e Cleveland Junior lasciano Quahog e partono per la California, fermandosi nella città natale di Cleveland, Stoolbend, dove s'imbatte nella sua vecchia fiamma dei tempi del liceo, Donna Tubbs. Cleveland, ancora innamorato di Donna, è deciso a ricominciare una nuova vita con lei, anche se i suoi figli non sono esattamente degli angioletti.",
+    poster: "https://image.tmdb.org/t/p/original/1OMz5xVAkKEuObHFtRAUjstX9cG.jpg",
+    duration: 1335
+  },
+  {
+    title: "Sigla+ Inizio The Cleveland Show",
+    url: "https://embed-cloudfront.wistia.com/deliveries/427b66c711d8d53c722dbc24df429eb69bf9c958.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "The Cleveland Show S1 E02 -  Da assassino a ballerino",
+    url: "https://ms-050.host-cdn.net/hls/llzeonlmqyhnmttc2qy4p3gc2tjwk5grrhlhyuy43ikyefm3nz3ldtygt3ca/index-v1-a1.m3u8",
+    description: "Cleveland, intenzionato a stabilire un legame con la sua nuova figlia, le chiede se può accompagnarla al ballo della scuola per Padri e Figlie.",
+    poster: "https://image.tmdb.org/t/p/original/1OMz5xVAkKEuObHFtRAUjstX9cG.jpg",
+    duration: 1303
+  },
+  {
+    title: "Sigla+ Inizio I Griffin + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/50150c181a1e8f6fb63b6e6056e8e1d89e65dc5a.m3u8",
+    description: "",
+    poster: "",
+    duration: 19
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "I Griffin S19 E01 -  La prima parola di Stewie",
+    url: "https://ms-013.host-cdn.net/hls/llzefzksquhnmttc2qr4p3wh3gv45s3y7nm4n6f5sqvjovvhiuur6jugtrxa/index-v1-a1.m3u8",
+    description: "Stewie pronuncia in chiesa la sua prima parola, e purtroppo è un'imprecazione. Lois è determinata a scoprire da chi abbia preso esempio Stewie.",
+    poster: "https://image.tmdb.org/t/p/original/nGx9Vr4bwSKnEaDh6mtxGietYhn.jpg",
+    duration: 1293
+  },
+  {
+    title: "Sigla+ Inizio I Griffin",
+    url: "https://embed-cloudfront.wistia.com/deliveries/0761fc021d4a963e6344cc87b5608006d3a6c254.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "AVVISO CONTENUTO 12+",
+    url: "https://embed-cloudfront.wistia.com/deliveries/e534979ecd2b647b61202a058508ee2de135a17b.m3u8",
+    description: "",
+    poster: "",
+    duration: 5
+  },
+  {
+    title: "I Griffin S19 E02 -  Il talento di Mr. Stewie",
+    url: "https://ms-005.host-cdn.net/hls/llzefycsquhnmttc2qr4pn6oqx76jhwexavs4ch4aqu2cjwjgzbzigtfgusq/index-v1-a1.m3u8",
+    description: "Stewie ha un peluche da cui non si separa mai, fino al giorno in cui scopre che era di suo fratello Chris e il tarlo della gelosia comincia a logorarlo.",
+    poster: "https://image.tmdb.org/t/p/original/nGx9Vr4bwSKnEaDh6mtxGietYhn.jpg",
+    duration: 1298
+  },
+  {
+    title: "Pubblicità 1",
+    url: "https://embed-cloudfront.wistia.com/deliveries/b275773a25c96393bbd59647d0f4f9be899067b2.m3u8",
+    description: "",
+    poster: "",
+    duration: 127
+  },
+  {
+    title: "Sigla+ Inizio Simpson + bumper",
+    url: "https://embed-cloudfront.wistia.com/deliveries/fc6be23b8ab76cde83ac42133bd2de4be6ba660c.m3u8",
+    description: "",
+    poster: "",
+    duration: 18
+  },
+  {
+    title: "I Simpson Ep8 St34 - Fratellastro di un altro pianeta",
+    url: "https://ms-025x.host-cdn.net/hls/llzeept6qyhnmttc2qzmp46v3ywvgb3i6cmxesgxlmye3wrrxjvgtedterrq/index-v1-a1.m3u8",
+    description: "Abe va a vivere a casa della sua nuova fidanzata, Blythe, madre di un figlio adottivo di 11 anni. Homer si trova cosi' ad avere un fratellastro.",
+    poster: "https://image.tmdb.org/t/p/original/4InwNJ8yl1L4kf7rZvPHWJFQpSV.jpg",
+    duration: 1299
+  }
+];
+
+const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0);
+const player = videojs("videoPlayer");
+let currentIndex;
+
+function caricaVideo(index, offset = 0) {
+  const item = palinsesto[index];
+  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+
+  const logo = document.getElementById('main-logo');
+
+  if (player.canPlayType('application/vnd.apple.mpegURL')) {
+    player.src({ src: item.url, type: "application/x-mpegURL" });
+    player.ready(() => {
+      player.currentTime(offset);
+      player.play().then(() => {
+        logo.classList.remove('hidden');
+      }).catch(e => console.warn(e));
+    });
+  } else if (Hls.isSupported()) {
+    const video = document.getElementById('videoPlayer');
+    const hls = new Hls();
+    hls.loadSource(item.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.currentTime = offset;
+      video.play().then(() => {
+        logo.classList.remove('hidden');
+      });
+    });
+  } else {
+    console.error("HLS non supportato da questo dispositivo.");
+    document.getElementById('fallback-image').style.display = 'block';
+  }
+
+  currentIndex = index;
+}
+
+player.on('ended', () => {
+  const next = (currentIndex + 1) % palinsesto.length;
+  caricaVideo(next, 0);
+});
+
+(function initLive() {
+  const now = new Date();
+  const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+
+  if (secondsFromStart < 0) {
+    console.log("Il palinsesto non è ancora iniziato.");
+    document.getElementById('fallback-image').style.display = 'block';
+    return;
+  }
+
+  const secondsInLoop = secondsFromStart % durataTotale;
+
+  let accumulated = 0;
+  let idx = 0;
+  for (; idx < palinsesto.length; idx++) {
+    if (secondsInLoop < accumulated + palinsesto[idx].duration) {
+      break;
+    }
+    accumulated += palinsesto[idx].duration;
+  }
+
+  const offset = secondsInLoop - accumulated;
+  caricaVideo(idx, offset);
+})();
+</script>
+
+
+<script>
+var overlayCard = document.getElementById("overlay-card");
+var overlayIcon = document.getElementById("overlay-icon");
+var overlayText = document.getElementById("overlay-text");
+var restartMessage = document.getElementById("restart-message");
+var channelInfoBar = document.getElementById("channel-info-bar");
+var menuPopup = document.getElementById("menu-popup");
+var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
+
+function showOverlay(state) {
+  clearTimeout(overlayTimer);
+  clearTimeout(restartTimer);
+  overlayCard.classList.remove("hidden");
+  overlayCard.style.display = 'block';
+
+  if (state === "pause") {
+    overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
+    overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 3 e pronuncia 'riprendi'.";
+  } else if (state === "play") {
+    overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
+    overlayText.innerHTML = "";
+    overlayTimer = setTimeout(function () {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
+  } else if (state === "restart") {
+    overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+    overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
+    overlayTimer = setTimeout(function () {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
+    restartTimer = setTimeout(function () {
+      restartMessage.classList.remove("hidden");
+      setTimeout(function () {
+        restartMessage.classList.add("hidden");
+      }, 15000);
+    }, 5000);
+  } else if (state === "fromStart") {
+    overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
+    overlayText.innerHTML = "Video riavviato dall'inizio.";
+    overlayTimer = setTimeout(function () {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
+  }
+}
+
+function showMenuPopup() {
+  clearTimeout(menuTimer);
+  menuPopup.classList.remove("hidden");
+  menuPopup.style.display = 'block';
+
+  menuTimer = setTimeout(function() {
+    hideMenuPopup();
+  }, 10000);
+}
+
+function hideMenuPopup() {
+  menuPopup.classList.add("hidden");
+  menuPopup.style.display = 'none';
+  clearTimeout(menuTimer);
+}
+
+function hideChannelInfo() {
+  channelInfoBar.style.display = "none";
+}
+
+function showChannelInfo() {
+  channelInfoBar.style.display = "block";
+  clearTimeout(channelInfoTimer);
+  channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+}
+
+showChannelInfo();
+
+document.addEventListener("mousemove", showChannelInfo);
+document.addEventListener("keypress", showChannelInfo);
+
+window.addEventListener("message", function (event) {
+  if (!event.data) return;
+  console.log("Messaggio ricevuto:", event.data);
+
+  if (event.data === "openMenu" || event.data === "menu" || event.data === "2") {
+    showMenuPopup();
+  }
+  else if (event.data === "3" || event.data === "rewindTenSeconds") {
+    hideMenuPopup();
+    const currentTime = player.currentTime();
+    const newTime = Math.max(0, currentTime - 10);
+    player.currentTime(newTime);
+    console.log("Video riportato indietro da", currentTime, "a", newTime);
+    showOverlay("restart");
+  }
+  else if (event.data === "4" || event.data === "fromStart") {
+    hideMenuPopup();
+    player.currentTime(0);
+    player.play();
+    console.log("Video riavviato dall'inizio");
+    showOverlay("fromStart");
+  }
+  else if (event.data === "5" || event.data === "pause") {
+    hideMenuPopup();
+    player.pause();
+    showOverlay("pause");
+  }
+  else if (event.data === "6" || event.data === "play") {
+    hideMenuPopup();
+    player.play();
+    showOverlay("play");
+  }
+  else if (event.data === "restart" || event.data === "rewind" || event.data === "indietro") {
+    const currentTime = player.currentTime();
+    const newTime = Math.max(0, currentTime - 10);
+    player.currentTime(newTime);
+    console.log("Video riportato indietro da", currentTime, "a", newTime);
+    showOverlay("restart");
+  }
+  else if (event.data === "live") {
+    location.reload();
+  }
+  else if (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number") {
+    const currentTime = player.currentTime();
+    const newTime = Math.max(0, currentTime - event.data.seconds);
+    player.currentTime(newTime);
+    console.log("Video riportato indietro di", event.data.seconds, "secondi");
+    showOverlay("restart");
+  }
+});
+
+document.querySelectorAll('.menu-option').forEach(option => {
+  option.addEventListener('click', function() {
+    const action = this.getAttribute('data-action');
+    if (action === '3') {
+      window.postMessage('3', '*');
+    } else if (action === '4') {
+      window.postMessage('4', '*');
+    } else if (action === '5') {
+      window.postMessage('5', '*');
+    } else if (action === '6') {
+      window.postMessage('6', '*');
+    }
+  });
+});
+</script>
+
+<script>
+player.on('error', function () {
+  document.getElementById("fallback-image").style.display = "block";
+  document.getElementById("videoPlayer").style.display = "none";
+});
+
+var logo = document.getElementById("main-logo");
+var timer;
+function hideLogo() {
+  logo.style.display = "none";
+}
+
+document.addEventListener("mousemove", resetTimer);
+document.addEventListener("keypress", resetTimer);
+resetTimer();
+</script>
+
+<script>
+  function updateSignal(percent) {
+    const bars = document.querySelectorAll('#signal-bars .bar');
+    const percentText = document.getElementById('signal-percent');
+
+    const activeBars = Math.ceil((percent / 100) * bars.length);
+
+    bars.forEach((bar, index) => {
+      bar.classList.toggle('active', index < activeBars);
+    });
+
+    percentText.textContent = `${percent}%`;
+  }
+
+  function getRandomSignal() {
+    return Math.floor(Math.random() * 4) + 96;
+  }
+
+  setInterval(() => {
+    const randomPercent = getRandomSignal();
+    updateSignal(randomPercent);
+  }, 2000);
+</script>
+
+<script>
+    const epgUrl = "https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-flix-animation.json";
+    let selectedChannelId = "flix-animation";
+    const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
+
+    let currentProgramGlobal = null;
+    let allPrograms = [];
+    let selectedProgramIndex = 0;
+
+    function truncateTitle(title, maxLength = 25) {
+        if (title.length > maxLength) {
+            return title.substring(0, maxLength) + "...";
+        }
+        return title;
+    }
+
+    function selectProgram(index) {
+        selectedProgramIndex = index;
+
+        document.querySelectorAll('.program-slot.upcoming').forEach(slot => {
+            slot.classList.remove('selected');
+        });
+
+        if (index > 0) {
+            const slotId = `next-program-slot-${index}`;
+            const slot = document.getElementById(slotId);
+            if (slot) {
+                slot.classList.add('selected');
+            }
+        }
+
+        updateProgramDescription(index);
+    }
+
+    function updateProgramDescription(index) {
+        if (!allPrograms || allPrograms.length === 0) return;
+
+        let selectedProgram;
+        if (index === 0) {
+            selectedProgram = currentProgramGlobal;
+        } else {
+            const upcomingPrograms = allPrograms.filter(program => {
+                const start = adjustTime(program.start);
+                const now = new Date();
+                return start > now;
+            });
+            selectedProgram = upcomingPrograms[index - 1];
+        }
+
+        if (selectedProgram) {
+            const startTime = adjustTime(selectedProgram.start);
+            const formatTime = date => {
+                return date.getHours().toString().padStart(2, '0') + ":" +
+                       date.getMinutes().toString().padStart(2, '0');
+            };
+
+            document.getElementById("program-time-title").textContent =
+                formatTime(startTime) + " " + selectedProgram.title;
+
+            document.getElementById("program-description-text").textContent =
+                selectedProgram.description || "Descrizione non disponibile.";
+        }
+    }
+
+    function isDST(date) {
+        const january = new Date(date.getFullYear(), 0, 1);
+        const july = new Date(date.getFullYear(), 6, 1);
+        return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+    }
+
+    function adjustTime(dateInput) {
+        const date = new Date(dateInput);
+        if (isDST(date)) {
+            date.setHours(date.getHours() - 2);
+        } else {
+            date.setHours(date.getHours() + 1);
+        }
+        return date;
+    }
+
+    function updateProgressBar(currentProgram) {
+        const startTime = adjustTime(currentProgram.start);
+        const endTime = adjustTime(currentProgram.end);
+        const now = new Date();
+
+        const totalDuration = endTime - startTime;
+        const elapsed = now - startTime;
+
+        let progressPercent = (elapsed / totalDuration) * 100;
+        progressPercent = Math.max(0, Math.min(progressPercent, 100));
+
+        document.getElementById("timeline-progress").style.width = progressPercent + "%";
+
+        const formatTime = date => {
+            return date.getHours().toString().padStart(2, '0') + ":" +
+                   date.getMinutes().toString().padStart(2, '0');
+        };
+
+        document.getElementById("program-start-time").textContent = formatTime(startTime);
+        document.getElementById("program-end-time").textContent = formatTime(endTime);
+
+        const elapsedMinutes = Math.floor(elapsed / (1000 * 60));
+        document.getElementById("elapsed-time").textContent = elapsedMinutes + " minuti";
+    }
+
+    function updateCurrentTime() {
+        const now = new Date();
+        const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+
+        const dayName = days[now.getDay()];
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = months[now.getMonth()];
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+
+        const timeString = `${dayName} ${day} ${month} ${hours}:${minutes}`;
+        document.getElementById("current-time").textContent = timeString;
+    }
+
+    setInterval(function(){
+        updateCurrentTime();
+        if (window.currentProgramGlobal) {
+            updateProgressBar(window.currentProgramGlobal);
+        }
+    }, 1000);
+
+    function updateProgramName() {
+        fetch(epgUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore nel recupero dei dati EPG");
+                }
+                return response.json();
+            })
+            .then(data => {
+              const channel = data;
+
+if (!channel.programs || channel.programs.length === 0) {
+console.error("Nessun programma disponibile");
+return;
+}
+
+                allPrograms = channel.programs;
+
+                const now = new Date();
+
+                const currentProgram = channel.programs.find(program => {
+                    const start = adjustTime(program.start);
+                    const end = adjustTime(program.end);
+                    return now >= start && now < end;
+                });
+
+                const upcomingPrograms = channel.programs
+                    .filter(program => {
+                        const start = adjustTime(program.start);
+                        return start > now;
+                    })
+                    .slice(0, 3);
+
+                currentProgramGlobal = currentProgram;
+
+                if (currentProgram) {
+                    const startTime = adjustTime(currentProgram.start);
+                    const formatTime = date => {
+                        return date.getHours().toString().padStart(2, '0') + ":" +
+                               date.getMinutes().toString().padStart(2, '0');
+                    };
+
+                    document.getElementById("program-time-title").classList.remove("loading");
+                    document.getElementById("program-description-text").classList.remove("loading");
+                    document.getElementById("current-program-slot").classList.remove("loading");
+                    document.getElementById("next-program-info").classList.remove("loading");
+
+                    if (selectedProgramIndex === 0) {
+                        document.getElementById("program-time-title").textContent =
+                            formatTime(startTime) + " " + currentProgram.title;
+
+                        document.getElementById("program-description-text").textContent =
+                            currentProgram.description || "Descrizione non disponibile.";
+                    }
+
+const truncatedCurrentTitle = truncateTitle(currentProgram.title);
+document.getElementById("current-program-slot").innerHTML =
+    "<span>" + truncatedCurrentTitle + "</span>";
+
+                    if (upcomingPrograms.length > 0) {
+                        const start1 = adjustTime(upcomingPrograms[0].start);
+                        const truncatedTitle1 = truncateTitle(upcomingPrograms[0].title);
+                        document.getElementById("next-program-slot-1").innerHTML =
+                            `<span>${formatTime(start1)} - ${truncatedTitle1}</span>`;
+                        document.getElementById("next-program-info").textContent =
+                            "A seguire: " + formatTime(start1) + " - " + upcomingPrograms[0].title;
+                    }
+                    if (upcomingPrograms.length > 1) {
+                        const start2 = adjustTime(upcomingPrograms[1].start);
+                        const truncatedTitle2 = truncateTitle(upcomingPrograms[1].title);
+                        document.getElementById("next-program-slot-2").innerHTML =
+                            `<span>${formatTime(start2)} - ${truncatedTitle2}</span>`;
+                    }
+
+                    updateProgressBar(currentProgram);
+                } else {
+                    document.getElementById("program-time-title").classList.remove("loading");
+                    document.getElementById("program-description-text").classList.remove("loading");
+                    document.getElementById("current-program-slot").classList.remove("loading");
+                    document.getElementById("next-program-info").classList.remove("loading");
+
+                    document.getElementById("program-time-title").textContent = "Programma non disponibile";
+                    document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile per il programma corrente.";
+                    document.getElementById("current-program-slot").innerHTML = "<span>Non disponibile</span>";
+                    document.getElementById("next-program-info").textContent = "A seguire: Non disponibile";
+                }
+            })
+            .catch(error => {
+                console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+                document.getElementById("program-time-title")?.classList.remove("loading");
+                document.getElementById("program-description-text")?.classList.remove("loading");
+                document.getElementById("current-program-slot")?.classList.remove("loading");
+                document.getElementById("next-program-info")?.classList.remove("loading");
+            });
+    }
+
+    updateCurrentTime();
+    updateProgramName();
+    setInterval(updateProgramName, 60000);
+</script>
+
+<script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+
+</body>
+</html>
