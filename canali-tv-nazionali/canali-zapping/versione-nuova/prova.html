@@ -661,52 +661,42 @@
             }
         });
 
-        window.addEventListener("message", function (event) {
+       window.addEventListener("message", function (event) {
     if (!event.data) return;
+    console.log("Messaggio ricevuto:", event.data);
 
-    // gestione comandi da sito principale
+    // ✅ NUOVO: gestione comandi da sito principale
     if (typeof event.data === "object" && event.data.action === "key") {
         const key = event.data.key;
+        console.log("Tasto ricevuto dal parent:", key);
 
         if (!allPrograms || allPrograms.length === 0) return;
 
+        // Se premi frecce o 4, fai apparire la barra
+        showChannelInfo();
+
         if (key === 'ArrowRight') {
-            showChannelInfo(); // mostra barra subito
-            // Seleziona programma → interazione attiva
             if (selectedProgramIndex < allPrograms.length - 1) {
-                isNavigating = true; 
+                // Interazione attiva → blocca timer breve, usa timer lungo dopo
+                isNavigating = true;
                 selectProgram(selectedProgramIndex + 1);
-                resetAutoResetTimer(); // timer 50s
-            } else {
-                // solo apparizione barra → timer breve 9s
-                clearTimeout(channelInfoTimer);
-                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+                resetAutoResetTimer(); // timer 50s parte dopo interazione
             }
-        } 
+        }
+
         else if (key === 'ArrowLeft') {
-            showChannelInfo();
             if (selectedProgramIndex > currentProgramIndexInAll) {
                 isNavigating = true;
                 selectProgram(selectedProgramIndex - 1);
-                resetAutoResetTimer(); // timer 50s
-            } else {
-                clearTimeout(channelInfoTimer);
-                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+                resetAutoResetTimer(); // timer 50s parte dopo interazione
             }
-        } 
+        }
+
         else if (key === '4') {
-            showChannelInfo();
-            // toggleDescription → se viene aperta o chiusa è considerata interazione attiva
-            const wasOpen = isDescriptionOpen;
             toggleDescription();
-            if (isDescriptionOpen !== wasOpen) {
-                isNavigating = true;
-                resetAutoResetTimer(); // timer 50s
-            } else {
-                // solo apparizione barra → timer breve 9s
-                clearTimeout(channelInfoTimer);
-                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
-            }
+            // Aprendo/chiudendo la descrizione consideriamo interazione attiva
+            isNavigating = true;
+            resetAutoResetTimer(); // timer 50s parte dopo interazione
         }
 
         return;
