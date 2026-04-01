@@ -674,7 +674,7 @@
             }
         });
 
-   window.addEventListener("message", function (event) {
+ window.addEventListener("message", function (event) {
     if (!event.data) return;
     console.log("Messaggio ricevuto:", event.data);
 
@@ -682,6 +682,14 @@
         const key = event.data.key;
         console.log("Tasto ricevuto dal parent:", key);
 
+        // 🔥 GESTISCI SUBITO IL TASTO 8
+        if (key === '8' || key === 8) {
+            hideChannelInfo(); // 👉 meglio diretto
+            isNavigating = false;
+            return;
+        }
+
+        // ⚠️ DOPO controlli i programmi
         if (!allPrograms || allPrograms.length === 0) return;
 
         if (key === 'ArrowRight') {
@@ -716,16 +724,10 @@
                 resetAutoResetTimer();
             }
         }
-        else if (key === '8') {
-            // 👉 Chiude la guide bar
-            showChannelInfo(false);
-
-            // opzionale: reset stato navigazione
-            isNavigating = false;
-        }
 
         return;
     }
+
 
 
             if (event.data === "pause") {
