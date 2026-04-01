@@ -7148,16 +7148,33 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
+  // ✅ NUOVO: Gestione navigazione mosaico filtrato con frecce direzionali
   if (filteredMosaicSystem.isActive) {
-    if (e.key === 'ArrowLeft') filteredMosaicSystem.navigate('left');
-    else if (e.key === 'ArrowRight') filteredMosaicSystem.navigate('right');
-    else if (e.key === 'ArrowUp') filteredMosaicSystem.navigate('up');
-    else if (e.key === 'ArrowDown') filteredMosaicSystem.navigate('down');
-    else if (e.key === 'Enter') filteredMosaicSystem.selectCurrentItem();
-    else if (e.key === 'Escape') filteredMosaicSystem.closeMosaic();
-
-    e.preventDefault();
-    return;
+    if (e.key === 'ArrowLeft') {
+      filteredMosaicSystem.navigate('left');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowRight') {
+      filteredMosaicSystem.navigate('right');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowUp') {
+      filteredMosaicSystem.navigate('up');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'ArrowDown') {
+      filteredMosaicSystem.navigate('down');
+      e.preventDefault();
+      return;
+    } else if (e.key === 'Enter') {
+      filteredMosaicSystem.selectCurrentItem();
+      e.preventDefault();
+      return;
+    } else if (e.key === 'Escape') {
+      filteredMosaicSystem.closeMosaic();
+      e.preventDefault();
+      return;
+    }
   }
 
  // ===== TASTO 8 → CHIUDE GUIDE BAR (iframe) =====
