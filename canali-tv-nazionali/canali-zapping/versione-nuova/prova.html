@@ -674,7 +674,7 @@
             }
         });
 
-       window.addEventListener("message", function (event) {
+   window.addEventListener("message", function (event) {
     if (!event.data) return;
     console.log("Messaggio ricevuto:", event.data);
 
@@ -716,9 +716,17 @@
                 resetAutoResetTimer();
             }
         }
+        else if (key === '8') {
+            // 👉 Chiude la guide bar
+            showChannelInfo(false);
+
+            // opzionale: reset stato navigazione
+            isNavigating = false;
+        }
 
         return;
     }
+
 
             if (event.data === "pause") {
                 player.pause();
