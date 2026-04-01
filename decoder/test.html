@@ -7190,9 +7190,9 @@ if (e.key === '8') {
   }
 
   // ===== PLAYER CONTROL =====
+    // Tasto 2 - Restart
   if (e.key === '2') {
-    // opzionale: puoi convertirlo in postMessage anche questo
-    sendToIframe("rewind"); // 🔥 migliorato
+    rewindIframe();
     e.preventDefault();
     return;
   }
