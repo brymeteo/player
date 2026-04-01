@@ -861,53 +861,102 @@ showChannelInfo();
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
+let isMenuOpen = false;
+
 window.addEventListener("message", function (event) {
   if (!event.data) return;
-  console.log("Messaggio ricevuto:", event.data);
 
-  if (event.data === "openMenu" || event.data === "menu" || event.data === "2") {
-    showMenuPopup();
+  let key = null;
+
+  // 🔹 Se arriva dal sito principale
+  if (typeof event.data === "object" && event.data.action === "key") {
+    key = event.data.key;
+  } 
+  // 🔹 Se arriva da altri messaggi legacy (stringhe)
+  else if (typeof event.data === "string") {
+    key = event.data;
   }
-  else if (event.data === "3" || event.data === "rewindTenSeconds") {
-    hideMenuPopup();
+
+  if (!key) return;
+
+  console.log("Messaggio ricevuto:", key);
+
+  // ===== TASTO 2 → TOGGLE MENU =====
+  if (key === "2" || key === "menu" || key === "openMenu") {
+    if (isMenuOpen) {
+      hideMenuPopup();
+      isMenuOpen = false;
+    } else {
+      showMenuPopup();
+      isMenuOpen = true;
+    }
+    return;
+  }
+
+  // ===== SE MENU APERTO → USA SOLO 3-4-5-6 =====
+  if (isMenuOpen) {
+
+    if (key === "3") {
+      const currentTime = player.currentTime();
+      const newTime = Math.max(0, currentTime - 10);
+      player.currentTime(newTime);
+      showOverlay("restart");
+    }
+    else if (key === "4") {
+      player.currentTime(0);
+      player.play();
+      showOverlay("fromStart");
+    }
+    else if (key === "5") {
+      player.pause();
+      showOverlay("pause");
+    }
+    else if (key === "6") {
+      player.play();
+      showOverlay("play");
+    }
+
+    return; // 🔥 blocca tutto il resto quando menu aperto
+  }
+
+  // ===== MENU CHIUSO → COMPORTAMENTO NORMALE =====
+  else {
+
+    if (key === "3" || key === "rewindTenSeconds") {
+      const currentTime = player.currentTime();
+      const newTime = Math.max(0, currentTime - 10);
+      player.currentTime(newTime);
+      showOverlay("restart");
+    }
+    else if (key === "4" || key === "fromStart") {
+      player.currentTime(0);
+      player.play();
+      showOverlay("fromStart");
+    }
+    else if (key === "5" || key === "pause") {
+      player.pause();
+      showOverlay("pause");
+    }
+    else if (key === "6" || key === "play") {
+      player.play();
+      showOverlay("play");
+    }
+  }
+
+  // ===== COMANDI GLOBALI =====
+  if (key === "restart" || key === "rewind" || key === "indietro") {
     const currentTime = player.currentTime();
     const newTime = Math.max(0, currentTime - 10);
     player.currentTime(newTime);
-    console.log("Video riportato indietro da", currentTime, "a", newTime);
     showOverlay("restart");
   }
-  else if (event.data === "4" || event.data === "fromStart") {
-    hideMenuPopup();
-    player.currentTime(0);
-    player.play();
-    console.log("Video riavviato dall'inizio");
-    showOverlay("fromStart");
-  }
-  else if (event.data === "5" || event.data === "pause") {
-    hideMenuPopup();
-    player.pause();
-    showOverlay("pause");
-  }
-  else if (event.data === "6" || event.data === "play") {
-    hideMenuPopup();
-    player.play();
-    showOverlay("play");
-  }
-  else if (event.data === "restart" || event.data === "rewind" || event.data === "indietro") {
-    const currentTime = player.currentTime();
-    const newTime = Math.max(0, currentTime - 10);
-    player.currentTime(newTime);
-    console.log("Video riportato indietro da", currentTime, "a", newTime);
-    showOverlay("restart");
-  }
-  else if (event.data === "live") {
+  else if (key === "live") {
     location.reload();
   }
   else if (typeof event.data === "object" && event.data.action === "rewind" && typeof event.data.seconds === "number") {
     const currentTime = player.currentTime();
     const newTime = Math.max(0, currentTime - event.data.seconds);
     player.currentTime(newTime);
-    console.log("Video riportato indietro di", event.data.seconds, "secondi");
     showOverlay("restart");
   }
 });
