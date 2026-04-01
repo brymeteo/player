@@ -661,44 +661,45 @@
             }
         });
 
-        window.addEventListener("message", function (event) {
+       window.addEventListener("message", function (event) {
     if (!event.data) return;
     console.log("Messaggio ricevuto:", event.data);
 
-    // ✅ NUOVO: gestione comandi da sito principale
     if (typeof event.data === "object" && event.data.action === "key") {
         const key = event.data.key;
         console.log("Tasto ricevuto dal parent:", key);
 
         if (!allPrograms || allPrograms.length === 0) return;
 
-        // Se premi frecce o 4, fai apparire la barra
+        // ✅ Fai apparire la barra subito
         showChannelInfo();
 
+        // ===== gestione interazione attiva solo se necessario =====
         if (key === 'ArrowRight') {
             if (selectedProgramIndex < allPrograms.length - 1) {
-                // Interazione attiva → blocca timer breve, usa timer lungo dopo
-                isNavigating = true;
+                isNavigating = true; // solo qui consideriamo interazione
                 selectProgram(selectedProgramIndex + 1);
                 resetAutoResetTimer(); // timer 50s parte dopo interazione
             }
-        }
-
+        } 
         else if (key === 'ArrowLeft') {
             if (selectedProgramIndex > currentProgramIndexInAll) {
                 isNavigating = true;
                 selectProgram(selectedProgramIndex - 1);
-                resetAutoResetTimer(); // timer 50s parte dopo interazione
+                resetAutoResetTimer();
+            }
+        } 
+        else if (key === '4') {
+            // toggleDescription può aprire/chiudere la descrizione
+            toggleDescription();
+            // consideriamo interazione solo se descrizione realmente aperta
+            if (isDescriptionOpen) {
+                isNavigating = true;
+                resetAutoResetTimer();
             }
         }
 
-        else if (key === '4') {
-            toggleDescription();
-            // Aprendo/chiudendo la descrizione consideriamo interazione attiva
-            isNavigating = true;
-            resetAutoResetTimer(); // timer 50s parte dopo interazione
-        }
-
+        // Se era solo un colpo per far apparire la barra, non cambiamo isNavigating
         return;
     }
 
