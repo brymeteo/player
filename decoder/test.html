@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7159,12 +7160,12 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // ===== FULLSCREEN =====
-  if (e.key === '8') {
-    toggleFullScreen();
-    e.preventDefault();
-    return;
-  }
+ // ===== TASTO 8 → CHIUDE GUIDE BAR (iframe) =====
+if (e.key === '8') {
+  sendToIframe("8"); // 🔥 invia comando all'iframe
+  e.preventDefault();
+  return;
+}
 
   // ===== 🔥 TASTO 4 → IFRAME =====
   if (e.key === '4') {
