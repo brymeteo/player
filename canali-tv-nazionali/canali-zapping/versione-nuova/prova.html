@@ -662,38 +662,56 @@
         });
 
         window.addEventListener("message", function (event) {
-            if (!event.data) return;
-            console.log("Messaggio ricevuto:", event.data);
+    if (!event.data) return;
 
+    // gestione comandi da sito principale
+    if (typeof event.data === "object" && event.data.action === "key") {
+        const key = event.data.key;
 
+        if (!allPrograms || allPrograms.length === 0) return;
 
-// ✅ NUOVO: gestione comandi da sito principale
-if (typeof event.data === "object" && event.data.action === "key") {
-    const key = event.data.key;
-
-    console.log("Tasto ricevuto dal parent:", key);
-
-    // ✅ sicurezza dati
-    if (!allPrograms || allPrograms.length === 0) return;
-
-    if (key === 'ArrowRight') {
-        if (selectedProgramIndex < allPrograms.length - 1) {
-            selectProgram(selectedProgramIndex + 1);
+        if (key === 'ArrowRight') {
+            showChannelInfo(); // mostra barra subito
+            // Seleziona programma → interazione attiva
+            if (selectedProgramIndex < allPrograms.length - 1) {
+                isNavigating = true; 
+                selectProgram(selectedProgramIndex + 1);
+                resetAutoResetTimer(); // timer 50s
+            } else {
+                // solo apparizione barra → timer breve 9s
+                clearTimeout(channelInfoTimer);
+                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+            }
+        } 
+        else if (key === 'ArrowLeft') {
+            showChannelInfo();
+            if (selectedProgramIndex > currentProgramIndexInAll) {
+                isNavigating = true;
+                selectProgram(selectedProgramIndex - 1);
+                resetAutoResetTimer(); // timer 50s
+            } else {
+                clearTimeout(channelInfoTimer);
+                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+            }
+        } 
+        else if (key === '4') {
+            showChannelInfo();
+            // toggleDescription → se viene aperta o chiusa è considerata interazione attiva
+            const wasOpen = isDescriptionOpen;
+            toggleDescription();
+            if (isDescriptionOpen !== wasOpen) {
+                isNavigating = true;
+                resetAutoResetTimer(); // timer 50s
+            } else {
+                // solo apparizione barra → timer breve 9s
+                clearTimeout(channelInfoTimer);
+                channelInfoTimer = setTimeout(hideChannelInfo, 9000);
+            }
         }
-    }
 
-    else if (key === 'ArrowLeft') {
-        if (selectedProgramIndex > currentProgramIndexInAll) {
-            selectProgram(selectedProgramIndex - 1);
-        }
+        return;
     }
-
-    else if (key === '4') {
-        toggleDescription();
-    }
-
-    return;
-}
+});
 
 
             if (event.data === "pause") {
