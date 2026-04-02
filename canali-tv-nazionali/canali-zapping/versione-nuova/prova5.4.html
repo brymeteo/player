@@ -1352,8 +1352,15 @@ function showChannelInfo(force = false) {
 
 showChannelInfo();
 
-document.addEventListener("mousemove", showChannelInfo);
-document.addEventListener("keypress", showChannelInfo);
+document.addEventListener("mousemove", () => {
+  showChannelInfo();
+  if (isNavigating) resetAutoResetTimer(); // 🔥 reset continuo
+});
+
+document.addEventListener("keypress", () => {
+  showChannelInfo();
+  if (isNavigating) resetAutoResetTimer(); // 🔥 reset continuo
+});
 
 let isMenuOpen = false;
 
@@ -1425,14 +1432,16 @@ window.addEventListener("message", function (event) {
 
   if (!allPrograms || allPrograms.length === 0) return;
 
-  // ➡️
+  // ➡️ FRECCIA DESTRA
   if (key === "ArrowRight") {
     if (selectedProgramIndex < allPrograms.length - 1) {
       showChannelInfo(true);
+
       if (!isNavigating) {
         isNavigating = true;
-        resetAutoResetTimer();
       }
+      resetAutoResetTimer(); // 🔥 SEMPRE
+
       selectProgram(selectedProgramIndex + 1);
     } else {
       showChannelInfo(false);
@@ -1440,14 +1449,16 @@ window.addEventListener("message", function (event) {
     return;
   }
 
-  // ⬅️
+  // ⬅️ FRECCIA SINISTRA
   if (key === "ArrowLeft") {
     if (selectedProgramIndex > currentProgramIndexInAll) {
       showChannelInfo(true);
+
       if (!isNavigating) {
         isNavigating = true;
-        resetAutoResetTimer();
       }
+      resetAutoResetTimer(); // 🔥 SEMPRE
+
       selectProgram(selectedProgramIndex - 1);
     } else {
       showChannelInfo(false);
@@ -1460,10 +1471,11 @@ window.addEventListener("message", function (event) {
     showChannelInfo(false);
     toggleDescription();
 
-    if (isDescriptionOpen && !isNavigating) {
+    if (!isNavigating) {
       isNavigating = true;
-      resetAutoResetTimer();
     }
+    resetAutoResetTimer(); // 🔥 SEMPRE
+
     return;
   }
 
@@ -1505,7 +1517,6 @@ document.querySelectorAll('.menu-option').forEach(option => {
     window.postMessage(action, '*');
   });
 });
-
 
 </script>
 
