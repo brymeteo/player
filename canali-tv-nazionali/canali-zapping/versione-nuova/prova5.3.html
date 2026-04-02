@@ -1026,10 +1026,25 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 9000);
 }
 
-showChannelInfo();
+ showChannelInfo();
 
-document.addEventListener("mousemove", showChannelInfo);
-document.addEventListener("keypress", showChannelInfo);
+        document.addEventListener("mousemove", function() {
+            if (!isNavigating) {
+                showChannelInfo();
+            }
+        });
+
+        document.addEventListener("keypress", function() {
+            if (!isNavigating) {
+                showChannelInfo();
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Enter' || e.key === 'OK') && !isNavigating) {
+                showChannelInfo();
+            }
+        });
 
 let isMenuOpen = false;
 
@@ -1062,6 +1077,51 @@ window.addEventListener("message", function (event) {
     }
     return;
   }
+   // 🔥 GESTISCI SUBITO IL TASTO 8
+        if (key === '8' || key === 8) {
+            hideChannelInfo(); // 👉 meglio diretto
+            isNavigating = false;
+            return;
+        }
+
+        // ⚠️ DOPO controlli i programmi
+        if (!allPrograms || allPrograms.length === 0) return;
+
+        if (key === 'ArrowRight') {
+            if (selectedProgramIndex < allPrograms.length - 1) {
+                showChannelInfo(true);
+                if (!isNavigating) {
+                    isNavigating = true;
+                    resetAutoResetTimer();
+                }
+                selectProgram(selectedProgramIndex + 1);
+            } else {
+                showChannelInfo(false);
+            }
+        }
+        else if (key === 'ArrowLeft') {
+            if (selectedProgramIndex > currentProgramIndexInAll) {
+                showChannelInfo(true);
+                if (!isNavigating) {
+                    isNavigating = true;
+                    resetAutoResetTimer();
+                }
+                selectProgram(selectedProgramIndex - 1);
+            } else {
+                showChannelInfo(false);
+            }
+        }
+        else if (key === '4') {
+            showChannelInfo(false);
+            toggleDescription();
+            if (isDescriptionOpen && !isNavigating) {
+                isNavigating = true;
+                resetAutoResetTimer();
+            }
+        }
+
+        return;
+    }
 
   // ===== SE MENU APERTO → USA SOLO 3-4-5-6 =====
  if (isMenuOpen) {
