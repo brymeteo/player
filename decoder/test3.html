@@ -4687,11 +4687,11 @@ ease;
           authScreen.classList.add('subscription-expired');
           expiredIcon.style.display = 'block';
           title.textContent = 'Abbonamento Scaduto';
-          subtitle.textContent = 'Il tuo abbonamento è scaduto. Per continuare, vai su https://brytv.webnode.it/area/bryid e rinnova il tuo abbonamento per ricevere un nuovo PIN.';
+          subtitle.textContent = 'Il tuo abbonamento è scaduto. Per continuare, vai su https://brytv.webnode.it/area/bryid e rinnova il tuo abbonamento per rinnovare il PIN.';
         } else if (reason === 'PIN_CHANGED') {
           expiredIcon.style.display = 'block';
-          title.textContent = 'PIN Modificato';
-          subtitle.textContent = 'Il tuo PIN è stato modificato. Inserisci il nuovo PIN per continuare. Recupera il PIN dal tuo account: https://brytv.webnode.it/area/bryid';
+          title.textContent = 'PIN Disconnesso';
+          subtitle.textContent = 'Il tuo PIN è stato disconnesso per assenza di Wi-fi. Inserisci nuovamente il PIN per continuare. Recupera il PIN dal tuo account: https://brytv.webnode.it/area/bryid';
         } else if (reason === 'SUBSCRIPTION_INACTIVE') {
           expiredIcon.style.display = 'block';
           title.textContent = 'Abbonamento Non Attivo';
