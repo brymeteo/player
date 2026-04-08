@@ -364,10 +364,7 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    /* Schermata intro caricamento */
-    .loading-intro {
-      background: linear-gradient(135deg, #1e4a72 0%, #193573 50%, #193573 100%);
-    }
+   
 
     /* Stili per il testo di caricamento */
     .loading-text {
@@ -2049,9 +2046,67 @@ ease;
       z-index: -1;
     }
 
+.skip-tutorial-overlay {
+  position: fixed;
+  bottom: 40px;
+  right: 300px;
+  z-index: 500;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+  transform: translateY(10px);
+}
+
+.skip-tutorial-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.skip-tutorial-btn {
+  background: rgba(0, 0, 0, 0.78);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  color: white;
+  font-size: 17px;
+  font-weight: 500;
+  padding: 16px 28px;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.skip-tutorial-btn.focused {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: white;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.35);
+  transform: scale(1.03);
+}
+
+.skip-tutorial-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+
+
+
   </style>
 </head>
 <body>
+
+<div class="skip-tutorial-overlay" id="skip-tutorial-overlay">
+  <button class="skip-tutorial-btn focused" id="skip-tutorial-btn">
+    <span>&#9654;</span>
+    <span>Conosci gia' il decoder? Salta il tutorial</span>
+  </button>
+</div>
+
 
   <!-- Contatore utenti online nascosto -->
   <div class="online-counter" id="online-counter">0</div>
@@ -2212,7 +2267,7 @@ ease;
 
       <div class="sky-nav">
         <div class="nav-item" id="mosaic-nav-btn">Mosaico</div>
-        <div class="nav-item">On Demand</div>
+        <div class="nav-item">Versione 10.1</div>
       </div>
     </div>
 
@@ -3298,13 +3353,13 @@ ease;
           
 
           <!-- Canale di configurazione -->
-          <div class="channel-item" data-channel="video0.mp4" data-url="https://brymeteo.github.io/player/decoder/immagini/cartello-configurazione-canali-completata.html" data-number="100" data-category="nazionali">
+          <div class="channel-item" data-channel="video0.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/100-Assistenza.html" data-number="100" data-category="nazionali">
            
             <div class="channel-details">
-              <div class="channel-name-main">Configurazione Completata</div>
+              <div class="channel-name-main">Tutorial Decoder e configurazioni</div>
               <div class="channel-number-main">Canale 100</div>
             </div>
-            <div class="channel-status">INFO</div>
+            <div class="channel-status">INFO SISTEMA</div>
             <div class="favorite-star empty" onclick="toggleFavorite(this)">☆</div>
           </div>
         </div>
@@ -3324,7 +3379,7 @@ ease;
       </div>
       
       <div class="navigation-hint">
-        <div>← → Categorie | ↑ Modalità numerica | ← → Naviga canali | INVIO Seleziona | ESC Chiudi | 9 Menu | 0 Voce | 6 Mosaico | 7 Filtri</div>
+        <div>Per assistenza e guide tutorial, visita il canale 100</div>
       </div>
       
       <div class="control-group">
@@ -6620,6 +6675,35 @@ const mosaicSystem = new MosaicSystem();
     let navigationMode = 'channels';
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     let favoritesMode = false;
+    let skipTutorialVisible = false;
+
+function showSkipTutorialButton() {
+  document.getElementById('skip-tutorial-overlay').classList.add('visible');
+  skipTutorialVisible = true;
+  if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
+  window.skipTutorialTimeout = setTimeout(hideSkipTutorialButton, 540000);
+}
+
+function hideSkipTutorialButton() {
+  document.getElementById('skip-tutorial-overlay').classList.remove('visible');
+  skipTutorialVisible = false;
+  if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
+}
+
+function skipToRai1() {
+  hideSkipTutorialButton();
+  const rai1 = document.querySelector('[data-number="101"]');
+  if (rai1) {
+    const idx = Array.from(channels).indexOf(rai1);
+    selectChannel(idx);
+    changeVideo(idx);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('skip-tutorial-btn').addEventListener('click', skipToRai1);
+});
+
 
     // Mappe per il riconoscimento vocale
     const categoryMap = {
@@ -6980,6 +7064,12 @@ const mosaicSystem = new MosaicSystem();
       
       document.getElementById('iframe-player').src = url;
       const channelNumber = channel.getAttribute('data-number');
+      if (channelNumber === '100') {
+  showSkipTutorialButton();
+} else {
+  hideSkipTutorialButton();
+}
+
       localStorage.setItem('selectedChannel', channelNumber);
       
       // ✅ TRACCIA IL CAMBIO CANALE
@@ -7084,6 +7174,15 @@ document.addEventListener('keydown', (e) => {
   }
 
   // ===== BLOCCO PIN =====
+  
+  if (e.key === 'Enter' && skipTutorialVisible && !hasOpenElements()) {
+  skipToRai1();
+  e.preventDefault();
+  return;
+}
+
+  
+  
   if (isPinInputActive) {
     const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Tab','Enter'];
 
