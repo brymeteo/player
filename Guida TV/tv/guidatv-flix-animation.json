@@ -1,4 +1,4 @@
-{
+[ {
   "id": "flix-animation",
   "name": "Flix Animation",
   "epgName": "Flix Animation",
@@ -23297,5 +23297,6 @@
       "poster": "https://is1-ssl.mzstatic.com/image/thumb/--U5OTGirg8KmQbhOEfWGg/680x382-190.jpg",
       "channel": "flix-animation"
     }
-  ]
-}
+        ]
+    }
+] 
