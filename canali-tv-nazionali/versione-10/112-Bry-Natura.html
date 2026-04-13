@@ -1305,9 +1305,9 @@ document.querySelectorAll('.menu-option').forEach(option => {
         }, 2000);
     </script>
 
-        <script>
-        const epgUrl = "https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-bry-natura.json";
-        let selectedChannelId = "bry-natura";
+    <script>
+        const epgUrl = "https://brymeteo.github.io/iptv-epg/output.json";
+        let selectedChannelId = "IT3200002L5";
         const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
 
         let currentProgramGlobal = null;
@@ -1331,20 +1331,15 @@ document.querySelectorAll('.menu-option').forEach(option => {
             return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
         }
 
-          // Funzione per regolare l'orario in base al periodo:
-    // - In ora legale (DST): sottrae un'ora
-    // - In ora solare: aggiunge un'ora
-    function adjustTime(dateInput) {
-        const date = new Date(dateInput);
-        if (isDST(date)) {
-            // Ora legale: sottrai un'ora
-            date.setHours(date.getHours() - 2);
-        } else {
-            // Ora solare: aggiungi un'ora
-            date.setHours(date.getHours() + 1);
+        function adjustTime(dateInput) {
+            const date = new Date(dateInput);
+            if (isDST(date)) {
+                date.setHours(date.getHours() - 0);
+            } else {
+                date.setHours(date.getHours() + 2);
+            }
+            return date;
         }
-        return date;
-    }
 
         function truncateTitle(title, maxLength = 22) {
             if (title.length <= maxLength) {
@@ -1720,7 +1715,7 @@ document.querySelectorAll('.menu-option').forEach(option => {
             return response.json();
         })
         .then(data => {
-            const channel = data;
+            const channel = data.find(c => c.id === selectedChannelId);
 
             const timeTitleEl = document.getElementById("program-time-title");
             const descEl = document.getElementById("program-description-text");
