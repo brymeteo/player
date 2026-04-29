@@ -849,14 +849,14 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
                     <div class="control-button canali-preferiti">
                         <img src="https://i.ibb.co/q3gWf3Jj/System-Info-26218.webp" alt="Restart" class="icon"
                             style="width: 25px; height: auto;" />
-                        <span>Info (4)</span>
+                        <span>Info</span>
                     </div>
 
 
   <div class="control-button registra">
                         <img src="https://images.icon-icons.com/1880/PNG/512/iconfinder-settings-4341324_120534.png" alt="Restart" class="icon"
                             style="width: 25px; height: auto;" />
-                        <span>Menu Video (2)</span>
+                        <span>Video</span>
                     </div>
 
 
@@ -864,7 +864,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 <div class="control-button canali-preferiti-tv">
                         <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon"
                             style="width: 25px; height: auto;" />
-                        <span>Vocale (0)</span>
+                        <span>Voce</span>
                     </div>
 
 
@@ -873,7 +873,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
                     <div class="control-button canali-preferiti-tv">
                         <img src="https://i.ibb.co/7Nx26QW5/1615996335-17290.png" alt="Restart" class="icon"
                             style="width: 25px; height: auto;" />
-                        <span>Mosaico (6/7)</span>
+                        <span>Mosaico</span>
                     </div>
                 </div>
             </div>
@@ -1765,66 +1765,101 @@ document.querySelectorAll('.menu-option').forEach(option => {
 }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                if (!allPrograms || allPrograms.length === 0) return;
-                if (selectedProgramIndex < allPrograms.length - 1) {
-                    showChannelInfo(true);
-                    if (!isNavigating) {
-                        isNavigating = true;
-                        resetAutoResetTimer();
-                    }
-                    selectProgram(selectedProgramIndex + 1);
-                }
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                if (!allPrograms || allPrograms.length === 0) return;
-                if (selectedProgramIndex > currentProgramIndexInAll) {
-                    showChannelInfo(true);
-                    if (!isNavigating) {
-                        isNavigating = true;
-                        resetAutoResetTimer();
-                    }
-                    selectProgram(selectedProgramIndex - 1);
-                }
-            } else if (e.key === '4') {
-                e.preventDefault();
-                showChannelInfo(false);
-                toggleDescription();
-                if (isDescriptionOpen && !isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-            }
-        });
 
-        document.getElementById('scroll-left').addEventListener('click', () => {
-            if (!allPrograms || allPrograms.length === 0) return;
-            if (selectedProgramIndex > currentProgramIndexInAll) {
-                showChannelInfo(true);
-                if (!isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-                selectProgram(selectedProgramIndex - 1);
-            }
-        });
+    if (e.key === 'ArrowRight') {
+        e.preventDefault();
 
-        document.getElementById('scroll-right').addEventListener('click', () => {
-            if (!allPrograms || allPrograms.length === 0) return;
-            if (selectedProgramIndex < allPrograms.length - 1) {
-                showChannelInfo(true);
-                if (!isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-                selectProgram(selectedProgramIndex + 1);
-            }
-        });
+        // 👉 la barra deve comparire SEMPRE
+        showChannelInfo(true);
 
-        updateCurrentTime();
-        updateProgramName();
-        setInterval(updateProgramName, 60000);
+        // se non ci sono programmi, non fare navigazione
+        if (!allPrograms || allPrograms.length === 0) return;
+
+        if (selectedProgramIndex < allPrograms.length - 1) {
+            if (!isNavigating) {
+                isNavigating = true;
+                resetAutoResetTimer();
+            }
+            selectProgram(selectedProgramIndex + 1);
+        }
+
+        return;
+    }
+
+    else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+
+        // 👉 la barra deve comparire SEMPRE
+        showChannelInfo(true);
+
+        // se non ci sono programmi, non fare navigazione
+        if (!allPrograms || allPrograms.length === 0) return;
+
+        if (selectedProgramIndex > currentProgramIndexInAll) {
+            if (!isNavigating) {
+                isNavigating = true;
+                resetAutoResetTimer();
+            }
+            selectProgram(selectedProgramIndex - 1);
+        }
+
+        return;
+    }
+
+    else if (e.key === '4') {
+        e.preventDefault();
+
+        showChannelInfo(false);
+        toggleDescription();
+
+        if (isDescriptionOpen && !isNavigating) {
+            isNavigating = true;
+            resetAutoResetTimer();
+        }
+
+        return;
+    }
+});
+
+
+// ===== CLICK FRECCIA SINISTRA UI =====
+document.getElementById('scroll-left').addEventListener('click', () => {
+
+    showChannelInfo(true);
+
+    if (!allPrograms || allPrograms.length === 0) return;
+
+    if (selectedProgramIndex > currentProgramIndexInAll) {
+        if (!isNavigating) {
+            isNavigating = true;
+            resetAutoResetTimer();
+        }
+        selectProgram(selectedProgramIndex - 1);
+    }
+});
+
+
+// ===== CLICK FRECCIA DESTRA UI =====
+document.getElementById('scroll-right').addEventListener('click', () => {
+
+    showChannelInfo(true);
+
+    if (!allPrograms || allPrograms.length === 0) return;
+
+    if (selectedProgramIndex < allPrograms.length - 1) {
+        if (!isNavigating) {
+            isNavigating = true;
+            resetAutoResetTimer();
+        }
+        selectProgram(selectedProgramIndex + 1);
+    }
+});
+
+
+// ===== INIT =====
+updateCurrentTime();
+updateProgramName();
+setInterval(updateProgramName, 60000);
     </script>
 
 
