@@ -7336,6 +7336,12 @@ body {
   color: white;
 }
 
+/* CONTENUTO SOTTO */
+#content {
+  padding: 30px;
+  color: black;
+}
+
 /* OVERLAY FULL SCREEN */
 .container {
   position: fixed;
@@ -7402,26 +7408,32 @@ button:focus {
 
 <body>
 
+<!-- 🔽 CONTENUTO SITO -->
+<div id="content">
+  <h1>Benvenuto nel sito</h1>
+  <p>Questo contenuto sarà visibile dopo l'aggiornamento.</p>
+</div>
+
+<!-- 🔽 OVERLAY UPDATE -->
 <div class="container" id="app"></div>
 
 <script>
 const app = document.getElementById("app");
 
-// 🔒 controllo blocco 5 ore
+/* 🔒 controllo blocco 5 ore */
 const updateDoneUntil = localStorage.getItem("update_done_until");
 
 if (updateDoneUntil && Date.now() < parseInt(updateDoneUntil)) {
-  document.body.innerHTML = "";
-  document.body.style.background = "#ffffff";
-  throw new Error("STOP");
+  // nasconde overlay ma lascia sito visibile
+  app.remove();
 } else {
   localStorage.removeItem("update_done_until");
 }
 
-// Stato step
+/* Stato step */
 const step = sessionStorage.getItem("update_step");
 
-// 👉 STEP 2
+/* 👉 STEP 2 */
 if (step === "done") {
   app.innerHTML = `
     <img src="https://i.ibb.co/wFgnHn3m/bry-logo-ufficiale5.png" class="logo">
@@ -7433,7 +7445,7 @@ if (step === "done") {
   `;
 }
 
-// 👉 STEP 1
+/* 👉 STEP 1 */
 else {
   app.innerHTML = `
     <img src="https://i.ibb.co/wFgnHn3m/bry-logo-ufficiale5.png" class="logo">
@@ -7445,7 +7457,7 @@ else {
   `;
 }
 
-// 🔄 RESET
+/* 🔄 RESET */
 function resetApp() {
 
   app.innerHTML = `
@@ -7480,15 +7492,17 @@ function resetApp() {
   }, 2000);
 }
 
-// ✅ COMPLETAMENTO
+/* ✅ COMPLETAMENTO */
 function completeUpdate() {
 
-  const expireTime = Date.now() + (5 * 60 * 60 * 1000); // 5 ore
+  const expireTime = Date.now() + (5 * 60 * 60 * 1000);
   localStorage.setItem("update_done_until", expireTime);
 
   sessionStorage.removeItem("update_step");
 
-  location.reload();
+  // 🔥 chiude overlay e mostra il sito sotto
+  const overlay = document.getElementById("app");
+  if (overlay) overlay.remove();
 }
 </script>
 
