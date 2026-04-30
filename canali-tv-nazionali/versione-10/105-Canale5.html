@@ -1177,30 +1177,46 @@ if (key === "8") {
 
 if (!allPrograms || allPrograms.length === 0) return;
 
-if (key === "ArrowRight") {
-  if (selectedProgramIndex < allPrograms.length - 1) {
-    showChannelInfo(true);
-    if (!isNavigating) {
+  if (key === "ArrowRight") {
+    if (selectedProgramIndex < allPrograms.length - 1) {
+      showChannelInfo(true);
+      if (!isNavigating) {
+        isNavigating = true;
+        resetAutoResetTimer();
+      }
+      selectProgram(selectedProgramIndex + 1);
+    } else {
+      showChannelInfo(false);
+    }
+    return;
+  }
+
+  if (key === "ArrowLeft") {
+    if (selectedProgramIndex > currentProgramIndexInAll) {
+      showChannelInfo(true);
+      if (!isNavigating) {
+        isNavigating = true;
+        resetAutoResetTimer();
+      }
+      selectProgram(selectedProgramIndex - 1);
+    } else {
+      showChannelInfo(false);
+    }
+    return;
+  }
+  
+  if (key === "4") {
+    showChannelInfo(false);
+    toggleDescription();
+
+    if (isDescriptionOpen && !isNavigating) {
       isNavigating = true;
       resetAutoResetTimer();
     }
-    selectProgram(selectedProgramIndex + 1);
+    return;
   }
-  return;
-}
-
-if (key === "ArrowLeft") {
-  if (selectedProgramIndex > currentProgramIndexInAll) {
-    showChannelInfo(true);
-    if (!isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
-    }
-    selectProgram(selectedProgramIndex - 1);
-  }
-  return;
-}
-
+  
+  
 // ===== ACTION SHORTCUT =====
 if (key === "3") {
   player.seek(Math.max(0, player.getCurrentTime() - 10));
