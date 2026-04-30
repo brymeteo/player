@@ -996,61 +996,65 @@ var overlayText = document.getElementById("overlay-text");
 var restartMessage = document.getElementById("restart-message");
 var channelInfoBar = document.getElementById("channel-info-bar");
 var menuPopup = document.getElementById("menu-popup");
-var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
 
-// Controllo al caricamento della pagina: se viene da tasto 7, mostra l'overlay exit-menu-overlay
+var overlayTimer, restartTimer, channelInfoTimer;
+
+// ===== INIT =====
 if (localStorage.getItem("showExitOverlayAfterLive") === "true") {
     showExitMenuOverlay();
     localStorage.removeItem("showExitOverlayAfterLive");
 }
 
+// ===== OVERLAY =====
 function showOverlay(state) {
   clearTimeout(overlayTimer);
   clearTimeout(restartTimer);
+
   overlayCard.classList.remove("hidden");
   overlayCard.style.display = 'block';
 
   if (state === "pause") {
     overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
     overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 6.";
-  } else if (state === "play") {
+  } 
+  else if (state === "play") {
     overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
     overlayText.innerHTML = "";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
-  } else if (state === "restart") {
+    overlayTimer = setTimeout(hideOverlay, 2000);
+  } 
+  else if (state === "restart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
+    overlayTimer = setTimeout(hideOverlay, 2000);
+
     restartTimer = setTimeout(() => {
       restartMessage.classList.remove("hidden");
-      setTimeout(() => {
-        restartMessage.classList.add("hidden");
-      }, 15000);
+      setTimeout(() => restartMessage.classList.add("hidden"), 15000);
     }, 5000);
-  } else if (state === "fromStart") {
+  } 
+  else if (state === "fromStart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riavviato dall'inizio.";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
-  } else if (state === "live") {
+    overlayTimer = setTimeout(hideOverlay, 2000);
+  } 
+  else if (state === "live") {
     overlayIcon.src = "https://i.ibb.co/mrKSv9Xh/circularplaybutton-122036.png";
     overlayText.innerHTML = "Ritorno alla diretta in corso...";
-    // Salva in localStorage per mostrare overlay exit-menu-overlay al reload
+
     localStorage.setItem("showExitOverlayAfterLive", "true");
+
     overlayTimer = setTimeout(() => {
       location.reload();
     }, 2000);
   }
 }
 
+function hideOverlay() {
+  overlayCard.classList.add("hidden");
+  overlayCard.style.display = 'none';
+}
+
+// ===== EXIT OVERLAY =====
 function showExitMenuOverlay() {
   const overlay = document.getElementById("exit-menu-overlay");
   overlay.classList.remove("hidden");
@@ -1062,8 +1066,8 @@ function showExitMenuOverlay() {
   }, 50000);
 }
 
+// ===== MENU =====
 function showMenuPopup() {
-  clearTimeout(menuTimer);
   menuPopup.classList.remove("hidden");
   menuPopup.style.display = 'block';
 }
@@ -1071,9 +1075,9 @@ function showMenuPopup() {
 function hideMenuPopup() {
   menuPopup.classList.add("hidden");
   menuPopup.style.display = 'none';
-  clearTimeout(menuTimer);
 }
 
+// ===== CHANNEL INFO =====
 function hideChannelInfo() {
   channelInfoBar.style.display = "none";
   clearTimeout(channelInfoTimer);
@@ -1085,14 +1089,17 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 50000);
 }
 
-var defaultHideTimer = setTimeout(hideChannelInfo, 9000);
+setTimeout(hideChannelInfo, 9000);
 
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
+// ===== STATO MENU =====
 let isMenuOpen = false;
 
+// ===== RICEZIONE COMANDI =====
 window.addEventListener("message", function (event) {
+
   if (!event.data) return;
 
   let key = null;
@@ -1105,53 +1112,50 @@ window.addEventListener("message", function (event) {
 
   if (!key) return;
 
-  console.log("Messaggio ricevuto:", key);
+  console.log("KEY:", key, "MENU:", isMenuOpen);
 
-  if (key === "2" || key === "menu" || key === "openMenu") {
-    if (isMenuOpen) {
-      hideMenuPopup();
-      isMenuOpen = false;
-    } else {
-      showMenuPopup();
-      isMenuOpen = true;
-    }
+  // ===== MENU CONTROL (NO TOGGLE!) =====
+  if (key === "openMenu") {
+    showMenuPopup();
+    isMenuOpen = true;
     return;
   }
 
-  if (isMenuOpen) {
-    if (key === "3") {
-      let current = player.getCurrentTime();
-      let t = Math.max(0, current - 10);
-      player.seek(t);
-      showOverlay("restart");
-      showExitMenuOverlay();
-    }
-    else if (key === "4") {
-      player.seek(0);
-      player.play();
-      showOverlay("fromStart");
-      showExitMenuOverlay();
-    }
-    else if (key === "5") {
-      player.pause();
-      showOverlay("pause");
-      showExitMenuOverlay();
-    }
-    else if (key === "6") {
-      player.play();
-      showOverlay("play");
-      showExitMenuOverlay();
-    }
-    else if (key === "7") {
-      showOverlay("live");
-      showExitMenuOverlay();
-    }
-
+  if (key === "closeMenu") {
     hideMenuPopup();
     isMenuOpen = false;
     return;
   }
 
+  // ===== COMANDI DENTRO MENU =====
+  if (isMenuOpen) {
+
+    if (key === "3") {
+      player.seek(Math.max(0, player.getCurrentTime() - 10));
+      showOverlay("restart");
+    }
+    else if (key === "4") {
+      player.seek(0);
+      player.play();
+      showOverlay("fromStart");
+    }
+    else if (key === "5") {
+      player.pause();
+      showOverlay("pause");
+    }
+    else if (key === "6") {
+      player.play();
+      showOverlay("play");
+    }
+    else if (key === "7") {
+      showOverlay("live");
+    }
+
+    // 🚫 NON chiudere il menu automaticamente
+    return;
+  }
+
+  // ===== COMANDI NORMALI =====
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
@@ -1168,8 +1172,6 @@ window.addEventListener("message", function (event) {
         resetAutoResetTimer();
       }
       selectProgram(selectedProgramIndex + 1);
-    } else {
-      showChannelInfo(false);
     }
     return;
   }
@@ -1182,27 +1184,12 @@ window.addEventListener("message", function (event) {
         resetAutoResetTimer();
       }
       selectProgram(selectedProgramIndex - 1);
-    } else {
-      showChannelInfo(false);
-    }
-    return;
-  }
-
-  if (key === "4") {
-    showChannelInfo(false);
-    toggleDescription();
-
-    if (isDescriptionOpen && !isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
     }
     return;
   }
 
   if (key === "3") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    player.seek(Math.max(0, player.getCurrentTime() - 10));
     showOverlay("restart");
   }
   else if (key === "5") {
@@ -1217,27 +1204,13 @@ window.addEventListener("message", function (event) {
     showOverlay("live");
   }
 
-  if (key === "restart" || key === "rewind" || key === "indietro") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
-    showOverlay("restart");
-  }
-  else if (key === "live") {
-    showOverlay("live");
-  }
-  else if (typeof event.data === "object" && event.data.action === "rewind") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - event.data.seconds);
-    player.seek(t);
-    showOverlay("restart");
-  }
 });
 
+// ===== CLICK MENU OPTION =====
 document.querySelectorAll('.menu-option').forEach(option => {
   option.addEventListener('click', function() {
     const action = this.getAttribute('data-action');
-    window.postMessage(action, '*');
+    window.postMessage({ action: "key", key: action }, '*');
   });
 });
 </script>
