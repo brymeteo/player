@@ -6625,8 +6625,10 @@ function sendToIframe(key) {
 }
 
 
-// ===== STATO MENU POPUP =====
-let isPopupMenuOpen = false;
+// ===== STATE =====
+let isMenuOpen = false;
+let menuToggleDebounce = false;
+
 
 // 🔥 LOCK ANTI-DOPPIO TOGGLE MENU (SMART TV FIX)
 let menuToggleLock = false;
@@ -6646,30 +6648,30 @@ document.addEventListener('keydown', (e) => {
   }
   lastKeyPressTime[e.key] = now;
 
-  // ===== TOGGLE POPUP (TASTO 2) =====
-  if (e.key === '2') {
+ // ===== TOGGLE POPUP (TASTO 2) =====
+if (e.key === '2') {
 
-    // 🔒 blocco anti doppio evento Smart TV
-    if (menuToggleLock) {
-      e.preventDefault();
-      return;
-    }
-
-    menuToggleLock = true;
-
-    isPopupMenuOpen = !isPopupMenuOpen;
-
-    sendToIframe("2");
-
-
-    // 🔓 sblocco dopo tempo maggiore (TV-safe)
-    setTimeout(() => {
-      menuToggleLock = false;
-    }, 800);
-
+  // 🔒 blocco anti doppio evento Smart TV
+  if (menuToggleLock) {
     e.preventDefault();
     return;
   }
+
+  menuToggleLock = true;
+
+  isMenuOpen = !isMenuOpen;  // ← CORRETTO: isMenuOpen non isPopupMenuOpen
+
+  sendToIframe("2");
+
+  // 🔓 sblocco dopo tempo maggiore (TV-safe)
+  setTimeout(() => {
+    menuToggleLock = false;
+  }, 800);
+
+  e.preventDefault();
+  return;
+}
+
 
   // ===== PRIORITÀ MENU POPUP =====
   if (isPopupMenuOpen) {
@@ -6679,11 +6681,12 @@ document.addEventListener('keydown', (e) => {
       sendToIframe(e.key);
     }
 
-    // ESC chiude menu
-    if (e.key === 'Escape') {
-      isPopupMenuOpen = false;
-      sendToIframe("closeMenu");
-    }
+   // ESC chiude menu
+if (e.key === 'Escape') {
+  isMenuOpen = false;
+  sendToIframe("Escape");  // ← O semplicemente non inviare niente
+}
+
 
     e.preventDefault();
     return;
