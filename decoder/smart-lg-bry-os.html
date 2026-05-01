@@ -6613,22 +6613,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-  // ===== INVIO COMANDI ALL'IFRAME =====
-function sendToIframe(key) {
+function sendToIframe(message) {
   const iframe = document.getElementById("iframe-player");
   if (!iframe || !iframe.contentWindow) return;
 
   iframe.contentWindow.postMessage({
     action: "key",
-    key: key
+    key: message
   }, "*");
 }
 
-
-// ===== STATE =====
-let isMenuOpen = false;
-let menuToggleDebounce = false;
-
+// ===== STATO MENU POPUP =====
+let isPopupMenuOpen = false;
 
 // 🔥 LOCK ANTI-DOPPIO TOGGLE MENU (SMART TV FIX)
 let menuToggleLock = false;
@@ -6641,37 +6637,42 @@ document.addEventListener('keydown', (e) => {
 
   const now = Date.now();
 
-  // 🔥 BLOCCO GENERALE ANTI-REPEAT (più permissivo)
+  // 🔥 BLOCCO GENERALE ANTI-REPEAT (più stabile per TV)
   if (lastKeyPressTime[e.key] && now - lastKeyPressTime[e.key] < 300) {
     e.preventDefault();
     return;
   }
   lastKeyPressTime[e.key] = now;
 
- // ===== TOGGLE POPUP (TASTO 2) =====
-if (e.key === '2') {
+  // ===== TOGGLE POPUP (TASTO 2) =====
+  if (e.key === '2') {
 
-  // 🔒 blocco anti doppio evento Smart TV
-  if (menuToggleLock) {
+    // 🔒 anti doppio evento Smart TV
+    if (menuToggleLock) {
+      e.preventDefault();
+      return;
+    }
+
+    menuToggleLock = true;
+
+    // toggle locale
+    isPopupMenuOpen = !isPopupMenuOpen;
+
+    // 🔴 IMPORTANTE: solo OPEN (niente closeMenu)
+    if (isPopupMenuOpen) {
+      sendToIframe("openMenu");
+    } else {
+      sendToIframe("closeMenu");
+    }
+
+    // 🔓 sblocco più lento (TV safe)
+    setTimeout(() => {
+      menuToggleLock = false;
+    }, 600);
+
     e.preventDefault();
     return;
   }
-
-  menuToggleLock = true;
-
-  isMenuOpen = !isMenuOpen;  // ← CORRETTO: isMenuOpen non isPopupMenuOpen
-
-  sendToIframe("2");
-
-  // 🔓 sblocco dopo tempo maggiore (TV-safe)
-  setTimeout(() => {
-    menuToggleLock = false;
-  }, 800);
-
-  e.preventDefault();
-  return;
-}
-
 
   // ===== PRIORITÀ MENU POPUP =====
   if (isPopupMenuOpen) {
@@ -6681,12 +6682,11 @@ if (e.key === '2') {
       sendToIframe(e.key);
     }
 
-   // ESC chiude menu
-if (e.key === 'Escape') {
-  isMenuOpen = false;
-  sendToIframe("Escape");  // ← O semplicemente non inviare niente
-}
-
+    // ESC chiude menu
+    if (e.key === 'Escape') {
+      isPopupMenuOpen = false;
+      sendToIframe("closeMenu");
+    }
 
     e.preventDefault();
     return;
