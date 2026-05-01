@@ -1093,7 +1093,6 @@ document.addEventListener("keypress", showChannelInfo);
 
 // ===== STATE =====
 let isMenuOpen = false;
-let lastMenuToggleTime = 0;
 
 // ===== MESSAGE LISTENER =====
 window.addEventListener("message", function (event) {
@@ -1110,13 +1109,11 @@ window.addEventListener("message", function (event) {
 
   if (!key) return;
 
-  console.log("KEY:", key);
+  console.log("KEY:", key, "TYPE:", typeof event.data);
 
 // ===== TOGGLE MENU (TASTO 2) =====
 if (key === "openMenu" || key === "2" || key === "menu") {
-  var now = Date.now();
-  if (now - lastMenuToggleTime < 300) return;
-  lastMenuToggleTime = now;
+  if (typeof event.data === "string") return;
 
   if (!isMenuOpen) {
     showMenuPopup();
