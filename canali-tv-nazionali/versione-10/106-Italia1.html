@@ -1091,23 +1091,24 @@ document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
 let isMenuOpen = false;
+let lastKeyTime = 0;
+let isToggling = false;
 
-window.addEventListener("message", function (event) {
-  if (!event.data) return;
+function handleKey(key, rawEvent = null) {
+  const now = Date.now();
 
-  let key = null;
+  // 🔴 blocco doppio evento (Smart TV fix)
+  if (now - lastKeyTime < 250) return;
+  lastKeyTime = now;
 
-  if (typeof event.data === "object" && event.data.action === "key") {
-    key = event.data.key;
-  } else if (typeof event.data === "string") {
-    key = event.data;
-  }
+  console.log("Tasto ricevuto:", key);
 
-  if (!key) return;
-
-  console.log("Messaggio ricevuto:", key);
-
+  // 🔴 TOGGLE MENU STABILE
   if (key === "2" || key === "menu" || key === "openMenu") {
+
+    if (isToggling) return;
+    isToggling = true;
+
     if (isMenuOpen) {
       hideMenuPopup();
       isMenuOpen = false;
@@ -1115,14 +1116,19 @@ window.addEventListener("message", function (event) {
       showMenuPopup();
       isMenuOpen = true;
     }
+
+    setTimeout(() => {
+      isToggling = false;
+    }, 300);
+
     return;
   }
 
+  // 🔴 AZIONI MENU (3–7)
   if (isMenuOpen) {
     if (key === "3") {
       let current = player.getCurrentTime();
-      let t = Math.max(0, current - 10);
-      player.seek(t);
+      player.seek(Math.max(0, current - 10));
       showOverlay("restart");
       showExitMenuOverlay();
     }
@@ -1147,11 +1153,13 @@ window.addEventListener("message", function (event) {
       showExitMenuOverlay();
     }
 
+    // 🔴 chiude SEMPRE dopo azione
     hideMenuPopup();
     isMenuOpen = false;
     return;
   }
 
+  // 🔴 resto controlli
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
@@ -1201,8 +1209,7 @@ window.addEventListener("message", function (event) {
 
   if (key === "3") {
     let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    player.seek(Math.max(0, current - 10));
     showOverlay("restart");
   }
   else if (key === "5") {
@@ -1219,25 +1226,62 @@ window.addEventListener("message", function (event) {
 
   if (key === "restart" || key === "rewind" || key === "indietro") {
     let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    player.seek(Math.max(0, current - 10));
     showOverlay("restart");
   }
   else if (key === "live") {
     showOverlay("live");
   }
-  else if (typeof event.data === "object" && event.data.action === "rewind") {
+  else if (rawEvent && typeof rawEvent.data === "object" && rawEvent.data.action === "rewind") {
     let current = player.getCurrentTime();
-    let t = Math.max(0, current - event.data.seconds);
-    player.seek(t);
+    player.seek(Math.max(0, current - rawEvent.data.seconds));
     showOverlay("restart");
   }
+}
+
+// 🔴 POSTMESSAGE (come avevi)
+window.addEventListener("message", function (event) {
+  if (!event.data) return;
+
+  let key = null;
+
+  if (typeof event.data === "object" && event.data.action === "key") {
+    key = event.data.key;
+  } else if (typeof event.data === "string") {
+    key = event.data;
+  }
+
+  if (!key) return;
+
+  handleKey(key, event);
 });
 
+// 🔴 AGGIUNTO: supporto Smart TV (TASTIERA / TELECOMANDO)
+document.addEventListener("keydown", function (e) {
+  let key = null;
+
+  if (e.key === "2" || e.keyCode === 50) key = "2";
+  if (e.key === "3" || e.keyCode === 51) key = "3";
+  if (e.key === "4" || e.keyCode === 52) key = "4";
+  if (e.key === "5" || e.keyCode === 53) key = "5";
+  if (e.key === "6" || e.keyCode === 54) key = "6";
+  if (e.key === "7" || e.keyCode === 55) key = "7";
+  if (e.key === "8" || e.keyCode === 56) key = "8";
+
+  if (e.key === "ArrowRight") key = "ArrowRight";
+  if (e.key === "ArrowLeft") key = "ArrowLeft";
+
+  if (!key) return;
+
+  e.preventDefault();
+  handleKey(key);
+});
+
+// 🔴 CLICK MENU
 document.querySelectorAll('.menu-option').forEach(option => {
   option.addEventListener('click', function() {
     const action = this.getAttribute('data-action');
-    window.postMessage(action, '*');
+    handleKey(action);
   });
 });
 </script>
