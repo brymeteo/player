@@ -6613,18 +6613,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-  function sendToIframe(message) {
-  const iframe = document.getElementById("iframe-player");
-  if (!iframe) return;
-
-  try {
-    iframe.contentWindow.postMessage(message, "*");
-  } catch (err) {
-    console.warn("Errore postMessage:", err);
-  }
-}
-
-// ===== INVIO COMANDI ALL'IFRAME =====
+  // ===== INVIO COMANDI ALL'IFRAME =====
 function sendToIframe(key) {
   const iframe = document.getElementById("iframe-player");
   if (!iframe || !iframe.contentWindow) return;
@@ -6634,6 +6623,7 @@ function sendToIframe(key) {
     key: key
   }, "*");
 }
+
 
 // ===== STATO MENU POPUP =====
 let isPopupMenuOpen = false;
@@ -6669,7 +6659,8 @@ document.addEventListener('keydown', (e) => {
 
     isPopupMenuOpen = !isPopupMenuOpen;
 
-    sendToIframe(isPopupMenuOpen ? "openMenu" : "closeMenu");
+    sendToIframe("2");
+
 
     // 🔓 sblocco dopo tempo maggiore (TV-safe)
     setTimeout(() => {
