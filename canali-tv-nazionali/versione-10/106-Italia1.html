@@ -1065,17 +1065,29 @@ function showExitMenuOverlay() {
   }, 50000);
 }
 
-// ===== MENU =====
-function showMenuPopup() {
-  clearTimeout(menuTimer);
+// ===== MENU STATE MACHINE =====
+let menuOpen = false;
+let menuLock = false; // anti doppio input TV
+
+function openMenu() {
+  if (menuOpen) return;
+
+  menuOpen = true;
+  menuLock = true;
+
   menuPopup.classList.remove("hidden");
-  menuPopup.style.display = 'block';
+  menuPopup.style.display = "block";
+
+  setTimeout(() => menuLock = false, 200);
 }
 
-function hideMenuPopup() {
+function closeMenu() {
+  if (!menuOpen) return;
+
+  menuOpen = false;
+
   menuPopup.classList.add("hidden");
-  menuPopup.style.display = 'none';
-  clearTimeout(menuTimer);
+  menuPopup.style.display = "none";
 }
 
 // ===== CHANNEL INFO =====
@@ -1095,63 +1107,69 @@ setTimeout(hideChannelInfo, 9000);
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
-// ===== STATE =====
-let isMenuOpen = false;
+// ===== MENU ACTIONS =====
+function runMenuAction(key) {
 
-// ===== CORE HANDLER =====
+  if (key === "3") {
+    player.seek(Math.max(0, player.getCurrentTime() - 10));
+    showOverlay("restart");
+    showExitMenuOverlay();
+  }
+
+  else if (key === "4") {
+    player.seek(0);
+    player.play();
+    showOverlay("fromStart");
+    showExitMenuOverlay();
+  }
+
+  else if (key === "5") {
+    player.pause();
+    showOverlay("pause");
+    showExitMenuOverlay();
+  }
+
+  else if (key === "6") {
+    player.play();
+    showOverlay("play");
+    showExitMenuOverlay();
+  }
+
+  else if (key === "7") {
+    showOverlay("live");
+    showExitMenuOverlay();
+  }
+
+  closeMenu();
+}
+
+// ===== CORE HANDLER (UNICO PUNTO INPUT) =====
 function handleKey(key) {
 
   console.log("KEY:", key);
 
-  // ✅ CONTROLLO DIRETTO (NO TOGGLE!)
-  if (key === "openMenu") {
-    showMenuPopup();
-    isMenuOpen = true;
+  if (menuLock) return;
+
+  // ---- OPEN / CLOSE MENU ----
+  if (key === "2") {
+    openMenu();
     return;
   }
 
-  if (key === "closeMenu") {
-    hideMenuPopup();
-    isMenuOpen = false;
+  if (key === "0") {
+    closeMenu();
     return;
   }
 
-  // ===== MENU ACTIONS =====
-  if (isMenuOpen) {
-
-    if (key === "3") {
-      player.seek(Math.max(0, player.getCurrentTime() - 10));
-      showOverlay("restart");
-      showExitMenuOverlay();
+  // ---- MENU ACTIVE ----
+  if (menuOpen) {
+    if (["3","4","5","6","7"].includes(key)) {
+      runMenuAction(key);
     }
-    else if (key === "4") {
-      player.seek(0);
-      player.play();
-      showOverlay("fromStart");
-      showExitMenuOverlay();
-    }
-    else if (key === "5") {
-      player.pause();
-      showOverlay("pause");
-      showExitMenuOverlay();
-    }
-    else if (key === "6") {
-      player.play();
-      showOverlay("play");
-      showExitMenuOverlay();
-    }
-    else if (key === "7") {
-      showOverlay("live");
-      showExitMenuOverlay();
-    }
-
-    // chiude dopo azione
-    hideMenuPopup();
-    isMenuOpen = false;
     return;
   }
 
-  // ===== ALTRE AZIONI =====
+  // ---- NAVIGATION ----
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
@@ -1162,11 +1180,7 @@ function handleKey(key) {
 
   if (key === "ArrowRight") {
     if (selectedProgramIndex < allPrograms.length - 1) {
-      showChannelInfo(true);
-      if (!isNavigating) {
-        isNavigating = true;
-        resetAutoResetTimer();
-      }
+      showChannelInfo();
       selectProgram(selectedProgramIndex + 1);
     }
     return;
@@ -1174,17 +1188,26 @@ function handleKey(key) {
 
   if (key === "ArrowLeft") {
     if (selectedProgramIndex > currentProgramIndexInAll) {
-      showChannelInfo(true);
-      if (!isNavigating) {
-        isNavigating = true;
-        resetAutoResetTimer();
-      }
+      showChannelInfo();
       selectProgram(selectedProgramIndex - 1);
     }
     return;
   }
+  
+   if (key === "4") {
+    showChannelInfo(false);
+    toggleDescription();
 
-  // shortcut fuori menu
+    if (isDescriptionOpen && !isNavigating) {
+      isNavigating = true;
+      resetAutoResetTimer();
+    }
+    return;
+  }
+  
+  
+
+  // ---- SHORTCUTS OUTSIDE MENU ----
   if (key === "3") {
     player.seek(Math.max(0, player.getCurrentTime() - 10));
     showOverlay("restart");
