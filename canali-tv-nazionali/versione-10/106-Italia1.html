@@ -1097,32 +1097,22 @@ document.addEventListener("keypress", showChannelInfo);
 
 // ===== STATE =====
 let isMenuOpen = false;
-let isToggling = false;
 
 // ===== CORE HANDLER =====
 function handleKey(key) {
 
   console.log("KEY:", key);
 
-  // ===== TOGGLE MENU =====
-  if (key === "2") {
+  // ✅ CONTROLLO DIRETTO (NO TOGGLE!)
+  if (key === "openMenu") {
+    showMenuPopup();
+    isMenuOpen = true;
+    return;
+  }
 
-    if (isToggling) return;
-
-    isToggling = true;
-
-    if (!isMenuOpen) {
-      showMenuPopup();
-      isMenuOpen = true;
-    } else {
-      hideMenuPopup();
-      isMenuOpen = false;
-    }
-
-    setTimeout(() => {
-      isToggling = false;
-    }, 800); // 🔥 stabile
-
+  if (key === "closeMenu") {
+    hideMenuPopup();
+    isMenuOpen = false;
     return;
   }
 
@@ -1155,6 +1145,7 @@ function handleKey(key) {
       showExitMenuOverlay();
     }
 
+    // chiude dopo azione
     hideMenuPopup();
     isMenuOpen = false;
     return;
