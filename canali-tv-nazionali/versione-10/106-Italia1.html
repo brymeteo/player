@@ -996,64 +996,61 @@ var overlayText = document.getElementById("overlay-text");
 var restartMessage = document.getElementById("restart-message");
 var channelInfoBar = document.getElementById("channel-info-bar");
 var menuPopup = document.getElementById("menu-popup");
-
 var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
 
-// ===== INIT =====
+// Controllo al caricamento della pagina: se viene da tasto 7, mostra l'overlay exit-menu-overlay
 if (localStorage.getItem("showExitOverlayAfterLive") === "true") {
     showExitMenuOverlay();
     localStorage.removeItem("showExitOverlayAfterLive");
 }
 
-// ===== OVERLAY =====
 function showOverlay(state) {
   clearTimeout(overlayTimer);
   clearTimeout(restartTimer);
-
   overlayCard.classList.remove("hidden");
   overlayCard.style.display = 'block';
 
   if (state === "pause") {
     overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
     overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 6.";
-  } 
-  else if (state === "play") {
+  } else if (state === "play") {
     overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
     overlayText.innerHTML = "";
-    overlayTimer = setTimeout(hideOverlay, 2000);
-  } 
-  else if (state === "restart") {
+    overlayTimer = setTimeout(() => {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
+  } else if (state === "restart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
-    overlayTimer = setTimeout(hideOverlay, 2000);
-
+    overlayTimer = setTimeout(() => {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
     restartTimer = setTimeout(() => {
       restartMessage.classList.remove("hidden");
-      setTimeout(() => restartMessage.classList.add("hidden"), 15000);
+      setTimeout(() => {
+        restartMessage.classList.add("hidden");
+      }, 15000);
     }, 5000);
-  } 
-  else if (state === "fromStart") {
+  } else if (state === "fromStart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riavviato dall'inizio.";
-    overlayTimer = setTimeout(hideOverlay, 2000);
-  } 
-  else if (state === "live") {
+    overlayTimer = setTimeout(() => {
+      overlayCard.classList.add("hidden");
+      overlayCard.style.display = 'none';
+    }, 2000);
+  } else if (state === "live") {
     overlayIcon.src = "https://i.ibb.co/mrKSv9Xh/circularplaybutton-122036.png";
     overlayText.innerHTML = "Ritorno alla diretta in corso...";
+    // Salva in localStorage per mostrare overlay exit-menu-overlay al reload
     localStorage.setItem("showExitOverlayAfterLive", "true");
-
     overlayTimer = setTimeout(() => {
       location.reload();
     }, 2000);
   }
 }
 
-function hideOverlay() {
-  overlayCard.classList.add("hidden");
-  overlayCard.style.display = 'none';
-}
-
-// ===== EXIT OVERLAY =====
 function showExitMenuOverlay() {
   const overlay = document.getElementById("exit-menu-overlay");
   overlay.classList.remove("hidden");
@@ -1065,32 +1062,18 @@ function showExitMenuOverlay() {
   }, 50000);
 }
 
-// ===== MENU STATE MACHINE =====
-let menuOpen = false;
-let menuLock = false; // anti doppio input TV
-
-function openMenu() {
-  if (menuOpen) return;
-
-  menuOpen = true;
-  menuLock = true;
-
+function showMenuPopup() {
+  clearTimeout(menuTimer);
   menuPopup.classList.remove("hidden");
-  menuPopup.style.display = "block";
-
-  setTimeout(() => menuLock = false, 200);
+  menuPopup.style.display = 'block';
 }
 
-function closeMenu() {
-  if (!menuOpen) return;
-
-  menuOpen = false;
-
+function hideMenuPopup() {
   menuPopup.classList.add("hidden");
-  menuPopup.style.display = "none";
+  menuPopup.style.display = 'none';
+  clearTimeout(menuTimer);
 }
 
-// ===== CHANNEL INFO =====
 function hideChannelInfo() {
   channelInfoBar.style.display = "none";
   clearTimeout(channelInfoTimer);
@@ -1102,132 +1085,14 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 50000);
 }
 
-setTimeout(hideChannelInfo, 9000);
+var defaultHideTimer = setTimeout(hideChannelInfo, 9000);
 
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
-// ===== MENU ACTIONS =====
-function runMenuAction(key) {
+let isMenuOpen = false;
 
-  if (key === "3") {
-    player.seek(Math.max(0, player.getCurrentTime() - 10));
-    showOverlay("restart");
-    showExitMenuOverlay();
-  }
-
-  else if (key === "4") {
-    player.seek(0);
-    player.play();
-    showOverlay("fromStart");
-    showExitMenuOverlay();
-  }
-
-  else if (key === "5") {
-    player.pause();
-    showOverlay("pause");
-    showExitMenuOverlay();
-  }
-
-  else if (key === "6") {
-    player.play();
-    showOverlay("play");
-    showExitMenuOverlay();
-  }
-
-  else if (key === "7") {
-    showOverlay("live");
-    showExitMenuOverlay();
-  }
-
-  closeMenu();
-}
-
-// ===== CORE HANDLER (UNICO PUNTO INPUT) =====
-function handleKey(key) {
-
-  console.log("KEY:", key);
-
-  if (menuLock) return;
-
-  // ---- OPEN / CLOSE MENU ----
-  if (key === "2") {
-    openMenu();
-    return;
-  }
-
-  if (key === "0") {
-    closeMenu();
-    return;
-  }
-
-  // ---- MENU ACTIVE ----
-  if (menuOpen) {
-    if (["3","4","5","6","7"].includes(key)) {
-      runMenuAction(key);
-    }
-    return;
-  }
-
-  // ---- NAVIGATION ----
-  if (key === "8") {
-    hideChannelInfo();
-    isNavigating = false;
-    return;
-  }
-
-  if (!allPrograms || allPrograms.length === 0) return;
-
-  if (key === "ArrowRight") {
-    if (selectedProgramIndex < allPrograms.length - 1) {
-      showChannelInfo();
-      selectProgram(selectedProgramIndex + 1);
-    }
-    return;
-  }
-
-  if (key === "ArrowLeft") {
-    if (selectedProgramIndex > currentProgramIndexInAll) {
-      showChannelInfo();
-      selectProgram(selectedProgramIndex - 1);
-    }
-    return;
-  }
-  
-   if (key === "4") {
-    showChannelInfo(false);
-    toggleDescription();
-
-    if (isDescriptionOpen && !isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
-    }
-    return;
-  }
-  
-  
-
-  // ---- SHORTCUTS OUTSIDE MENU ----
-  if (key === "3") {
-    player.seek(Math.max(0, player.getCurrentTime() - 10));
-    showOverlay("restart");
-  }
-  else if (key === "5") {
-    player.pause();
-    showOverlay("pause");
-  }
-  else if (key === "6") {
-    player.play();
-    showOverlay("play");
-  }
-  else if (key === "7") {
-    showOverlay("live");
-  }
-}
-
-// ===== POSTMESSAGE ONLY =====
 window.addEventListener("message", function (event) {
-
   if (!event.data) return;
 
   let key = null;
@@ -1240,14 +1105,139 @@ window.addEventListener("message", function (event) {
 
   if (!key) return;
 
-  handleKey(key);
+  console.log("Messaggio ricevuto:", key);
+
+  if (key === "2" || key === "menu" || key === "openMenu") {
+    if (isMenuOpen) {
+      hideMenuPopup();
+      isMenuOpen = false;
+    } else {
+      showMenuPopup();
+      isMenuOpen = true;
+    }
+    return;
+  }
+
+  if (isMenuOpen) {
+    if (key === "3") {
+      let current = player.getCurrentTime();
+      let t = Math.max(0, current - 10);
+      player.seek(t);
+      showOverlay("restart");
+      showExitMenuOverlay();
+    }
+    else if (key === "4") {
+      player.seek(0);
+      player.play();
+      showOverlay("fromStart");
+      showExitMenuOverlay();
+    }
+    else if (key === "5") {
+      player.pause();
+      showOverlay("pause");
+      showExitMenuOverlay();
+    }
+    else if (key === "6") {
+      player.play();
+      showOverlay("play");
+      showExitMenuOverlay();
+    }
+    else if (key === "7") {
+      showOverlay("live");
+      showExitMenuOverlay();
+    }
+
+    hideMenuPopup();
+    isMenuOpen = false;
+    return;
+  }
+
+  if (key === "8") {
+    hideChannelInfo();
+    isNavigating = false;
+    return;
+  }
+
+  if (!allPrograms || allPrograms.length === 0) return;
+
+  if (key === "ArrowRight") {
+    if (selectedProgramIndex < allPrograms.length - 1) {
+      showChannelInfo(true);
+      if (!isNavigating) {
+        isNavigating = true;
+        resetAutoResetTimer();
+      }
+      selectProgram(selectedProgramIndex + 1);
+    } else {
+      showChannelInfo(false);
+    }
+    return;
+  }
+
+  if (key === "ArrowLeft") {
+    if (selectedProgramIndex > currentProgramIndexInAll) {
+      showChannelInfo(true);
+      if (!isNavigating) {
+        isNavigating = true;
+        resetAutoResetTimer();
+      }
+      selectProgram(selectedProgramIndex - 1);
+    } else {
+      showChannelInfo(false);
+    }
+    return;
+  }
+
+  if (key === "4") {
+    showChannelInfo(false);
+    toggleDescription();
+
+    if (isDescriptionOpen && !isNavigating) {
+      isNavigating = true;
+      resetAutoResetTimer();
+    }
+    return;
+  }
+
+  if (key === "3") {
+    let current = player.getCurrentTime();
+    let t = Math.max(0, current - 10);
+    player.seek(t);
+    showOverlay("restart");
+  }
+  else if (key === "5") {
+    player.pause();
+    showOverlay("pause");
+  }
+  else if (key === "6") {
+    player.play();
+    showOverlay("play");
+  }
+  else if (key === "7") {
+    showOverlay("live");
+  }
+
+  if (key === "restart" || key === "rewind" || key === "indietro") {
+    let current = player.getCurrentTime();
+    let t = Math.max(0, current - 10);
+    player.seek(t);
+    showOverlay("restart");
+  }
+  else if (key === "live") {
+    showOverlay("live");
+  }
+  else if (typeof event.data === "object" && event.data.action === "rewind") {
+    let current = player.getCurrentTime();
+    let t = Math.max(0, current - event.data.seconds);
+    player.seek(t);
+    showOverlay("restart");
+  }
 });
 
-// ===== CLICK MENU =====
 document.querySelectorAll('.menu-option').forEach(option => {
   option.addEventListener('click', function() {
     const action = this.getAttribute('data-action');
-    handleKey(action);
+    window.postMessage(action, '*');
   });
 });
 </script>
