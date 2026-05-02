@@ -996,61 +996,64 @@ var overlayText = document.getElementById("overlay-text");
 var restartMessage = document.getElementById("restart-message");
 var channelInfoBar = document.getElementById("channel-info-bar");
 var menuPopup = document.getElementById("menu-popup");
+
 var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
 
-// Controllo al caricamento della pagina: se viene da tasto 7, mostra l'overlay exit-menu-overlay
+// ===== INIT =====
 if (localStorage.getItem("showExitOverlayAfterLive") === "true") {
     showExitMenuOverlay();
     localStorage.removeItem("showExitOverlayAfterLive");
 }
 
+// ===== OVERLAY =====
 function showOverlay(state) {
   clearTimeout(overlayTimer);
   clearTimeout(restartTimer);
+
   overlayCard.classList.remove("hidden");
   overlayCard.style.display = 'block';
 
   if (state === "pause") {
     overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
     overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 6.";
-  } else if (state === "play") {
+  } 
+  else if (state === "play") {
     overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
     overlayText.innerHTML = "";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
-  } else if (state === "restart") {
+    overlayTimer = setTimeout(hideOverlay, 2000);
+  } 
+  else if (state === "restart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
+    overlayTimer = setTimeout(hideOverlay, 2000);
+
     restartTimer = setTimeout(() => {
       restartMessage.classList.remove("hidden");
-      setTimeout(() => {
-        restartMessage.classList.add("hidden");
-      }, 15000);
+      setTimeout(() => restartMessage.classList.add("hidden"), 15000);
     }, 5000);
-  } else if (state === "fromStart") {
+  } 
+  else if (state === "fromStart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riavviato dall'inizio.";
-    overlayTimer = setTimeout(() => {
-      overlayCard.classList.add("hidden");
-      overlayCard.style.display = 'none';
-    }, 2000);
-  } else if (state === "live") {
+    overlayTimer = setTimeout(hideOverlay, 2000);
+  } 
+  else if (state === "live") {
     overlayIcon.src = "https://i.ibb.co/mrKSv9Xh/circularplaybutton-122036.png";
     overlayText.innerHTML = "Ritorno alla diretta in corso...";
-    // Salva in localStorage per mostrare overlay exit-menu-overlay al reload
     localStorage.setItem("showExitOverlayAfterLive", "true");
+
     overlayTimer = setTimeout(() => {
       location.reload();
     }, 2000);
   }
 }
 
+function hideOverlay() {
+  overlayCard.classList.add("hidden");
+  overlayCard.style.display = 'none';
+}
+
+// ===== EXIT OVERLAY =====
 function showExitMenuOverlay() {
   const overlay = document.getElementById("exit-menu-overlay");
   overlay.classList.remove("hidden");
@@ -1062,6 +1065,7 @@ function showExitMenuOverlay() {
   }, 50000);
 }
 
+// ===== MENU =====
 function showMenuPopup() {
   clearTimeout(menuTimer);
   menuPopup.classList.remove("hidden");
@@ -1074,6 +1078,7 @@ function hideMenuPopup() {
   clearTimeout(menuTimer);
 }
 
+// ===== CHANNEL INFO =====
 function hideChannelInfo() {
   channelInfoBar.style.display = "none";
   clearTimeout(channelInfoTimer);
@@ -1085,50 +1090,47 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 50000);
 }
 
-var defaultHideTimer = setTimeout(hideChannelInfo, 9000);
+setTimeout(hideChannelInfo, 9000);
 
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
+// ===== STATE =====
 let isMenuOpen = false;
-let lastKeyTime = 0;
 let isToggling = false;
 
-function handleKey(key, rawEvent = null) {
-  const now = Date.now();
+// ===== CORE HANDLER =====
+function handleKey(key) {
 
-  // 🔴 blocco doppio evento (Smart TV fix)
-  if (now - lastKeyTime < 250) return;
-  lastKeyTime = now;
+  console.log("KEY:", key);
 
-  console.log("Tasto ricevuto:", key);
-
-  // 🔴 TOGGLE MENU STABILE
-  if (key === "2" || key === "menu" || key === "openMenu") {
+  // ===== TOGGLE MENU =====
+  if (key === "2") {
 
     if (isToggling) return;
+
     isToggling = true;
 
-    if (isMenuOpen) {
-      hideMenuPopup();
-      isMenuOpen = false;
-    } else {
+    if (!isMenuOpen) {
       showMenuPopup();
       isMenuOpen = true;
+    } else {
+      hideMenuPopup();
+      isMenuOpen = false;
     }
 
     setTimeout(() => {
       isToggling = false;
-    }, 300);
+    }, 800); // 🔥 stabile
 
     return;
   }
 
-  // 🔴 AZIONI MENU (3–7)
+  // ===== MENU ACTIONS =====
   if (isMenuOpen) {
+
     if (key === "3") {
-      let current = player.getCurrentTime();
-      player.seek(Math.max(0, current - 10));
+      player.seek(Math.max(0, player.getCurrentTime() - 10));
       showOverlay("restart");
       showExitMenuOverlay();
     }
@@ -1153,13 +1155,12 @@ function handleKey(key, rawEvent = null) {
       showExitMenuOverlay();
     }
 
-    // 🔴 chiude SEMPRE dopo azione
     hideMenuPopup();
     isMenuOpen = false;
     return;
   }
 
-  // 🔴 resto controlli
+  // ===== ALTRE AZIONI =====
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
@@ -1176,8 +1177,6 @@ function handleKey(key, rawEvent = null) {
         resetAutoResetTimer();
       }
       selectProgram(selectedProgramIndex + 1);
-    } else {
-      showChannelInfo(false);
     }
     return;
   }
@@ -1190,26 +1189,13 @@ function handleKey(key, rawEvent = null) {
         resetAutoResetTimer();
       }
       selectProgram(selectedProgramIndex - 1);
-    } else {
-      showChannelInfo(false);
     }
     return;
   }
 
-  if (key === "4") {
-    showChannelInfo(false);
-    toggleDescription();
-
-    if (isDescriptionOpen && !isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
-    }
-    return;
-  }
-
+  // shortcut fuori menu
   if (key === "3") {
-    let current = player.getCurrentTime();
-    player.seek(Math.max(0, current - 10));
+    player.seek(Math.max(0, player.getCurrentTime() - 10));
     showOverlay("restart");
   }
   else if (key === "5") {
@@ -1223,24 +1209,11 @@ function handleKey(key, rawEvent = null) {
   else if (key === "7") {
     showOverlay("live");
   }
-
-  if (key === "restart" || key === "rewind" || key === "indietro") {
-    let current = player.getCurrentTime();
-    player.seek(Math.max(0, current - 10));
-    showOverlay("restart");
-  }
-  else if (key === "live") {
-    showOverlay("live");
-  }
-  else if (rawEvent && typeof rawEvent.data === "object" && rawEvent.data.action === "rewind") {
-    let current = player.getCurrentTime();
-    player.seek(Math.max(0, current - rawEvent.data.seconds));
-    showOverlay("restart");
-  }
 }
 
-// 🔴 POSTMESSAGE (come avevi)
+// ===== POSTMESSAGE ONLY =====
 window.addEventListener("message", function (event) {
+
   if (!event.data) return;
 
   let key = null;
@@ -1253,31 +1226,10 @@ window.addEventListener("message", function (event) {
 
   if (!key) return;
 
-  handleKey(key, event);
-});
-
-// 🔴 AGGIUNTO: supporto Smart TV (TASTIERA / TELECOMANDO)
-document.addEventListener("keydown", function (e) {
-  let key = null;
-
-  if (e.key === "2" || e.keyCode === 50) key = "2";
-  if (e.key === "3" || e.keyCode === 51) key = "3";
-  if (e.key === "4" || e.keyCode === 52) key = "4";
-  if (e.key === "5" || e.keyCode === 53) key = "5";
-  if (e.key === "6" || e.keyCode === 54) key = "6";
-  if (e.key === "7" || e.keyCode === 55) key = "7";
-  if (e.key === "8" || e.keyCode === 56) key = "8";
-
-  if (e.key === "ArrowRight") key = "ArrowRight";
-  if (e.key === "ArrowLeft") key = "ArrowLeft";
-
-  if (!key) return;
-
-  e.preventDefault();
   handleKey(key);
 });
 
-// 🔴 CLICK MENU
+// ===== CLICK MENU =====
 document.querySelectorAll('.menu-option').forEach(option => {
   option.addEventListener('click', function() {
     const action = this.getAttribute('data-action');
