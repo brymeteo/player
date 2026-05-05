@@ -31,7 +31,6 @@
       height: 100vh;
     }
 
-    /* Schermate di benvenuto e setup - Animazioni ridotte */
     .welcome-screen {
       position: fixed;
       top: 0;
@@ -87,7 +86,8 @@
       font-weight: 500;
       padding: 16px 40px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche invece di "all" */
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
       text-transform: none;
       letter-spacing: 0;
     }
@@ -98,7 +98,6 @@
       transform: translateY(-1px);
     }
 
-    /* Schermata aggiornamento */
     .update-screen {
       background: linear-gradient(135deg, #1e4a72 0%, #1641a1 50%, #3a67cc 100%);
     }
@@ -143,7 +142,6 @@
       font-size: 17px;
     }
 
-    /* Schermata riavvio */
     .reboot-screen {
       background: #000;
       display: flex;
@@ -187,7 +185,6 @@
       animation: fadeIn 1s ease 1s forwards;
     }
 
-    /* Schermata di autenticazione PIN */
     .pin-auth-screen {
       position: fixed;
       top: 0;
@@ -261,7 +258,8 @@
       font-weight: 600;
       text-align: center;
       outline: none;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: border-color 0.2s ease, background-color 0.2s ease;
     }
 
     .pin-digit:focus {
@@ -298,7 +296,8 @@
       font-weight: 500;
       padding: 15px 40px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
       margin-top: 20px;
     }
 
@@ -325,7 +324,8 @@
       font-size: 14px;
       padding: 12px 20px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -336,7 +336,6 @@
       border-color: rgba(255, 255, 255, 0.5);
     }
 
-    /* Schermata scadenza abbonamento */
     .subscription-expired {
       background: linear-gradient(135deg, rgb(19 62 139) 0%, rgb(11 61 119) 50%, rgb(2 68 138) 100%), url(https://brymeteo.github.io/player/decoder/immagini/schermata-home-bry.png);
     }
@@ -356,7 +355,6 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    /* Stili per il testo di caricamento */
     .loading-text {
       font-size: 27px;
       color: white;
@@ -371,7 +369,6 @@
       opacity: 1;
     }
 
-    /* Pulsante Entra per fullscreen */
     .fullscreen-enter-btn {
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
@@ -385,7 +382,8 @@
       letter-spacing: 0;
       margin-top: 30px;
       opacity: 0;
-      transition: all 0.2s ease, opacity 0.5s ease-in-out;
+      /* OTTIMIZZATO: separato opacity da transform */
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.5s ease-in-out;
     }
 
     .fullscreen-enter-btn.visible {
@@ -398,9 +396,6 @@
       transform: translateY(-1px);
     }
 
-    /* =====================================================
-       FIX 1: Player principale - sfondo sempre #171a45
-       ===================================================== */
     .main-player {
       position: fixed;
       top: 0;
@@ -411,7 +406,6 @@
       z-index: 100;
     }
 
-    /* Il wrapper garantisce che il colore di sfondo non lampeggi mai */
     .player-bg {
       position: absolute;
       top: 0;
@@ -429,11 +423,9 @@
       height: 100%;
       border: none;
       background: #171a45;
-      /* Impedisce qualsiasi flash visivo durante il cambio src */
       display: block;
     }
 
-    /* Pulsante menu principale - Inizialmente invisibile */
     .menu-trigger {
       position: fixed;
       left: 30px;
@@ -449,6 +441,7 @@
       cursor: pointer;
       opacity: 0;
       visibility: hidden;
+      /* OTTIMIZZATO: solo opacity e transform, no box-shadow in transition */
       transition: opacity 0.2s ease, transform 0.2s ease;
       z-index: 300;
       box-shadow: 0 4px 20px rgba(0, 120, 212, 0.4);
@@ -456,7 +449,6 @@
 
     .menu-trigger:hover {
       transform: translateY(-50%) scale(1.05);
-      box-shadow: 0 6px 25px rgba(0, 120, 212, 0.6);
     }
 
     .menu-trigger.visible {
@@ -464,12 +456,12 @@
       visibility: visible;
     }
 
-    /* Banner informativo modalità numerica */
     .numeric-mode-banner {
       position: fixed;
       top: 20px;
       left: 50%;
-      transform: translateX(-50%);
+      /* OTTIMIZZATO: usa transform3d per promuovere su layer GPU */
+      transform: translate3d(-50%, -10px, 0);
       background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
       color: white;
       padding: 15px 30px;
@@ -479,16 +471,18 @@
       z-index: 2500;
       box-shadow: 0 4px 20px rgba(0, 120, 212, 0.4);
       opacity: 0;
-      transform: translateX(-50%) translateY(-10px);
-      transition: all 0.3s ease;
+      /* OTTIMIZZATO: solo opacity e transform */
+      transition: opacity 0.3s ease, transform 0.3s ease;
       border: 1px solid rgba(255, 255, 255, 0.2);
       text-align: center;
       min-width: 400px;
+      /* OTTIMIZZATO: promuove su layer compositing */
+      will-change: opacity, transform;
     }
 
     .numeric-mode-banner.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translate3d(-50%, 0, 0);
     }
 
     .numeric-mode-banner .banner-icon {
@@ -512,7 +506,8 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       opacity: 0;
       visibility: hidden;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo opacity e visibility */
+      transition: opacity 0.2s ease, visibility 0.2s ease;
       border: 2px solid rgba(0, 120, 212, 0.3);
       min-width: 150px;
       text-align: center;
@@ -524,7 +519,6 @@
       visibility: visible;
     }
 
-    /* Overlay di errore per canale non trovato */
     .channel-error-overlay {
       position: fixed;
       top: 50%;
@@ -540,7 +534,8 @@
       box-shadow: 0 8px 32px rgba(255, 68, 68, 0.4);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      /* OTTIMIZZATO: solo opacity e visibility, rimosso transform dalla transition */
+      transition: opacity 0.2s ease, visibility 0.2s ease;
       text-align: center;
       min-width: 300px;
     }
@@ -550,7 +545,6 @@
       visibility: visible;
     }
 
-    /* Popup programmazione canale */
     .schedule-popup {
       position: fixed;
       top: 0;
@@ -629,14 +623,14 @@
       font-weight: 500;
       padding: 12px 24px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease;
       min-width: 140px;
     }
 
     .schedule-popup-btn:hover {
       background: rgba(255, 255, 255, 0.25);
       border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-1px);
     }
 
     .schedule-popup-btn.primary {
@@ -647,21 +641,25 @@
 
     .schedule-popup-btn.primary:hover {
       background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
     }
 
     .schedule-popup-btn.focused {
       background: rgba(255, 255, 255, 0.3);
       border-color: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      /* OTTIMIZZATO: outline invece di box-shadow per focused */
+      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 1px;
     }
 
     .schedule-popup-btn.primary.focused {
       background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+      outline: 2px solid rgba(255, 215, 0, 0.7);
+      outline-offset: 1px;
     }
 
-    /* Pannello principale stile Sky */
+    /* =====================================================
+       PANNELLO SKY
+       ===================================================== */
     .sky-panel {
       position: fixed;
       left: 0;
@@ -683,7 +681,6 @@
       visibility: visible;
     }
 
-    /* Header Sky */
     .sky-header {
       background: linear-gradient(90deg, #001f3f 0%, #003d82 100%);
       padding: 20px 40px;
@@ -721,7 +718,6 @@
       margin-top: -4px;
     }
 
-    /* Info abbonamento nell'header */
     .subscription-info {
       display: flex;
       flex-direction: column;
@@ -766,7 +762,8 @@
       color: white;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .nav-item:hover, .nav-item.active {
@@ -774,19 +771,23 @@
       border-color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Contenuto principale */
     .sky-content {
       flex: 1;
       display: flex;
       overflow: hidden;
     }
 
-    /* Sidebar categorie */
+    /* =====================================================
+       SIDEBAR CATEGORIE
+       ===================================================== */
     .categories-sidebar {
       width: 300px;
       background: rgba(0, 0, 0, 0.3);
       border-right: 1px solid rgba(255, 255, 255, 0.1);
       overflow: auto;
+      /* OTTIMIZZATO: scroll nativo accelerato */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     .categories-sidebar::-webkit-scrollbar {
@@ -798,10 +799,13 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo background-color, no box-shadow */
+      transition: background-color 0.15s ease;
       display: flex;
       align-items: center;
       gap: 15px;
+      /* OTTIMIZZATO: isola il layout di ogni item */
+      contain: layout style;
     }
 
     .category-item:hover {
@@ -816,7 +820,9 @@
     .category-item.focused {
       background: rgba(255, 255, 255, 0.15);
       border-left: 4px solid #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      /* OTTIMIZZATO: outline invece di box-shadow */
+      outline: 1px solid rgba(255, 255, 255, 0.3);
+      outline-offset: -1px;
     }
 
     .category-icon {
@@ -830,7 +836,9 @@
       font-size: 16px;
     }
 
-    /* Lista canali principale */
+    /* =====================================================
+       LISTA CANALI
+       ===================================================== */
     .channels-main {
       flex: 1;
       display: flex;
@@ -860,6 +868,10 @@
       flex: 1;
       overflow-y: auto;
       padding: 0;
+      /* OTTIMIZZATO: scroll nativo accelerato, no smooth su TV vecchie */
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
     }
 
     .channels-grid::-webkit-scrollbar {
@@ -875,7 +887,6 @@
       border-radius: 4px;
     }
 
-    /* Elementi canale */
     .channel-item {
       display: flex;
       align-items: center;
@@ -883,8 +894,11 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: white;
       cursor: pointer;
-      transition: all 0.15s ease;
+      /* OTTIMIZZATO: solo background-color */
+      transition: background-color 0.12s ease;
       position: relative;
+      /* OTTIMIZZATO: isola layout e paint di ogni riga */
+      contain: layout style;
     }
 
     .channel-item:hover {
@@ -944,7 +958,8 @@
       font-size: 20px;
       color: #ffd700;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo transform, no color in transition (già istantaneo) */
+      transition: transform 0.15s ease;
       user-select: none;
     }
 
@@ -956,7 +971,6 @@
       color: rgba(255, 255, 255, 0.3);
     }
 
-    /* Controlli inferiori */
     .sky-controls {
       background: rgba(0, 0, 0, 0.4);
       padding: 20px 30px;
@@ -980,7 +994,8 @@
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -1006,7 +1021,6 @@
       text-align: center;
     }
 
-    /* Pulsante chiudi */
     .close-panel {
       position: absolute;
       top: 46px;
@@ -1022,7 +1036,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo background-color */
+      transition: background-color 0.2s ease;
       z-index: 1001;
     }
 
@@ -1030,7 +1045,6 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Overlay vocale */
     .voice-overlay {
       position: fixed;
       top: 0;
@@ -1078,7 +1092,6 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
-    /* Fullscreen button */
     .fullscreen-btn {
       position: fixed;
       top: 48px;
@@ -1095,7 +1108,8 @@
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo opacity */
+      transition: opacity 0.2s ease;
       z-index: 1500;
     }
 
@@ -1107,12 +1121,15 @@
       opacity: 1;
     }
 
-    /* Sistema notifiche */
+    /* =====================================================
+       NOTIFICHE
+       ===================================================== */
     .favorites-notification {
       position: fixed;
       top: 20px;
       left: 50%;
-      transform: translateX(-50%);
+      /* OTTIMIZZATO: translate3d per GPU compositing */
+      transform: translate3d(-50%, -10px, 0);
       background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
       color: white;
       padding: 15px 30px;
@@ -1122,16 +1139,18 @@
       z-index: 2500;
       box-shadow: 0 4px 20px rgba(0, 120, 212, 0.4);
       opacity: 0;
-      transform: translateX(-50%) translateY(-10px);
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo opacity e transform */
+      transition: opacity 0.2s ease, transform 0.2s ease;
       border: 1px solid rgba(255, 255, 255, 0.2);
       text-align: center;
       min-width: 300px;
+      /* OTTIMIZZATO: layer dedicato */
+      will-change: opacity, transform;
     }
 
     .favorites-notification.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translate3d(-50%, 0, 0);
     }
 
     .favorites-notification.favorites-mode {
@@ -1146,7 +1165,9 @@
       vertical-align: middle;
     }
 
-    /* STILI MOSAICO */
+    /* =====================================================
+       MOSAICO 6 — OTTIMIZZAZIONI PERFORMANCE
+       ===================================================== */
     .mosaic-overlay {
       position: fixed;
       top: 0;
@@ -1197,18 +1218,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo background-color */
+      transition: background-color 0.2s ease;
     }
 
     .mosaic-close:hover {
       background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
     }
 
     .mosaic-content {
       flex: 1;
       padding: 2%;
       overflow-y: auto;
+      /* OTTIMIZZATO: scroll nativo accelerato, no smooth */
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
+      /* OTTIMIZZATO: limita area di paint */
+      contain: layout style;
     }
 
     .mosaic-grid {
@@ -1220,27 +1247,38 @@
       margin: 0 auto;
     }
 
+    /* =====================================================
+       CARD MOSAICO — CUORE DELL'OTTIMIZZAZIONE
+       ===================================================== */
     .mosaic-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: background 0.15s ease;
+      /* OTTIMIZZATO: solo border-color invece di box-shadow */
+      transition: border-color 0.12s ease;
       position: relative;
       min-height: 530px;
+      /* OTTIMIZZATO: forza layer GPU, isola paint */
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      contain: layout style paint;
+      /* OTTIMIZZATO: comunica al browser cosa cambierà */
+      will-change: border-color;
     }
 
+    /* OTTIMIZZATO: rimosso transform e box-shadow da :hover */
     .mosaic-card:hover {
-      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.3);
-      border-color: rgba(0, 120, 212, 0.5);
+      border-color: rgba(0, 120, 212, 0.6);
     }
 
+    /* OTTIMIZZATO: outline invece di box-shadow + transform */
     .mosaic-card.selected {
-      border-color: #0078d4;
-      box-shadow: 0 0 20px rgba(0, 120, 212, 0.6);
-      transform: translateY(-2px);
-    }
+    border-color: #ffffff;
+    outline: 2px solid rgb(255 255 255 / 50%);
+    outline-offset: -2px;
+}
 
     .mosaic-card-header {
       display: flex;
@@ -1332,6 +1370,8 @@
       background: linear-gradient(90deg, #0078d4 0%, #4fc3f7 100%);
       border-radius: 2px;
       transition: width 0.3s ease;
+      /* OTTIMIZZATO: forza GPU per l'animazione della barra */
+      transform: translateZ(0);
     }
 
     .mosaic-progress-text {
@@ -1401,12 +1441,12 @@
       pointer-events: none;
     }
 
-    .mosaic-card,
-    .filtered-mosaic-card {
-      box-shadow: none;
-    }
+    /* RIMOSSO: .mosaic-card, .filtered-mosaic-card { box-shadow: none; }
+       Non più necessario, box-shadow eliminato dalla logica */
 
-    /* STILI MOSAICO FILTRATO */
+    /* =====================================================
+       MOSAICO FILTRATO 7 — OTTIMIZZAZIONI PERFORMANCE
+       ===================================================== */
     .filtered-mosaic-overlay {
       position: fixed;
       top: 0;
@@ -1457,12 +1497,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo background-color */
+      transition: background-color 0.2s ease;
     }
 
     .filtered-mosaic-close:hover {
       background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
     }
 
     .filtered-mosaic-content {
@@ -1478,6 +1518,10 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      /* OTTIMIZZATO: scroll nativo */
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
     }
 
     .filtered-mosaic-sidebar-header {
@@ -1504,11 +1548,14 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: white;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo background-color */
+      transition: background-color 0.12s ease;
       display: flex;
       align-items: center;
       gap: 15px;
       position: relative;
+      /* OTTIMIZZATO: isola ogni item della sidebar */
+      contain: layout style;
     }
 
     .filtered-category-item:hover {
@@ -1523,7 +1570,9 @@
     .filtered-category-item.focused {
       background: rgba(255, 255, 255, 0.15);
       border-left: 4px solid #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      /* OTTIMIZZATO: outline invece di box-shadow */
+      outline: 1px solid rgba(255, 255, 255, 0.3);
+      outline-offset: -1px;
     }
 
     .filtered-category-icon {
@@ -1598,7 +1647,8 @@
       font-weight: 500;
       padding: 8px 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.15s ease, border-color 0.15s ease;
       display: flex;
       align-items: center;
       gap: 5px;
@@ -1617,7 +1667,9 @@
     .time-nav-btn.focused {
       background: rgba(255, 255, 255, 0.3);
       border-color: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      /* OTTIMIZZATO: outline invece di box-shadow */
+      outline: 1px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 1px;
     }
 
     .current-time-display {
@@ -1638,6 +1690,12 @@
       flex: 1;
       overflow-y: auto;
       padding: 20px;
+      /* OTTIMIZZATO: scroll nativo accelerato */
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: auto;
+      overscroll-behavior: contain;
+      /* OTTIMIZZATO: crea stacking context isolato */
+      contain: layout style;
     }
 
     .filtered-mosaic-grid {
@@ -1647,38 +1705,47 @@
       max-width: 100%;
     }
 
+    /* =====================================================
+       CARD MOSAICO FILTRATO — CUORE DELL'OTTIMIZZAZIONE
+       ===================================================== */
     .filtered-mosaic-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo border-color, rimosso transform e box-shadow */
+      transition: border-color 0.12s ease;
       position: relative;
       min-height: 450px;
       display: flex;
       flex-direction: column;
+      /* OTTIMIZZATO: forza compositing layer, isola paint */
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      contain: layout style paint;
+      will-change: border-color;
     }
 
+    /* OTTIMIZZATO: rimosso transform translateY e box-shadow da hover */
     .filtered-mosaic-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.3);
-      border-color: rgba(0, 120, 212, 0.5);
+      border-color: rgba(0, 120, 212, 0.6);
     }
 
+    /* OTTIMIZZATO: outline invece di box-shadow + transform */
     .filtered-mosaic-card.selected {
       border-color: #ffffff;
-      box-shadow: 0 0 20px rgb(255 255 255 / 60%);
-      transform: translateY(-2px);
+      outline: 2px solid rgba(255, 255, 255, 0.6);
+      outline-offset: -2px;
     }
 
     .filtered-mosaic-card.future-program {
       border-color: #ffd700;
     }
 
+    /* OTTIMIZZATO: rimosso box-shadow da future-program:hover */
     .filtered-mosaic-card.future-program:hover {
       border-color: #ffed4e;
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.6);
     }
 
     .filtered-mosaic-card.future-program .filtered-mosaic-program-time {
@@ -1780,6 +1847,8 @@
       background: linear-gradient(90deg, #0078d4 0%, #4fc3f7 100%);
       border-radius: 3px;
       transition: width 0.3s ease;
+      /* OTTIMIZZATO: forza GPU per l'animazione della barra */
+      transform: translateZ(0);
     }
 
     .filtered-mosaic-progress-text {
@@ -1848,7 +1917,9 @@
       pointer-events: none;
     }
 
-    /* Responsive */
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
     @media (max-width: 768px) {
       .sky-content { flex-direction: column; }
       .categories-sidebar { width: 100%; height: 200px; overflow-x: auto; overflow-y: hidden; display: flex; }
@@ -1880,7 +1951,9 @@
       .current-time-display { min-width: auto; }
     }
 
-    /* Indicatore di caricamento */
+    /* =====================================================
+       ELEMENTI VARI
+       ===================================================== */
     .loading-indicator {
       position: absolute;
       top: 50%;
@@ -1891,7 +1964,6 @@
       z-index: 1001;
     }
 
-    /* Contatore utenti online - Stile nascosto */
     .online-counter {
       position: fixed;
       top: -100px;
@@ -1905,7 +1977,6 @@
       color: transparent;
     }
 
-    /* Statistiche canali - Stile nascosto */
     .channel-stats {
       position: absolute;
       top: -1000px;
@@ -1924,7 +1995,8 @@
       z-index: 500;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+      /* OTTIMIZZATO: solo opacity, visibility, transform */
+      transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
       transform: translateY(10px);
     }
 
@@ -1946,7 +2018,8 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      transition: all 0.2s ease;
+      /* OTTIMIZZATO: solo proprietà specifiche */
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
       font-family: 'Inter', sans-serif;
       letter-spacing: 0.2px;
     }
@@ -1954,7 +2027,9 @@
     .skip-tutorial-btn.focused {
       background: rgba(255, 255, 255, 0.18);
       border-color: white;
-      box-shadow: 0 0 22px rgba(255, 255, 255, 0.35);
+      /* OTTIMIZZATO: outline invece di box-shadow */
+      outline: 2px solid rgba(255, 255, 255, 0.35);
+      outline-offset: 2px;
       transform: scale(1.03);
     }
 
@@ -1963,6 +2038,7 @@
       border-color: rgba(255, 255, 255, 0.65);
     }
   </style>
+  
 </head>
 <body>
 
@@ -2134,7 +2210,7 @@
 
       <div class="sky-nav">
         <div class="nav-item" id="mosaic-nav-btn">Mosaico</div>
-        <div class="nav-item">Versione 10.1</div>
+        <div class="nav-item">Versione 10.4.1</div>
       </div>
     </div>
 
@@ -2853,7 +2929,7 @@
             <div class="favorite-star empty" onclick="toggleFavorite(this)">☆</div>
           </div>
 
-          <div class="channel-item" data-channel="video80.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/613-Super.Spongebob-pluto.html" data-number="613" data-category="generali" data-epg-url="https://brymeteo.github.io/iptv-epg/output.json" data-epg-id="ITAJ380000343">
+          <div class="channel-item" data-channel="video80.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/613-Super.Spongebob-pluto.html" data-number="613" data-category="bambini" data-epg-url="https://brymeteo.github.io/iptv-epg/output.json" data-epg-id="ITAJ380000343">
             <img src="https://i.ibb.co/ksT2rTMb/logo1.png" alt="Mr Bean" class="channel-logo">
             <div class="channel-details">
               <div class="channel-name-main">Super Spongebob HD</div>
@@ -3213,21 +3289,27 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // =====================================================
-    // FIX 1: Funzione cambio canale senza flash nero
-    // Svuota prima il src, poi lo riassegna dopo un micro-delay.
-    // Il div .player-bg con sfondo #171a45 rimane sempre visibile.
-    // =====================================================
     function setIframeSrc(url) {
       const iframe = document.getElementById('iframe-player');
-      // Svuota temporaneamente per forzare il reset del renderer
       iframe.src = 'about:blank';
-      // Riassegna nel prossimo frame: il player-bg copre il vuoto
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           iframe.src = url;
         });
       });
+    }
+
+    // =====================================================
+    // OPT: Helper scroll manuale — sostituisce scrollIntoView
+    // con smooth su tutti i contenitori, evita il jank
+    // su Smart TV vecchie con renderer lento.
+    // =====================================================
+    function scrollToElement(container, element) {
+      if (!container || !element) return;
+      const containerH = container.offsetHeight;
+      const elemTop   = element.offsetTop;
+      const elemH     = element.offsetHeight;
+      container.scrollTop = elemTop - (containerH / 2) + (elemH / 2);
     }
 
     // =====================================================
@@ -3293,23 +3375,24 @@
       }
 
       startHeartbeat() {
+        // OPT: guard document.hidden — non spreca Firestore se tab non visibile
         this.heartbeatInterval = setInterval(async () => {
-          if (this.isActive && !document.hidden) {
-            try {
-              await db.collection('onlineUsers').doc(this.sessionId).update({
-                lastHeartbeat: firebase.firestore.FieldValue.serverTimestamp(),
-                currentChannel: this.currentChannel,
-                isActive: true
-              });
-              await this.updateOnlineCounter();
-            } catch (error) {
-              console.error('Errore heartbeat:', error);
-            }
+          if (!this.isActive || document.hidden) return;
+          try {
+            await db.collection('onlineUsers').doc(this.sessionId).update({
+              lastHeartbeat: firebase.firestore.FieldValue.serverTimestamp(),
+              currentChannel: this.currentChannel,
+              isActive: true
+            });
+            await this.updateOnlineCounter();
+          } catch (error) {
+            console.error('Errore heartbeat:', error);
           }
         }, 30000);
       }
 
       startChannelStatsTracking() {
+        // OPT: guard document.hidden
         this.channelStatsInterval = setInterval(async () => {
           if (this.isActive && this.currentChannel && !document.hidden) {
             await this.trackChannelView();
@@ -3499,8 +3582,8 @@
         const channel = document.querySelector(`[data-number="${channelNumber}"]`);
         if (channel) {
           this.overlay.classList.remove('show');
-          const chans = document.querySelectorAll('.channel-item');
-          const index = Array.from(chans).indexOf(channel);
+          // OPT: usa la NodeList cached invece di querySelectorAll
+          const index = Array.from(channels).indexOf(channel);
           selectChannel(index);
           changeVideo(index);
           this.deactivate();
@@ -3663,7 +3746,6 @@
       }
 
       async startMainApp(authData = null) {
-        // FIX 2: Il tracciamento parte solo dopo autenticazione
         if (authData && authData.streamingPin) {
           try {
             await onlineTracker.startTracking({
@@ -3682,7 +3764,6 @@
           if (categoryIndex !== -1) selectedCategoryIndex = categoryIndex;
           filterChannelsByCategory(savedCategory);
 
-          // FIX 2: Carica il canale salvato OPPURE il canale 100, mai un canale prima del PIN
           const savedChannel = localStorage.getItem('selectedChannel');
           if (savedChannel) {
             const selectedChannel = document.querySelector(`[data-number="${savedChannel}"]`);
@@ -3691,7 +3772,6 @@
               selectChannel(index);
               changeVideo(index);
             } else {
-              // canale salvato non trovato, vai al 100
               loadDefaultChannel();
             }
           } else {
@@ -3701,7 +3781,6 @@
       }
     }
 
-    // FIX 2: funzione separata per caricare il canale 100 di default
     function loadDefaultChannel() {
       const defaultChannel = document.querySelector('[data-number="100"]');
       if (defaultChannel) {
@@ -3854,7 +3933,6 @@
       handlePinChanged() {
         onlineTracker.stopTracking();
         localStorage.removeItem('pinAuthData');
-        // FIX 2: Svuota l'iframe quando il PIN cambia (disconnessione)
         document.getElementById('iframe-player').src = '';
         this.showAuthScreen(false, 'PIN_CHANGED');
       }
@@ -3863,7 +3941,6 @@
         if (userData.subscriptionActivated !== true || userData.packageStatus !== 'active') {
           onlineTracker.stopTracking();
           localStorage.removeItem('pinAuthData');
-          // FIX 2: Svuota l'iframe quando l'abbonamento diventa inattivo
           document.getElementById('iframe-player').src = '';
           this.showAuthScreen(false, 'SUBSCRIPTION_INACTIVE');
           return;
@@ -3877,7 +3954,6 @@
           if (expiryDate < new Date()) {
             onlineTracker.stopTracking();
             localStorage.removeItem('pinAuthData');
-            // FIX 2: Svuota l'iframe quando l'abbonamento scade
             document.getElementById('iframe-player').src = '';
             this.showAuthScreen(true);
             return;
@@ -3977,14 +4053,12 @@
         }
         authScreen.classList.remove('hidden');
         if (isExpired || reason) {
-          // FIX 2: quando si mostra la schermata auth, svuota l'iframe (muto)
           document.getElementById('iframe-player').src = '';
           setTimeout(() => {
             const configChannel = document.querySelector('[data-number="100"]');
             if (configChannel) {
               const index = Array.from(channels).indexOf(configChannel);
               selectChannel(index);
-              // Non chiamare changeVideo qui: l'utente non è autenticato
             }
           }, 100);
         }
@@ -4042,12 +4116,16 @@
         this.epgData = new Map();
         this.updateInterval = null;
         this.epgLoaded = false;
+        // OPT: cache colonne griglia — evita getBoundingClientRect ad ogni keydown
+        this._cachedCols = 0;
         this.init();
       }
 
       init() {
         document.getElementById('mosaic-nav-btn').addEventListener('click', () => this.toggleMosaic());
         document.getElementById('mosaic-close').addEventListener('click', () => this.closeMosaic());
+        // OPT: invalida cache colonne al resize
+        window.addEventListener('resize', () => { this._cachedCols = 0; });
         this.loadEPGDataOnce();
       }
 
@@ -4068,6 +4146,7 @@
 
       async openMosaic() {
         this.isActive = true;
+        this._cachedCols = 0; // OPT: reset cache all'apertura
         document.getElementById('mosaic-overlay').classList.add('active');
         if (!this.epgLoaded) {
           this.showLoading(true);
@@ -4097,29 +4176,51 @@
         this.stopProgressUpdates();
       }
 
+      // =====================================================
+      // OPT: Fetch EPG parallelo con Promise.allSettled
+      // Prima era sequenziale (for...of + await) = ~16s per 80 canali.
+      // Ora tutti i fetch partono insieme = ~1-2s totali.
+      // =====================================================
       async loadEPGData() {
         const channelItems = document.querySelectorAll('.channel-item');
-        for (const channel of channelItems) {
+        const fetchTasks = [];
+
+        channelItems.forEach(channel => {
           const channelNumber = channel.dataset.number;
           const epgUrl = channel.dataset.epgUrl;
           const epgId = channel.dataset.epgId;
-          if (epgUrl && !this.epgData.has(channelNumber)) {
-            try {
-              const response = await fetch(epgUrl);
-              if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-              const data = await response.json();
-              let channelData = null;
-              if (Array.isArray(data)) channelData = data.find(ch => ch.id === epgId);
-              else if (data.id) channelData = data;
-              if (channelData && channelData.programs) this.epgData.set(channelNumber, channelData);
-              else this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
-            } catch (error) {
+
+          if (!epgUrl) {
+            if (!this.epgData.has(channelNumber)) {
               this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
             }
-          } else if (!epgUrl && !this.epgData.has(channelNumber)) {
-            this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+            return;
           }
-        }
+
+          if (this.epgData.has(channelNumber)) return;
+
+          fetchTasks.push(
+            fetch(epgUrl)
+              .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+              })
+              .then(data => {
+                let channelData = null;
+                if (Array.isArray(data)) channelData = data.find(ch => ch.id === epgId);
+                else if (data.id) channelData = data;
+                this.epgData.set(
+                  channelNumber,
+                  (channelData && channelData.programs) ? channelData : this.getFallbackEPGData(channelNumber)
+                );
+              })
+              .catch(() => {
+                this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+              })
+          );
+        });
+
+        await Promise.allSettled(fetchTasks);
       }
 
       getFallbackEPGData(channelNumber) {
@@ -4177,28 +4278,39 @@
         return date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
       }
 
+      // =====================================================
+      // OPT: DocumentFragment — costruisce tutto il DOM offline
+      // e lo inserisce con un solo reflow invece di N reflow.
+      // =====================================================
       generateMosaicCards() {
         const mosaicGrid = document.getElementById('mosaic-grid');
         if (this.epgData.size === 0) {
           mosaicGrid.innerHTML = '<div style="color: white; text-align: center; padding: 50px; font-size: 18px;">Nessun canale disponibile</div>';
           return;
         }
-        mosaicGrid.innerHTML = '';
+
         this.mosaicCards = [];
+        const fragment = document.createDocumentFragment();
         const channelItems = document.querySelectorAll('.channel-item');
+
         channelItems.forEach((channel, index) => {
           const channelNumber = channel.dataset.number;
-          const channelName = channel.querySelector('.channel-name-main').textContent;
-          const channelLogo = channel.querySelector('.channel-logo') ? channel.querySelector('.channel-logo').src : '';
           if (channelNumber === '100') return;
+
+          const channelName = channel.querySelector('.channel-name-main').textContent;
+          const logoEl = channel.querySelector('.channel-logo');
+          const channelLogo = logoEl ? logoEl.src : '';
           const channelData = this.epgData.get(channelNumber);
           const currentProgram = this.getCurrentProgram(channelData, channelNumber);
+          const progress = this.calculateProgress(currentProgram, channelNumber);
+          const progressText = currentProgram
+            ? `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}`
+            : 'Orario non disponibile';
+
           const card = document.createElement('div');
           card.className = 'mosaic-card';
           card.dataset.channelNumber = channelNumber;
           card.dataset.channelIndex = index;
-          const progress = this.calculateProgress(currentProgram, channelNumber);
-          const progressText = currentProgram ? `${this.formatTime(currentProgram.start, channelNumber)} - ${this.formatTime(currentProgram.end, channelNumber)}` : 'Orario non disponibile';
           card.innerHTML = `
             <div class="mosaic-card-header">
               <img src="${channelLogo}" alt="${channelName}" class="mosaic-channel-logo" onerror="this.style.display='none'">
@@ -4208,7 +4320,9 @@
               </div>
             </div>
             <div class="mosaic-program-poster">
-              ${currentProgram && currentProgram.poster ? `<img src="${currentProgram.poster}" alt="Poster" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.5);font-size:14px;\\'>Immagine non disponibile</div>'">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.5);font-size:14px;">Immagine non disponibile</div>'}
+              ${currentProgram && currentProgram.poster
+                ? `<img src="${currentProgram.poster}" alt="Poster" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.5);font-size:14px;\\'>Immagine non disponibile</div>'">`
+                : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.5);font-size:14px;">Immagine non disponibile</div>'}
             </div>
             <div class="mosaic-program-info">
               <div class="mosaic-program-title">${currentProgram ? currentProgram.title : 'Programma non disponibile'}</div>
@@ -4220,17 +4334,28 @@
             </div>
           `;
           card.addEventListener('click', () => this.selectChannel(channelNumber));
-          mosaicGrid.appendChild(card);
+          fragment.appendChild(card);
           this.mosaicCards.push(card);
         });
+
+        // Un solo reflow: svuota e inserisce tutto insieme
+        mosaicGrid.innerHTML = '';
+        mosaicGrid.appendChild(fragment);
       }
 
+      // =====================================================
+      // OPT: scroll manuale istantaneo invece di scrollIntoView smooth
+      // =====================================================
       updateCardSelection() {
         if (this.selectedCardIndex < 0) this.selectedCardIndex = 0;
         else if (this.selectedCardIndex >= this.mosaicCards.length) this.selectedCardIndex = this.mosaicCards.length - 1;
+
         this.mosaicCards.forEach((card, index) => card.classList.toggle('selected', index === this.selectedCardIndex));
-        if (this.mosaicCards[this.selectedCardIndex]) {
-          this.mosaicCards[this.selectedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+
+        const selected = this.mosaicCards[this.selectedCardIndex];
+        if (selected) {
+          const container = document.getElementById('mosaic-content');
+          scrollToElement(container, selected);
         }
       }
 
@@ -4238,29 +4363,39 @@
         this.closeMosaic();
         const channel = document.querySelector(`[data-number="${channelNumber}"]`);
         if (channel) {
-          const channelItems = document.querySelectorAll('.channel-item');
-          const index = Array.from(channelItems).indexOf(channel);
+          // OPT: usa NodeList cached globale
+          const index = Array.from(channels).indexOf(channel);
           selectChannel(index);
           changeVideo(index);
         }
       }
 
+      // =====================================================
+      // OPT: Cache colonne griglia — getBoundingClientRect
+      // e getComputedStyle vengono chiamati UNA SOLA VOLTA
+      // per sessione (o al resize), non ad ogni keydown.
+      // =====================================================
+      _getCols() {
+        if (this._cachedCols > 0) return this._cachedCols;
+        const mosaicGrid = document.getElementById('mosaic-grid');
+        const firstCard = this.mosaicCards[0];
+        if (!firstCard) return 1;
+        const gridRect  = mosaicGrid.getBoundingClientRect();
+        const cardRect  = firstCard.getBoundingClientRect();
+        const gap       = parseInt(window.getComputedStyle(mosaicGrid).gap) || 20;
+        this._cachedCols = Math.max(1, Math.floor((gridRect.width + gap) / (cardRect.width + gap)));
+        return this._cachedCols;
+      }
+
       navigateMosaic(direction) {
         if (!this.isActive || this.mosaicCards.length === 0) return;
-        const mosaicGrid = document.getElementById('mosaic-grid');
-        const gridRect = mosaicGrid.getBoundingClientRect();
-        const firstCard = this.mosaicCards[0];
-        if (!firstCard) return;
-        const cardRect = firstCard.getBoundingClientRect();
-        const cardWidth = cardRect.width;
-        const gridStyle = window.getComputedStyle(mosaicGrid);
-        const gap = parseInt(gridStyle.gap) || 20;
-        const availableWidth = gridRect.width;
-        const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
+
+        const cols = this._getCols();
         const rows = Math.ceil(this.mosaicCards.length / cols);
         const currentRow = Math.floor(this.selectedCardIndex / cols);
         const currentCol = this.selectedCardIndex % cols;
         let newIndex = this.selectedCardIndex;
+
         switch (direction) {
           case 'left':
             if (currentCol > 0) newIndex = this.selectedCardIndex - 1;
@@ -4281,6 +4416,7 @@
             else { newIndex = currentCol; if (newIndex >= this.mosaicCards.length) newIndex = 0; }
             break;
         }
+
         newIndex = Math.max(0, Math.min(this.mosaicCards.length - 1, newIndex));
         if (newIndex !== this.selectedCardIndex) { this.selectedCardIndex = newIndex; this.updateCardSelection(); }
       }
@@ -4293,7 +4429,10 @@
       }
 
       startProgressUpdates() {
-        this.updateInterval = setInterval(() => { if (this.isActive) this.updateProgressBars(); }, 30000);
+        // OPT: guard document.hidden — non aggiorna se tab non visibile
+        this.updateInterval = setInterval(() => {
+          if (this.isActive && !document.hidden) this.updateProgressBars();
+        }, 30000);
       }
 
       stopProgressUpdates() {
@@ -4318,6 +4457,7 @@
       async forceReloadEPG() {
         this.epgData.clear();
         this.epgLoaded = false;
+        this._cachedCols = 0;
         await this.loadEPGDataOnce();
         if (this.isActive) { this.generateMosaicCards(); this.updateCardSelection(); }
       }
@@ -4342,6 +4482,8 @@
         this.maxTimeOffset = 12;
         this.minTimeOffset = -6;
         this.scheduledChannels = new Map();
+        // OPT: cache colonne griglia filtrata
+        this._cachedCols = 0;
         this.init();
       }
 
@@ -4354,6 +4496,8 @@
         this.loadEPGDataOnce();
         this.loadScheduledChannels();
         this.startScheduleChecker();
+        // OPT: invalida cache colonne al resize
+        window.addEventListener('resize', () => { this._cachedCols = 0; });
       }
 
       setupCategories() {
@@ -4375,6 +4519,7 @@
         const newOffset = this.currentTimeOffset + direction;
         if (newOffset > this.maxTimeOffset || newOffset < this.minTimeOffset) return;
         this.currentTimeOffset = newOffset;
+        this._cachedCols = 0; // OPT: reset cache al cambio orario (griglia può cambiare)
         this.updateTimeDisplay();
         this.generateFilteredCards(this.currentFilter);
         this.updateCardSelection();
@@ -4479,8 +4624,8 @@
         this.closeMosaic();
         const channel = document.querySelector(`[data-number="${channelNumber}"]`);
         if (channel) {
-          const channelItems = document.querySelectorAll('.channel-item');
-          const index = Array.from(channelItems).indexOf(channel);
+          // OPT: usa NodeList cached globale
+          const index = Array.from(channels).indexOf(channel);
           selectChannel(index);
           changeVideo(index);
         }
@@ -4524,8 +4669,8 @@
           if (timeDiff <= 180000) {
             const channel = document.querySelector(`[data-number="${channelNumber}"]`);
             if (channel) {
-              const channelItems = document.querySelectorAll('.channel-item');
-              const index = Array.from(channelItems).indexOf(channel);
+              // OPT: usa NodeList cached globale
+              const index = Array.from(channels).indexOf(channel);
               selectChannel(index);
               changeVideo(index);
               this.showScheduleNotification(`Cambio automatico su canale ${channelNumber}`);
@@ -4546,29 +4691,49 @@
         }
       }
 
+      // =====================================================
+      // OPT: Fetch EPG parallelo con Promise.allSettled
+      // =====================================================
       async loadEPGData() {
         const channelItems = document.querySelectorAll('.channel-item');
-        for (const channel of channelItems) {
+        const fetchTasks = [];
+
+        channelItems.forEach(channel => {
           const channelNumber = channel.dataset.number;
           const epgUrl = channel.dataset.epgUrl;
           const epgId = channel.dataset.epgId;
-          if (epgUrl && !this.epgData.has(channelNumber)) {
-            try {
-              const response = await fetch(epgUrl);
-              if (!response.ok) throw new Error(`HTTP error!`);
-              const data = await response.json();
-              let channelData = null;
-              if (Array.isArray(data)) channelData = data.find(ch => ch.id === epgId);
-              else if (data.id) channelData = data;
-              if (channelData && channelData.programs) this.epgData.set(channelNumber, channelData);
-              else this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
-            } catch (error) {
+
+          if (!epgUrl) {
+            if (!this.epgData.has(channelNumber)) {
               this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
             }
-          } else if (!epgUrl && !this.epgData.has(channelNumber)) {
-            this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+            return;
           }
-        }
+
+          if (this.epgData.has(channelNumber)) return;
+
+          fetchTasks.push(
+            fetch(epgUrl)
+              .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+              })
+              .then(data => {
+                let channelData = null;
+                if (Array.isArray(data)) channelData = data.find(ch => ch.id === epgId);
+                else if (data.id) channelData = data;
+                this.epgData.set(
+                  channelNumber,
+                  (channelData && channelData.programs) ? channelData : this.getFallbackEPGData(channelNumber)
+                );
+              })
+              .catch(() => {
+                this.epgData.set(channelNumber, this.getFallbackEPGData(channelNumber));
+              })
+          );
+        });
+
+        await Promise.allSettled(fetchTasks);
       }
 
       getFallbackEPGData(channelNumber) {
@@ -4621,6 +4786,7 @@
 
       async openMosaic() {
         this.isActive = true;
+        this._cachedCols = 0; // OPT: reset cache all'apertura
         document.getElementById('filtered-mosaic-overlay').classList.add('active');
         if (!this.epgLoaded) {
           this.showLoading(true);
@@ -4656,10 +4822,10 @@
       }
 
       updateCategoryCounts() {
-        const channelItems = document.querySelectorAll('.channel-item');
+        // OPT: usa NodeList cached globale invece di querySelectorAll
         const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
         const counts = { tutti: 0, nazionali: 0, show: 0, generali: 0, sport: 0, cinema: 0, documentari: 0, cucina: 0, news: 0, bambini: 0, musica: 0, preferiti: favs.length };
-        channelItems.forEach(channel => {
+        channels.forEach(channel => {
           const category = channel.dataset.category;
           const channelNumber = channel.dataset.number;
           if (channelNumber === '100') return;
@@ -4674,6 +4840,7 @@
 
       selectCategory(categoryName) {
         this.currentFilter = categoryName;
+        this._cachedCols = 0; // OPT: reset cache al cambio categoria
         localStorage.setItem('filteredMosaicCategory', categoryName);
         const categoryItems = document.querySelectorAll('.filtered-category-item');
         categoryItems.forEach(item => { item.classList.remove('active'); if (item.dataset.filterCategory === categoryName) item.classList.add('active'); });
@@ -4684,531 +4851,330 @@
         this.updateCardSelection();
       }
 
-        updateCategoryTitle(categoryName) {
-    const titles = {
-      'tutti': 'TUTTI I CANALI',
-      'nazionali': 'CANALI NAZIONALI',
-      'show': 'SHOW & SERIE',
-      'generali': 'CANALI GENERALI',
-      'sport': 'CANALI SPORT',
-      'cinema': 'CANALI CINEMA',
-      'documentari': 'DOCUMENTARI & LIFESTYLE',
-      'cucina': 'CUCINA & LIFESTYLE',
-      'news': 'NEWS & METEO',
-      'bambini': 'BAMBINI & RAGAZZI',
-      'musica': 'MUSICA & RADIO',
-      'preferiti': 'CANALI PREFERITI'
-    };
-
-    const subtitles = {
-      'tutti': 'Visualizzazione di tutti i canali disponibili',
-      'nazionali': 'Canali televisivi nazionali italiani',
-      'show': 'Serie TV, show e intrattenimento',
-      'generali': 'Canali di intrattenimento generale',
-      'sport': 'Canali dedicati allo sport',
-      'cinema': 'Film e contenuti cinematografici',
-      'documentari': 'Documentari e programmi educativi',
-      'cucina': 'Programmi di cucina e gastronomia',
-      'news': 'Notizie, informazione e meteo',
-      'bambini': 'Contenuti per bambini e ragazzi',
-      'musica': 'Musica, radio e intrattenimento musicale',
-      'preferiti': 'I tuoi canali preferiti salvati'
-    };
-
-    document.getElementById('filtered-mosaic-category-title').textContent = titles[categoryName] || 'CATEGORIA';
-    document.getElementById('filtered-mosaic-category-subtitle').textContent = subtitles[categoryName] || 'Canali filtrati per categoria';
-  }
-
-  generateFilteredCards(categoryName) {
-    const grid = document.getElementById('filtered-mosaic-grid');
-    grid.innerHTML = '';
-    this.filteredCards = [];
-
-    const channels = document.querySelectorAll('.channel-item');
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-
-    channels.forEach((channel, index) => {
-      const channelNumber = channel.dataset.number;
-      const channelCategory = channel.dataset.category;
-      const channelName = channel.querySelector('.channel-name-main').textContent;
-      const channelLogo = channel.querySelector('.channel-logo').src;
-      
-      // Salta il canale di configurazione
-      if (channelNumber === '100') return;
-      
-      // Applica il filtro
-      let shouldShow = false;
-      
-      if (categoryName === 'tutti') {
-        shouldShow = true;
-      } else if (categoryName === 'preferiti') {
-        shouldShow = favorites.includes(channelNumber);
-      } else {
-        shouldShow = channelCategory === categoryName;
+      updateCategoryTitle(categoryName) {
+        const titles = {
+          'tutti': 'TUTTI I CANALI', 'nazionali': 'CANALI NAZIONALI', 'show': 'SHOW & SERIE',
+          'generali': 'CANALI GENERALI', 'sport': 'CANALI SPORT', 'cinema': 'CANALI CINEMA',
+          'documentari': 'DOCUMENTARI & LIFESTYLE', 'cucina': 'CUCINA & LIFESTYLE',
+          'news': 'NEWS & METEO', 'bambini': 'BAMBINI & RAGAZZI',
+          'musica': 'MUSICA & RADIO', 'preferiti': 'CANALI PREFERITI'
+        };
+        const subtitles = {
+          'tutti': 'Visualizzazione di tutti i canali disponibili', 'nazionali': 'Canali televisivi nazionali italiani',
+          'show': 'Serie TV, show e intrattenimento', 'generali': 'Canali di intrattenimento generale',
+          'sport': 'Canali dedicati allo sport', 'cinema': 'Film e contenuti cinematografici',
+          'documentari': 'Documentari e programmi educativi', 'cucina': 'Programmi di cucina e gastronomia',
+          'news': 'Notizie, informazione e meteo', 'bambini': 'Contenuti per bambini e ragazzi',
+          'musica': 'Musica, radio e intrattenimento musicale', 'preferiti': 'I tuoi canali preferiti salvati'
+        };
+        document.getElementById('filtered-mosaic-category-title').textContent = titles[categoryName] || 'CATEGORIA';
+        document.getElementById('filtered-mosaic-category-subtitle').textContent = subtitles[categoryName] || 'Canali filtrati per categoria';
       }
-      
-      if (!shouldShow) return;
-      
-      // ===== MODIFICA PRINCIPALE: Usa il programma per l'orario selezionato =====
-      const channelData = this.epgData.get(channelNumber);
-      const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
-      
-      const card = document.createElement('div');
-      card.className = 'filtered-mosaic-card';
-      card.dataset.channelNumber = channelNumber;
-      card.dataset.channelIndex = index;
-      
-      // ===== VERIFICA SE IL PROGRAMMA È FUTURO =====
-      const isFuture = this.isProgramFuture(program, channelNumber);
-      if (isFuture) {
-        card.classList.add('future-program');
-      }
-      
-      const progress = this.calculateProgress(program, channelNumber);
-      const progressText = program ? 
-        `${this.formatTime(program.start, channelNumber)} - ${this.formatTime(program.end, channelNumber)}` :
-        'Orario non disponibile';
-      
-      card.innerHTML = `
-        <div class="filtered-mosaic-card-header">
-          <img src="${channelLogo}" alt="${channelName}" class="filtered-mosaic-channel-logo" 
-               onerror="this.style.display='none'">
-          <div class="filtered-mosaic-channel-info">
-            <div class="filtered-mosaic-channel-name">${channelName}</div>
-            <div class="filtered-mosaic-channel-number">Canale ${channelNumber}</div>
-          </div>
-        </div>
-        
-        <div class="filtered-mosaic-program-poster">
-          ${program && program.poster ? 
-            `<img src="${program.poster}" alt="Poster programma" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;\\'>Immagine non disponibile</div>'">` :
-            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;">Immagine non disponibile</div>'
-          }
-        </div>
-        
-        <div class="filtered-mosaic-program-info">
-          <div class="filtered-mosaic-program-title">
-            ${program ? program.title : 'Programma non disponibile'}
-          </div>
-          <div class="filtered-mosaic-program-time">${progressText}</div>
-          
-          <div class="filtered-mosaic-progress-container">
-            <div class="filtered-mosaic-progress-bar">
-              <div class="filtered-mosaic-progress-fill" style="width: ${progress}%"></div>
+
+      // =====================================================
+      // OPT: DocumentFragment — un solo reflow invece di N
+      // OPT: localStorage.favorites letto una volta sola prima del loop
+      // =====================================================
+      generateFilteredCards(categoryName) {
+        const grid = document.getElementById('filtered-mosaic-grid');
+        this.filteredCards = [];
+        const fragment = document.createDocumentFragment();
+
+        // OPT: usa NodeList cached globale
+        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+        channels.forEach((channel, index) => {
+          const channelNumber = channel.dataset.number;
+          if (channelNumber === '100') return;
+
+          const channelCategory = channel.dataset.category;
+          let shouldShow = false;
+          if (categoryName === 'tutti') shouldShow = true;
+          else if (categoryName === 'preferiti') shouldShow = favs.includes(channelNumber);
+          else shouldShow = channelCategory === categoryName;
+          if (!shouldShow) return;
+
+          const channelName = channel.querySelector('.channel-name-main').textContent;
+          const logoEl = channel.querySelector('.channel-logo');
+          const channelLogo = logoEl ? logoEl.src : '';
+          const channelData = this.epgData.get(channelNumber);
+          const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
+          const isFuture = this.isProgramFuture(program, channelNumber);
+          const progress = this.calculateProgress(program, channelNumber);
+          const progressText = program
+            ? `${this.formatTime(program.start, channelNumber)} - ${this.formatTime(program.end, channelNumber)}`
+            : 'Orario non disponibile';
+
+          const card = document.createElement('div');
+          card.className = 'filtered-mosaic-card' + (isFuture ? ' future-program' : '');
+          card.dataset.channelNumber = channelNumber;
+          card.dataset.channelIndex = index;
+          card.innerHTML = `
+            <div class="filtered-mosaic-card-header">
+              <img src="${channelLogo}" alt="${channelName}" class="filtered-mosaic-channel-logo" onerror="this.style.display='none'">
+              <div class="filtered-mosaic-channel-info">
+                <div class="filtered-mosaic-channel-name">${channelName}</div>
+                <div class="filtered-mosaic-channel-number">Canale ${channelNumber}</div>
+              </div>
             </div>
-            <div class="filtered-mosaic-progress-text">${progress}% completato</div>
-          </div>
-        </div>
-      `;
-      
-      // ===== EVENT LISTENER MODIFICATO PER GESTIRE PROGRAMMI FUTURI =====
-      card.addEventListener('click', () => {
-        if (isFuture && this.currentTimeOffset > 0) {
-          // Mostra popup per programmi futuri
-          this.showSchedulePopup(channelNumber, program);
+            <div class="filtered-mosaic-program-poster">
+              ${program && program.poster
+                ? `<img src="${program.poster}" alt="Poster programma" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;\\'>Immagine non disponibile</div>'">`
+                : '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255,255,255,0.5); font-size: 14px;">Immagine non disponibile</div>'}
+            </div>
+            <div class="filtered-mosaic-program-info">
+              <div class="filtered-mosaic-program-title">${program ? program.title : 'Programma non disponibile'}</div>
+              <div class="filtered-mosaic-program-time">${progressText}</div>
+              <div class="filtered-mosaic-progress-container">
+                <div class="filtered-mosaic-progress-bar">
+                  <div class="filtered-mosaic-progress-fill" style="width: ${progress}%"></div>
+                </div>
+                <div class="filtered-mosaic-progress-text">${progress}% completato</div>
+              </div>
+            </div>
+          `;
+
+          card.addEventListener('click', () => {
+            if (isFuture && this.currentTimeOffset > 0) this.showSchedulePopup(channelNumber, program);
+            else this.selectChannel(channelNumber);
+          });
+
+          fragment.appendChild(card);
+          this.filteredCards.push(card);
+        });
+
+        // Un solo reflow: svuota e inserisce tutto insieme
+        grid.innerHTML = '';
+        if (this.filteredCards.length === 0) {
+          grid.innerHTML = '<div style="color: white; text-align: center; padding: 50px; font-size: 18px; grid-column: 1 / -1;">Nessun canale disponibile per questa categoria</div>';
         } else {
-          // Comportamento normale per programmi correnti
-          this.selectChannel(channelNumber);
+          grid.appendChild(fragment);
         }
-      });
-      
-      grid.appendChild(card);
-      this.filteredCards.push(card);
-    });
-
-    // Se non ci sono canali per questa categoria
-    if (this.filteredCards.length === 0) {
-      grid.innerHTML = `
-        <div style="color: white; text-align: center; padding: 50px; font-size: 18px; grid-column: 1 / -1;">
-          Nessun canale disponibile per questa categoria
-        </div>
-      `;
-    }
-  }
-
-  updateCategorySelection() {
-    const categoryItems = document.querySelectorAll('.filtered-category-item');
-    
-    // Assicurati che l'indice sia valido
-    if (this.selectedCategoryIndex < 0) {
-      this.selectedCategoryIndex = 0;
-    } else if (this.selectedCategoryIndex >= categoryItems.length) {
-      this.selectedCategoryIndex = categoryItems.length - 1;
-    }
-
-    categoryItems.forEach((item, index) => {
-      item.classList.toggle('focused', index === this.selectedCategoryIndex);
-    });
-    
-    // Scroll alla categoria selezionata
-    if (categoryItems[this.selectedCategoryIndex]) {
-      categoryItems[this.selectedCategoryIndex].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  }
-
-  updateCardSelection() {
-    if (this.filteredCards.length === 0) return;
-    
-    // Assicurati che l'indice sia valido
-    if (this.selectedCardIndex < 0) {
-      this.selectedCardIndex = 0;
-    } else if (this.selectedCardIndex >= this.filteredCards.length) {
-      this.selectedCardIndex = this.filteredCards.length - 1;
-    }
-
-    this.filteredCards.forEach((card, index) => {
-      card.classList.toggle('selected', index === this.selectedCardIndex);
-    });
-    
-    // Scroll alla card selezionata
-    if (this.filteredCards[this.selectedCardIndex]) {
-      this.filteredCards[this.selectedCardIndex].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center'
-      });
-    }
-  }
-
-  // ✅ MODIFICATO: Gestione navigazione principale con supporto popup
-  navigate(direction) {
-    if (!this.isActive) return;
-
-    // ✅ NUOVO: Gestione navigazione nel popup
-    if (this.navigationMode === 'popup') {
-      if (direction === 'up' || direction === 'down') {
-        this.navigatePopupButtons(direction);
       }
-      return;
-    }
 
-    if (this.navigationMode === 'categories') {
-      this.navigateCategories(direction);
-    } else if (this.navigationMode === 'cards') {
-      this.navigateCards(direction);
-    } else if (this.navigationMode === 'time') {
-      this.navigateTimeButtons(direction);
-    }
-  }
-
-  navigateCategories(direction) {
-    const categoryItems = document.querySelectorAll('.filtered-category-item');
-    
-    switch (direction) {
-      case 'up':
-        if (this.selectedCategoryIndex > 0) {
-          this.selectedCategoryIndex--;
-        } else {
-          this.selectedCategoryIndex = categoryItems.length - 1;
-        }
-        break;
-        
-      case 'down':
-        if (this.selectedCategoryIndex < categoryItems.length - 1) {
-          this.selectedCategoryIndex++;
-        } else {
-          this.selectedCategoryIndex = 0;
-        }
-        break;
-        
-      case 'right':
-        // Passa alla navigazione delle card
-        this.navigationMode = 'cards';
-        this.updateCardSelection();
-        return;
-    }
-    
-    this.updateCategorySelection();
-  }
-
-  // ✅ MODIFICATO: Navigazione card con gestione tasti 4 e 5
-  navigateCards(direction) {
-    if (this.filteredCards.length === 0) return;
-    
-    // ===== GESTIONE FRECCE SINISTRA/DESTRA =====
-    if (direction === 'left' || direction === 'right') {
-      // Se siamo nella prima colonna e andiamo a sinistra, torna alle categorie
-      const grid = document.getElementById('filtered-mosaic-grid');
-      const gridRect = grid.getBoundingClientRect();
-      const firstCard = this.filteredCards[0];
-      
-      if (firstCard) {
+      // =====================================================
+      // OPT: Cache colonne griglia filtrata
+      // =====================================================
+      _getCols() {
+        if (this._cachedCols > 0) return this._cachedCols;
+        const grid = document.getElementById('filtered-mosaic-grid');
+        const firstCard = this.filteredCards[0];
+        if (!firstCard) return 1;
+        const gridRect = grid.getBoundingClientRect();
         const cardRect = firstCard.getBoundingClientRect();
-        const cardWidth = cardRect.width;
-        const gridStyle = window.getComputedStyle(grid);
-        const gap = parseInt(gridStyle.gap) || 20;
-        
-        const availableWidth = gridRect.width;
-        const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
-        const currentCol = this.selectedCardIndex % cols;
-        
-        if (direction === 'left' && currentCol === 0) {
-          // Torna alla navigazione delle categorie
-          this.navigationMode = 'categories';
-          this.updateCategorySelection();
+        const gap = parseInt(window.getComputedStyle(grid).gap) || 20;
+        this._cachedCols = Math.max(1, Math.floor((gridRect.width + gap) / (cardRect.width + gap)));
+        return this._cachedCols;
+      }
+
+      updateCategorySelection() {
+        const categoryItems = document.querySelectorAll('.filtered-category-item');
+        if (this.selectedCategoryIndex < 0) this.selectedCategoryIndex = 0;
+        else if (this.selectedCategoryIndex >= categoryItems.length) this.selectedCategoryIndex = categoryItems.length - 1;
+
+        categoryItems.forEach((item, index) => {
+          item.classList.toggle('focused', index === this.selectedCategoryIndex);
+        });
+
+        // OPT: scroll manuale istantaneo
+        const selected = categoryItems[this.selectedCategoryIndex];
+        if (selected) {
+          const sidebar = document.getElementById('filtered-mosaic-overlay').querySelector('.filtered-mosaic-sidebar');
+          scrollToElement(sidebar, selected);
+        }
+      }
+
+      // =====================================================
+      // OPT: scroll manuale istantaneo invece di scrollIntoView smooth
+      // =====================================================
+      updateCardSelection() {
+        if (this.filteredCards.length === 0) return;
+        if (this.selectedCardIndex < 0) this.selectedCardIndex = 0;
+        else if (this.selectedCardIndex >= this.filteredCards.length) this.selectedCardIndex = this.filteredCards.length - 1;
+
+        this.filteredCards.forEach((card, index) => {
+          card.classList.toggle('selected', index === this.selectedCardIndex);
+        });
+
+        const selected = this.filteredCards[this.selectedCardIndex];
+        if (selected) {
+          const container = document.getElementById('filtered-mosaic-grid-container');
+          scrollToElement(container, selected);
+        }
+      }
+
+      navigate(direction) {
+        if (!this.isActive) return;
+        if (this.navigationMode === 'popup') {
+          if (direction === 'up' || direction === 'down') this.navigatePopupButtons(direction);
           return;
         }
+        if (this.navigationMode === 'categories') this.navigateCategories(direction);
+        else if (this.navigationMode === 'cards') this.navigateCards(direction);
+        else if (this.navigationMode === 'time') this.navigateTimeButtons(direction);
       }
-      
-      // Navigazione orizzontale tra le card
-      this.navigateCardsHorizontal(direction);
-      return;
-    }
-    
-    // Navigazione verticale tra le card
-    this.navigateCardsVertical(direction);
-  }
 
-  // ✅ NUOVO: Navigazione orizzontale tra le card
-  navigateCardsHorizontal(direction) {
-    const grid = document.getElementById('filtered-mosaic-grid');
-    const gridRect = grid.getBoundingClientRect();
-    const firstCard = this.filteredCards[0];
-    
-    if (!firstCard) return;
-    
-    const cardRect = firstCard.getBoundingClientRect();
-    const cardWidth = cardRect.width;
-    const gridStyle = window.getComputedStyle(grid);
-    const gap = parseInt(gridStyle.gap) || 20;
-    
-    const availableWidth = gridRect.width;
-    const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
-    const rows = Math.ceil(this.filteredCards.length / cols);
-    
-    const currentRow = Math.floor(this.selectedCardIndex / cols);
-    const currentCol = this.selectedCardIndex % cols;
-    
-    let newIndex = this.selectedCardIndex;
-    
-    if (direction === 'left') {
-      if (currentCol > 0) {
-        newIndex = this.selectedCardIndex - 1;
-      } else {
-        // Vai alla fine della riga precedente
-        if (currentRow > 0) {
-          const prevRowLastIndex = Math.min(this.filteredCards.length - 1, (currentRow * cols) - 1);
-          newIndex = prevRowLastIndex;
-        } else {
-          // Vai all'ultima card dell'ultima riga
-          newIndex = this.filteredCards.length - 1;
+      navigateCategories(direction) {
+        const categoryItems = document.querySelectorAll('.filtered-category-item');
+        switch (direction) {
+          case 'up':
+            this.selectedCategoryIndex = this.selectedCategoryIndex > 0 ? this.selectedCategoryIndex - 1 : categoryItems.length - 1;
+            break;
+          case 'down':
+            this.selectedCategoryIndex = this.selectedCategoryIndex < categoryItems.length - 1 ? this.selectedCategoryIndex + 1 : 0;
+            break;
+          case 'right':
+            this.navigationMode = 'cards';
+            this.updateCardSelection();
+            return;
         }
+        this.updateCategorySelection();
       }
-    } else if (direction === 'right') {
-      if (currentCol < cols - 1 && this.selectedCardIndex + 1 < this.filteredCards.length) {
-        newIndex = this.selectedCardIndex + 1;
-      } else {
-        // Vai all'inizio della riga successiva
-        if (currentRow < rows - 1) {
-          newIndex = (currentRow + 1) * cols;
-          if (newIndex >= this.filteredCards.length) {
-            newIndex = this.filteredCards.length - 1;
+
+      navigateCards(direction) {
+        if (this.filteredCards.length === 0) return;
+
+        if (direction === 'left' || direction === 'right') {
+          const cols = this._getCols();
+          const currentCol = this.selectedCardIndex % cols;
+          if (direction === 'left' && currentCol === 0) {
+            this.navigationMode = 'categories';
+            this.updateCategorySelection();
+            return;
           }
-        } else {
-          // Vai alla prima card
-          newIndex = 0;
+          this.navigateCardsHorizontal(direction, cols);
+          return;
+        }
+        this.navigateCardsVertical(direction);
+      }
+
+      // =====================================================
+      // OPT: cols passato come parametro — non ricalcolato due volte
+      // =====================================================
+      navigateCardsHorizontal(direction, cols) {
+        if (!cols) cols = this._getCols();
+        const rows = Math.ceil(this.filteredCards.length / cols);
+        const currentRow = Math.floor(this.selectedCardIndex / cols);
+        const currentCol = this.selectedCardIndex % cols;
+        let newIndex = this.selectedCardIndex;
+
+        if (direction === 'left') {
+          if (currentCol > 0) newIndex = this.selectedCardIndex - 1;
+          else if (currentRow > 0) newIndex = Math.min(this.filteredCards.length - 1, (currentRow * cols) - 1);
+          else newIndex = this.filteredCards.length - 1;
+        } else if (direction === 'right') {
+          if (currentCol < cols - 1 && this.selectedCardIndex + 1 < this.filteredCards.length) newIndex = this.selectedCardIndex + 1;
+          else if (currentRow < rows - 1) { newIndex = (currentRow + 1) * cols; if (newIndex >= this.filteredCards.length) newIndex = this.filteredCards.length - 1; }
+          else newIndex = 0;
+        }
+
+        newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
+        if (newIndex !== this.selectedCardIndex) { this.selectedCardIndex = newIndex; this.updateCardSelection(); }
+      }
+
+      navigateCardsVertical(direction) {
+        const cols = this._getCols();
+        const rows = Math.ceil(this.filteredCards.length / cols);
+        const currentRow = Math.floor(this.selectedCardIndex / cols);
+        const currentCol = this.selectedCardIndex % cols;
+        let newIndex = this.selectedCardIndex;
+
+        if (direction === 'up') {
+          if (currentRow > 0) newIndex = Math.max(0, this.selectedCardIndex - cols);
+          else { const lastRowStartIndex = (rows - 1) * cols; const targetIndex = lastRowStartIndex + currentCol; newIndex = targetIndex >= this.filteredCards.length ? this.filteredCards.length - 1 : targetIndex; }
+        } else if (direction === 'down') {
+          if (currentRow < rows - 1) { const targetIndex = this.selectedCardIndex + cols; newIndex = targetIndex < this.filteredCards.length ? targetIndex : this.filteredCards.length - 1; }
+          else { newIndex = currentCol; if (newIndex >= this.filteredCards.length) newIndex = 0; }
+        }
+
+        newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
+        if (newIndex !== this.selectedCardIndex) { this.selectedCardIndex = newIndex; this.updateCardSelection(); }
+      }
+
+      handleTimeNavigation(direction) {
+        if (direction === 'prev') this.navigateTime(-1);
+        else if (direction === 'next') this.navigateTime(1);
+      }
+
+      selectCurrentItem() {
+        if (this.navigationMode === 'popup') { this.selectCurrentPopupButton(); return; }
+        if (this.navigationMode === 'categories') {
+          const categoryItems = document.querySelectorAll('.filtered-category-item');
+          const selectedCategory = categoryItems[this.selectedCategoryIndex];
+          if (selectedCategory) this.selectCategory(selectedCategory.dataset.filterCategory);
+        } else if (this.navigationMode === 'cards') {
+          if (this.filteredCards[this.selectedCardIndex]) {
+            const channelNumber = this.filteredCards[this.selectedCardIndex].dataset.channelNumber;
+            const channelData = this.epgData.get(channelNumber);
+            const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
+            const isFuture = this.isProgramFuture(program, channelNumber);
+            if (isFuture && this.currentTimeOffset > 0) this.showSchedulePopup(channelNumber, program);
+            else this.selectChannel(channelNumber);
+          }
+        }
+      }
+
+      selectChannel(channelNumber) {
+        this.closeMosaic();
+        const channel = document.querySelector(`[data-number="${channelNumber}"]`);
+        if (channel) {
+          // OPT: usa NodeList cached globale
+          const index = Array.from(channels).indexOf(channel);
+          selectChannel(index);
+          changeVideo(index);
+        }
+      }
+
+      startProgressUpdates() {
+        // OPT: guard document.hidden
+        this.updateInterval = setInterval(() => {
+          if (this.isActive && !document.hidden) this.updateProgressBars();
+        }, 30000);
+      }
+
+      stopProgressUpdates() {
+        if (this.updateInterval) { clearInterval(this.updateInterval); this.updateInterval = null; }
+      }
+
+      updateProgressBars() {
+        this.filteredCards.forEach(card => {
+          const channelNumber = card.dataset.channelNumber;
+          const channelData = this.epgData.get(channelNumber);
+          const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
+          if (program) {
+            const progress = this.calculateProgress(program, channelNumber);
+            const progressFill = card.querySelector('.filtered-mosaic-progress-fill');
+            const progressText = card.querySelector('.filtered-mosaic-progress-text');
+            if (progressFill) progressFill.style.width = progress + '%';
+            if (progressText) progressText.textContent = progress + '% completato';
+          }
+        });
+      }
+
+      async forceReloadEPG() {
+        this.epgData.clear();
+        this.epgLoaded = false;
+        this._cachedCols = 0;
+        await this.loadEPGDataOnce();
+        if (this.isActive) {
+          this.updateCategoryCounts();
+          this.generateFilteredCards(this.currentFilter);
+          this.updateCardSelection();
         }
       }
     }
-    
-    newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
-    
-    if (newIndex !== this.selectedCardIndex) {
-      this.selectedCardIndex = newIndex;
-      this.updateCardSelection();
-    }
-  }
 
-  // ✅ NUOVO: Navigazione verticale tra le card
-  navigateCardsVertical(direction) {
-    const grid = document.getElementById('filtered-mosaic-grid');
-    const gridRect = grid.getBoundingClientRect();
-    const firstCard = this.filteredCards[0];
-    
-    if (!firstCard) return;
-    
-    const cardRect = firstCard.getBoundingClientRect();
-    const cardWidth = cardRect.width;
-    const gridStyle = window.getComputedStyle(grid);
-    const gap = parseInt(gridStyle.gap) || 20;
-    
-    const availableWidth = gridRect.width;
-    const cols = Math.floor((availableWidth + gap) / (cardWidth + gap));
-    const rows = Math.ceil(this.filteredCards.length / cols);
-    
-    const currentRow = Math.floor(this.selectedCardIndex / cols);
-    const currentCol = this.selectedCardIndex % cols;
-    
-    let newIndex = this.selectedCardIndex;
-    
-    if (direction === 'up') {
-      if (currentRow > 0) {
-        newIndex = Math.max(0, this.selectedCardIndex - cols);
-      } else {
-        const lastRowStartIndex = (rows - 1) * cols;
-        const targetIndex = lastRowStartIndex + currentCol;
-        if (targetIndex >= this.filteredCards.length) {
-          newIndex = this.filteredCards.length - 1;
-        } else {
-          newIndex = targetIndex;
-        }
-      }
-    } else if (direction === 'down') {
-      if (currentRow < rows - 1) {
-        const targetIndex = this.selectedCardIndex + cols;
-        if (targetIndex < this.filteredCards.length) {
-          newIndex = targetIndex;
-        } else {
-          newIndex = this.filteredCards.length - 1;
-        }
-      } else {
-        newIndex = currentCol;
-        if (newIndex >= this.filteredCards.length) {
-          newIndex = 0;
-        }
-      }
-    }
-    
-    newIndex = Math.max(0, Math.min(this.filteredCards.length - 1, newIndex));
-    
-    if (newIndex !== this.selectedCardIndex) {
-      this.selectedCardIndex = newIndex;
-      this.updateCardSelection();
-    }
-  }
-
-  // ✅ NUOVO: Gestione navigazione temporale con tasti 4 e 5
-  handleTimeNavigation(direction) {
-    if (direction === 'prev') {
-      this.navigateTime(-1);
-    } else if (direction === 'next') {
-      this.navigateTime(1);
-    }
-  }
-
-  selectCurrentItem() {
-    // ✅ NUOVO: Gestione selezione nel popup
-    if (this.navigationMode === 'popup') {
-      this.selectCurrentPopupButton();
-      return;
-    }
-
-    if (this.navigationMode === 'categories') {
-      // Seleziona la categoria corrente
-      const categoryItems = document.querySelectorAll('.filtered-category-item');
-      const selectedCategory = categoryItems[this.selectedCategoryIndex];
-      if (selectedCategory) {
-        const categoryName = selectedCategory.dataset.filterCategory;
-        this.selectCategory(categoryName);
-      }
-    } else if (this.navigationMode === 'cards') {
-      // ===== GESTIONE SELEZIONE CARD MODIFICATA =====
-      if (this.filteredCards[this.selectedCardIndex]) {
-        const channelNumber = this.filteredCards[this.selectedCardIndex].dataset.channelNumber;
-        const channelData = this.epgData.get(channelNumber);
-        const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
-        
-        // Verifica se il programma è futuro
-        const isFuture = this.isProgramFuture(program, channelNumber);
-        
-        if (isFuture && this.currentTimeOffset > 0) {
-          // Mostra popup per programmi futuri
-          this.showSchedulePopup(channelNumber, program);
-        } else {
-          // Comportamento normale per programmi correnti
-          this.selectChannel(channelNumber);
-        }
-      }
-    }
-  }
-
-  selectChannel(channelNumber) {
-    // Chiudi il mosaico
-    this.closeMosaic();
-    
-    // Seleziona il canale
-    const channel = document.querySelector(`[data-number="${channelNumber}"]`);
-    if (channel) {
-      const channels = document.querySelectorAll('.channel-item');
-      const index = Array.from(channels).indexOf(channel);
-      selectChannel(index);
-      changeVideo(index);
-    }
-  }
-
-  startProgressUpdates() {
-    // 🚀 MODIFICA: Aggiorna solo le barre di progresso, NON ricarica i dati EPG
-    this.updateInterval = setInterval(() => {
-      if (this.isActive) {
-        this.updateProgressBars();
-      }
-    }, 30000);
-  }
-
-  stopProgressUpdates() {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-      this.updateInterval = null;
-    }
-  }
-
-  updateProgressBars() {
-    // 🚀 MODIFICA: Aggiorna solo le barre di progresso usando i dati EPG esistenti
-    this.filteredCards.forEach(card => {
-      const channelNumber = card.dataset.channelNumber;
-      const channelData = this.epgData.get(channelNumber);
-      const program = this.getProgramAtTime(channelData, channelNumber, this.currentTimeOffset);
-      
-      if (program) {
-        const progress = this.calculateProgress(program, channelNumber);
-        const progressFill = card.querySelector('.filtered-mosaic-progress-fill');
-        const progressText = card.querySelector('.filtered-mosaic-progress-text');
-        
-        if (progressFill) {
-          progressFill.style.width = progress + '%';
-        }
-        if (progressText) {
-          progressText.textContent = progress + '% completato';
-        }
-      }
+    // Inizializza i sistemi quando il DOM è pronto
+    document.addEventListener('DOMContentLoaded', () => {
+      window.mosaicSystem = new MosaicSystem();
+      window.filteredMosaicSystem = new FilteredMosaicSystem();
     });
-  }
 
-  // 🚫 RIMOSSO: Non più necessario l'aggiornamento periodico automatico
-  // startPeriodicUpdate() { ... }
+    const setupSystem = new SetupSystem();
+    const pinAuth = new PinAuthSystem();
+    const mosaicSystem = new MosaicSystem();
 
-  // 🆕 NUOVO METODO: Forza il ricaricamento manuale dei dati EPG (se necessario)
-  async forceReloadEPG() {
-    console.log('🔄 Ricaricamento manuale dei dati EPG per mosaico filtrato...');
-    this.epgData.clear();
-    this.epgLoaded = false;
-    await this.loadEPGDataOnce();
-    
-    if (this.isActive) {
-      this.updateCategoryCounts();
-      this.generateFilteredCards(this.currentFilter);
-      this.updateCardSelection();
-      console.log('✅ Mosaico filtrato aggiornato con nuovi dati EPG');
-    }
-  }
-}
-
-// 🚀 Inizializza i sistemi quando il DOM è pronto
-document.addEventListener('DOMContentLoaded', () => {
-  window.mosaicSystem = new MosaicSystem();
-  window.filteredMosaicSystem = new FilteredMosaicSystem();
-});
-
-// Inizializza i sistemi
-const setupSystem = new SetupSystem();
-const pinAuth = new PinAuthSystem();
-const mosaicSystem = new MosaicSystem();
-
-
-    // ===== RESTO DEL CODICE ORIGINALE =====
+    // ===== VARIABILI GLOBALI =====
     let channels = document.querySelectorAll('.channel-item');
     let categories = document.querySelectorAll('.category-item');
     let selectedChannelIndex = 0;
@@ -5226,33 +5192,32 @@ const mosaicSystem = new MosaicSystem();
     let favoritesMode = false;
     let skipTutorialVisible = false;
 
-function showSkipTutorialButton() {
-  document.getElementById('skip-tutorial-overlay').classList.add('visible');
-  skipTutorialVisible = true;
-  if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
-  window.skipTutorialTimeout = setTimeout(hideSkipTutorialButton, 540000);
-}
+    function showSkipTutorialButton() {
+      document.getElementById('skip-tutorial-overlay').classList.add('visible');
+      skipTutorialVisible = true;
+      if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
+      window.skipTutorialTimeout = setTimeout(hideSkipTutorialButton, 540000);
+    }
 
-function hideSkipTutorialButton() {
-  document.getElementById('skip-tutorial-overlay').classList.remove('visible');
-  skipTutorialVisible = false;
-  if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
-}
+    function hideSkipTutorialButton() {
+      document.getElementById('skip-tutorial-overlay').classList.remove('visible');
+      skipTutorialVisible = false;
+      if (window.skipTutorialTimeout) clearTimeout(window.skipTutorialTimeout);
+    }
 
-function skipToRai1() {
-  hideSkipTutorialButton();
-  const rai1 = document.querySelector('[data-number="101"]');
-  if (rai1) {
-    const idx = Array.from(channels).indexOf(rai1);
-    selectChannel(idx);
-    changeVideo(idx);
-  }
-}
+    function skipToRai1() {
+      hideSkipTutorialButton();
+      const rai1 = document.querySelector('[data-number="101"]');
+      if (rai1) {
+        const idx = Array.from(channels).indexOf(rai1);
+        selectChannel(idx);
+        changeVideo(idx);
+      }
+    }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('skip-tutorial-btn').addEventListener('click', skipToRai1);
-});
-
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('skip-tutorial-btn').addEventListener('click', skipToRai1);
+    });
 
     // Mappe per il riconoscimento vocale
     const categoryMap = {
@@ -5336,7 +5301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '606': ['Super', '606'],
       '611': ['Mr.bean animato', 'bean animato', '611'],
       '612': ['Mr.bean', '612'],
-      '613': ['Super Spongebob', 'spongebob','613'],
+      '613': ['Super Spongebob', 'spongebob', '613'],
       '700': ['deejay tv', 'deejay', '700'],
       '701': ['Rtl1025', 'Rtl 102.5', '701'],
       '702': ['Radio italia', 'Radioitalia', '702'],
@@ -5353,12 +5318,11 @@ document.addEventListener('DOMContentLoaded', () => {
       '100': ['configurazione', '100']
     };
 
-    // Funzioni per gestire i preferiti
+    // Funzioni preferiti
     function toggleFavorite(starElement) {
       event.stopPropagation();
       const channelItem = starElement.closest('.channel-item');
       const channelNumber = channelItem.dataset.number;
-      
       if (favorites.includes(channelNumber)) {
         favorites = favorites.filter(fav => fav !== channelNumber);
         starElement.textContent = '☆';
@@ -5370,14 +5334,8 @@ document.addEventListener('DOMContentLoaded', () => {
         starElement.classList.remove('empty');
         showFavoriteNotification('Canale aggiunto ai preferiti');
       }
-      
       localStorage.setItem('favorites', JSON.stringify(favorites));
-      
-      if (currentCategory === 'preferiti') {
-        filterChannelsByCategory('preferiti');
-      }
-      
-      // Aggiorna i contatori nel mosaico filtrato se è attivo
+      if (currentCategory === 'preferiti') filterChannelsByCategory('preferiti');
       if (filteredMosaicSystem.isActive) {
         filteredMosaicSystem.updateCategoryCounts();
         if (filteredMosaicSystem.currentFilter === 'preferiti') {
@@ -5391,9 +5349,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentChannel = channels[selectedChannelIndex];
       if (currentChannel) {
         const star = currentChannel.querySelector('.favorite-star');
-        if (star) {
-          toggleFavorite(star);
-        }
+        if (star) toggleFavorite(star);
       }
     }
 
@@ -5408,32 +5364,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Funzione per mostrare la notifica dei preferiti
     function showFavoriteNotification(message) {
       const notification = document.getElementById('favorites-notification');
       const notificationText = document.getElementById('notification-text');
       const notificationIcon = document.getElementById('notification-icon');
-      
-      // Rimuovi eventuali timeout precedenti
-      if (window.favoriteNotificationTimeout) {
-        clearTimeout(window.favoriteNotificationTimeout);
-      }
-      
-      // Imposta il messaggio e l'icona
+      if (window.favoriteNotificationTimeout) clearTimeout(window.favoriteNotificationTimeout);
       notificationIcon.textContent = '⭐';
       notificationText.textContent = message;
       notification.classList.remove('favorites-mode');
-      
-      // Mostra la notifica
       notification.classList.add('show');
-      
-      // Nascondi dopo 3 secondi
-      window.favoriteNotificationTimeout = setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
+      window.favoriteNotificationTimeout = setTimeout(() => { notification.classList.remove('show'); }, 3000);
     }
 
-    // Funzioni per gestire il menu
+    // Gestione menu
     function openMenu() {
       isMenuOpen = true;
       skyPanel.classList.add('active');
@@ -5449,120 +5392,98 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleMenu() {
-      if (isMenuOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
+      if (isMenuOpen) closeMenu();
+      else openMenu();
     }
 
-    // MODIFICA: Funzione per mostrare il trigger solo al passaggio del mouse
     function showTrigger() {
       menuTrigger.classList.add('visible');
       clearTimeout(mouseTimer);
       mouseTimer = setTimeout(() => {
-        if (!isMenuOpen) {
-          menuTrigger.classList.remove('visible');
-        }
+        if (!isMenuOpen) menuTrigger.classList.remove('visible');
       }, 3000);
     }
 
     function resetHideTimeout() {
       clearTimeout(hideTimeout);
       hideTimeout = setTimeout(() => {
-        if (isMenuOpen && !preventChannelShow) {
-          closeMenu();
-        }
+        if (isMenuOpen && !preventChannelShow) closeMenu();
       }, 10000);
     }
 
-    // MODIFICA: Funzione per verificare se ci sono elementi aperti
     function hasOpenElements() {
       return mosaicSystem.isActive || filteredMosaicSystem.isActive || isMenuOpen || isPinInputActive || numericSelector.isActive;
     }
 
-    // Event listeners
     document.addEventListener('mousemove', (e) => {
       if (e.isTrusted) {
         showTrigger();
-        if (isMenuOpen) {
-          resetHideTimeout();
-        }
+        if (isMenuOpen) resetHideTimeout();
       }
     });
 
     document.addEventListener('click', (e) => {
-      if (e.isTrusted && isMenuOpen) {
-        resetHideTimeout();
-      }
+      if (e.isTrusted && isMenuOpen) resetHideTimeout();
     });
 
     menuTrigger.addEventListener('click', toggleMenu);
     document.getElementById('close-panel').addEventListener('click', closeMenu);
 
-    // Gestione delle categorie
+    // =====================================================
+    // OPT: filterChannelsByCategory — batch display con
+    // requestAnimationFrame per evitare N reflow separati
+    // =====================================================
     function filterChannelsByCategory(category) {
       currentCategory = category;
-      const allChannels = document.querySelectorAll('.channel-item');
-      
+
+      // Aggiorna stato categorie sidebar
       categories.forEach(item => {
         item.classList.remove('active');
-        if (item.dataset.category === category) {
-          item.classList.add('active');
-        }
+        if (item.dataset.category === category) item.classList.add('active');
       });
 
-      allChannels.forEach(channel => {
-        if (category === 'tutti') {
-          channel.style.display = 'flex';
-        } else if (category === 'preferiti') {
-          const channelNumber = channel.dataset.number;
-          if (favorites.includes(channelNumber)) {
-            channel.style.display = 'flex';
-          } else {
-            channel.style.display = 'none';
-          }
-        } else if (channel.dataset.category === category) {
-          channel.style.display = 'flex';
-        } else {
-          channel.style.display = 'none';
-        }
+      // Raccoglie show/hide PRIMA, applica tutto in un frame
+      const toShow = [];
+      const toHide = [];
+      channels.forEach(channel => {
+        let visible = false;
+        if (category === 'tutti') visible = true;
+        else if (category === 'preferiti') visible = favorites.includes(channel.dataset.number);
+        else visible = channel.dataset.category === category;
+        (visible ? toShow : toHide).push(channel);
+      });
+
+      requestAnimationFrame(() => {
+        toHide.forEach(ch => { ch.style.display = 'none'; });
+        toShow.forEach(ch => { ch.style.display = 'flex'; });
       });
 
       const titles = {
-        'nazionali': 'CANALI NAZIONALI',
-        'show': 'SHOW & SERIE',
-        'generali': 'CANALI GENERALI',
-        'sport': 'CANALI SPORT',
-        'cinema': 'CANALI CINEMA',
-        'documentari': 'DOCUMENTARI & LIFESTYLE',
-        'news': 'NEWS & METEO',
-        'bambini': 'BAMBINI & RAGAZZI',
-        'musica': 'MUSICA & RADIO',
-        'tutti': 'TUTTI I CANALI',
-        'preferiti': 'CANALI PREFERITI'
+        'nazionali': 'CANALI NAZIONALI', 'show': 'SHOW & SERIE', 'generali': 'CANALI GENERALI',
+        'sport': 'CANALI SPORT', 'cinema': 'CANALI CINEMA', 'documentari': 'DOCUMENTARI & LIFESTYLE',
+        'news': 'NEWS & METEO', 'bambini': 'BAMBINI & RAGAZZI', 'musica': 'MUSICA & RADIO',
+        'tutti': 'TUTTI I CANALI', 'preferiti': 'CANALI PREFERITI', 'cucina': 'CUCINA & LIFESTYLE'
       };
-      
       document.querySelector('.channels-title').textContent = titles[category] || 'TUTTI I CANALI';
 
-      const visibleChannels = Array.from(allChannels).filter(ch => ch.style.display !== 'none');
-      if (visibleChannels.length > 0) {
-        selectChannel(Array.from(allChannels).indexOf(visibleChannels[0]));
+      if (toShow.length > 0) {
+        selectChannel(Array.from(channels).indexOf(toShow[0]));
       }
 
       localStorage.setItem('currentCategory', category);
     }
 
-    // Navigazione categorie
+    // =====================================================
+    // OPT: selectCategory — scroll manuale istantaneo
+    // =====================================================
     function selectCategory(index) {
       if (index < 0 || index >= categories.length) return;
-      
       categories.forEach(c => c.classList.remove('focused'));
       categories[index].classList.add('focused');
       selectedCategoryIndex = index;
-      
-      categories[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
+      // OPT: scroll manuale istantaneo sulla sidebar
+      const sidebar = document.querySelector('.categories-sidebar');
+      scrollToElement(sidebar, categories[index]);
       if (isMenuOpen) resetHideTimeout();
     }
 
@@ -5570,86 +5491,63 @@ document.addEventListener('DOMContentLoaded', () => {
       const category = categories[selectedCategoryIndex].dataset.category;
       filterChannelsByCategory(category);
       navigationMode = 'channels';
-      
       categories.forEach(c => c.classList.remove('focused'));
     }
 
-    // Event listeners per categorie
     categories.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        selectedCategoryIndex = index;
-        activateCategory();
-      });
+      item.addEventListener('click', () => { selectedCategoryIndex = index; activateCategory(); });
     });
 
-    // Gestione della selezione dei canali
+    // =====================================================
+    // OPT: selectChannel — scroll manuale istantaneo
+    // =====================================================
     function selectChannel(index) {
-      const visibleChannels = Array.from(channels).filter(ch => ch.style.display !== 'none');
       if (index < 0 || index >= channels.length) return;
-      
       channels.forEach(c => c.classList.remove('selected'));
       channels[index].classList.add('selected');
       selectedChannelIndex = index;
-      
-      channels[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
+      // OPT: scroll manuale istantaneo nella lista canali
+      const grid = document.querySelector('.channels-grid');
+      scrollToElement(grid, channels[index]);
       if (isMenuOpen) resetHideTimeout();
     }
 
     function changeVideo(index) {
       const channel = channels[index];
       const url = channel.getAttribute('data-url');
-      
       document.getElementById('loading-indicator').style.display = 'block';
-      
       document.getElementById('iframe-player').src = url;
       const channelNumber = channel.getAttribute('data-number');
-      if (channelNumber === '100') {
-  showSkipTutorialButton();
-} else {
-  hideSkipTutorialButton();
-}
-
-      localStorage.setItem('selectedChannel', channelNumber);
-      
-      // ✅ TRACCIA IL CAMBIO CANALE
+      if (channelNumber === '100') showSkipTutorialButton();
+      else hideSkipTutorialButton();
+      // OPT: debounce localStorage — non scrive ad ogni frame durante navigazione rapida
+      clearTimeout(window._saveChannelTimeout);
+      window._saveChannelTimeout = setTimeout(() => {
+        localStorage.setItem('selectedChannel', channelNumber);
+      }, 300);
       onlineTracker.updateCurrentChannel(channelNumber);
-      
-      setTimeout(() => {
-        document.getElementById('loading-indicator').style.display = 'none';
-      }, 2000);
+      setTimeout(() => { document.getElementById('loading-indicator').style.display = 'none'; }, 2000);
     }
 
     function scrollChannels(direction, reset = true) {
-      if (reset && isMenuOpen) {
-        resetHideTimeout();
-      }
-      
+      if (reset && isMenuOpen) resetHideTimeout();
       const visibleChannels = Array.from(channels).filter(ch => ch.style.display !== 'none');
       const currentVisibleIndex = visibleChannels.findIndex(ch => ch.classList.contains('selected'));
-      
       if (direction === 'down' && currentVisibleIndex < visibleChannels.length - 1) {
-        const nextChannel = visibleChannels[currentVisibleIndex + 1];
-        const nextIndex = Array.from(channels).indexOf(nextChannel);
+        const nextIndex = Array.from(channels).indexOf(visibleChannels[currentVisibleIndex + 1]);
         selectChannel(nextIndex);
       } else if (direction === 'up' && currentVisibleIndex > 0) {
-        const prevChannel = visibleChannels[currentVisibleIndex - 1];
-        const prevIndex = Array.from(channels).indexOf(prevChannel);
+        const prevIndex = Array.from(channels).indexOf(visibleChannels[currentVisibleIndex - 1]);
         selectChannel(prevIndex);
       }
-      
       changeVideo(selectedChannelIndex);
     }
 
     function scrollCategories(direction) {
-      if (direction === 'right' && selectedCategoryIndex < categories.length - 1) {
-        selectCategory(selectedCategoryIndex + 1);
-      } else if (direction === 'left' && selectedCategoryIndex > 0) {
-        selectCategory(selectedCategoryIndex - 1);
-      }
+      if (direction === 'right' && selectedCategoryIndex < categories.length - 1) selectCategory(selectedCategoryIndex + 1);
+      else if (direction === 'left' && selectedCategoryIndex > 0) selectCategory(selectedCategoryIndex - 1);
     }
 
-    // Event listeners per i controlli
     document.getElementById('scroll-up-btn').addEventListener('mousedown', (e) => {
       scrollChannels('up', e.isTrusted);
       scrollInterval = setInterval(() => scrollChannels('up', false), 150);
@@ -5664,280 +5562,163 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
- // ===== INVIO COMANDI ALL'IFRAME =====
-function sendToIframe(key) {
-  const iframe = document.getElementById("iframe-player");
-  if (!iframe || !iframe.contentWindow) return;
-
-  try {
-    iframe.contentWindow.postMessage({
-      action: "key",
-      key: key
-    }, "*");
-  } catch (err) {
-    console.warn("Errore postMessage:", err);
-  }
-}
-
-// ===== STATO MENU POPUP =====
-let isPopupMenuOpen = false;
-
-// ===== GESTIONE TASTIERA =====
-document.addEventListener('keydown', (e) => {
-
-  // =====================================================
-  // 🔥 TOGGLE MENU (TASTO 2) - FIX DEFINITIVO
-  // =====================================================
-  if (e.key === '2') {
-    e.preventDefault();
-
-    isPopupMenuOpen = !isPopupMenuOpen;
-
-    if (isPopupMenuOpen) {
-      sendToIframe("openMenu");
-    } else {
-      sendToIframe("closeMenu");
-    }
-
-    return; // IMPORTANTISSIMO: blocca propagazione
-  }
-
-  // =====================================================
-  // PRIORITÀ MENU POPUP (iframe)
-  // =====================================================
-  if (isPopupMenuOpen) {
-
-    // invio comandi al player
-    if (['3','4','5','6','7'].includes(e.key)) {
-      sendToIframe(e.key);
-    }
-
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // BLOCCO PIN
-  // =====================================================
-  if (e.key === 'Enter' && skipTutorialVisible && !hasOpenElements()) {
-    skipToRai1();
-    e.preventDefault();
-    return;
-  }
-
-  if (isPinInputActive) {
-    const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Tab','Enter'];
-
-    if (!allowedKeys.includes(e.key)) {
-      e.preventDefault();
-      return;
-    }
-
-    if (e.key === 'Enter') return;
-    if (/^[0-9]$/.test(e.key)) return;
-    if (e.key === 'Backspace' || e.key === 'Tab') return;
-
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // NUMERIC SELECTOR
-  // =====================================================
-  if (/^[0-9]$/.test(e.key) && numericSelector.isActive) {
-    if (numericSelector.addDigit(e.key)) {
-      e.preventDefault();
-      return;
-    }
-  }
-
-  if (e.key === 'Backspace' && numericSelector.isActive) {
-    if (numericSelector.backspace()) {
-      e.preventDefault();
-      return;
-    }
-  }
-
-  if (e.key === 'Enter' && numericSelector.isActive) {
-    if (numericSelector.forceChannelChange()) {
-      e.preventDefault();
-      return;
-    }
-  }
-
-  // =====================================================
-  // FRECCE CANALI
-  // =====================================================
-  if (e.key === 'ArrowUp' && !hasOpenElements()) {
-    favoritesMode ? scrollFavorites('down') : scrollChannels('down');
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === 'ArrowDown' && !hasOpenElements()) {
-    favoritesMode ? scrollFavorites('up') : scrollChannels('up');
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // FRECCE IFRAME
-  // =====================================================
-  if (e.key === 'ArrowRight' && !hasOpenElements()) {
-    sendToIframe("ArrowRight");
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === 'ArrowLeft' && !hasOpenElements()) {
-    sendToIframe("ArrowLeft");
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // MOSAICO
-  // =====================================================
-  if (e.key === '6') {
-    mosaicSystem.toggleMosaic();
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '7') {
-    filteredMosaicSystem.toggleMosaic();
-    e.preventDefault();
-    return;
-  }
-
-  if (mosaicSystem.isActive) {
-    if (e.key === 'ArrowLeft') mosaicSystem.navigateMosaic('left');
-    else if (e.key === 'ArrowRight') mosaicSystem.navigateMosaic('right');
-    else if (e.key === 'ArrowUp') mosaicSystem.navigateMosaic('up');
-    else if (e.key === 'ArrowDown') mosaicSystem.navigateMosaic('down');
-    else if (e.key === 'Enter') mosaicSystem.selectCurrentCard();
-    else if (e.key === 'Escape') mosaicSystem.closeMosaic();
-
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // MOSAICO FILTRATO
-  // =====================================================
-  if (filteredMosaicSystem.isActive) {
-
-    if (e.key === '4') {
-      filteredMosaicSystem.handleTimeNavigation('prev');
-      e.preventDefault();
-      return;
-    }
-
-    if (e.key === '5') {
-      filteredMosaicSystem.handleTimeNavigation('next');
-      e.preventDefault();
-      return;
-    }
-
-    if (e.key === 'ArrowLeft') filteredMosaicSystem.navigate('left');
-    else if (e.key === 'ArrowRight') filteredMosaicSystem.navigate('right');
-    else if (e.key === 'ArrowUp') filteredMosaicSystem.navigate('up');
-    else if (e.key === 'ArrowDown') filteredMosaicSystem.navigate('down');
-    else if (e.key === 'Enter') filteredMosaicSystem.selectCurrentItem();
-    else if (e.key === 'Escape') filteredMosaicSystem.closeMosaic();
-
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // COMANDI DIRETTI
-  // =====================================================
-  if (e.key === '8') {
-    sendToIframe("8");
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '4') {
-    sendToIframe("4");
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '5') {
-    numericSelector.toggleMode();
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '3') {
-    toggleFavoritesMode();
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '1') {
-    toggleCurrentChannelFavorite();
-    e.preventDefault();
-    return;
-  }
-
-  if (e.key === '9') {
-    toggleMenu();
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // VOCE
-  // =====================================================
-  if (e.key === '0' && !numericSelector.isActive) {
-    if (recognition) startVoiceRecognition();
-    e.preventDefault();
-    return;
-  }
-
-  // =====================================================
-  // MENU INTERNO
-  // =====================================================
-  if (isMenuOpen) {
-    resetHideTimeout();
-
-    if (navigationMode === 'categories') {
-      if (e.key === 'ArrowRight') scrollCategories('right');
-      else if (e.key === 'ArrowLeft') scrollCategories('left');
-      else if (e.key === 'Enter') activateCategory();
-    }
-
-    if (navigationMode === 'channels') {
-      if (e.key === 'ArrowDown') scrollChannels('down');
-      else if (e.key === 'ArrowUp') scrollChannels('up');
-      else if (e.key === 'ArrowLeft') {
-        navigationMode = 'categories';
-        selectCategory(selectedCategoryIndex);
+    function sendToIframe(key) {
+      const iframe = document.getElementById("iframe-player");
+      if (!iframe || !iframe.contentWindow) return;
+      try {
+        iframe.contentWindow.postMessage({ action: "key", key: key }, "*");
+      } catch (err) {
+        console.warn("Errore postMessage:", err);
       }
-      else if (e.key === 'Enter') changeVideo(selectedChannelIndex);
     }
 
-    if (e.key === 'Escape') closeMenu();
+    let isPopupMenuOpen = false;
 
-    e.preventDefault();
-  }
+    // =====================================================
+    // OPT: Throttle keydown a 80ms per le frecce di navigazione.
+    // Su Smart TV vecchie il key-repeat può arrivare a 30-40
+    // eventi/sec — il throttle lo limita a ~12/sec che è
+    // più che sufficiente per navigazione fluida.
+    // I tasti "istantanei" (numeri, Enter, Escape) bypassano
+    // il throttle per non introdurre ritardi percepibili.
+    // =====================================================
+    let _keyThrottle = false;
+    const _throttledKeys = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
 
-  // =====================================================
-  // FULLSCREEN
-  // =====================================================
-  if (e.key === 'f' || e.key === 'F') {
-    toggleFullScreen();
-    e.preventDefault();
-  }
-});
+    document.addEventListener('keydown', (e) => {
+
+      // Throttle solo sui tasti di navigazione (frecce)
+      if (_throttledKeys.has(e.key)) {
+        if (_keyThrottle) { e.preventDefault(); return; }
+        _keyThrottle = true;
+        setTimeout(() => { _keyThrottle = false; }, 80);
+      }
+
+      // ===== TOGGLE MENU (TASTO 2) =====
+      if (e.key === '2') {
+        e.preventDefault();
+        isPopupMenuOpen = !isPopupMenuOpen;
+        sendToIframe(isPopupMenuOpen ? "openMenu" : "closeMenu");
+        return;
+      }
+
+      // ===== PRIORITÀ MENU POPUP (iframe) =====
+      if (isPopupMenuOpen) {
+        if (['3','4','5','6','7'].includes(e.key)) sendToIframe(e.key);
+        e.preventDefault();
+        return;
+      }
+
+      // ===== BLOCCO PIN =====
+      if (e.key === 'Enter' && skipTutorialVisible && !hasOpenElements()) {
+        skipToRai1(); e.preventDefault(); return;
+      }
+
+      if (isPinInputActive) {
+        const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Tab','Enter'];
+        if (!allowedKeys.includes(e.key)) { e.preventDefault(); return; }
+        if (e.key === 'Enter') return;
+        if (/^[0-9]$/.test(e.key)) return;
+        if (e.key === 'Backspace' || e.key === 'Tab') return;
+        e.preventDefault(); return;
+      }
+
+      // ===== NUMERIC SELECTOR =====
+      if (/^[0-9]$/.test(e.key) && numericSelector.isActive) {
+        if (numericSelector.addDigit(e.key)) { e.preventDefault(); return; }
+      }
+      if (e.key === 'Backspace' && numericSelector.isActive) {
+        if (numericSelector.backspace()) { e.preventDefault(); return; }
+      }
+      if (e.key === 'Enter' && numericSelector.isActive) {
+        if (numericSelector.forceChannelChange()) { e.preventDefault(); return; }
+      }
+
+      // ===== FRECCE CANALI =====
+      if (e.key === 'ArrowUp' && !hasOpenElements()) {
+        favoritesMode ? scrollFavorites('down') : scrollChannels('down');
+        e.preventDefault(); return;
+      }
+      if (e.key === 'ArrowDown' && !hasOpenElements()) {
+        favoritesMode ? scrollFavorites('up') : scrollChannels('up');
+        e.preventDefault(); return;
+      }
+
+      // ===== FRECCE IFRAME =====
+      if (e.key === 'ArrowRight' && !hasOpenElements()) {
+        sendToIframe("ArrowRight"); e.preventDefault(); return;
+      }
+      if (e.key === 'ArrowLeft' && !hasOpenElements()) {
+        sendToIframe("ArrowLeft"); e.preventDefault(); return;
+      }
+
+      // ===== MOSAICO 6 =====
+      if (e.key === '6') { mosaicSystem.toggleMosaic(); e.preventDefault(); return; }
+
+      // ===== MOSAICO FILTRATO 7 =====
+      if (e.key === '7') { filteredMosaicSystem.toggleMosaic(); e.preventDefault(); return; }
+
+      if (mosaicSystem.isActive) {
+        if (e.key === 'ArrowLeft') mosaicSystem.navigateMosaic('left');
+        else if (e.key === 'ArrowRight') mosaicSystem.navigateMosaic('right');
+        else if (e.key === 'ArrowUp') mosaicSystem.navigateMosaic('up');
+        else if (e.key === 'ArrowDown') mosaicSystem.navigateMosaic('down');
+        else if (e.key === 'Enter') mosaicSystem.selectCurrentCard();
+        else if (e.key === 'Escape') mosaicSystem.closeMosaic();
+        e.preventDefault(); return;
+      }
+
+      if (filteredMosaicSystem.isActive) {
+        if (e.key === '4') { filteredMosaicSystem.handleTimeNavigation('prev'); e.preventDefault(); return; }
+        if (e.key === '5') { filteredMosaicSystem.handleTimeNavigation('next'); e.preventDefault(); return; }
+        if (e.key === 'ArrowLeft') filteredMosaicSystem.navigate('left');
+        else if (e.key === 'ArrowRight') filteredMosaicSystem.navigate('right');
+        else if (e.key === 'ArrowUp') filteredMosaicSystem.navigate('up');
+        else if (e.key === 'ArrowDown') filteredMosaicSystem.navigate('down');
+        else if (e.key === 'Enter') filteredMosaicSystem.selectCurrentItem();
+        else if (e.key === 'Escape') filteredMosaicSystem.closeMosaic();
+        e.preventDefault(); return;
+      }
+
+      // ===== COMANDI DIRETTI =====
+      if (e.key === '8') { sendToIframe("8"); e.preventDefault(); return; }
+      if (e.key === '4') { sendToIframe("4"); e.preventDefault(); return; }
+      if (e.key === '5') { numericSelector.toggleMode(); e.preventDefault(); return; }
+      if (e.key === '3') { toggleFavoritesMode(); e.preventDefault(); return; }
+      if (e.key === '1') { toggleCurrentChannelFavorite(); e.preventDefault(); return; }
+      if (e.key === '9') { toggleMenu(); e.preventDefault(); return; }
+
+      // ===== VOCE =====
+      if (e.key === '0' && !numericSelector.isActive) {
+        if (recognition) startVoiceRecognition();
+        e.preventDefault(); return;
+      }
+
+      // ===== MENU INTERNO =====
+      if (isMenuOpen) {
+        resetHideTimeout();
+        if (navigationMode === 'categories') {
+          if (e.key === 'ArrowRight') scrollCategories('right');
+          else if (e.key === 'ArrowLeft') scrollCategories('left');
+          else if (e.key === 'Enter') activateCategory();
+        }
+        if (navigationMode === 'channels') {
+          if (e.key === 'ArrowDown') scrollChannels('down');
+          else if (e.key === 'ArrowUp') scrollChannels('up');
+          else if (e.key === 'ArrowLeft') { navigationMode = 'categories'; selectCategory(selectedCategoryIndex); }
+          else if (e.key === 'Enter') changeVideo(selectedChannelIndex);
+        }
+        if (e.key === 'Escape') closeMenu();
+        e.preventDefault();
+      }
+
+      // ===== FULLSCREEN =====
+      if (e.key === 'f' || e.key === 'F') { toggleFullScreen(); e.preventDefault(); }
+    });
 
     // Gestione modalità preferiti
     function toggleFavoritesMode() {
       if (!favoritesMode) {
-        // Entra in modalità preferiti
         if (favorites.length > 0) {
           favoritesMode = true;
           showFavoritesNotification(true);
@@ -5948,29 +5729,20 @@ document.addEventListener('keydown', (e) => {
             changeVideo(index);
           }
         } else {
-          // Se non ci sono preferiti, mostra un messaggio diverso
           showFavoritesNotification(true, true);
         }
       } else {
-        // Esce dalla modalità preferiti
         favoritesMode = false;
         showFavoritesNotification(false);
-        // Torna alla visualizzazione normale
         filterChannelsByCategory(currentCategory);
       }
     }
 
-    // Funzione per mostrare le notifiche della modalità preferiti
     function showFavoritesNotification(isEntering, noFavorites = false) {
       const notification = document.getElementById('favorites-notification');
       const notificationText = document.getElementById('notification-text');
       const notificationIcon = document.getElementById('notification-icon');
-      
-      // Rimuovi eventuali timeout precedenti
-      if (window.favoritesNotificationTimeout) {
-        clearTimeout(window.favoritesNotificationTimeout);
-      }
-      
+      if (window.favoritesNotificationTimeout) clearTimeout(window.favoritesNotificationTimeout);
       if (isEntering) {
         if (noFavorites) {
           notification.classList.remove('favorites-mode');
@@ -5986,33 +5758,19 @@ document.addEventListener('keydown', (e) => {
         notificationIcon.textContent = '📺';
         notificationText.textContent = 'Modalità Normale - Tutti i canali disponibili';
       }
-      
-      // Mostra la notifica
       notification.classList.add('show');
-      
-      // Nascondi dopo 3 secondi
-      window.favoritesNotificationTimeout = setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
+      window.favoritesNotificationTimeout = setTimeout(() => { notification.classList.remove('show'); }, 3000);
     }
 
     function scrollFavorites(direction) {
       if (favorites.length === 0) return;
-      
       const currentChannel = channels[selectedChannelIndex];
       const currentNumber = currentChannel.dataset.number;
       const currentFavIndex = favorites.indexOf(currentNumber);
-      
       let nextFavIndex;
-      if (direction === 'down') {
-        nextFavIndex = (currentFavIndex + 1) % favorites.length;
-      } else {
-        nextFavIndex = (currentFavIndex - 1 + favorites.length) % favorites.length;
-      }
-      
-      const nextFavoriteNumber = favorites[nextFavIndex];
-      const nextFavoriteChannel = document.querySelector(`[data-number="${nextFavoriteNumber}"]`);
-      
+      if (direction === 'down') nextFavIndex = (currentFavIndex + 1) % favorites.length;
+      else nextFavIndex = (currentFavIndex - 1 + favorites.length) % favorites.length;
+      const nextFavoriteChannel = document.querySelector(`[data-number="${favorites[nextFavIndex]}"]`);
       if (nextFavoriteChannel) {
         const index = Array.from(channels).indexOf(nextFavoriteChannel);
         selectChannel(index);
@@ -6020,12 +5778,9 @@ document.addEventListener('keydown', (e) => {
       }
     }
 
-    // Fullscreen
     function toggleFullScreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.log(`Errore fullscreen: ${err.message}`);
-        });
+        document.documentElement.requestFullscreen().catch(err => { console.log(`Errore fullscreen: ${err.message}`); });
       } else {
         document.exitFullscreen();
       }
@@ -6033,15 +5788,10 @@ document.addEventListener('keydown', (e) => {
 
     document.getElementById('fullscreen-btn').addEventListener('click', toggleFullScreen);
 
-    // Click sui canali
     channels.forEach((channel, index) => {
-      channel.addEventListener('click', () => {
-        selectChannel(index);
-        changeVideo(index);
-      });
+      channel.addEventListener('click', () => { selectChannel(index); changeVideo(index); });
     });
 
-    // Funzione rewind
     function rewindIframe() {
       document.getElementById("iframe-player").contentWindow.postMessage("rewind", "*");
     }
@@ -6063,63 +5813,27 @@ document.addEventListener('keydown', (e) => {
         recognition.start();
         document.getElementById('voice-overlay').style.display = 'flex';
         document.getElementById('voice-text').textContent = 'Pronuncia il nome del canale o il numero';
-
         const autoResetTimer = setTimeout(() => {
-          if (recognitionActive) {
-            recognition.abort();
-            resetVoiceRecognition();
-          }
+          if (recognitionActive) { recognition.abort(); resetVoiceRecognition(); }
         }, 8000);
-
         recognition.onresult = (event) => {
           const spokenText = event.results[0][0].transcript.toLowerCase().trim();
-          console.log('Riconosciuto:', spokenText);
           document.getElementById('voice-text').textContent = `Riconosciuto: ${spokenText}`;
-
           processVoiceCommand(spokenText);
-
           clearTimeout(autoResetTimer);
-          setTimeout(() => {
-            resetVoiceRecognition();
-          }, 1500);
+          setTimeout(() => { resetVoiceRecognition(); }, 1500);
         };
-
-        recognition.onend = () => {
-          clearTimeout(autoResetTimer);
-          resetVoiceRecognition();
-        };
-
-        recognition.onerror = (event) => {
-          console.error('Errore riconoscimento vocale:', event.error);
-          clearTimeout(autoResetTimer);
-          resetVoiceRecognition();
-        };
+        recognition.onend = () => { clearTimeout(autoResetTimer); resetVoiceRecognition(); };
+        recognition.onerror = (event) => { console.error('Errore riconoscimento vocale:', event.error); clearTimeout(autoResetTimer); resetVoiceRecognition(); };
       }
 
       function processVoiceCommand(spokenText) {
-        // Comando mosaico normale
-        if (spokenText.includes('mosaico')) {
-          mosaicSystem.toggleMosaic();
-          return;
-        }
-
-        // ✅ NUOVO: Comando mosaico filtrato
-        if (spokenText.includes('filtro') || spokenText.includes('filtri') || spokenText.includes('categoria')) {
-          filteredMosaicSystem.toggleMosaic();
-          return;
-        }
-
-        // Comandi di controllo player
-        if (spokenText === "pausa") {
-          document.getElementById("iframe-player").contentWindow.postMessage("pause", "*");
-          return;
-        } else if (spokenText === "riprendi") {
-          document.getElementById("iframe-player").contentWindow.postMessage("play", "*");
-          return;
-        } else if (spokenText === "live") {
-          document.getElementById("iframe-player").contentWindow.postMessage("live", "*");
-          return;
-        } else if (spokenText.includes("indietro")) {
+        if (spokenText.includes('mosaico')) { mosaicSystem.toggleMosaic(); return; }
+        if (spokenText.includes('filtro') || spokenText.includes('filtri') || spokenText.includes('categoria')) { filteredMosaicSystem.toggleMosaic(); return; }
+        if (spokenText === "pausa") { document.getElementById("iframe-player").contentWindow.postMessage("pause", "*"); return; }
+        else if (spokenText === "riprendi") { document.getElementById("iframe-player").contentWindow.postMessage("play", "*"); return; }
+        else if (spokenText === "live") { document.getElementById("iframe-player").contentWindow.postMessage("live", "*"); return; }
+        else if (spokenText.includes("indietro")) {
           let match = spokenText.match(/indietro di (\d+)\s*(secondi|minuti)/);
           if (match) {
             let amount = parseInt(match[1]);
@@ -6129,51 +5843,33 @@ document.addEventListener('keydown', (e) => {
             document.getElementById("iframe-player").contentWindow.postMessage("indietro", "*");
           }
           return;
-        } else if (spokenText === "restart" || spokenText === "riavvia") {
-          document.getElementById("iframe-player").contentWindow.postMessage("restart", "*");
-          return;
-        }
+        } else if (spokenText === "restart" || spokenText === "riavvia") { document.getElementById("iframe-player").contentWindow.postMessage("restart", "*"); return; }
 
-        // Gestione apertura categorie
         let categoryFound = false;
         for (const [categoryKey, categoryAliases] of Object.entries(categoryMap)) {
           for (const alias of categoryAliases) {
-            if (spokenText.includes('apri') && spokenText.includes(alias) || 
-                spokenText.includes('sezione') && spokenText.includes(alias)) {
+            if ((spokenText.includes('apri') && spokenText.includes(alias)) || (spokenText.includes('sezione') && spokenText.includes(alias))) {
               if (!isMenuOpen) openMenu();
               filterChannelsByCategory(categoryKey);
-              categoryFound = true;
-              break;
+              categoryFound = true; break;
             }
           }
           if (categoryFound) break;
         }
-
         if (categoryFound) return;
 
-        // Gestione selezione canali
         let channelFound = false;
-        
         const numberMatch = spokenText.match(/\b(\d{3})\b/);
         if (numberMatch) {
           const channelNumber = numberMatch[1];
           const channel = document.querySelector(`[data-number="${channelNumber}"]`);
           if (channel) {
-            const originalCategory = currentCategory;
-            if (currentCategory !== 'tutti') {
-              filterChannelsByCategory('tutti');
-            }
-            
+            if (currentCategory !== 'tutti') filterChannelsByCategory('tutti');
             const index = Array.from(channels).indexOf(channel);
-            selectChannel(index);
-            changeVideo(index);
-            channelFound = true;
-            
+            selectChannel(index); changeVideo(index); channelFound = true;
             if (spokenText.includes('preferiti') || spokenText.includes('salva') || spokenText.includes('salvati')) {
               const star = channel.querySelector('.favorite-star');
-              if (star && star.classList.contains('empty')) {
-                toggleFavorite(star);
-              }
+              if (star && star.classList.contains('empty')) toggleFavorite(star);
             }
           }
         }
@@ -6184,21 +5880,12 @@ document.addEventListener('keydown', (e) => {
               if (spokenText.includes(alias)) {
                 const channel = document.querySelector(`[data-number="${channelNumber}"]`);
                 if (channel) {
-                  const originalCategory = currentCategory;
-                  if (currentCategory !== 'tutti') {
-                    filterChannelsByCategory('tutti');
-                  }
-                  
+                  if (currentCategory !== 'tutti') filterChannelsByCategory('tutti');
                   const index = Array.from(channels).indexOf(channel);
-                  selectChannel(index);
-                  changeVideo(index);
-                  channelFound = true;
-                  
+                  selectChannel(index); changeVideo(index); channelFound = true;
                   if (spokenText.includes('preferiti') || spokenText.includes('salva') || spokenText.includes('salvati')) {
                     const star = channel.querySelector('.favorite-star');
-                    if (star && star.classList.contains('empty')) {
-                      toggleFavorite(star);
-                    }
+                    if (star && star.classList.contains('empty')) toggleFavorite(star);
                   }
                   break;
                 }
@@ -6206,10 +5893,6 @@ document.addEventListener('keydown', (e) => {
             }
             if (channelFound) break;
           }
-        }
-
-        if (!channelFound) {
-          console.log("Comando non riconosciuto: " + spokenText);
         }
       }
 
@@ -6222,167 +5905,104 @@ document.addEventListener('keydown', (e) => {
       document.getElementById('voice-btn').addEventListener('click', startVoiceRecognition);
     }
 
-    // ✅ MODIFICATO: Gestione messaggi da iframe con supporto tasto 7
     window.addEventListener("message", function(event) {
       if (event.data && event.data.action) {
         if (event.data.action === "toggleFullscreen") {
           toggleFullScreen();
         } else if (event.data.action === "simulateClick") {
           const key = event.data.key;
-          if (key === '3' && recognition && !isPinInputActive) {
-            startVoiceRecognition();
-          } else if (key === '2' && !isPinInputActive) {
-            rewindIframe();
-          } else if (key === '1' && !isPinInputActive) {
-            toggleCurrentChannelFavorite();
-          } else if (key === '4' && !isPinInputActive) {
-            if (filteredMosaicSystem.isActive) {
-              filteredMosaicSystem.handleTimeNavigation('prev');
-            } else if (favoritesMode) {
-              scrollFavorites('up');
-            } else {
-              scrollChannels('up');
-            }
+          if (key === '3' && recognition && !isPinInputActive) startVoiceRecognition();
+          else if (key === '2' && !isPinInputActive) rewindIframe();
+          else if (key === '1' && !isPinInputActive) toggleCurrentChannelFavorite();
+          else if (key === '4' && !isPinInputActive) {
+            if (filteredMosaicSystem.isActive) filteredMosaicSystem.handleTimeNavigation('prev');
+            else if (favoritesMode) scrollFavorites('up');
+            else scrollChannels('up');
           } else if (key === '5' && !isPinInputActive) {
-            if (filteredMosaicSystem.isActive) {
-              filteredMosaicSystem.handleTimeNavigation('next');
-            } else if (favoritesMode) {
-              scrollFavorites('down');
-            } else {
-              scrollChannels('down');
-            }
+            if (filteredMosaicSystem.isActive) filteredMosaicSystem.handleTimeNavigation('next');
+            else if (favoritesMode) scrollFavorites('down');
+            else scrollChannels('down');
           } else if (key === '6' && !isPinInputActive) {
             mosaicSystem.toggleMosaic();
           } else if (key === '7' && !isPinInputActive) {
-            // ✅ NUOVO: Gestione tasto 7 da iframe
             filteredMosaicSystem.toggleMosaic();
           }
         }
       }
     });
 
-    // Inizializzazione
     window.onload = () => {
       menuTrigger.classList.remove('visible');
       document.getElementById('fullscreen-btn').classList.remove('visible');
     };
 
-    // ===== FUNZIONI GLOBALI PER ACCESSO ALLE STATISTICHE =====
-    window.getOnlineUsersCount = () => {
-      return parseInt(document.getElementById('online-counter').textContent) || 0;
-    };
+    // ===== FUNZIONI GLOBALI STATISTICHE =====
+    window.getOnlineUsersCount = () => parseInt(document.getElementById('online-counter').textContent) || 0;
 
     window.getChannelStats = () => {
       try {
         const statsText = document.getElementById('channel-stats').innerHTML;
         return statsText ? JSON.parse(statsText) : [];
-      } catch (error) {
-        console.error('Errore parsing statistiche canali:', error);
-        return [];
-      }
+      } catch (error) { return []; }
     };
 
     window.getRealTimeStats = async () => {
-      if (onlineTracker) {
-        return await onlineTracker.getRealTimeStats();
-      }
+      if (onlineTracker) return await onlineTracker.getRealTimeStats();
       return { onlineUsers: 0, topChannels: [] };
     };
 
-    // 🆕 NUOVE FUNZIONI GLOBALI: Per forzare il ricaricamento manuale dei dati EPG
-    window.forceReloadMosaicEPG = () => {
-      if (mosaicSystem) {
-        mosaicSystem.forceReloadEPG();
-      }
-    };
+    window.forceReloadMosaicEPG = () => { if (mosaicSystem) mosaicSystem.forceReloadEPG(); };
+    window.forceReloadFilteredMosaicEPG = () => { if (filteredMosaicSystem) filteredMosaicSystem.forceReloadEPG(); };
 
-    window.forceReloadFilteredMosaicEPG = () => {
-      if (filteredMosaicSystem) {
-        filteredMosaicSystem.forceReloadEPG();
-      }
-    };
-
-    // Log delle statistiche ogni 5 minuti (solo per debug)
+    // Log statistiche ogni 5 minuti
     setInterval(async () => {
       const stats = await window.getRealTimeStats();
       console.log('📊 Statistiche Real-Time:', stats);
-    }, 5 * 60 * 1000); // 5 minuti
-    
-    
-    
-    // ===== FUNZIONI PER VISUALIZZARE STATISTICHE FIREBASE =====
+    }, 5 * 60 * 1000);
 
-// Funzione per visualizzare utenti online in tempo reale
-window.showOnlineUsers = async () => {
-  try {
-    const activeUsers = await db.collection('onlineUsers')
-      .where('isActive', '==', true)
-      .get();
+    window.showOnlineUsers = async () => {
+      try {
+        const activeUsers = await db.collection('onlineUsers').where('isActive', '==', true).get();
+        console.log('👥 UTENTI ONLINE ATTUALMENTE:');
+        console.log('Totale utenti online:', activeUsers.size);
+        activeUsers.forEach(doc => {
+          const userData = doc.data();
+          console.log(`- ${userData.userName} (PIN: ${userData.userId}) - Canale: ${userData.currentChannel || 'N/A'}`);
+        });
+        return activeUsers.size;
+      } catch (error) { console.error('❌ Errore recupero utenti online:', error); return 0; }
+    };
 
-    console.log('👥 UTENTI ONLINE ATTUALMENTE:');
-    console.log('Totale utenti online:', activeUsers.size);
-    
-    activeUsers.forEach(doc => {
-      const userData = doc.data();
-      console.log(`- ${userData.userName} (PIN: ${userData.userId}) - Canale: ${userData.currentChannel || 'N/A'}`);
-    });
-    
-    return activeUsers.size;
-  } catch (error) {
-    console.error('❌ Errore recupero utenti online:', error);
-    return 0;
-  }
-};
+    window.showChannelStats = async () => {
+      try {
+        const stats = await db.collection('channelStats').orderBy('totalViews', 'desc').limit(10).get();
+        console.log('📊 TOP 10 CANALI PIÙ VISTI:');
+        stats.forEach((doc, index) => {
+          const data = doc.data();
+          console.log(`${index + 1}. Canale ${data.channelNumber} - ${data.totalViews} visualizzazioni - ${data.currentViewers || 0} spettatori attuali`);
+        });
+        return stats.docs.map(doc => doc.data());
+      } catch (error) { console.error('❌ Errore recupero statistiche canali:', error); return []; }
+    };
 
-// Funzione per visualizzare statistiche canali più visti
-window.showChannelStats = async () => {
-  try {
-    const stats = await db.collection('channelStats')
-      .orderBy('totalViews', 'desc')
-      .limit(10)
-      .get();
+    window.showAllStats = async () => {
+      console.log('📈 === STATISTICHE COMPLETE FIREBASE ===');
+      const onlineCount = await window.showOnlineUsers();
+      console.log('');
+      await window.showChannelStats();
+      console.log('');
+      console.log('🔄 Per aggiornare le statistiche, richiama: showAllStats()');
+      return { onlineUsers: onlineCount, channelStats: await window.showChannelStats() };
+    };
 
-    console.log('📊 TOP 10 CANALI PIÙ VISTI:');
-    
-    stats.forEach((doc, index) => {
-      const data = doc.data();
-      console.log(`${index + 1}. Canale ${data.channelNumber} - ${data.totalViews} visualizzazioni - ${data.currentViewers || 0} spettatori attuali`);
-    });
-    
-    return stats.docs.map(doc => doc.data());
-  } catch (error) {
-    console.error('❌ Errore recupero statistiche canali:', error);
-    return [];
-  }
-};
+    setInterval(async () => {
+      const stats = await window.getRealTimeStats();
+      console.log('📊 Aggiornamento automatico statistiche:', {
+        utentiOnline: stats.onlineUsers,
+        topCanali: stats.topChannels.slice(0, 3)
+      });
+    }, 2 * 60 * 1000);
 
-// Funzione per visualizzare tutte le statistiche insieme
-window.showAllStats = async () => {
-  console.log('📈 === STATISTICHE COMPLETE FIREBASE ===');
-  
-  const onlineCount = await window.showOnlineUsers();
-  console.log('');
-  await window.showChannelStats();
-  
-  console.log('');
-  console.log('🔄 Per aggiornare le statistiche, richiama: showAllStats()');
-  
-  return {
-    onlineUsers: onlineCount,
-    channelStats: await window.showChannelStats()
-  };
-};
-
-// Avvia monitoraggio automatico ogni 2 minuti
-setInterval(async () => {
-  const stats = await window.getRealTimeStats();
-  console.log('📊 Aggiornamento automatico statistiche:', {
-    utentiOnline: stats.onlineUsers,
-    topCanali: stats.topChannels.slice(0, 3) // Mostra solo i primi 3
-  });
-}, 2 * 60 * 1000); // Ogni 2 minuti
-
-    
 </script>
 
 
