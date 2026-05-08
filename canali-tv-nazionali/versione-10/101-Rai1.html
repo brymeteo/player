@@ -876,7 +876,18 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
   <p id="overlay-text"></p>
 </div>
 
-<div id="menu-popup" class="hidden">
+<div id="overlay-card" class="hidden">
+  <img id="overlay-icon" src="" alt="Icona comando">
+  <div id="overlay-animation" class="spinner-cubes">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <p id="overlay-text"></p>
+</div>
+
+<!-- MENU POPUP: visibilità gestita SOLO via classe menu-visible (non .hidden) -->
+<div id="menu-popup">
   <h2>Azioni Disponibili</h2>
   <div class="menu-options">
 
@@ -929,7 +940,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 </div>
 
 <div id="restart-message" class="hidden">
- Il contenuto non è attualmente in diretta. Per tornare alla live del canale, premi il tasto 2 e poi 7.
+  Il contenuto non è attualmente in diretta. Per tornare alla live del canale, premi il tasto 2 e poi 7.
 </div>
 
 
