@@ -8,7 +8,9 @@
 src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
 <link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
 
-
+<link rel="preconnect" href="https://87f2e2e5e7624e3bad85da1ca2ed31a7.mediatailor.eu-west-1.amazonaws.com">
+<link rel="dns-prefetch" href="https://87f2e2e5e7624e3bad85da1ca2ed31a7.mediatailor.eu-west-1.amazonaws.com">
+<link rel="preconnect" href="https://amazonaws.com">
 
 
   <style>
@@ -32,10 +34,6 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             opacity: 90%;
             cursor: pointer;
             display: block;
-        }
-
-        .hidden {
-            display: none;
         }
 
         body {
@@ -423,6 +421,43 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             margin-bottom: 15px;
         }
 
+        /* Layout interno del program-description con immagine a destra */
+        #program-description-inner {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        #program-description-text-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #program-poster-img {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        
+        .continua-button {
+    position: absolute;
+    right: 20px;
+    top: 80%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 500;
+    gap: 8px;
+}
+        
+
         @media only screen and (max-width: 760px) {
             #channel-info-bar {
                 bottom: 15px;
@@ -452,11 +487,6 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             }
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-
   body, html {
     margin: 0;
     padding: 0;
@@ -473,31 +503,17 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     background: #171a45;
   }
 
-  .video-js {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-  }
-
   .logo-overlay {
-  position: absolute;
-  top: 5%;
-  right: 4%;
-  width: 15%;
-  max-width: 26%;
-  height: auto !important;
-  pointer-events: none;
-  z-index: 997;
-  opacity: 1;
-  filter: drop-shadow(0 0 3px rgba(0,0,0,0.1));
-}
-
-  .video-js .vjs-control-bar {
-    display: none !important;
-  }
-
-  .vjs-fullscreen-control {
-    z-index: 15;
+    position: absolute;
+    top: 5%;
+    right: 4%;
+    width: 15%;
+    max-width: 26%;
+    height: auto !important;
+    pointer-events: none;
+    z-index: 997;
+    opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(0,0,0,0.1));
   }
 
   #fallback-image {
@@ -521,81 +537,72 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     text-shadow: 0 0 5px black;
   }
 
-    #overlay-card {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(30 75 121 / 98%);
-  padding: 20px;
-  border-radius: 10px;
-  color: #fff;
-  text-align: center;
-  z-index: 9999;
-  width: 500px;
-  font-family: sans-serif;
-  font-size: 20px;
-}
-
-#overlay-card img {
-  width: 70px;
-  height: auto;
-  margin-bottom: 10px;
-}
-
-@media only screen and (max-width: 600px) {
   #overlay-card {
-    width: 300px;
-    font-size: 14px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(30 75 121 / 98%);
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    z-index: 9999;
+    width: 500px;
+    font-family: sans-serif;
+    font-size: 20px;
   }
 
   #overlay-card img {
-    width: 50px;
+    width: 70px;
+    height: auto;
+    margin-bottom: 10px;
   }
-}
 
-    .spinner-cubes {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .spinner-cubes div {
-      width: 10px;
-      height: 10px;
-      background-color: #fff;
-      margin: 2px;
-      animation: spinner 1s infinite ease-in-out;
-    }
-    .spinner-cubes div:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .spinner-cubes div:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .spinner-cubes div:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-    @keyframes spinner {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(0.5);
-      }
+  @media only screen and (max-width: 600px) {
+    #overlay-card {
+      width: 300px;
+      font-size: 14px;
     }
 
-#restart-message {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: rgb(30 75 121 / 98%);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 10000;
-  font-family: sans-serif;
-  font-size: 18px;
-}
+    #overlay-card img {
+      width: 50px;
+    }
+  }
+
+  .spinner-cubes {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .spinner-cubes div {
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    margin: 2px;
+    animation: spinner 1s infinite ease-in-out;
+  }
+  .spinner-cubes div:nth-child(1) { animation-delay: 0s; }
+  .spinner-cubes div:nth-child(2) { animation-delay: 0.2s; }
+  .spinner-cubes div:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes spinner {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.5); }
+  }
+
+  #restart-message {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgb(30 75 121 / 98%);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10000;
+    font-family: sans-serif;
+    font-size: 18px;
+  }
 
   @media only screen and (max-width: 600px) {
     #restart-message {
@@ -604,8 +611,13 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     }
   }
 
+  /* =====================================================
+     CLASSE .hidden — display:none definitivo
+     ATTENZIONE: NON usare questa classe su #menu-popup
+     direttamente via CSS statico; gestire solo via JS
+  ===================================================== */
   .hidden {
-    display: none;
+    display: none !important;
   }
 
   #next-program-name {
@@ -615,130 +627,137 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     opacity: 0.85;
   }
 
-  .video-js .vjs-loading-spinner {
-    display: none !important;
-  }
-  .video-js .vjs-waiting {
-    display: none !important;
-  }
-
+  /* =====================================================
+     MENU POPUP
+     Usa visibility + opacity invece di display:none
+     per evitare il flash di chiusura immediata su TV
+  ===================================================== */
   #menu-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(30 75 121 / 98%);
-  padding: 30px;
-  border-radius: 15px;
-  color: #fff;
-  z-index: 10000;
-  width: 600px;
-  font-family: sans-serif;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(30 75 121 / 98%);
+    padding: 30px;
+    border-radius: 15px;
+    color: #fff;
+    z-index: 10000;
+    width: 600px;
+    font-family: sans-serif;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    /* Stato iniziale: nascosto senza .hidden,
+       così .hidden non interferisce con la transizione */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
 
-#menu-popup h2 {
-  margin: 0 0 25px 0;
-  font-size: 26px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.menu-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.menu-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* ✅ AGGIUNTO */
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px 20px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.menu-option:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(5px);
-}
-
-.menu-option-number {
-  font-size: 28px;
-  font-weight: bold;
-  width: 50px;
-  text-align: center;
-  color: #ffd700;
-}
-
-.menu-option-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px; /* ✅ AGGIUNTO (stabilità layout) */
-}
-
-.menu-option-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.menu-option-desc {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* ✅ NUOVO: icone a destra */
-.menu-option-icon {
-  width: 38px;
-  height: 38px;
-  margin-left: 15px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  #menu-popup {
-    width: 90%;
-    padding: 20px;
+  #menu-popup.menu-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, visibility 0s linear 0s;
   }
 
   #menu-popup h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+    margin: 0 0 25px 0;
+    font-size: 26px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   .menu-option {
-    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .menu-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
   }
 
   .menu-option-number {
-    font-size: 24px;
-    width: 40px;
+    font-size: 28px;
+    font-weight: bold;
+    width: 50px;
+    text-align: center;
+    color: #ffd700;
+  }
+
+  .menu-option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
   }
 
   .menu-option-title {
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
   }
 
   .menu-option-desc {
-    font-size: 12px;
+    font-size: 14px;
+    opacity: 0.8;
   }
 
-  /* opzionale: icone più piccole su mobile */
   .menu-option-icon {
-    width: 24px;
-    height: 24px;
+    width: 38px;
+    height: 38px;
+    margin-left: 15px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
-}
-  
-  
-  
-</style>
+
+  @media only screen and (max-width: 600px) {
+    #menu-popup {
+      width: 90%;
+      padding: 20px;
+    }
+
+    #menu-popup h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .menu-option {
+      padding: 12px 15px;
+    }
+
+    .menu-option-number {
+      font-size: 24px;
+      width: 40px;
+    }
+
+    .menu-option-title {
+      font-size: 16px;
+    }
+
+    .menu-option-desc {
+      font-size: 12px;
+    }
+
+    .menu-option-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  </style>
 
 </head>
 <body>
@@ -771,17 +790,22 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 
 
 
- <div id="channel-info-bar">
-        <div id="program-description">
-            <div id="program-time-title" class="loading">18:00 Caricamento...</div>
-            <div id="program-description-text" class="loading">
-                [Bambini] Caricamento della descrizione del programma in corso...
+<div id="channel-info-bar">
+    <div id="program-description">
+        <div id="program-description-inner">
+            <div id="program-description-text-wrapper">
+                <div id="program-time-title" class="loading">18:00 Caricamento...</div>
+                <div id="program-description-text" class="loading">
+                    [Bambini] Caricamento della descrizione del programma in corso...
+                </div>
+                <div class="continua-button">
+                    <div class="continua-icon">i</div>
+                    <span></span>
+                </div>
             </div>
-            <div class="continua-button">
-                <div class="continua-icon">i</div>
-                <span>Continua</span>
-            </div>
+            <img id="program-poster-img" src="" alt="Poster programma">
         </div>
+    </div>
 
         <div id="channel-info-middle">
             <div id="channel-left-info">
@@ -892,7 +916,7 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
   <p id="overlay-text"></p>
 </div>
 
-<div id="menu-popup" class="hidden">
+<div id="menu-popup">
   <h2>Azioni Disponibili</h2>
   <div class="menu-options">
 
@@ -988,90 +1012,94 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 
 
 <script>
-var overlayCard = document.getElementById("overlay-card");
-var overlayIcon = document.getElementById("overlay-icon");
-var overlayText = document.getElementById("overlay-text");
+var overlayCard   = document.getElementById("overlay-card");
+var overlayIcon   = document.getElementById("overlay-icon");
+var overlayText   = document.getElementById("overlay-text");
 var restartMessage = document.getElementById("restart-message");
 var channelInfoBar = document.getElementById("channel-info-bar");
-var menuPopup = document.getElementById("menu-popup");
-var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
+var menuPopup     = document.getElementById("menu-popup");
 
-// Controllo al caricamento della pagina: se viene da tasto 7, mostra l'overlay exit-menu-overlay
+var overlayTimer, restartTimer, channelInfoTimer;
+
+// ===== EXIT OVERLAY CHECK =====
 if (localStorage.getItem("showExitOverlayAfterLive") === "true") {
-    showExitMenuOverlay();
-    localStorage.removeItem("showExitOverlayAfterLive");
+  showExitMenuOverlay();
+  localStorage.removeItem("showExitOverlayAfterLive");
 }
 
+// ===== OVERLAY =====
 function showOverlay(state) {
   clearTimeout(overlayTimer);
   clearTimeout(restartTimer);
+
   overlayCard.classList.remove("hidden");
   overlayCard.style.display = 'block';
 
   if (state === "pause") {
     overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
     overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 6.";
-  } else if (state === "play") {
+  }
+  else if (state === "play") {
     overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
     overlayText.innerHTML = "";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-  } else if (state === "restart") {
+  }
+  else if (state === "restart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-    restartTimer = setTimeout(() => {
+    restartTimer = setTimeout(function() {
       restartMessage.classList.remove("hidden");
-      setTimeout(() => {
-        restartMessage.classList.add("hidden");
-      }, 15000);
+      setTimeout(function() { restartMessage.classList.add("hidden"); }, 15000);
     }, 5000);
-  } else if (state === "fromStart") {
+  }
+  else if (state === "fromStart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riavviato dall'inizio.";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-  } else if (state === "live") {
+  }
+  else if (state === "live") {
     overlayIcon.src = "https://i.ibb.co/mrKSv9Xh/circularplaybutton-122036.png";
     overlayText.innerHTML = "Ritorno alla diretta in corso...";
-    // Salva in localStorage per mostrare overlay exit-menu-overlay al reload
     localStorage.setItem("showExitOverlayAfterLive", "true");
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       location.reload();
     }, 2000);
   }
 }
 
+// ===== EXIT OVERLAY =====
 function showExitMenuOverlay() {
-  const overlay = document.getElementById("exit-menu-overlay");
+  var overlay = document.getElementById("exit-menu-overlay");
   overlay.classList.remove("hidden");
   overlay.style.display = "flex";
-
-  setTimeout(() => {
+  setTimeout(function() {
     overlay.classList.add("hidden");
     overlay.style.display = "none";
   }, 50000);
 }
 
+// ===== MENU =====
+// Il menu usa visibility/opacity (classe menu-visible), NON .hidden,
+// così non c'è conflitto con display:none e il popup rimane stabile su TV.
 function showMenuPopup() {
-  clearTimeout(menuTimer);
-  menuPopup.classList.remove("hidden");
-  menuPopup.style.display = 'block';
+  menuPopup.classList.add("menu-visible");
 }
 
 function hideMenuPopup() {
-  menuPopup.classList.add("hidden");
-  menuPopup.style.display = 'none';
-  clearTimeout(menuTimer);
+  menuPopup.classList.remove("menu-visible");
 }
 
+// ===== CHANNEL INFO =====
 function hideChannelInfo() {
   channelInfoBar.style.display = "none";
   clearTimeout(channelInfoTimer);
@@ -1083,17 +1111,26 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 50000);
 }
 
-var defaultHideTimer = setTimeout(hideChannelInfo, 9000);
-
+// ===== AUTO HIDE INIT =====
+setTimeout(hideChannelInfo, 9000);
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
-let isMenuOpen = false;
+// ===== MENU STATE =====
+var isMenuOpen = false;
 
-window.addEventListener("message", function (event) {
+// =====================================================
+// MESSAGE HANDLER
+// FIX PRINCIPALE: hideMenuPopup() è ora chiamato SOLO
+// dentro ciascun branch di azione (3-7), NON in modo
+// incondizionato. In questo modo, messaggi "spurii"
+// (es. il tasto "2" fisico inviato dal sito padre
+// subito dopo "openMenu") non chiudono il popup.
+// =====================================================
+window.addEventListener("message", function(event) {
   if (!event.data) return;
 
-  let key = null;
+  var key = null;
 
   if (typeof event.data === "object" && event.data.action === "key") {
     key = event.data.key;
@@ -1105,58 +1142,72 @@ window.addEventListener("message", function (event) {
 
   console.log("Messaggio ricevuto:", key);
 
-  if (key === "2" || key === "menu" || key === "openMenu") {
-    if (isMenuOpen) {
-      hideMenuPopup();
-      isMenuOpen = false;
-    } else {
-      showMenuPopup();
-      isMenuOpen = true;
-    }
+  // --- APERTURA / CHIUSURA MENU ---
+  if (key === "openMenu") {
+    isMenuOpen = true;
+    showMenuPopup();
     return;
   }
 
+  if (key === "closeMenu") {
+    isMenuOpen = false;
+    hideMenuPopup();
+    return;
+  }
+
+  // --- AZIONI DA MENU ---
+  // IMPORTANTE: hideMenuPopup() è dentro ogni singolo branch;
+  // qualsiasi altro tasto (incluso "2") viene ignorato
+  // e il menu rimane aperto.
   if (isMenuOpen) {
     if (key === "3") {
-      let current = player.getCurrentTime();
-      let t = Math.max(0, current - 10);
-      player.seek(t);
+      var current3 = player.getCurrentTime();
+      player.seek(Math.max(0, current3 - 10));
       showOverlay("restart");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "4") {
       player.seek(0);
       player.play();
       showOverlay("fromStart");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "5") {
       player.pause();
       showOverlay("pause");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "6") {
       player.play();
       showOverlay("play");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "7") {
       showOverlay("live");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
-
-    hideMenuPopup();
-    isMenuOpen = false;
+    // Qualsiasi altro tasto mentre il menu è aperto: ignorato (menu rimane visibile)
     return;
   }
 
+  // --- NAVIGAZIONE CANALI ---
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
     return;
   }
 
-  if (!allPrograms || allPrograms.length === 0) return;
+ if (!allPrograms || allPrograms.length === 0) return;
 
   if (key === "ArrowRight") {
     if (selectedProgramIndex < allPrograms.length - 1) {
@@ -1189,18 +1240,13 @@ window.addEventListener("message", function (event) {
   if (key === "4") {
     showChannelInfo(false);
     toggleDescription();
-
-    if (isDescriptionOpen && !isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
-    }
     return;
   }
 
+  // --- CONTROLLI DIRETTI PLAYER (fuori menu) ---
   if (key === "3") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    var current = player.getCurrentTime();
+    player.seek(Math.max(0, current - 10));
     showOverlay("restart");
   }
   else if (key === "5") {
@@ -1216,25 +1262,24 @@ window.addEventListener("message", function (event) {
   }
 
   if (key === "restart" || key === "rewind" || key === "indietro") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    var currentRew = player.getCurrentTime();
+    player.seek(Math.max(0, currentRew - 10));
     showOverlay("restart");
   }
   else if (key === "live") {
     showOverlay("live");
   }
   else if (typeof event.data === "object" && event.data.action === "rewind") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - event.data.seconds);
-    player.seek(t);
+    var currentRw = player.getCurrentTime();
+    player.seek(Math.max(0, currentRw - event.data.seconds));
     showOverlay("restart");
   }
 });
 
-document.querySelectorAll('.menu-option').forEach(option => {
+// ===== CLICK SU OPZIONI MENU =====
+document.querySelectorAll('.menu-option').forEach(function(option) {
   option.addEventListener('click', function() {
-    const action = this.getAttribute('data-action');
+    var action = this.getAttribute('data-action');
     window.postMessage(action, '*');
   });
 });
@@ -1593,32 +1638,34 @@ document.querySelectorAll('.menu-option').forEach(option => {
         }
 
         function updateProgramDescription(index) {
-            if (!allPrograms || allPrograms.length === 0) {
-                document.getElementById("program-time-title").textContent = "Nessun programma disponibile";
-                document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile.";
-                return;
-            }
+    if (!allPrograms || allPrograms.length === 0) {
+      document.getElementById("program-time-title").textContent = "Nessun programma disponibile";
+      document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile.";
+      updatePosterImage(null);
+      return;
+    }
 
-            const selectedProgram = allPrograms[index];
+    var selectedProgram = allPrograms[index];
+    if (selectedProgram) {
+      var startTime = adjustTime(selectedProgram.start);
+      var isCurrent = (index === currentProgramIndexInAll);
+      var timeDisplay = isCurrent ? 'Adesso' : formatTime(startTime);
+      document.getElementById("program-time-title").textContent = timeDisplay + " " + selectedProgram.title;
+      document.getElementById("program-description-text").textContent = selectedProgram.description || "Descrizione non disponibile.";
+      updatePosterImage(selectedProgram.poster || null);
+    }
+  }
 
-            if (selectedProgram) {
-                const startTime = adjustTime(selectedProgram.start);
-                const isCurrent = index === currentProgramIndexInAll;
-
-                let timeDisplay = '';
-                if (isCurrent) {
-                    timeDisplay = 'Adesso';
-                } else {
-                    timeDisplay = formatTime(startTime);
-                }
-
-                document.getElementById("program-time-title").textContent =
-                    timeDisplay + " " + selectedProgram.title;
-
-                document.getElementById("program-description-text").textContent =
-                    selectedProgram.description || "Descrizione non disponibile.";
-            }
-        }
+  function updatePosterImage(posterUrl) {
+    var posterImg = document.getElementById("program-poster-img");
+    if (posterUrl) {
+      posterImg.src = posterUrl;
+      posterImg.style.display = "block";
+    } else {
+      posterImg.style.display = "none";
+      posterImg.src = "";
+    }
+  }
 
         function updateProgressBar(currentProgram) {
             const startTime = adjustTime(currentProgram.start);
