@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Italia Meteo 3D</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#07111f;
+  font-family:Inter,system-ui,sans-serif;
+}
+
+#map{position:absolute;inset:0;}
+
+/* TOPBAR */
+#topbar{
+  position:absolute;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1000;
+  display:flex;
+  gap:10px;
+  background:rgba(10,20,35,.72);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  padding:10px;
+  border-radius:18px;
+}
+
+.top-btn{
+  border:none;
+  cursor:pointer;
+  padding:10px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  color:#d7e6ff;
+  font-size:13px;
+  font-weight:600;
+}
+
+.top-btn.active{
+  background:#2596ff;
+  color:white;
+}
+
+/* TIMELINE */
+#timeline{
+  position:absolute;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%);
+  z-index:1000;
+  width:min(720px,92vw);
+  background:rgba(8,18,34,.75);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:18px 22px;
+}
+
+#hour-label{
+  color:white;
+  font-size:15px;
+  margin-bottom:12px;
+  font-weight:700;
+  text-align:center;
+}
+
+input[type=range]{width:100%;}
+
+/* MARKER */
+.weather-marker{
+  width:74px;
+ 
+  border-radius:22px;
+  backdrop-filter:blur(10px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  cursor:pointer;
+  transition:.16s;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.weather-marker:hover{
+  transform:scale(1.12);
+}
+
+.marker-temp{font-size:18px;font-weight:800;}
+.marker-city{font-size:11px;opacity:.8;margin-top:2px;}
+
+.marker-icon img{
+  width:62px;
+  height:62px;
+  object-fit:contain;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.4));
+}
+
+.weather-marker.icon-mode{
+  width:56px;
+  height:56px;
+  border-radius:18px;
+}
+
+/* LOADING */
+#loading{
+  position:fixed;
+  inset:0;
+  background:#07111f;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="loading">Caricamento...</div>
+<div id="map"></div>
+
+<div id="topbar">
+  <button class="top-btn active" data-mode="temp">Temperatura</button>
+  <button class="top-btn" data-mode="rain">Pioggia</button>
+  <button class="top-btn" data-mode="wind">Vento</button>
+  <button class="top-btn" data-mode="icon">Meteo</button>
+</div>
+
+<div id="timeline">
+  <div id="hour-label">Ora</div>
+  <input type="range" id="slider" min="0" max="23" value="12">
+</div>
+
+<script>
+
+/* ================= ICONE ================= */
+
+const iconUrls = {
+  '01d':'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
+  '01n':'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
+  '02d':'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
+  '02n':'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
+  '04d':'https://brymeteo.github.io/tv/Grafica/Icone/10.svg',
+  '04n':'https://brymeteo.github.io/tv/Grafica/Icone/11.svg',
+  '45d':'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
+  '45n':'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
+  '53d':'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
+  '63d':'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
+  '71d':'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
+  '80d':'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
+  '95d':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
+};
+
+/* ================= DATA ================= */
+
+const MAPTILER_KEY="NZtaSdszEIjlbOcH7syp";
+
+const CITIES = [
+  {name:"Milano",lat:45.4642,lon:9.19},
+  {name:"Torino",lat:45.07,lon:7.68},
+  {name:"Venezia",lat:45.44,lon:12.33},
+  {name:"Bologna",lat:44.49,lon:11.34},
+  {name:"Firenze",lat:43.77,lon:11.25},
+  {name:"Roma",lat:41.89,lon:12.49},
+  {name:"Napoli",lat:40.85,lon:14.26},
+  {name:"Bari",lat:41.12,lon:16.87},
+  {name:"Palermo",lat:38.11,lon:13.36},
+  {name:"Cagliari",lat:39.22,lon:9.12},
+  {name:"Catania",lat:37.50,lon:15.08},
+  {name:"Genova",lat:44.40,lon:8.93},
+];
+
+let map;
+let weatherData={};
+let markers=[];
+let currentMode="temp";
+
+/* ================= ORA ITALIA ================= */
+
+function getItalyHour(){
+  const now=new Date();
+  const italy=new Date(now.toLocaleString("en-US",{timeZone:"Europe/Rome"}));
+  return italy.getHours();
+}
+
+/* ================= ICON LOGIC ================= */
+
+function isNight(hour){
+  return hour<6 || hour>18;
+}
+
+function getIcon(code,hour){
+
+  const night=isNight(hour);
+  const suffix=night?"n":"d";
+
+  let base="03";
+
+  if(code===0)base="01";
+  else if(code<=2)base="02";
+  else if(code<=3)base="04";
+  else if(code<=48)base="45";
+  else if(code<=55)base="53";
+  else if(code<=65)base="63";
+  else if(code<=77)base="71";
+  else if(code<=82)base="80";
+  else if(code>=95)base="95";
+
+  return iconUrls[base+suffix]||iconUrls["01d"];
+}
+
+/* ================= MAP ================= */
+
+map=new maplibregl.Map({
+  container:"map",
+  style:{
+    version:8,
+    sources:{
+      base:{
+        type:"raster",
+        tiles:[`https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=${MAPTILER_KEY}`],
+        tileSize:256
+      }
+    },
+    layers:[{id:"base",type:"raster",source:"base"}]
+  },
+  center:[12.5,42],
+  zoom:5.2,
+  pitch:55
+});
+
+/* ================= WEATHER ================= */
+
+async function loadWeather(){
+  for(const c of CITIES){
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&hourly=temperature_2m,precipitation,windspeed_10m,weathercode&timezone=Europe/Rome`;
+    const r=await fetch(url);
+    const d=await r.json();
+    weatherData[c.name]=d.hourly;
+  }
+}
+
+/* ================= MARKERS ================= */
+
+function clearMarkers(){
+  markers.forEach(m=>m.remove());
+  markers=[];
+}
+
+function buildMarkers(hour){
+
+  clearMarkers();
+
+  for(const c of CITIES){
+
+    const d=weatherData[c.name];
+    if(!d)continue;
+
+    const temp=Math.round(d.temperature_2m[hour]);
+    const rain=d.precipitation[hour];
+    const wind=Math.round(d.windspeed_10m[hour]);
+    const code=d.weathercode[hour];
+
+    let value="";
+    if(currentMode==="temp")value=`${temp}°`;
+    else if(currentMode==="rain")value=`${rain} mm`;
+    else if(currentMode==="wind")value=`${wind}`;
+
+    const el=document.createElement("div");
+    el.className="weather-marker";
+
+    if(currentMode==="icon")el.classList.add("icon-mode");
+
+    el.innerHTML=currentMode==="icon"
+      ? `<div class="marker-icon"><img src="${getIcon(code,hour)}"></div>`
+      : `<div class="marker-icon"><img src="${getIcon(code,hour)}"></div>
+         <div class="marker-temp">${value}</div>
+         <div class="marker-city">${c.name}</div>`;
+
+    new maplibregl.Marker({element:el,anchor:"center"})
+      .setLngLat([c.lon,c.lat])
+      .addTo(map);
+
+    markers.push(el);
+  }
+}
+
+/* ================= UI ================= */
+
+document.querySelectorAll(".top-btn").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".top-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    currentMode=b.dataset.mode;
+    buildMarkers(currentHour);
+  };
+});
+
+/* ================= INIT ================= */
+
+let currentHour=getItalyHour();
+
+document.getElementById("slider").value=currentHour;
+document.getElementById("hour-label").innerText=`Ora: ${currentHour}:00`;
+
+document.getElementById("slider").oninput=(e)=>{
+  currentHour=+e.target.value;
+  document.getElementById("hour-label").innerText=`Ora: ${currentHour}:00`;
+  buildMarkers(currentHour);
+};
+
+(async()=>{
+  await loadWeather();
+  buildMarkers(currentHour);
+  document.getElementById("loading").style.display="none";
+})();
+
+/* auto sync ogni minuto */
+setInterval(()=>{
+  currentHour=getItalyHour();
+  document.getElementById("slider").value=currentHour;
+  document.getElementById("hour-label").innerText=`Ora: ${currentHour}:00`;
+  buildMarkers(currentHour);
+},60000);
+
+</script>
+
+</body>
+</html>
