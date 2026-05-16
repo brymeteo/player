@@ -7,196 +7,118 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
-
 *{ margin:0; padding:0; box-sizing:border-box; }
-
-html,body{
-  width:100%; height:100%;
-  overflow:hidden;
-  font-family:Inter,system-ui,sans-serif;
-  background:#d7dde5;
-}
-
-/* ================= DAYS ================= */
+html,body{ width:100%; height:100%; overflow:hidden; font-family:Inter,system-ui,sans-serif; background:#d7dde5; }
 
 #days-container{
-  position:fixed;
-  top:0; left:0; right:0;
-  z-index:3000;
-  display:flex;
-  gap:22px;
-  align-items:center;
-  padding:14px 18px;
-  background:#d7dde5;
+  position:fixed; top:0; left:0; right:0; z-index:3000;
+  display:flex; gap:22px; align-items:center;
+  padding:14px 18px; background:#d7dde5;
   border-bottom:1px solid rgba(0,0,0,.12);
-  overflow-x:auto;
-  scrollbar-width:none;
+  overflow-x:auto; scrollbar-width:none;
 }
 #days-container::-webkit-scrollbar{ display:none; }
-
 .day-btn{
-  border:none; background:none;
-  font-size:16px; font-weight:700;
-  color:#2b2b2b; cursor:pointer;
-  padding-bottom:10px;
-  position:relative;
-  white-space:nowrap;
+  border:none; background:none; font-size:16px; font-weight:700;
+  color:#2b2b2b; cursor:pointer; padding-bottom:10px;
+  position:relative; white-space:nowrap;
 }
 .day-btn.active{ color:#1565c0; }
 .day-btn.active::after{
-  content:"";
-  position:absolute;
-  left:0; right:0; bottom:-10px;
-  height:3px; border-radius:999px;
-  background:#1565c0;
+  content:""; position:absolute; left:0; right:0; bottom:-10px;
+  height:3px; border-radius:999px; background:#1565c0;
 }
 
-/* ================= MAP ================= */
-
-#map{
-  position:absolute;
-  top:60px; left:0; right:0; bottom:0;
-}
-
-/* ================= WATERMARK ================= */
+#map{ position:absolute; top:60px; left:0; right:0; bottom:0; }
 
 #watermark{
-  position:absolute;
-  bottom:150px;
-  right:30px;
-  z-index:1500;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-  pointer-events:none;
-  user-select:none;
+  position:absolute; bottom:150px; right:30px; z-index:1500;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  pointer-events:none; user-select:none;
 }
-
 #watermark img{
-  width:52px;
-  height:52px;
-  object-fit:contain;
-  
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));
-  opacity:.92;
+  width:52px; height:52px; object-fit:contain;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.4)); opacity:.92;
 }
-
 #watermark-text{
-  font-size:10px;
-  font-weight:700;
-  color:white;
-  text-align:center;
-  line-height:1.3;
-  text-shadow:0 1px 4px rgba(0,0,0,.7), 0 0 8px rgba(0,0,0,.5);
+  font-size:10px; font-weight:700; color:white; text-align:center;
+  line-height:1.3; text-shadow:0 1px 4px rgba(0,0,0,.7), 0 0 8px rgba(0,0,0,.5);
   letter-spacing:.3px;
 }
 
-/* ================= TOPBAR ================= */
-
 #topbar{
-  position:absolute;
-  top:80px; left:50%;
-  transform:translateX(-50%);
-  z-index:2000;
-  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+  position:absolute; top:80px; left:50%; transform:translateX(-50%);
+  z-index:2000; display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
   width:min(92vw,720px);
 }
 .top-btn{
-  border:none;
-  background:rgba(255,255,255,.95);
-  color:#2b2b2b;
-  padding:14px 20px;
-  border-radius:999px;
-  font-size:15px; font-weight:700;
-  cursor:pointer; white-space:nowrap;
-  transition:.2s;
+  border:none; background:rgba(255,255,255,.95); color:#2b2b2b;
+  padding:14px 20px; border-radius:999px; font-size:15px; font-weight:700;
+  cursor:pointer; white-space:nowrap; transition:.2s;
   box-shadow:0 4px 14px rgba(0,0,0,.12);
 }
-.top-btn.active{
-  background:#d9ecff; color:#1358a8;
-  border:2px solid #5ea9ff;
-}
+.top-btn.active{ background:#d9ecff; color:#1358a8; border:2px solid #5ea9ff; }
 
-/* ================= TIMELINE ================= */
+/* badge cache — iniettato dentro attribuzione MapLibre */
+#cache-badge{
+  font-size:10px; font-weight:700;
+  color:#555; display:inline;
+}
+#cache-badge.fresh{ color:#1a7a1a; }
+#cache-badge.cached{ color:#b86c00; }
 
 #timeline{
-  position:absolute;
-  left:50%; bottom:28px;
-  transform:translateX(-50%);
-  z-index:2000;
-  width:min(1100px,92vw);
-  background:rgba(255,255,255,.95);
-  border-radius:22px;
-  padding:20px 28px 18px;
-  box-shadow:0 12px 40px rgba(0,0,0,.16);
+  position:absolute; left:50%; bottom:28px; transform:translateX(-50%);
+  z-index:2000; width:min(1100px,92vw);
+  background:rgba(255,255,255,.95); border-radius:22px;
+  padding:20px 28px 18px; box-shadow:0 12px 40px rgba(0,0,0,.16);
 }
-
 #current-hour-label{
-  text-align:center;
-  font-size:15px; font-weight:700;
-  color:#1565c0;
-  margin-bottom:12px;
+  text-align:center; font-size:15px; font-weight:700;
+  color:#1565c0; margin-bottom:12px;
 }
-
 #slider-wrap{ position:relative; }
-
 input[type=range]{
-  appearance:none; -webkit-appearance:none;
-  width:100%; height:8px;
-  border-radius:999px;
-  background:#d3d7dc;
-  outline:none; cursor:pointer;
-  display:block;
+  appearance:none; -webkit-appearance:none; width:100%; height:8px;
+  border-radius:999px; background:#d3d7dc; outline:none; cursor:pointer; display:block;
 }
 input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:26px; height:26px;
-  border-radius:50%;
-  background:white;
-  border:4px solid #1565c0;
-  cursor:pointer;
+  -webkit-appearance:none; width:26px; height:26px; border-radius:50%;
+  background:white; border:4px solid #1565c0; cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
 input[type=range]::-moz-range-thumb{
-  width:26px; height:26px;
-  border-radius:50%;
-  background:white;
-  border:4px solid #1565c0;
-  cursor:pointer;
+  width:26px; height:26px; border-radius:50%;
+  background:white; border:4px solid #1565c0; cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,.2);
 }
-
-/* righella tick */
 #tick-ruler{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  margin-top:6px;
-  padding:0 13px;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-top:6px; padding:0 13px;
 }
-.tick-wrap{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  flex:0 0 calc(100% / 23);
-}
+.tick-wrap{ display:flex; flex-direction:column; align-items:center; flex:0 0 calc(100% / 23); }
 .tick-wrap:first-child{ align-items:flex-start; }
 .tick-wrap:last-child { align-items:flex-end; }
-
 .tick{ width:1.5px; background:#b0b8c4; }
 .tick.major{ height:10px; background:#6b7a8d; }
 .tick.minor{ height:6px; }
+.tick-label{ font-size:13px; font-weight:700; color:#2b2b2b; margin-top:4px; white-space:nowrap; line-height:1; }
 
-.tick-label{
-  font-size:13px; font-weight:700;
-  color:#2b2b2b;
-  margin-top:4px;
-  white-space:nowrap;
-  line-height:1;
+/* loading overlay */
+#loading{
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(215,221,229,.92);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px;
 }
-
-/* ================= MOBILE ================= */
+#loading.hidden{ display:none; }
+.spinner{
+  width:48px; height:48px; border:5px solid #ccc;
+  border-top-color:#1565c0; border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+#loading p{ font-size:15px; font-weight:700; color:#333; }
 
 @media(max-width:768px){
   #days-container{ gap:16px; padding:12px 14px; }
@@ -213,38 +135,26 @@ input[type=range]::-moz-range-thumb{
   .tick-label{ font-size:10px; }
 }
 
-/* ================= MARKERS ================= */
-
-.weather-marker{
-  width:74px;
-  display:flex; flex-direction:column; align-items:center;
-  color:white; text-align:center;
-}
-.marker-icon img{
-  width:68px; height:68px;
-  object-fit:contain;
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,.35));
-}
+.weather-marker{ width:74px; display:flex; flex-direction:column; align-items:center; color:white; text-align:center; }
+.marker-icon img{ width:68px; height:68px; object-fit:contain; filter:drop-shadow(0 3px 6px rgba(0,0,0,.35)); }
 .weather-circle{
-  width:58px; height:58px;
-  border-radius:50%;
+  width:58px; height:58px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-weight:800; color:white;
-  box-shadow:0 3px 8px rgba(0,0,0,.35);
-  font-size:16px;
+  font-weight:800; color:white; box-shadow:0 3px 8px rgba(0,0,0,.35); font-size:16px;
 }
-.marker-city{
-  font-size:17px; opacity:.95;
-  margin-top:4px; text-align:center;
-}
+.marker-city{ font-size:17px; opacity:.95; margin-top:4px; text-align:center; }
 .temp-hot  { background:linear-gradient(135deg,#ff4d4d,#ff9900); }
 .temp-warm { background:linear-gradient(135deg,#ffb347,#ff4d4d); }
 .temp-cold { background:linear-gradient(135deg,#0f4778,#00f2fe8c); }
 .rain      { background:linear-gradient(135deg,#4facfe61,#5c6e80); }
-
 </style>
 </head>
 <body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p id="loading-msg">Caricamento dati meteo…</p>
+</div>
 
 <div id="days-container"></div>
 
@@ -256,11 +166,11 @@ input[type=range]::-moz-range-thumb{
 
 <div id="map"></div>
 
-<!-- WATERMARK FISSO SULLA MAPPA -->
 <div id="watermark">
   <img src="https://a7daf9079c.cbaul-cdnwnd.com/bb884067cd8a3f65d8a2d99b3c09cfdd/200000682-1967b1967d/700/logo%20tiktok3-8.webp?ph=a7daf9079c" alt="BryMeteo">
   <div id="watermark-text">© Brymeteo<br>proprietà esclusiva</div>
 </div>
+
 
 <div id="timeline">
   <div id="current-hour-label">00:00</div>
@@ -272,8 +182,16 @@ input[type=range]::-moz-range-thumb{
 
 <script>
 
-/* ================= ICONE ================= */
+/* ============================================================
+   CONFIGURAZIONE CACHE
+   CACHE_TTL_MS = 3 ore  → cambia qui se vuoi un intervallo diverso
+   ============================================================ */
+const CACHE_KEY    = "bry_meteo_v2";
+const CACHE_TTL_MS = 3 * 60 * 60 * 1000; // 3 ore
 
+/* ============================================================
+   ICONE
+   ============================================================ */
 const iconUrls = {
   '01d':'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
   '01n':'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
@@ -307,50 +225,18 @@ const iconUrls = {
   '95n':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg'
 };
 
-/* ================= FASCIA ================= */
-
 const BAND_LABELS = { 0:"Notte", 6:"Mattina", 12:"Pomeriggio", 18:"Sera" };
-
 function isNightHour(h){ return h < 6 || h >= 20; }
 
-/* ================= ORA ITALIANA CORRENTE ================= */
-
 function getItalianHour(){
-  /* Usa toLocaleString con timezone Europe/Rome per ottenere l'ora locale italiana */
   const now = new Date();
-  const h = parseInt(now.toLocaleString("it-IT", {
-    timeZone: "Europe/Rome",
-    hour: "2-digit",
-    hour12: false
-  }), 10);
-  /* toLocaleString può restituire "24" a mezzanotte su alcuni browser */
+  const h = parseInt(now.toLocaleString("it-IT",{timeZone:"Europe/Rome",hour:"2-digit",hour12:false}),10);
   return h === 24 ? 0 : h;
 }
 
-/* ================= TICK RULER ================= */
-
-function buildTickRuler(){
-  const ruler = document.getElementById("tick-ruler");
-  ruler.innerHTML = "";
-  for(let h = 0; h < 24; h++){
-    const isMajor = (h % 6 === 0);
-    const wrap = document.createElement("div");
-    wrap.className = "tick-wrap";
-    const tick = document.createElement("div");
-    tick.className = "tick " + (isMajor ? "major" : "minor");
-    wrap.appendChild(tick);
-    if(isMajor){
-      const lbl = document.createElement("div");
-      lbl.className = "tick-label";
-      lbl.textContent = BAND_LABELS[h];
-      wrap.appendChild(lbl);
-    }
-    ruler.appendChild(wrap);
-  }
-}
-
-/* ================= CITIES ================= */
-
+/* ============================================================
+   CITIES
+   ============================================================ */
 const CITIES = [
   { name:"Milano",   lat:45.464, lon:9.192,  minZoom:0 },
   { name:"Bergamo",  lat:45.698, lon:9.677,  minZoom:0 },
@@ -362,7 +248,6 @@ const CITIES = [
   { name:"Mantova",  lat:45.152, lon:10.774, minZoom:0 },
   { name:"Pavia",    lat:45.184, lon:9.158,  minZoom:0 },
   { name:"Cremona",  lat:45.133, lon:10.022, minZoom:0 },
-
   { name:"Monza",          lat:45.584, lon:9.274,  minZoom:8 },
   { name:"Lodi",           lat:45.314, lon:9.503,  minZoom:8 },
   { name:"Vigevano",       lat:45.319, lon:8.855,  minZoom:8 },
@@ -375,7 +260,6 @@ const CITIES = [
   { name:"Desenzano",      lat:45.468, lon:10.536, minZoom:8 },
   { name:"Mandello",       lat:45.918, lon:9.318,  minZoom:8 },
   { name:"Tirano",         lat:46.216, lon:10.170, minZoom:8 },
-
   { name:"Abbiategrasso",    lat:45.397, lon:8.916,  minZoom:9 },
   { name:"Magenta",          lat:45.459, lon:8.882,  minZoom:9 },
   { name:"Melegnano",        lat:45.358, lon:9.323,  minZoom:9 },
@@ -396,7 +280,6 @@ const CITIES = [
   { name:"Casalpusterlengo", lat:45.178, lon:9.651,  minZoom:9 },
   { name:"Viadana",          lat:44.924, lon:10.521, minZoom:9 },
   { name:"Asola",            lat:45.222, lon:10.411, minZoom:9 },
-
   { name:"Cernusco S.N.",  lat:45.523, lon:9.327,  minZoom:10 },
   { name:"Carate Brianza", lat:45.680, lon:9.228,  minZoom:10 },
   { name:"Erba",           lat:45.815, lon:9.219,  minZoom:10 },
@@ -415,52 +298,159 @@ const CITIES = [
   { name:"Voghera",        lat:44.996, lon:9.009,  minZoom:10 },
 ];
 
-/* ================= STATO ================= */
-
+/* ============================================================
+   STATO
+   ============================================================ */
 let map;
-let weatherData  = {};
+let weatherData  = {}; // { cityName: { temperature_2m:[], precipitation:[], weathercode:[] } }
 let markers      = [];
 let currentDay   = 0;
 let currentHour  = 0;
 let currentMode  = "icon";
-let autoTracking = true; /* diventa false quando l'utente sposta lo slider */
+let autoTracking = true;
 
-/* ================= MAP ================= */
-
+/* ============================================================
+   MAPPA
+   ============================================================ */
 map = new maplibregl.Map({
   container:"map",
   style:{
     version:8,
-    sources:{
-      base:{
-        type:"raster",
-        tiles:["https://api.meteo7.it/mapbox/styles/v1/cjnhzyvlx2svx2so6faitezd4/tiles/{z}/{x}/{y}"],
-        tileSize:256
-      }
-    },
+    sources:{ base:{ type:"raster", tiles:["https://api.meteo7.it/mapbox/styles/v1/cjnhzyvlx2svx2so6faitezd4/tiles/{z}/{x}/{y}"], tileSize:256 }},
     layers:[{id:"base",type:"raster",source:"base"}]
   },
   center:[9.9,45.7],
   zoom:7.2
 });
-
 map.on("zoomend", buildMarkers);
 map.on("moveend", buildMarkers);
 
-/* ================= WEATHER ================= */
-
-async function loadWeather(){
-  for(const c of CITIES){
-    if(weatherData[c.name]) continue;
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&hourly=temperature_2m,precipitation,weathercode&forecast_days=8&timezone=Europe/Rome`;
-    const r = await fetch(url);
-    const d = await r.json();
-    weatherData[c.name] = d.hourly;
+/* Sostituisce l'attribuzione con BryMeteo.
+   Dopo innerHTML, appende il badge cache se gia' disponibile. */
+map.on("load", () => {
+  const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
+  if(!inner) return;
+  inner.innerHTML = '<a href="https://brymeteo.webnode.it" target="_blank">© BryMeteo</a>';
+  if(window._badgeState){
+    updateCacheBadge(window._badgeState.fromCache, window._badgeState.ts);
   }
+});
+
+/* ============================================================
+   CACHE localStorage
+   - Salviamo { ts: timestamp, data: { cityName: hourlyObj } }
+   - TTL = 3 ore (CACHE_TTL_MS)
+   ============================================================ */
+function cacheLoad(){
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    const age = Date.now() - obj.ts;
+    if(age > CACHE_TTL_MS) return null; // scaduta
+    return obj; // { ts, data }
+  } catch(e){ return null; }
 }
 
-/* ================= ICON ================= */
+function cacheSave(data){
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+  } catch(e){ /* quota localStorage superata – ignoriamo */ }
+}
 
+function updateCacheBadge(fromCache, ts){
+  window._badgeState = { fromCache, ts }; // salvato per map.on('load')
+  /* Inietta il badge dentro .maplibregl-ctrl-attrib-inner.
+     Se MapLibre non ha ancora renderizzato il controllo, riprova dopo 1s. */
+  function inject(){
+    const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
+    if(!inner) return false;
+    let badge = inner.querySelector("#cache-badge");
+    if(!badge){
+      badge = document.createElement("span");
+      badge.id = "cache-badge";
+      inner.appendChild(document.createTextNode(" · "));
+      inner.appendChild(badge);
+    }
+    if(fromCache){
+      const mins = Math.round((Date.now()-ts)/60000);
+      const next = Math.max(0, Math.round((CACHE_TTL_MS-(Date.now()-ts))/60000));
+      badge.textContent = `📦 cache ${mins}m · rinnovo in ${next}m`;
+      badge.className = "cached";
+    } else {
+      badge.textContent = "🌐 dati freschi";
+      badge.className = "fresh";
+    }
+    return true;
+  }
+  if(!inject()) setTimeout(inject, 1000);
+}
+
+/* ============================================================
+   FETCH BATCH — UNA SOLA CHIAMATA API PER TUTTE LE CITTÀ
+   Open-Meteo supporta array di latitude/longitude nella stessa URL.
+   Risponde con un array di oggetti nella proprietà root (index 0…n-1).
+   ============================================================ */
+async function fetchAllCities(){
+  const lats = CITIES.map(c => c.lat).join(",");
+  const lons = CITIES.map(c => c.lon).join(",");
+
+  const url = "https://api.open-meteo.com/v1/forecast"
+    + `?latitude=${lats}`
+    + `&longitude=${lons}`
+    + "&hourly=temperature_2m,precipitation,weathercode"
+    + "&forecast_days=8"
+    + "&timezone=Europe%2FRome";
+
+  document.getElementById("loading-msg").textContent = "Download dati meteo… (1 chiamata API)";
+  const r = await fetch(url);
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  const json = await r.json();
+
+  /* Se una città → oggetto singolo; se più città → array */
+  const results = Array.isArray(json) ? json : [json];
+
+  const data = {};
+  results.forEach((item, i) => {
+    data[CITIES[i].name] = item.hourly;
+  });
+  return data;
+}
+
+/* ============================================================
+   CARICAMENTO PRINCIPALE (con cache)
+   ============================================================ */
+async function loadWeather(){
+  const cached = cacheLoad();
+  if(cached){
+    weatherData = cached.data;
+    updateCacheBadge(true, cached.ts);
+    return;
+  }
+  /* nessuna cache valida → fetch */
+  weatherData = await fetchAllCities();
+  cacheSave(weatherData);
+  updateCacheBadge(false, Date.now());
+}
+
+/* ============================================================
+   RINNOVO AUTOMATICO CACHE ogni 3 ore (in background)
+   Si attiva solo quando la pagina resta aperta
+   ============================================================ */
+setInterval(async () => {
+  const cached = cacheLoad();
+  if(cached) return; // ancora valida
+  try {
+    weatherData = await fetchAllCities();
+    cacheSave(weatherData);
+    updateCacheBadge(false, Date.now());
+    buildMarkers();
+  } catch(e){ console.warn("Rinnovo cache fallito:", e); }
+}, 5 * 60 * 1000); // controlla ogni 5 minuti se la cache è scaduta
+
+/* ============================================================
+   ICONA
+   ============================================================ */
 function getIcon(code, hour){
   const suffix = isNightHour(hour) ? "n" : "d";
   let base="03";
@@ -476,12 +466,10 @@ function getIcon(code, hour){
   return iconUrls[base+suffix]||iconUrls["01d"];
 }
 
-/* ================= MARKERS ================= */
-
-function clearMarkers(){
-  markers.forEach(m=>m.remove());
-  markers=[];
-}
+/* ============================================================
+   MARKERS
+   ============================================================ */
+function clearMarkers(){ markers.forEach(m=>m.remove()); markers=[]; }
 
 function getTempColor(t){
   if(t>=28) return "temp-hot";
@@ -516,52 +504,65 @@ function buildMarkers(){
   }
 }
 
-/* ================= LABEL ORA ================= */
-
-function updateHourLabel(h){
-  document.getElementById("current-hour-label").textContent =
-    String(h).padStart(2,"0")+":00";
-}
-
-function setSliderHour(h){
-  currentHour = h;
-  document.getElementById("hour-slider").value = h;
-  updateHourLabel(h);
-}
-
-/* ================= AUTO CLOCK ================= */
-
-function syncClock(){
-  if(!autoTracking) return;
-  /* solo se siamo sul giorno 0 (Oggi) */
-  if(currentDay !== 0) return;
-  const h = getItalianHour();
-  if(h !== currentHour){
-    setSliderHour(h);
-    buildMarkers();
+/* ============================================================
+   TICK RULER
+   ============================================================ */
+function buildTickRuler(){
+  const ruler = document.getElementById("tick-ruler");
+  ruler.innerHTML = "";
+  for(let h=0;h<24;h++){
+    const isMajor=(h%6===0);
+    const wrap=document.createElement("div"); wrap.className="tick-wrap";
+    const tick=document.createElement("div"); tick.className="tick "+(isMajor?"major":"minor");
+    wrap.appendChild(tick);
+    if(isMajor){
+      const lbl=document.createElement("div"); lbl.className="tick-label";
+      lbl.textContent=BAND_LABELS[h]; wrap.appendChild(lbl);
+    }
+    ruler.appendChild(wrap);
   }
 }
 
-/* controlla ogni 60 secondi */
-setInterval(syncClock, 60000);
+/* ============================================================
+   ORA LABEL + SLIDER
+   ============================================================ */
+function updateHourLabel(h){
+  document.getElementById("current-hour-label").textContent=String(h).padStart(2,"0")+":00";
+}
+function setSliderHour(h){
+  currentHour=h;
+  document.getElementById("hour-slider").value=h;
+  updateHourLabel(h);
+}
 
-/* ================= SLIDER ================= */
+/* ============================================================
+   AUTO CLOCK (ogni 60s)
+   ============================================================ */
+function syncClock(){
+  if(!autoTracking||currentDay!==0) return;
+  const h=getItalianHour();
+  if(h!==currentHour){ setSliderHour(h); buildMarkers(); }
+}
+setInterval(syncClock,60000);
 
-document.getElementById("hour-slider").addEventListener("input", function(){
-  autoTracking = false; /* l'utente ha preso il controllo */
-  currentHour  = +this.value;
+/* ============================================================
+   SLIDER
+   ============================================================ */
+document.getElementById("hour-slider").addEventListener("input",function(){
+  autoTracking=false;
+  currentHour=+this.value;
   updateHourLabel(currentHour);
   buildMarkers();
 });
 
-/* ================= DAYS ================= */
-
+/* ============================================================
+   DAYS
+   ============================================================ */
 function buildDays(){
   const container=document.getElementById("days-container");
   container.innerHTML="";
   for(let i=0;i<8;i++){
-    const date=new Date();
-    date.setDate(date.getDate()+i);
+    const date=new Date(); date.setDate(date.getDate()+i);
     const label=i===0?"Oggi":date.toLocaleDateString("it-IT",{weekday:"short",day:"numeric"});
     const btn=document.createElement("button");
     btn.className="day-btn"+(i===0?" active":"");
@@ -570,18 +571,16 @@ function buildDays(){
       currentDay=i;
       document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("active"));
       btn.classList.add("active");
-      /* se torna su Oggi e autoTracking era attivo, riallinea */
-      if(i===0 && autoTracking){
-        setSliderHour(getItalianHour());
-      }
+      if(i===0&&autoTracking) setSliderHour(getItalianHour());
       buildMarkers();
     };
     container.appendChild(btn);
   }
 }
 
-/* ================= MODE ================= */
-
+/* ============================================================
+   MODE BUTTONS
+   ============================================================ */
 document.querySelectorAll(".top-btn").forEach(btn=>{
   btn.onclick=()=>{
     document.querySelectorAll(".top-btn").forEach(b=>b.classList.remove("active"));
@@ -591,17 +590,23 @@ document.querySelectorAll(".top-btn").forEach(btn=>{
   };
 });
 
-/* ================= INIT ================= */
-
+/* ============================================================
+   INIT
+   ============================================================ */
 buildTickRuler();
 buildDays();
-
-/* imposta subito l'ora italiana corrente */
-const startHour = getItalianHour();
+const startHour=getItalianHour();
 setSliderHour(startHour);
 
 (async()=>{
-  await loadWeather();
+  try{
+    await loadWeather();
+  }catch(e){
+    document.getElementById("loading-msg").textContent="Errore caricamento dati. Ricarica la pagina.";
+    console.error(e);
+    return;
+  }
+  document.getElementById("loading").classList.add("hidden");
   buildMarkers();
 })();
 
