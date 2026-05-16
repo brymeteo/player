@@ -59,7 +59,6 @@ html,body{ width:100%; height:100%; overflow:hidden; font-family:Inter,system-ui
 }
 .top-btn.active{ background:#d9ecff; color:#1358a8; border:2px solid #5ea9ff; }
 
-/* badge cache — iniettato dentro attribuzione MapLibre */
 #cache-badge{
   font-size:10px; font-weight:700;
   color:#555; display:inline;
@@ -104,7 +103,6 @@ input[type=range]::-moz-range-thumb{
 .tick.minor{ height:6px; }
 .tick-label{ font-size:13px; font-weight:700; color:#2b2b2b; margin-top:4px; white-space:nowrap; line-height:1; }
 
-/* loading overlay */
 #loading{
   position:fixed; inset:0; z-index:9000;
   background:rgba(215,221,229,.92);
@@ -172,7 +170,6 @@ input[type=range]::-moz-range-thumb{
   <div id="watermark-text">© Brymeteo<br>proprietà esclusiva</div>
 </div>
 
-
 <div id="timeline">
   <div id="current-hour-label">00:00</div>
   <div id="slider-wrap">
@@ -185,11 +182,10 @@ input[type=range]::-moz-range-thumb{
 
 /* ============================================================
    CONFIGURAZIONE CACHE
-   CACHE_TTL_MS = 3 ore  → cambia qui se vuoi un intervallo diverso
    ============================================================ */
 const CACHE_KEY    = "bry_meteo_italia_v1";
 const CACHE_TTL_MS = 3 * 60 * 60 * 1000; // 3 ore
-const LABEL_ZOOM   = 5.5; // sotto questa soglia i nomi città sono nascosti
+const LABEL_ZOOM   = 5.5;
 
 /* ============================================================
    ICONE
@@ -230,17 +226,58 @@ const iconUrls = {
 const BAND_LABELS = { 0:"Notte", 6:"Mattina", 12:"Pomeriggio", 18:"Sera" };
 function isNightHour(h){ return h < 6 || h >= 20; }
 
+/* ============================================================
+   FIX 1 — getItalianHour() robusto (no ambiguità "24")
+   Usa Intl.DateTimeFormat che restituisce sempre 0-23
+   ============================================================ */
 function getItalianHour(){
+  const now  = new Date();
+  const fmt  = new Intl.DateTimeFormat("it-IT", {
+    timeZone: "Europe/Rome",
+    hour: "2-digit",
+    hour12: false
+  });
+  const h = parseInt(fmt.format(now), 10);
+  // Intl può restituire 24 in edge-case: normalizza
+  return (isNaN(h) || h === 24) ? 0 : h;
+}
+
+/* ============================================================
+   FIX 2 — getItalianDateString() → "YYYY-MM-DD" in fuso italiano
+   Usata per confrontare con le date dell'array API
+   ============================================================ */
+function getItalianDateString(offsetDays = 0){
   const now = new Date();
-  const h = parseInt(now.toLocaleString("it-IT",{timeZone:"Europe/Rome",hour:"2-digit",hour12:false}),10);
-  return h === 24 ? 0 : h;
+  now.setDate(now.getDate() + offsetDays);
+  // formatta in fuso europeo
+  return new Intl.DateTimeFormat("sv-SE", {  // sv-SE → formato ISO YYYY-MM-DD nativo
+    timeZone: "Europe/Rome"
+  }).format(now);  // es. "2024-06-15"
+}
+
+/* ============================================================
+   FIX 3 — getHourIndex(): calcola l'indice nell'array API
+   in modo robusto, cercando il timestamp corretto
+   nell'array "time" restituito dall'API invece di fare
+   aritmetica cieca (day*24+hour).
+   ============================================================ */
+function getHourIndex(hourlyData, dayOffset, hour){
+  if(!hourlyData || !hourlyData.time) return dayOffset * 24 + hour; // fallback
+
+  const targetDate = getItalianDateString(dayOffset);
+  // I timestamp API hanno formato "YYYY-MM-DDTHH:00" — cerca la corrispondenza esatta
+  const target = `${targetDate}T${String(hour).padStart(2,"0")}:00`;
+  const idx = hourlyData.time.indexOf(target);
+  if(idx !== -1) return idx;
+
+  // Fallback: se non trovato (non dovrebbe succedere), usa aritmetica
+  return dayOffset * 24 + hour;
 }
 
 /* ============================================================
    CITIES
    ============================================================ */
 const CITIES = [
-  // ── ZOOM 0: grandi capoluoghi visibili da tutta Italia ──
   { name:"Roma",       lat:41.902, lon:12.496, minZoom:0 },
   { name:"Milano",     lat:45.464, lon:9.192,  minZoom:0 },
   { name:"Napoli",     lat:40.851, lon:14.268, minZoom:0 },
@@ -253,8 +290,6 @@ const CITIES = [
   { name:"Catania",    lat:37.502, lon:15.088, minZoom:0 },
   { name:"Venezia",    lat:45.438, lon:12.335, minZoom:0 },
   { name:"Cagliari",   lat:39.223, lon:9.122,  minZoom:0 },
-
-  // ── ZOOM 6: capoluoghi di regione e città importanti ──
   { name:"Trieste",    lat:45.649, lon:13.777, minZoom:0 },
   { name:"Trento",     lat:46.073, lon:11.121, minZoom:0 },
   { name:"Bolzano",    lat:46.499, lon:11.356, minZoom:0 },
@@ -284,8 +319,6 @@ const CITIES = [
   { name:"Messina",    lat:38.193, lon:15.556, minZoom:6 },
   { name:"Sassari",    lat:40.727, lon:8.560,  minZoom:6 },
   { name:"Aosta",      lat:45.737, lon:7.315,  minZoom:0 },
-
-  // ── ZOOM 7: altre città medie ──
   { name:"Como",       lat:45.808, lon:9.085,  minZoom:7 },
   { name:"Varese",     lat:45.820, lon:8.825,  minZoom:7 },
   { name:"Pavia",      lat:45.184, lon:9.158,  minZoom:7 },
@@ -325,8 +358,6 @@ const CITIES = [
   { name:"Nuoro",      lat:40.321, lon:9.332,  minZoom:0 },
   { name:"Oristano",   lat:39.906, lon:8.591,  minZoom:7 },
   { name:"Olbia",      lat:40.923, lon:9.499,  minZoom:7 },
-
-  // ── ZOOM 8: città minori e comuni importanti ──
   { name:"Monza",      lat:45.584, lon:9.274,  minZoom:8 },
   { name:"Lecco",      lat:45.856, lon:9.397,  minZoom:8 },
   { name:"Sondrio",    lat:46.169, lon:9.869,  minZoom:0 },
@@ -352,7 +383,6 @@ const CITIES = [
   { name:"Pistoia",    lat:43.933, lon:10.917, minZoom:8 },
   { name:"Pordenone",  lat:45.962, lon:12.658, minZoom:8 },
   { name:"Gorizia",    lat:45.940, lon:13.622, minZoom:8 },
-  { name:"Sassari",    lat:40.727, lon:8.560,  minZoom:0 },
   { name:"Teramo",     lat:42.659, lon:13.704, minZoom:8 },
   { name:"Chieti",     lat:42.351, lon:14.168, minZoom:8 },
   { name:"Isernia",    lat:41.594, lon:14.234, minZoom:8 },
@@ -371,7 +401,7 @@ const CITIES = [
    STATO
    ============================================================ */
 let map;
-let weatherData  = {}; // { cityName: { temperature_2m:[], precipitation:[], weathercode:[] } }
+let weatherData  = {};
 let markers      = [];
 let currentDay   = 0;
 let currentHour  = 0;
@@ -394,8 +424,6 @@ map = new maplibregl.Map({
 map.on("zoomend", buildMarkers);
 map.on("moveend", buildMarkers);
 
-/* Sostituisce l'attribuzione con BryMeteo.
-   Dopo innerHTML, appende il badge cache se gia' disponibile. */
 map.on("load", () => {
   const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
   if(!inner) return;
@@ -407,8 +435,6 @@ map.on("load", () => {
 
 /* ============================================================
    CACHE localStorage
-   - Salviamo { ts: timestamp, data: { cityName: hourlyObj } }
-   - TTL = 3 ore (CACHE_TTL_MS)
    ============================================================ */
 function cacheLoad(){
   try {
@@ -416,21 +442,19 @@ function cacheLoad(){
     if(!raw) return null;
     const obj = JSON.parse(raw);
     const age = Date.now() - obj.ts;
-    if(age > CACHE_TTL_MS) return null; // scaduta
-    return obj; // { ts, data }
+    if(age > CACHE_TTL_MS) return null;
+    return obj;
   } catch(e){ return null; }
 }
 
 function cacheSave(data){
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-  } catch(e){ /* quota localStorage superata – ignoriamo */ }
+  } catch(e){}
 }
 
 function updateCacheBadge(fromCache, ts){
-  window._badgeState = { fromCache, ts }; // salvato per map.on('load')
-  /* Inietta il badge dentro .maplibregl-ctrl-attrib-inner.
-     Se MapLibre non ha ancora renderizzato il controllo, riprova dopo 1s. */
+  window._badgeState = { fromCache, ts };
   function inject(){
     const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
     if(!inner) return false;
@@ -456,9 +480,7 @@ function updateCacheBadge(fromCache, ts){
 }
 
 /* ============================================================
-   FETCH BATCH — UNA SOLA CHIAMATA API PER TUTTE LE CITTÀ
-   Open-Meteo supporta array di latitude/longitude nella stessa URL.
-   Risponde con un array di oggetti nella proprietà root (index 0…n-1).
+   FETCH BATCH
    ============================================================ */
 async function fetchAllCities(){
   const lats = CITIES.map(c => c.lat).join(",");
@@ -476,11 +498,11 @@ async function fetchAllCities(){
   if(!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();
 
-  /* Se una città → oggetto singolo; se più città → array */
   const results = Array.isArray(json) ? json : [json];
 
   const data = {};
   results.forEach((item, i) => {
+    // Salviamo l'intero oggetto hourly, incluso "time", per il lookup robusto
     data[CITIES[i].name] = item.hourly;
   });
   return data;
@@ -496,26 +518,24 @@ async function loadWeather(){
     updateCacheBadge(true, cached.ts);
     return;
   }
-  /* nessuna cache valida → fetch */
   weatherData = await fetchAllCities();
   cacheSave(weatherData);
   updateCacheBadge(false, Date.now());
 }
 
 /* ============================================================
-   RINNOVO AUTOMATICO CACHE ogni 3 ore (in background)
-   Si attiva solo quando la pagina resta aperta
+   RINNOVO AUTOMATICO CACHE ogni 3 ore
    ============================================================ */
 setInterval(async () => {
   const cached = cacheLoad();
-  if(cached) return; // ancora valida
+  if(cached) return;
   try {
     weatherData = await fetchAllCities();
     cacheSave(weatherData);
     updateCacheBadge(false, Date.now());
     buildMarkers();
   } catch(e){ console.warn("Rinnovo cache fallito:", e); }
-}, 5 * 60 * 1000); // controlla ogni 5 minuti se la cache è scaduta
+}, 5 * 60 * 1000);
 
 /* ============================================================
    ICONA
@@ -536,7 +556,7 @@ function getIcon(code, hour){
 }
 
 /* ============================================================
-   MARKERS
+   MARKERS — usa getHourIndex() per indice corretto
    ============================================================ */
 function clearMarkers(){ markers.forEach(m=>m.remove()); markers=[]; }
 
@@ -548,28 +568,33 @@ function getTempColor(t){
 
 function buildMarkers(){
   clearMarkers();
-  const zoom  = map.getZoom();
-  const index = currentDay*24 + currentHour;
-  const vis   = CITIES.filter(c=>zoom>=c.minZoom);
+  const zoom = map.getZoom();
+  const vis  = CITIES.filter(c => zoom >= c.minZoom);
 
   for(const c of vis){
-    const d=weatherData[c.name];
+    const d = weatherData[c.name];
     if(!d) continue;
-    const temp=Math.round(d.temperature_2m[index]);
-    const rain=d.precipitation[index];
-    const code=d.weathercode[index];
-    const el=document.createElement("div");
-    const showLabel = map.getZoom() >= LABEL_ZOOM;
-    el.className="weather-marker" + (showLabel ? "" : " hide-label");
-    let html="";
-    if(currentMode==="icon"){
-      html=`<div class="marker-icon"><img src="${getIcon(code,currentHour)}"></div><div class="marker-city">${c.name}</div>`;
-    } else if(currentMode==="temp"){
-      html=`<div class="weather-circle ${getTempColor(temp)}">${temp}°</div><div class="marker-city">${c.name}</div>`;
+
+    // FIX PRINCIPALE: indice calcolato cercando il timestamp nell'array API
+    const index = getHourIndex(d, currentDay, currentHour);
+
+    const temp = Math.round(d.temperature_2m[index]);
+    const rain = d.precipitation[index];
+    const code = d.weathercode[index];
+
+    const el = document.createElement("div");
+    const showLabel = zoom >= LABEL_ZOOM;
+    el.className = "weather-marker" + (showLabel ? "" : " hide-label");
+
+    let html = "";
+    if(currentMode === "icon"){
+      html = `<div class="marker-icon"><img src="${getIcon(code,currentHour)}"></div><div class="marker-city">${c.name}</div>`;
+    } else if(currentMode === "temp"){
+      html = `<div class="weather-circle ${getTempColor(temp)}">${temp}°</div><div class="marker-city">${c.name}</div>`;
     } else {
-      html=`<div class="weather-circle rain">${rain}</div><div class="marker-city">${c.name}</div>`;
+      html = `<div class="weather-circle rain">${rain}</div><div class="marker-city">${c.name}</div>`;
     }
-    el.innerHTML=html;
+    el.innerHTML = html;
     markers.push(new maplibregl.Marker({element:el,anchor:"center"}).setLngLat([c.lon,c.lat]).addTo(map));
   }
 }
@@ -606,42 +631,57 @@ function setSliderHour(h){
 }
 
 /* ============================================================
-   AUTO CLOCK (ogni 60s)
+   AUTO CLOCK (ogni 60s) — FIX: confronta anche la data
    ============================================================ */
 function syncClock(){
-  if(!autoTracking||currentDay!==0) return;
-  const h=getItalianHour();
-  if(h!==currentHour){ setSliderHour(h); buildMarkers(); }
+  if(!autoTracking || currentDay !== 0) return;
+  const h = getItalianHour();
+  if(h !== currentHour){
+    setSliderHour(h);
+    buildMarkers();
+  }
 }
-setInterval(syncClock,60000);
+setInterval(syncClock, 60000);
 
 /* ============================================================
    SLIDER
    ============================================================ */
-document.getElementById("hour-slider").addEventListener("input",function(){
-  autoTracking=false;
-  currentHour=+this.value;
+document.getElementById("hour-slider").addEventListener("input", function(){
+  autoTracking = false;
+  currentHour  = +this.value;
   updateHourLabel(currentHour);
   buildMarkers();
 });
 
 /* ============================================================
-   DAYS
+   DAYS — FIX: "Oggi" mostra la data italiana corretta
    ============================================================ */
 function buildDays(){
-  const container=document.getElementById("days-container");
-  container.innerHTML="";
+  const container = document.getElementById("days-container");
+  container.innerHTML = "";
+
+  // Data di riferimento in fuso italiano (evita ambiguità mezzanotte UTC)
+  const nowItaly = new Date(
+    new Intl.DateTimeFormat("sv-SE", { timeZone:"Europe/Rome" }).format(new Date()) + "T00:00:00"
+  );
+
   for(let i=0;i<8;i++){
-    const date=new Date(); date.setDate(date.getDate()+i);
-    const label=i===0?"Oggi":date.toLocaleDateString("it-IT",{weekday:"short",day:"numeric"});
-    const btn=document.createElement("button");
-    btn.className="day-btn"+(i===0?" active":"");
-    btn.innerText=label;
-    btn.onclick=()=>{
-      currentDay=i;
-      document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("active"));
+    const date = new Date(nowItaly);
+    date.setDate(date.getDate() + i);
+
+    const label = i === 0
+      ? "Oggi"
+      : date.toLocaleDateString("it-IT", { weekday:"short", day:"numeric" });
+
+    const btn = document.createElement("button");
+    btn.className = "day-btn" + (i===0 ? " active" : "");
+    btn.innerText  = label;
+    btn.onclick = () => {
+      currentDay = i;
+      autoTracking = (i === 0); // riabilita auto-tracking solo su "Oggi"
+      document.querySelectorAll(".day-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      if(i===0&&autoTracking) setSliderHour(getItalianHour());
+      if(i === 0 && autoTracking) setSliderHour(getItalianHour());
       buildMarkers();
     };
     container.appendChild(btn);
@@ -665,7 +705,7 @@ document.querySelectorAll(".top-btn").forEach(btn=>{
    ============================================================ */
 buildTickRuler();
 buildDays();
-const startHour=getItalianHour();
+const startHour = getItalianHour();
 setSliderHour(startHour);
 
 (async()=>{
