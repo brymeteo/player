@@ -188,39 +188,180 @@ const CACHE_TTL_MS = 3 * 60 * 60 * 1000; // 3 ore
 const LABEL_ZOOM   = 5.5;
 
 /* ============================================================
-   ICONE
+   SOGLIA PIOGGIA — sotto questa soglia (mm) si ignora la
+   precipitazione e si usa l'icona del cielo (nuvole/sole)
    ============================================================ */
+const RAIN_THRESHOLD_MM = 0.5;
+
+/* ============================================================
+   ICONE — mappatura completa e granulare per fenomeno WMO
+   ┌─────────────────────────────────────────────────────────┐
+   │  SOSTITUISCI OGNI URL CON IL TUO FILE SVG               │
+   │  Le chiavi sono descrittive: capire cosa serve          │
+   │  è immediato anche senza la documentazione WMO          │
+   └─────────────────────────────────────────────────────────┘
+
+   CIELO SERENO
+     sole_pieno_d / sole_pieno_n          → WMO 0
+
+   POCO NUVOLOSO (qualche nuvola, sole prevalente)
+     poco_nuvoloso_d / poco_nuvoloso_n    → WMO 1
+
+   PARZIALMENTE NUVOLOSO / VARIABILE
+     nuvole_sparse_d / nuvole_sparse_n    → WMO 2
+
+   CIELO COPERTO (overcast)
+     coperto_d / coperto_n                → WMO 3
+
+   NEBBIA LEGGERA
+     nebbia_d / nebbia_n                  → WMO 45
+
+   NEBBIA INTENSA / CON BRINA (icing fog)
+     nebbia_intensa_d / nebbia_intensa_n  → WMO 48
+
+   PIOVIGGINE LEGGERA
+     pioviggine_leggera_d / …_n          → WMO 51
+
+   PIOVIGGINE MODERATA
+     pioviggine_moderata_d / …_n         → WMO 53
+
+   PIOVIGGINE FORTE
+     pioviggine_forte_d / …_n            → WMO 55
+
+   PIOVIGGINE GELATA LEGGERA
+     pioviggine_gelata_d / …_n           → WMO 56
+
+   PIOVIGGINE GELATA FORTE
+     pioviggine_gelata_forte_d / …_n     → WMO 57
+
+   PIOGGIA LEGGERA
+     pioggia_leggera_d / …_n             → WMO 61
+
+   PIOGGIA MODERATA
+     pioggia_moderata_d / …_n            → WMO 63
+
+   PIOGGIA FORTE
+     pioggia_forte_d / …_n               → WMO 65
+
+   PIOGGIA GELATA LEGGERA
+     pioggia_gelata_d / …_n              → WMO 66
+
+   PIOGGIA GELATA FORTE
+     pioggia_gelata_forte_d / …_n        → WMO 67
+
+   NEVE LEGGERA
+     neve_leggera_d / …_n                → WMO 71
+
+   NEVE MODERATA
+     neve_moderata_d / …_n               → WMO 73
+
+   NEVE FORTE / BUFERA
+     neve_forte_d / …_n                  → WMO 75
+
+   GRANELLI DI NEVE / PIOGGIA+NEVE
+     nevischio_d / …_n                   → WMO 77
+
+   ROVESCIO LEGGERO
+     rovescio_leggero_d / …_n            → WMO 80
+
+   ROVESCIO MODERATO
+     rovescio_moderato_d / …_n           → WMO 81
+
+   ROVESCIO FORTE / VIOLENTO
+     rovescio_forte_d / …_n              → WMO 82
+
+   ROVESCIO DI NEVE
+     rovescio_neve_d / …_n               → WMO 85/86
+
+   GRANDINE
+     grandine_d / …_n                    → WMO 85 (alt)
+
+   TEMPORALE LEGGERO (senza precipitazione intensa)
+     temporale_leggero_d / …_n           → WMO 95
+
+   TEMPORALE CON GRANDINE LEGGERA
+     temporale_grandine_d / …_n          → WMO 96
+
+   TEMPORALE VIOLENTO CON GRANDINE GROSSA
+     temporale_violento_d / …_n          → WMO 99
+   ============================================================ */
+
 const iconUrls = {
-  '01d':'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
-  '01n':'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
-  '02d':'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
-  '02n':'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
-  '03d':'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
-  '03n':'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
-  '04d':'https://brymeteo.github.io/tv/Grafica/Icone/10.svg',
-  '04n':'https://brymeteo.github.io/tv/Grafica/Icone/11.svg',
-  '45d':'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
-  '45n':'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
-  '48d':'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
-  '48n':'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
-  '51d':'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
-  '51n':'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
-  '53d':'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
-  '53n':'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
-  '55d':'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
-  '55n':'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
-  '61d':'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
-  '61n':'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
-  '63d':'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
-  '63n':'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
-  '65d':'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
-  '65n':'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
-  '71d':'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
-  '71n':'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
-  '80d':'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
-  '80n':'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
-  '95d':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
-  '95n':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg'
+  // ── SERENO ──────────────────────────────────────────────
+  'sole_pieno_d'            : 'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
+  'sole_pieno_n'            : 'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
+
+  // ── POCO NUVOLOSO ────────────────────────────────────────
+  'poco_nuvoloso_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
+  'poco_nuvoloso_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
+
+  // ── PARZIALMENTE NUVOLOSO / VARIABILE ────────────────────
+  'nuvole_sparse_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/26.svg', // ← sostituisci con icona "nuvole+sole"
+  'nuvole_sparse_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/27.svg',
+
+  // ── COPERTO ──────────────────────────────────────────────
+  'coperto_d'               : 'https://brymeteo.github.io/tv/Grafica/Icone/10.svg',
+  'coperto_n'               : 'https://brymeteo.github.io/tv/Grafica/Icone/11.svg',
+
+  // ── NEBBIA ───────────────────────────────────────────────
+  'nebbia_d'                : 'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
+  'nebbia_n'                : 'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
+  'nebbia_intensa_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/03.svg', // ← sostituisci con icona nebbia intensa
+  'nebbia_intensa_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/03.svg',
+
+  // ── PIOVIGGINE ───────────────────────────────────────────
+  'pioviggine_leggera_d'    : 'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
+  'pioviggine_leggera_n'    : 'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
+  'pioviggine_moderata_d'   : 'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
+  'pioviggine_moderata_n'   : 'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
+  'pioviggine_forte_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'pioviggine_forte_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'pioviggine_gelata_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg', // ← sostituisci
+  'pioviggine_gelata_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'pioviggine_gelata_forte_d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg', // ← sostituisci
+  'pioviggine_gelata_forte_n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+
+  // ── PIOGGIA ──────────────────────────────────────────────
+  'pioggia_leggera_d'       : 'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
+  'pioggia_leggera_n'       : 'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
+  'pioggia_moderata_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
+  'pioggia_moderata_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
+  'pioggia_forte_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_forte_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg', // ← sostituisci
+  'pioggia_gelata_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_forte_d'  : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg', // ← sostituisci
+  'pioggia_gelata_forte_n'  : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+
+  // ── NEVE ─────────────────────────────────────────────────
+  'neve_leggera_d'          : 'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
+  'neve_leggera_n'          : 'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
+  'neve_moderata_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg', // ← sostituisci
+  'neve_moderata_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'neve_forte_d'            : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg', // ← sostituisci
+  'neve_forte_n'            : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'nevischio_d'             : 'https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001457-b18ecb18ee/39.svg?ph=7e11bb4538', // ← sostituisci
+  'nevischio_n'             : 'https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001457-b18ecb18ee/39.svg?ph=7e11bb4538',
+
+  // ── ROVESCI ──────────────────────────────────────────────
+  'rovescio_leggero_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
+  'rovescio_leggero_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
+  'rovescio_moderato_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
+  'rovescio_moderato_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
+  'rovescio_forte_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'rovescio_forte_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'rovescio_neve_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/32.svg', // ← sostituisci
+  'rovescio_neve_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/32.svg',
+  'grandine_d'              : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg', // ← sostituisci
+  'grandine_n'              : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+
+  // ── TEMPORALI ────────────────────────────────────────────
+  'temporale_leggero_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/25.svg',
+  'temporale_leggero_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/24.svg',
+  'temporale_grandine_d'    : 'https://brymeteo.github.io/player/maps:italia:/italia/44.svg',  
+  'temporale_grandine_n'    : 'https://brymeteo.github.io/player/maps:italia:/italia/44.svg',
+  'temporale_violento_d'    : 'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
+  'temporale_violento_n'    : 'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
 };
 
 const BAND_LABELS = { 0:"Notte", 6:"Mattina", 12:"Pomeriggio", 18:"Sera" };
@@ -538,21 +679,119 @@ setInterval(async () => {
 }, 5 * 60 * 1000);
 
 /* ============================================================
-   ICONA
+   ICONA — logica granulare completa WMO
+   Riceve: code WMO, ora (0-23), precipitazione mm
+   La soglia RAIN_THRESHOLD_MM decide se un codice "pioggia"
+   viene trattato come tale o ricade sull'icona nuvolosa.
    ============================================================ */
-function getIcon(code, hour){
-  const suffix = isNightHour(hour) ? "n" : "d";
-  let base="03";
-  if(code===0)      base="01";
-  else if(code<=2)  base="02";
-  else if(code<=3)  base="03";
-  else if(code<=48) base="45";
-  else if(code<=55) base="53";
-  else if(code<=65) base="63";
-  else if(code<=77) base="71";
-  else if(code<=82) base="80";
-  else if(code>=95) base="95";
-  return iconUrls[base+suffix]||iconUrls["01d"];
+function getIcon(code, hour, rainMm){
+  const n   = isNightHour(hour) ? 'n' : 'd';
+  const wet = rainMm >= RAIN_THRESHOLD_MM; // pioggia effettiva?
+
+  let key;
+
+  switch(code){
+    // ── 0 Sereno ──────────────────────────────────────────
+    case 0:
+      key = `sole_pieno_${n}`; break;
+
+    // ── 1 Poco nuvoloso ───────────────────────────────────
+    case 1:
+      key = `poco_nuvoloso_${n}`; break;
+
+    // ── 2 Parzialmente nuvoloso / variabile ───────────────
+    case 2:
+      key = `nuvole_sparse_${n}`; break;
+
+    // ── 3 Cielo coperto ───────────────────────────────────
+    case 3:
+      key = `coperto_${n}`; break;
+
+    // ── 45 Nebbia ─────────────────────────────────────────
+    case 45:
+      key = `nebbia_${n}`; break;
+
+    // ── 48 Nebbia con brina / intensa ─────────────────────
+    case 48:
+      key = `nebbia_intensa_${n}`; break;
+
+    // ── 51/53/55 Pioviggine ───────────────────────────────
+    case 51:
+      key = wet ? `pioviggine_leggera_${n}`  : `coperto_${n}`; break;
+    case 53:
+      key = wet ? `pioviggine_moderata_${n}` : `coperto_${n}`; break;
+    case 55:
+      key = wet ? `pioviggine_forte_${n}`    : `coperto_${n}`; break;
+
+    // ── 56/57 Pioviggine gelata ───────────────────────────
+    case 56:
+      key = wet ? `pioviggine_gelata_${n}`       : `coperto_${n}`; break;
+    case 57:
+      key = wet ? `pioviggine_gelata_forte_${n}`  : `coperto_${n}`; break;
+
+    // ── 61/63/65 Pioggia ──────────────────────────────────
+    case 61:
+      key = wet ? `pioggia_leggera_${n}`   : `nuvole_sparse_${n}`; break;
+    case 63:
+      key = wet ? `pioggia_moderata_${n}`  : `coperto_${n}`; break;
+    case 65:
+      key = wet ? `pioggia_forte_${n}`     : `coperto_${n}`; break;
+
+    // ── 66/67 Pioggia gelata ──────────────────────────────
+    case 66:
+      key = wet ? `pioggia_gelata_${n}`       : `coperto_${n}`; break;
+    case 67:
+      key = wet ? `pioggia_gelata_forte_${n}`  : `coperto_${n}`; break;
+
+    // ── 71/73/75 Neve ─────────────────────────────────────
+    case 71:
+      key = `neve_leggera_${n}`; break;
+    case 73:
+      key = `neve_moderata_${n}`; break;
+    case 75:
+      key = `neve_forte_${n}`; break;
+
+    // ── 77 Granelli di neve / pioggia+neve ────────────────
+    case 77:
+      key = `nevischio_${n}`; break;
+
+    // ── 80/81/82 Rovesci di pioggia ───────────────────────
+    case 80:
+      key = wet ? `rovescio_leggero_${n}`  : `nuvole_sparse_${n}`; break;
+    case 81:
+      key = wet ? `rovescio_moderato_${n}` : `coperto_${n}`; break;
+    case 82:
+      key = wet ? `rovescio_forte_${n}`    : `coperto_${n}`; break;
+
+    // ── 85/86 Rovesci di neve ─────────────────────────────
+    case 85:
+    case 86:
+      key = `rovescio_neve_${n}`; break;
+
+    // ── 95 Temporale leggero/moderato ─────────────────────
+    case 95:
+      key = `temporale_leggero_${n}`; break;
+
+    // ── 96 Temporale con grandine leggera ─────────────────
+    case 96:
+      key = `temporale_grandine_${n}`; break;
+
+    // ── 99 Temporale violento con grandine grossa ─────────
+    case 99:
+      key = `temporale_violento_${n}`; break;
+
+    // ── Fallback generico ─────────────────────────────────
+    default:
+      // Prova a classificare per range come sicurezza
+      if(code <= 3)        key = `coperto_${n}`;
+      else if(code <= 48)  key = `nebbia_${n}`;
+      else if(code <= 67)  key = wet ? `pioggia_moderata_${n}` : `coperto_${n}`;
+      else if(code <= 77)  key = `neve_leggera_${n}`;
+      else if(code <= 82)  key = wet ? `rovescio_moderato_${n}` : `coperto_${n}`;
+      else                 key = `temporale_leggero_${n}`;
+  }
+
+  return iconUrls[key] || iconUrls['sole_pieno_d'];
 }
 
 /* ============================================================
@@ -588,7 +827,7 @@ function buildMarkers(){
 
     let html = "";
     if(currentMode === "icon"){
-      html = `<div class="marker-icon"><img src="${getIcon(code,currentHour)}"></div><div class="marker-city">${c.name}</div>`;
+      html = `<div class="marker-icon"><img src="${getIcon(code,currentHour,rain)}"></div><div class="marker-city">${c.name}</div>`;
     } else if(currentMode === "temp"){
       html = `<div class="weather-circle ${getTempColor(temp)}">${temp}°</div><div class="marker-city">${c.name}</div>`;
     } else {
