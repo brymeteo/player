@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lombardia Meteo Responsive</title>
+<title>Lombardia Meteo</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
@@ -59,7 +59,6 @@ html,body{ width:100%; height:100%; overflow:hidden; font-family:Inter,system-ui
 }
 .top-btn.active{ background:#d9ecff; color:#1358a8; border:2px solid #5ea9ff; }
 
-/* badge cache — iniettato dentro attribuzione MapLibre */
 #cache-badge{
   font-size:10px; font-weight:700;
   color:#555; display:inline;
@@ -104,7 +103,6 @@ input[type=range]::-moz-range-thumb{
 .tick.minor{ height:6px; }
 .tick-label{ font-size:13px; font-weight:700; color:#2b2b2b; margin-top:4px; white-space:nowrap; line-height:1; }
 
-/* loading overlay */
 #loading{
   position:fixed; inset:0; z-index:9000;
   background:rgba(215,221,229,.92);
@@ -147,6 +145,7 @@ input[type=range]::-moz-range-thumb{
 .temp-warm { background:linear-gradient(135deg,#ffb347,#ff4d4d); }
 .temp-cold { background:linear-gradient(135deg,#0f4778,#00f2fe8c); }
 .rain      { background:linear-gradient(135deg,#4facfe61,#5c6e80); }
+.hide-label .marker-city{ display:none; }
 </style>
 </head>
 <body>
@@ -171,7 +170,6 @@ input[type=range]::-moz-range-thumb{
   <div id="watermark-text">© Brymeteo<br>proprietà esclusiva</div>
 </div>
 
-
 <div id="timeline">
   <div id="current-hour-label">00:00</div>
   <div id="slider-wrap">
@@ -184,125 +182,189 @@ input[type=range]::-moz-range-thumb{
 
 /* ============================================================
    CONFIGURAZIONE CACHE
-   CACHE_TTL_MS = 3 ore  → cambia qui se vuoi un intervallo diverso
    ============================================================ */
-const CACHE_KEY    = "bry_meteo_v2";
+const CACHE_KEY    = "bry_meteo_lombardia_v1";
 const CACHE_TTL_MS = 3 * 60 * 60 * 1000; // 3 ore
+const LABEL_ZOOM   = 7.0;
 
 /* ============================================================
-   ICONE
+   SOGLIA PIOGGIA
+   ============================================================ */
+const RAIN_THRESHOLD_MM = 0.5;
+
+/* ============================================================
+   ICONE — mappatura completa WMO
    ============================================================ */
 const iconUrls = {
-  '01d':'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
-  '01n':'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
-  '02d':'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
-  '02n':'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
-  '03d':'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
-  '03n':'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
-  '04d':'https://brymeteo.github.io/tv/Grafica/Icone/10.svg',
-  '04n':'https://brymeteo.github.io/tv/Grafica/Icone/11.svg',
-  '45d':'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
-  '45n':'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
-  '48d':'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
-  '48n':'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
-  '51d':'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
-  '51n':'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
-  '53d':'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
-  '53n':'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
-  '55d':'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
-  '55n':'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
-  '61d':'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
-  '61n':'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
-  '63d':'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
-  '63n':'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
-  '65d':'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
-  '65n':'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
-  '71d':'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
-  '71n':'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
-  '80d':'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
-  '80n':'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
-  '95d':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
-  '95n':'https://brymeteo.github.io/tv/Grafica/Icone/23.svg'
+  'sole_pieno_d'            : 'https://brymeteo.github.io/tv/Grafica/Icone/05.svg',
+  'sole_pieno_n'            : 'https://brymeteo.github.io/tv/Grafica/Icone/02.svg',
+  'poco_nuvoloso_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/21.svg',
+  'poco_nuvoloso_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/22.svg',
+  'nuvole_sparse_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/26.svg',
+  'nuvole_sparse_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/27.svg',
+  'coperto_d'               : 'https://brymeteo.github.io/tv/Grafica/Icone/10.svg',
+  'coperto_n'               : 'https://brymeteo.github.io/tv/Grafica/Icone/11.svg',
+  'nebbia_d'                : 'https://brymeteo.github.io/tv/Grafica/Icone/06.svg',
+  'nebbia_n'                : 'https://brymeteo.github.io/tv/Grafica/Icone/04.svg',
+  'nebbia_intensa_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/03.svg',
+  'nebbia_intensa_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/03.svg',
+  'pioviggine_leggera_d'    : 'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
+  'pioviggine_leggera_n'    : 'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
+  'pioviggine_moderata_d'   : 'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
+  'pioviggine_moderata_n'   : 'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
+  'pioviggine_forte_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'pioviggine_forte_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'pioviggine_gelata_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'pioviggine_gelata_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'pioviggine_gelata_forte_d': 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'pioviggine_gelata_forte_n': 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'pioggia_leggera_d'       : 'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
+  'pioggia_leggera_n'       : 'https://brymeteo.github.io/tv/Grafica/Icone/18.svg',
+  'pioggia_moderata_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
+  'pioggia_moderata_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/19.svg',
+  'pioggia_forte_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_forte_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_forte_d'  : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'pioggia_gelata_forte_n'  : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'neve_leggera_d'          : 'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
+  'neve_leggera_n'          : 'https://brymeteo.github.io/tv/Grafica/Icone/30.svg',
+  'neve_moderata_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'neve_moderata_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'neve_forte_d'            : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'neve_forte_n'            : 'https://brymeteo.github.io/tv/Grafica/Icone/31.svg',
+  'nevischio_d'             : 'https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001457-b18ecb18ee/39.svg?ph=7e11bb4538',
+  'nevischio_n'             : 'https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001457-b18ecb18ee/39.svg?ph=7e11bb4538',
+  'rovescio_leggero_d'      : 'https://brymeteo.github.io/tv/Grafica/Icone/15.svg',
+  'rovescio_leggero_n'      : 'https://brymeteo.github.io/tv/Grafica/Icone/12.svg',
+  'rovescio_moderato_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/16.svg',
+  'rovescio_moderato_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/13.svg',
+  'rovescio_forte_d'        : 'https://brymeteo.github.io/tv/Grafica/Icone/17.svg',
+  'rovescio_forte_n'        : 'https://brymeteo.github.io/tv/Grafica/Icone/14.svg',
+  'rovescio_neve_d'         : 'https://brymeteo.github.io/tv/Grafica/Icone/32.svg',
+  'rovescio_neve_n'         : 'https://brymeteo.github.io/tv/Grafica/Icone/32.svg',
+  'grandine_d'              : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'grandine_n'              : 'https://brymeteo.github.io/tv/Grafica/Icone/20.svg',
+  'temporale_leggero_d'     : 'https://brymeteo.github.io/tv/Grafica/Icone/25.svg',
+  'temporale_leggero_n'     : 'https://brymeteo.github.io/tv/Grafica/Icone/24.svg',
+  'temporale_grandine_d'    : 'https://brymeteo.github.io/player/maps:italia:/italia/44.svg',
+  'temporale_grandine_n'    : 'https://brymeteo.github.io/player/maps:italia:/italia/44.svg',
+  'temporale_violento_d'    : 'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
+  'temporale_violento_n'    : 'https://brymeteo.github.io/tv/Grafica/Icone/23.svg',
 };
 
 const BAND_LABELS = { 0:"Notte", 6:"Mattina", 12:"Pomeriggio", 18:"Sera" };
 function isNightHour(h){ return h < 6 || h >= 20; }
 
+/* ============================================================
+   UTILITY ORA / DATA ITALIANA
+   ============================================================ */
 function getItalianHour(){
+  const now  = new Date();
+  const fmt  = new Intl.DateTimeFormat("it-IT", {
+    timeZone: "Europe/Rome",
+    hour: "2-digit",
+    hour12: false
+  });
+  const h = parseInt(fmt.format(now), 10);
+  return (isNaN(h) || h === 24) ? 0 : h;
+}
+
+function getItalianDateString(offsetDays = 0){
   const now = new Date();
-  const h = parseInt(now.toLocaleString("it-IT",{timeZone:"Europe/Rome",hour:"2-digit",hour12:false}),10);
-  return h === 24 ? 0 : h;
+  now.setDate(now.getDate() + offsetDays);
+  return new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Europe/Rome"
+  }).format(now);
+}
+
+function getHourIndex(hourlyData, dayOffset, hour){
+  if(!hourlyData || !hourlyData.time) return dayOffset * 24 + hour;
+  const targetDate = getItalianDateString(dayOffset);
+  const target = `${targetDate}T${String(hour).padStart(2,"0")}:00`;
+  const idx = hourlyData.time.indexOf(target);
+  if(idx !== -1) return idx;
+  return dayOffset * 24 + hour;
 }
 
 /* ============================================================
-   CITIES
+   CITTÀ LOMBARDIA — tutte le province e principali centri
    ============================================================ */
 const CITIES = [
-  { name:"Milano",   lat:45.464, lon:9.192,  minZoom:0 },
-  { name:"Bergamo",  lat:45.698, lon:9.677,  minZoom:0 },
-  { name:"Brescia",  lat:45.541, lon:10.211, minZoom:0 },
-  { name:"Como",     lat:45.808, lon:9.085,  minZoom:0 },
-  { name:"Lecco",    lat:45.856, lon:9.397,  minZoom:0 },
-  { name:"Varese",   lat:45.820, lon:8.825,  minZoom:0 },
-  { name:"Sondrio",  lat:46.169, lon:9.869,  minZoom:0 },
-  { name:"Mantova",  lat:45.152, lon:10.774, minZoom:0 },
-  { name:"Pavia",    lat:45.184, lon:9.158,  minZoom:0 },
-  { name:"Cremona",  lat:45.133, lon:10.022, minZoom:0 },
-  { name:"Monza",          lat:45.584, lon:9.274,  minZoom:8 },
-  { name:"Lodi",           lat:45.314, lon:9.503,  minZoom:8 },
-  { name:"Vigevano",       lat:45.319, lon:8.855,  minZoom:8 },
-  { name:"Busto Arsizio",  lat:45.610, lon:8.851,  minZoom:8 },
-  { name:"Gallarate",      lat:45.659, lon:8.794,  minZoom:8 },
-  { name:"Saronno",        lat:45.625, lon:9.035,  minZoom:8 },
-  { name:"Sesto S.G.",     lat:45.531, lon:9.224,  minZoom:8 },
-  { name:"Cinisello B.",   lat:45.560, lon:9.214,  minZoom:8 },
-  { name:"Crema",          lat:45.363, lon:9.688,  minZoom:8 },
-  { name:"Desenzano",      lat:45.468, lon:10.536, minZoom:8 },
-  { name:"Mandello",       lat:45.918, lon:9.318,  minZoom:8 },
-  { name:"Tirano",         lat:46.216, lon:10.170, minZoom:8 },
-  { name:"Abbiategrasso",    lat:45.397, lon:8.916,  minZoom:9 },
-  { name:"Magenta",          lat:45.459, lon:8.882,  minZoom:9 },
-  { name:"Melegnano",        lat:45.358, lon:9.323,  minZoom:9 },
-  { name:"Cassano d'A.",     lat:45.522, lon:9.520,  minZoom:9 },
-  { name:"Treviglio",        lat:45.521, lon:9.591,  minZoom:9 },
-  { name:"Romano di L.",     lat:45.522, lon:9.746,  minZoom:9 },
-  { name:"Palazzolo",        lat:45.597, lon:9.882,  minZoom:9 },
-  { name:"Chiari",           lat:45.537, lon:9.931,  minZoom:9 },
-  { name:"Iseo",             lat:45.655, lon:10.043, minZoom:9 },
-  { name:"Darfo",            lat:45.887, lon:10.186, minZoom:9 },
-  { name:"Edolo",            lat:46.178, lon:10.331, minZoom:9 },
-  { name:"Bormio",           lat:46.469, lon:10.374, minZoom:9 },
-  { name:"Chiavenna",        lat:46.322, lon:9.397,  minZoom:9 },
-  { name:"Morbegno",         lat:46.135, lon:9.575,  minZoom:9 },
-  { name:"Mariano C.",       lat:45.701, lon:9.148,  minZoom:9 },
-  { name:"Merate",           lat:45.700, lon:9.427,  minZoom:9 },
-  { name:"Calolziocorte",    lat:45.797, lon:9.435,  minZoom:9 },
-  { name:"Casalpusterlengo", lat:45.178, lon:9.651,  minZoom:9 },
-  { name:"Viadana",          lat:44.924, lon:10.521, minZoom:9 },
-  { name:"Asola",            lat:45.222, lon:10.411, minZoom:9 },
-  { name:"Cernusco S.N.",  lat:45.523, lon:9.327,  minZoom:10 },
-  { name:"Carate Brianza", lat:45.680, lon:9.228,  minZoom:10 },
-  { name:"Erba",           lat:45.815, lon:9.219,  minZoom:10 },
-  { name:"Cantù",          lat:45.736, lon:9.129,  minZoom:10 },
-  { name:"Tradate",        lat:45.712, lon:8.908,  minZoom:10 },
-  { name:"Luino",          lat:46.001, lon:8.742,  minZoom:10 },
-  { name:"Laveno",         lat:45.913, lon:8.617,  minZoom:10 },
-  { name:"Arona",          lat:45.760, lon:8.559,  minZoom:10 },
-  { name:"Gardone V.T.",   lat:45.690, lon:10.181, minZoom:10 },
-  { name:"Salò",           lat:45.607, lon:10.521, minZoom:10 },
-  { name:"Gargnano",       lat:45.688, lon:10.658, minZoom:10 },
-  { name:"Riva d. G.",     lat:45.887, lon:10.840, minZoom:10 },
-  { name:"Ostiglia",       lat:45.069, lon:11.136, minZoom:10 },
-  { name:"Suzzara",        lat:44.993, lon:10.744, minZoom:10 },
-  { name:"Mortara",        lat:45.253, lon:8.738,  minZoom:10 },
-  { name:"Voghera",        lat:44.996, lon:9.009,  minZoom:10 },
+  // Capoluoghi di provincia
+  { name:"Milano",      lat:45.464,  lon:9.192,  minZoom:0 },
+  { name:"Bergamo",     lat:45.698,  lon:9.677,  minZoom:0 },
+  { name:"Brescia",     lat:45.541,  lon:10.211, minZoom:0 },
+  { name:"Como",        lat:45.808,  lon:9.085,  minZoom:0 },
+  { name:"Cremona",     lat:45.133,  lon:10.022, minZoom:0 },
+  { name:"Lecco",       lat:45.856,  lon:9.397,  minZoom:0 },
+  { name:"Lodi",        lat:45.314,  lon:9.503,  minZoom:0 },
+  { name:"Mantova",     lat:45.152,  lon:10.774, minZoom:0 },
+  { name:"Monza",       lat:45.584,  lon:9.274,  minZoom:8 },
+  { name:"Pavia",       lat:45.184,  lon:9.158,  minZoom:0 },
+  { name:"Sondrio",     lat:46.169,  lon:9.869,  minZoom:0 },
+  { name:"Varese",      lat:45.820,  lon:8.825,  minZoom:0 },
+
+  // Principali comuni
+  { name:"Vigevano",    lat:45.318,  lon:8.858,  minZoom:8 },
+  { name:"Busto A.",    lat:45.611,  lon:8.851,  minZoom:8 },
+  { name:"Gallarate",   lat:45.660,  lon:8.793,  minZoom:8 },
+  { name:"Saronno",     lat:45.624,  lon:9.036,  minZoom:8 },
+  { name:"Seregno",     lat:45.651,  lon:9.202,  minZoom:8 },
+  { name:"Sesto S.G.", lat:45.533,  lon:9.226,  minZoom:8 },
+  { name:"Cinisello B.",lat:45.557,  lon:9.215,  minZoom:8 },
+  { name:"Cologno M.",  lat:45.529,  lon:9.273,  minZoom:8 },
+  { name:"Rho",         lat:45.530,  lon:9.042,  minZoom:8 },
+  { name:"Legnano",     lat:45.596,  lon:8.914,  minZoom:8 },
+  { name:"Abbiategrasso",lat:45.396, lon:8.920,  minZoom:8 },
+  { name:"Corsico",     lat:45.431,  lon:9.112,  minZoom:9 },
+  { name:"Desio",       lat:45.617,  lon:9.208,  minZoom:9 },
+  { name:"Carate B.",   lat:45.680,  lon:9.231,  minZoom:9 },
+  { name:"Erba",        lat:45.810,  lon:9.228,  minZoom:9 },
+  { name:"Cantù",       lat:45.740,  lon:9.128,  minZoom:9 },
+  { name:"Mariano C.",  lat:45.753,  lon:9.148,  minZoom:9 },
+  { name:"Merate",      lat:45.699,  lon:9.425,  minZoom:9 },
+  { name:"Treviglio",   lat:45.521,  lon:9.590,  minZoom:8 },
+  { name:"Romano L.",   lat:45.519,  lon:9.745,  minZoom:9 },
+  { name:"Clusone",     lat:45.888,  lon:9.949,  minZoom:9 },
+  { name:"Palazzolo S.",lat:45.597,  lon:9.878,  minZoom:9 },
+  { name:"Lovere",      lat:45.814,  lon:10.071, minZoom:9 },
+  { name:"Darfo B.T.",  lat:45.886,  lon:10.186, minZoom:9 },
+  { name:"Chiari",      lat:45.538,  lon:9.931,  minZoom:9 },
+  { name:"Desenzano",   lat:45.467,  lon:10.535, minZoom:8 },
+  { name:"Sirmione",    lat:45.494,  lon:10.605, minZoom:9 },
+  { name:"Salò",        lat:45.607,  lon:10.519, minZoom:9 },
+  { name:"Gardone R.",  lat:45.627,  lon:10.545, minZoom:9 },
+  { name:"Lumezzane",   lat:45.652,  lon:10.268, minZoom:9 },
+  { name:"Garda BS",    lat:45.579,  lon:10.481, minZoom:9 },
+  { name:"Crema",       lat:45.363,  lon:9.688,  minZoom:8 },
+  { name:"Cassano d'A.",lat:45.526,  lon:9.521,  minZoom:9 },
+  { name:"Casalmaggiore",lat:44.986, lon:10.421, minZoom:8 },
+  { name:"Crema Sud",   lat:45.330,  lon:9.706,  minZoom:9 },
+  { name:"Sabbioneta",  lat:44.998,  lon:10.492, minZoom:9 },
+  { name:"Viadana",     lat:44.927,  lon:10.521, minZoom:9 },
+  { name:"Voghera",     lat:44.994,  lon:9.012,  minZoom:8 },
+  { name:"Mortara",     lat:45.252,  lon:8.737,  minZoom:9 },
+  { name:"Stradella",   lat:45.081,  lon:9.300,  minZoom:9 },
+  { name:"Morbegno",    lat:46.134,  lon:9.573,  minZoom:8 },
+  { name:"Tirano",      lat:46.215,  lon:10.169, minZoom:8 },
+  { name:"Bormio",      lat:46.468,  lon:10.374, minZoom:8 },
+  { name:"Livigno",     lat:46.537,  lon:10.138, minZoom:8 },
+  { name:"Chiavenna",   lat:46.324,  lon:9.401,  minZoom:8 },
+  { name:"Edolo",       lat:46.177,  lon:10.331, minZoom:9 },
+  { name:"Gemonio",     lat:45.841,  lon:8.699,  minZoom:9 },
+  { name:"Luino",       lat:46.001,  lon:8.744,  minZoom:8 },
+  { name:"Laveno",      lat:45.911,  lon:8.619,  minZoom:9 },
+  { name:"Angera",      lat:45.775,  lon:8.580,  minZoom:9 },
+  { name:"Ispra",       lat:45.825,  lon:8.609,  minZoom:9 },
 ];
 
 /* ============================================================
    STATO
    ============================================================ */
 let map;
-let weatherData  = {}; // { cityName: { temperature_2m:[], precipitation:[], weathercode:[] } }
+let weatherData  = {};
 let markers      = [];
 let currentDay   = 0;
 let currentHour  = 0;
@@ -310,7 +372,7 @@ let currentMode  = "icon";
 let autoTracking = true;
 
 /* ============================================================
-   MAPPA
+   MAPPA — centrata e zoomata sulla Lombardia
    ============================================================ */
 map = new maplibregl.Map({
   container:"map",
@@ -319,14 +381,14 @@ map = new maplibregl.Map({
     sources:{ base:{ type:"raster", tiles:["https://api.meteo7.it/mapbox/styles/v1/cjnhzyvlx2svx2so6faitezd4/tiles/{z}/{x}/{y}"], tileSize:256 }},
     layers:[{id:"base",type:"raster",source:"base"}]
   },
-  center:[9.9,45.7],
-  zoom:7.2
+  center:[9.95, 45.55],   // centro Lombardia
+  zoom:7.2,               // zoom regionale
+  minZoom:7.0,            // non si allontana troppo
+  maxZoom:13
 });
 map.on("zoomend", buildMarkers);
 map.on("moveend", buildMarkers);
 
-/* Sostituisce l'attribuzione con BryMeteo.
-   Dopo innerHTML, appende il badge cache se gia' disponibile. */
 map.on("load", () => {
   const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
   if(!inner) return;
@@ -338,8 +400,6 @@ map.on("load", () => {
 
 /* ============================================================
    CACHE localStorage
-   - Salviamo { ts: timestamp, data: { cityName: hourlyObj } }
-   - TTL = 3 ore (CACHE_TTL_MS)
    ============================================================ */
 function cacheLoad(){
   try {
@@ -347,21 +407,19 @@ function cacheLoad(){
     if(!raw) return null;
     const obj = JSON.parse(raw);
     const age = Date.now() - obj.ts;
-    if(age > CACHE_TTL_MS) return null; // scaduta
-    return obj; // { ts, data }
+    if(age > CACHE_TTL_MS) return null;
+    return obj;
   } catch(e){ return null; }
 }
 
 function cacheSave(data){
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-  } catch(e){ /* quota localStorage superata – ignoriamo */ }
+  } catch(e){}
 }
 
 function updateCacheBadge(fromCache, ts){
-  window._badgeState = { fromCache, ts }; // salvato per map.on('load')
-  /* Inietta il badge dentro .maplibregl-ctrl-attrib-inner.
-     Se MapLibre non ha ancora renderizzato il controllo, riprova dopo 1s. */
+  window._badgeState = { fromCache, ts };
   function inject(){
     const inner = document.querySelector(".maplibregl-ctrl-attrib-inner");
     if(!inner) return false;
@@ -387,9 +445,7 @@ function updateCacheBadge(fromCache, ts){
 }
 
 /* ============================================================
-   FETCH BATCH — UNA SOLA CHIAMATA API PER TUTTE LE CITTÀ
-   Open-Meteo supporta array di latitude/longitude nella stessa URL.
-   Risponde con un array di oggetti nella proprietà root (index 0…n-1).
+   FETCH BATCH
    ============================================================ */
 async function fetchAllCities(){
   const lats = CITIES.map(c => c.lat).join(",");
@@ -402,12 +458,11 @@ async function fetchAllCities(){
     + "&forecast_days=8"
     + "&timezone=Europe%2FRome";
 
-  document.getElementById("loading-msg").textContent = "Download dati meteo… (1 chiamata API)";
+  document.getElementById("loading-msg").textContent = "Download dati meteo Lombardia…";
   const r = await fetch(url);
   if(!r.ok) throw new Error("HTTP " + r.status);
   const json = await r.json();
 
-  /* Se una città → oggetto singolo; se più città → array */
   const results = Array.isArray(json) ? json : [json];
 
   const data = {};
@@ -427,43 +482,73 @@ async function loadWeather(){
     updateCacheBadge(true, cached.ts);
     return;
   }
-  /* nessuna cache valida → fetch */
   weatherData = await fetchAllCities();
   cacheSave(weatherData);
   updateCacheBadge(false, Date.now());
 }
 
 /* ============================================================
-   RINNOVO AUTOMATICO CACHE ogni 3 ore (in background)
-   Si attiva solo quando la pagina resta aperta
+   RINNOVO AUTOMATICO CACHE ogni 3 ore
    ============================================================ */
 setInterval(async () => {
   const cached = cacheLoad();
-  if(cached) return; // ancora valida
+  if(cached) return;
   try {
     weatherData = await fetchAllCities();
     cacheSave(weatherData);
     updateCacheBadge(false, Date.now());
     buildMarkers();
   } catch(e){ console.warn("Rinnovo cache fallito:", e); }
-}, 5 * 60 * 1000); // controlla ogni 5 minuti se la cache è scaduta
+}, 5 * 60 * 1000);
 
 /* ============================================================
-   ICONA
+   ICONA — logica granulare completa WMO
    ============================================================ */
-function getIcon(code, hour){
-  const suffix = isNightHour(hour) ? "n" : "d";
-  let base="03";
-  if(code===0)      base="01";
-  else if(code<=2)  base="02";
-  else if(code<=3)  base="03";
-  else if(code<=48) base="45";
-  else if(code<=55) base="53";
-  else if(code<=65) base="63";
-  else if(code<=77) base="71";
-  else if(code<=82) base="80";
-  else if(code>=95) base="95";
-  return iconUrls[base+suffix]||iconUrls["01d"];
+function getIcon(code, hour, rainMm){
+  const n   = isNightHour(hour) ? 'n' : 'd';
+  const wet = rainMm >= RAIN_THRESHOLD_MM;
+
+  let key;
+
+  switch(code){
+    case 0:  key = `sole_pieno_${n}`; break;
+    case 1:  key = `poco_nuvoloso_${n}`; break;
+    case 2:  key = `nuvole_sparse_${n}`; break;
+    case 3:  key = `coperto_${n}`; break;
+    case 45: key = `nebbia_${n}`; break;
+    case 48: key = `nebbia_intensa_${n}`; break;
+    case 51: key = wet ? `pioviggine_leggera_${n}`  : `coperto_${n}`; break;
+    case 53: key = wet ? `pioviggine_moderata_${n}` : `coperto_${n}`; break;
+    case 55: key = wet ? `pioviggine_forte_${n}`    : `coperto_${n}`; break;
+    case 56: key = wet ? `pioviggine_gelata_${n}`       : `coperto_${n}`; break;
+    case 57: key = wet ? `pioviggine_gelata_forte_${n}`  : `coperto_${n}`; break;
+    case 61: key = wet ? `pioggia_leggera_${n}`   : `nuvole_sparse_${n}`; break;
+    case 63: key = wet ? `pioggia_moderata_${n}`  : `coperto_${n}`; break;
+    case 65: key = wet ? `pioggia_forte_${n}`     : `coperto_${n}`; break;
+    case 66: key = wet ? `pioggia_gelata_${n}`       : `coperto_${n}`; break;
+    case 67: key = wet ? `pioggia_gelata_forte_${n}`  : `coperto_${n}`; break;
+    case 71: key = `neve_leggera_${n}`; break;
+    case 73: key = `neve_moderata_${n}`; break;
+    case 75: key = `neve_forte_${n}`; break;
+    case 77: key = `nevischio_${n}`; break;
+    case 80: key = wet ? `rovescio_leggero_${n}`  : `nuvole_sparse_${n}`; break;
+    case 81: key = wet ? `rovescio_moderato_${n}` : `coperto_${n}`; break;
+    case 82: key = wet ? `rovescio_forte_${n}`    : `coperto_${n}`; break;
+    case 85:
+    case 86: key = `rovescio_neve_${n}`; break;
+    case 95: key = `temporale_leggero_${n}`; break;
+    case 96: key = `temporale_grandine_${n}`; break;
+    case 99: key = `temporale_violento_${n}`; break;
+    default:
+      if(code <= 3)        key = `coperto_${n}`;
+      else if(code <= 48)  key = `nebbia_${n}`;
+      else if(code <= 67)  key = wet ? `pioggia_moderata_${n}` : `coperto_${n}`;
+      else if(code <= 77)  key = `neve_leggera_${n}`;
+      else if(code <= 82)  key = wet ? `rovescio_moderato_${n}` : `coperto_${n}`;
+      else                 key = `temporale_leggero_${n}`;
+  }
+
+  return iconUrls[key] || iconUrls['sole_pieno_d'];
 }
 
 /* ============================================================
@@ -479,27 +564,32 @@ function getTempColor(t){
 
 function buildMarkers(){
   clearMarkers();
-  const zoom  = map.getZoom();
-  const index = currentDay*24 + currentHour;
-  const vis   = CITIES.filter(c=>zoom>=c.minZoom);
+  const zoom = map.getZoom();
+  const vis  = CITIES.filter(c => zoom >= c.minZoom);
 
   for(const c of vis){
-    const d=weatherData[c.name];
+    const d = weatherData[c.name];
     if(!d) continue;
-    const temp=Math.round(d.temperature_2m[index]);
-    const rain=d.precipitation[index];
-    const code=d.weathercode[index];
-    const el=document.createElement("div");
-    el.className="weather-marker";
-    let html="";
-    if(currentMode==="icon"){
-      html=`<div class="marker-icon"><img src="${getIcon(code,currentHour)}"></div><div class="marker-city">${c.name}</div>`;
-    } else if(currentMode==="temp"){
-      html=`<div class="weather-circle ${getTempColor(temp)}">${temp}°</div><div class="marker-city">${c.name}</div>`;
+
+    const index = getHourIndex(d, currentDay, currentHour);
+
+    const temp = Math.round(d.temperature_2m[index]);
+    const rain = d.precipitation[index];
+    const code = d.weathercode[index];
+
+    const el = document.createElement("div");
+    const showLabel = zoom >= LABEL_ZOOM;
+    el.className = "weather-marker" + (showLabel ? "" : " hide-label");
+
+    let html = "";
+    if(currentMode === "icon"){
+      html = `<div class="marker-icon"><img src="${getIcon(code,currentHour,rain)}"></div><div class="marker-city">${c.name}</div>`;
+    } else if(currentMode === "temp"){
+      html = `<div class="weather-circle ${getTempColor(temp)}">${temp}°</div><div class="marker-city">${c.name}</div>`;
     } else {
-      html=`<div class="weather-circle rain">${rain}</div><div class="marker-city">${c.name}</div>`;
+      html = `<div class="weather-circle rain">${rain}</div><div class="marker-city">${c.name}</div>`;
     }
-    el.innerHTML=html;
+    el.innerHTML = html;
     markers.push(new maplibregl.Marker({element:el,anchor:"center"}).setLngLat([c.lon,c.lat]).addTo(map));
   }
 }
@@ -536,21 +626,24 @@ function setSliderHour(h){
 }
 
 /* ============================================================
-   AUTO CLOCK (ogni 60s)
+   AUTO CLOCK
    ============================================================ */
 function syncClock(){
-  if(!autoTracking||currentDay!==0) return;
-  const h=getItalianHour();
-  if(h!==currentHour){ setSliderHour(h); buildMarkers(); }
+  if(!autoTracking || currentDay !== 0) return;
+  const h = getItalianHour();
+  if(h !== currentHour){
+    setSliderHour(h);
+    buildMarkers();
+  }
 }
-setInterval(syncClock,60000);
+setInterval(syncClock, 60000);
 
 /* ============================================================
    SLIDER
    ============================================================ */
-document.getElementById("hour-slider").addEventListener("input",function(){
-  autoTracking=false;
-  currentHour=+this.value;
+document.getElementById("hour-slider").addEventListener("input", function(){
+  autoTracking = false;
+  currentHour  = +this.value;
   updateHourLabel(currentHour);
   buildMarkers();
 });
@@ -559,19 +652,30 @@ document.getElementById("hour-slider").addEventListener("input",function(){
    DAYS
    ============================================================ */
 function buildDays(){
-  const container=document.getElementById("days-container");
-  container.innerHTML="";
+  const container = document.getElementById("days-container");
+  container.innerHTML = "";
+
+  const nowItaly = new Date(
+    new Intl.DateTimeFormat("sv-SE", { timeZone:"Europe/Rome" }).format(new Date()) + "T00:00:00"
+  );
+
   for(let i=0;i<8;i++){
-    const date=new Date(); date.setDate(date.getDate()+i);
-    const label=i===0?"Oggi":date.toLocaleDateString("it-IT",{weekday:"short",day:"numeric"});
-    const btn=document.createElement("button");
-    btn.className="day-btn"+(i===0?" active":"");
-    btn.innerText=label;
-    btn.onclick=()=>{
-      currentDay=i;
-      document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("active"));
+    const date = new Date(nowItaly);
+    date.setDate(date.getDate() + i);
+
+    const label = i === 0
+      ? "Oggi"
+      : date.toLocaleDateString("it-IT", { weekday:"short", day:"numeric" });
+
+    const btn = document.createElement("button");
+    btn.className = "day-btn" + (i===0 ? " active" : "");
+    btn.innerText  = label;
+    btn.onclick = () => {
+      currentDay = i;
+      autoTracking = (i === 0);
+      document.querySelectorAll(".day-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      if(i===0&&autoTracking) setSliderHour(getItalianHour());
+      if(i === 0 && autoTracking) setSliderHour(getItalianHour());
       buildMarkers();
     };
     container.appendChild(btn);
@@ -595,7 +699,7 @@ document.querySelectorAll(".top-btn").forEach(btn=>{
    ============================================================ */
 buildTickRuler();
 buildDays();
-const startHour=getItalianHour();
+const startHour = getItalianHour();
 setSliderHour(startHour);
 
 (async()=>{
