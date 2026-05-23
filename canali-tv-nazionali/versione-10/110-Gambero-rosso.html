@@ -1,4 +1,3 @@
-
  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/level-selector@latest/dist/level-selector.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clappr-pip@latest/dist/clappr-pip.min.js"></script>
@@ -17,7 +16,6 @@
 
 <link rel="preconnect" href="https://d2gqna20cltcqm.cloudfront.net">
 <link rel="dns-prefetch" href="https://d2gqna20cltcqm.cloudfront.net">
-
 
   <style>
 
@@ -427,6 +425,43 @@
             margin-bottom: 15px;
         }
 
+        /* Layout interno del program-description con immagine a destra */
+        #program-description-inner {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        #program-description-text-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #program-poster-img {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        
+        .continua-button {
+    position: absolute;
+    right: 20px;
+    top: 80%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 500;
+    gap: 8px;
+}
+        
+
         @media only screen and (max-width: 760px) {
             #channel-info-bar {
                 bottom: 15px;
@@ -754,18 +789,23 @@
 </div>
 
 <div id="channel-info-bar">
-        <div id="program-description">
-            <div id="program-time-title" class="loading">18:00 Caricamento...</div>
-            <div id="program-description-text" class="loading">
-                [Bambini] Caricamento della descrizione del programma in corso...
+    <div id="program-description">
+        <div id="program-description-inner">
+            <div id="program-description-text-wrapper">
+                <div id="program-time-title" class="loading">18:00 Caricamento...</div>
+                <div id="program-description-text" class="loading">
+                    [Bambini] Caricamento della descrizione del programma in corso...
+                </div>
+                <div class="continua-button">
+                    <div class="continua-icon">i</div>
+                    <span></span>
+                </div>
             </div>
-            <div class="continua-button">
-                <div class="continua-icon">i</div>
-                <span>Continua</span>
-            </div>
+            <img id="program-poster-img" src="" alt="Poster programma">
         </div>
+    </div>
 
-        <div id="channel-info-middle">
+    <div id="channel-info-middle">
             <div id="channel-left-info">
                 <div id="channel-number">110</div>
                 <div id="channel-title">Gambero Rosso HD</div>
@@ -784,34 +824,34 @@
             <div id="current-time">Giovedì 05 Dic 18:12</div>
         </div>
 
-        <div id="timeline-section">
-            <div id="program-status"></div>
+    <div id="timeline-section">
+        <div id="program-status"></div>
 
-            <div id="timeline-container" style="display: none;">
-                <div id="timeline-bar">
-                    <div id="timeline-progress"></div>
+        <div id="timeline-container" style="display: none;">
+            <div id="timeline-bar">
+                <div id="timeline-progress"></div>
+            </div>
+        </div>
+
+        <div id="program-timeline-container">
+            <div class="scroll-indicator left hidden" id="scroll-left">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </div>
+
+            <div id="program-timeline-wrapper">
+                <div id="program-timeline">
                 </div>
             </div>
 
-            <div id="program-timeline-container">
-                <div class="scroll-indicator left hidden" id="scroll-left">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                    </svg>
-                </div>
-
-                <div id="program-timeline-wrapper">
-                    <div id="program-timeline">
-                    </div>
-                </div>
-
-                <div class="scroll-indicator right" id="scroll-right">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                    </svg>
-                </div>
+            <div class="scroll-indicator right" id="scroll-right">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
             </div>
-            
+        </div>
+
         <div id="control-buttons">
             <div class="control-group">
                 <div class="control-button canale">
@@ -1527,6 +1567,7 @@ document.querySelectorAll('.menu-option').forEach(function(option) {
     if (!allPrograms || allPrograms.length === 0) {
       document.getElementById("program-time-title").textContent = "Nessun programma disponibile";
       document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile.";
+      updatePosterImage(null);
       return;
     }
 
@@ -1537,6 +1578,18 @@ document.querySelectorAll('.menu-option').forEach(function(option) {
       var timeDisplay = isCurrent ? 'Adesso' : formatTime(startTime);
       document.getElementById("program-time-title").textContent = timeDisplay + " " + selectedProgram.title;
       document.getElementById("program-description-text").textContent = selectedProgram.description || "Descrizione non disponibile.";
+      updatePosterImage(selectedProgram.poster || null);
+    }
+  }
+
+  function updatePosterImage(posterUrl) {
+    var posterImg = document.getElementById("program-poster-img");
+    if (posterUrl) {
+      posterImg.src = posterUrl;
+      posterImg.style.display = "block";
+    } else {
+      posterImg.style.display = "none";
+      posterImg.src = "";
     }
   }
 
@@ -1618,6 +1671,7 @@ document.querySelectorAll('.menu-option').forEach(function(option) {
           timeTitleEl.textContent = "Nessun programma disponibile";
           descEl.textContent = "Nessuna informazione disponibile.";
           nextInfoEl.textContent = "A seguire: Non disponibile";
+          updatePosterImage(null);
           renderProgramTimeline();
           return;
         }
@@ -1647,6 +1701,7 @@ document.querySelectorAll('.menu-option').forEach(function(option) {
         } else {
           timeTitleEl.textContent = "Nessun programma disponibile";
           descEl.textContent = "Nessuna informazione disponibile per il programma corrente.";
+          updatePosterImage(null);
           var upcomingProgram2 = allPrograms.find(function(p) { return adjustTime(p.start) > now; });
           if (upcomingProgram2) {
             nextInfoEl.textContent = "A seguire: " + formatTime(adjustTime(upcomingProgram2.start)) + " - " + upcomingProgram2.title;
