@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-05-27T06:06:15.581Z",
+  "generated": "2026-05-27T06:19:26.678Z",
   "description": "Override meteo manuali – Meteo Override Editor",
   "overrides": [
     {
@@ -18,7 +18,7 @@
       "pressure": 1013,
       "uv": null,
       "precipProbability": 1,
-      "note": ""
+      "note": "Rischio temporali in zona"
     }
   ]
 }
