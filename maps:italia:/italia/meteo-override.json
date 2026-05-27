@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "generated": "2026-05-27T06:06:15.581Z",
+  "description": "Override meteo manuali – Meteo Override Editor",
+  "overrides": [
+    {
+      "zone": "varese",
+      "date": "2026-05-27",
+      "hour": 21,
+      "weatherCode": 1,
+      "temp": 27,
+      "feelsLike": 27,
+      "windKmh": 0,
+      "windDeg": 0,
+      "windGustKmh": null,
+      "precipitation": 0,
+      "humidity": 60,
+      "pressure": 1013,
+      "uv": null,
+      "precipProbability": 1,
+      "note": ""
+    }
+  ]
+}
