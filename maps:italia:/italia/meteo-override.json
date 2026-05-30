@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "generated": "2026-05-27T06:19:26.678Z",
-  "description": "Override meteo manuali – Meteo Override Editor",
+  "generated": "2026-05-30T06:02:26.275Z",
+  "description": "Override meteo manuali + allerte – Meteo Override Editor",
   "overrides": [
     {
-      "zone": "varese",
-      "date": "2026-05-27",
-      "hour": 21,
-      "weatherCode": 1,
-      "temp": 27,
-      "feelsLike": 27,
+      "zone": "berra",
+      "date": "2026-05-30",
+      "hour": 12,
+      "weatherCode": 71,
+      "temp": -2,
+      "feelsLike": -2,
       "windKmh": 0,
       "windDeg": 0,
       "windGustKmh": null,
@@ -17,8 +17,16 @@
       "humidity": 60,
       "pressure": 1013,
       "uv": null,
-      "precipProbability": 1,
-      "note": "Rischio temporali in zona"
+      "precipProbability": 0,
+      "note": ""
+    }
+  ],
+  "alerts": [
+    {
+      "zone": "berra",
+      "level": "yellow",
+      "iconUrl": "https://cdn.meteocons.com/3.0.0-next.10/svg/flat/code-yellow.svg",
+      "message": "Possibilità di temporali"
     }
   ]
 }
