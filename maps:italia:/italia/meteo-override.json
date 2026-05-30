@@ -1,32 +1,18 @@
 {
   "version": 1,
-  "generated": "2026-05-30T06:02:26.275Z",
+  "generated": "2026-05-30T21:40:07.237Z",
   "description": "Override meteo manuali + allerte – Meteo Override Editor",
-  "overrides": [
-    {
-      "zone": "berra",
-      "date": "2026-05-30",
-      "hour": 12,
-      "weatherCode": 71,
-      "temp": -2,
-      "feelsLike": -2,
-      "windKmh": 0,
-      "windDeg": 0,
-      "windGustKmh": null,
-      "precipitation": 0,
-      "humidity": 60,
-      "pressure": 1013,
-      "uv": null,
-      "precipProbability": 0,
-      "note": ""
-    }
-  ],
+  "overrides": [],
   "alerts": [
     {
       "zone": "berra",
       "level": "yellow",
       "iconUrl": "https://cdn.meteocons.com/3.0.0-next.10/svg/flat/code-yellow.svg",
-      "message": "Possibilità di temporali"
+      "message": "Rischio temporali",
+      "validFrom": "2026-05-31",
+      "validFromTime": "00:00",
+      "validTo": "2026-05-31",
+      "validToTime": "23:00"
     }
   ]
 }
