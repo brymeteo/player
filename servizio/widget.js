@@ -20,6 +20,7 @@
     'www.brymeteo.it',
     'brymeteo.webnode.it',
     'brymeteo.github.io',
+    'www.w3schools.com',
     // aggiungi qui il dominio del cliente
   ];
 
