@@ -1,0 +1,15 @@
+{
+  "licenses": {
+    "RIVAPO2026": {
+      "domain": "www.comune-rivadelpo.it",
+      "expires": "2027-01-01",
+      "active": true
+    },
+
+    "PROVA2026": {
+      "domain": "www.w3schools.com",
+      "expires": "2027-01-01",
+      "active": true
+    }
+  }
+}
