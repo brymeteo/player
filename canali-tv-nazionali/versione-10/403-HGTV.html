@@ -1,12 +1,22 @@
+
+
+<script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/level-selector@latest/dist/level-selector.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clappr-pip@latest/dist/clappr-pip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/clappr/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>DIRETTA TV</title>
-    <meta charset="UTF-8">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.86/clappr.min.js"></script>
-    <script type="text/javascript"
-src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+<title>DIRETTA TV</title>
+<meta charset="UTF-8">
+    
+
+<script type="text/javascript"src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist/level-selector.min.js"></script>
+    
 <link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+
 
 
 
@@ -32,10 +42,6 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             opacity: 90%;
             cursor: pointer;
             display: block;
-        }
-
-        .hidden {
-            display: none;
         }
 
         body {
@@ -423,6 +429,43 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             margin-bottom: 15px;
         }
 
+        /* Layout interno del program-description con immagine a destra */
+        #program-description-inner {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        #program-description-text-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #program-poster-img {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        
+        .continua-button {
+    position: absolute;
+    right: 20px;
+    top: 80%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 500;
+    gap: 8px;
+}
+        
+
         @media only screen and (max-width: 760px) {
             #channel-info-bar {
                 bottom: 15px;
@@ -452,11 +495,6 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             }
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-
   body, html {
     margin: 0;
     padding: 0;
@@ -473,31 +511,17 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     background: #171a45;
   }
 
-  .video-js {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-  }
-
   .logo-overlay {
-  position: absolute;
-  top: 5%;
-  right: 4%;
-  width: 15%;
-  max-width: 26%;
-  height: auto !important;
-  pointer-events: none;
-  z-index: 997;
-  opacity: 1;
-  filter: drop-shadow(0 0 3px rgba(0,0,0,0.1));
-}
-
-  .video-js .vjs-control-bar {
-    display: none !important;
-  }
-
-  .vjs-fullscreen-control {
-    z-index: 15;
+    position: absolute;
+    top: 5%;
+    right: 4%;
+    width: 15%;
+    max-width: 26%;
+    height: auto !important;
+    pointer-events: none;
+    z-index: 997;
+    opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(0,0,0,0.1));
   }
 
   #fallback-image {
@@ -521,81 +545,72 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     text-shadow: 0 0 5px black;
   }
 
-    #overlay-card {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(30 75 121 / 98%);
-  padding: 20px;
-  border-radius: 10px;
-  color: #fff;
-  text-align: center;
-  z-index: 9999;
-  width: 500px;
-  font-family: sans-serif;
-  font-size: 20px;
-}
-
-#overlay-card img {
-  width: 70px;
-  height: auto;
-  margin-bottom: 10px;
-}
-
-@media only screen and (max-width: 600px) {
   #overlay-card {
-    width: 300px;
-    font-size: 14px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(30 75 121 / 98%);
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    z-index: 9999;
+    width: 500px;
+    font-family: sans-serif;
+    font-size: 20px;
   }
 
   #overlay-card img {
-    width: 50px;
+    width: 70px;
+    height: auto;
+    margin-bottom: 10px;
   }
-}
 
-    .spinner-cubes {
-      display: flex;
-      justify-content: center;
-      margin: 10px 0;
-    }
-    .spinner-cubes div {
-      width: 10px;
-      height: 10px;
-      background-color: #fff;
-      margin: 2px;
-      animation: spinner 1s infinite ease-in-out;
-    }
-    .spinner-cubes div:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .spinner-cubes div:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .spinner-cubes div:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-    @keyframes spinner {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(0.5);
-      }
+  @media only screen and (max-width: 600px) {
+    #overlay-card {
+      width: 300px;
+      font-size: 14px;
     }
 
-#restart-message {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: rgb(30 75 121 / 98%);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 10000;
-  font-family: sans-serif;
-  font-size: 18px;
-}
+    #overlay-card img {
+      width: 50px;
+    }
+  }
+
+  .spinner-cubes {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .spinner-cubes div {
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    margin: 2px;
+    animation: spinner 1s infinite ease-in-out;
+  }
+  .spinner-cubes div:nth-child(1) { animation-delay: 0s; }
+  .spinner-cubes div:nth-child(2) { animation-delay: 0.2s; }
+  .spinner-cubes div:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes spinner {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.5); }
+  }
+
+  #restart-message {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgb(30 75 121 / 98%);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10000;
+    font-family: sans-serif;
+    font-size: 18px;
+  }
 
   @media only screen and (max-width: 600px) {
     #restart-message {
@@ -604,8 +619,13 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     }
   }
 
+  /* =====================================================
+     CLASSE .hidden — display:none definitivo
+     ATTENZIONE: NON usare questa classe su #menu-popup
+     direttamente via CSS statico; gestire solo via JS
+  ===================================================== */
   .hidden {
-    display: none;
+    display: none !important;
   }
 
   #next-program-name {
@@ -615,139 +635,144 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     opacity: 0.85;
   }
 
-  .video-js .vjs-loading-spinner {
-    display: none !important;
-  }
-  .video-js .vjs-waiting {
-    display: none !important;
-  }
-
+  /* =====================================================
+     MENU POPUP
+     Usa visibility + opacity invece di display:none
+     per evitare il flash di chiusura immediata su TV
+  ===================================================== */
   #menu-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(30 75 121 / 98%);
-  padding: 30px;
-  border-radius: 15px;
-  color: #fff;
-  z-index: 10000;
-  width: 600px;
-  font-family: sans-serif;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(30 75 121 / 98%);
+    padding: 30px;
+    border-radius: 15px;
+    color: #fff;
+    z-index: 10000;
+    width: 600px;
+    font-family: sans-serif;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    /* Stato iniziale: nascosto senza .hidden,
+       così .hidden non interferisce con la transizione */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
 
-#menu-popup h2 {
-  margin: 0 0 25px 0;
-  font-size: 26px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.menu-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.menu-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* ✅ AGGIUNTO */
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px 20px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.menu-option:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateX(5px);
-}
-
-.menu-option-number {
-  font-size: 28px;
-  font-weight: bold;
-  width: 50px;
-  text-align: center;
-  color: #ffd700;
-}
-
-.menu-option-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px; /* ✅ AGGIUNTO (stabilità layout) */
-}
-
-.menu-option-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.menu-option-desc {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* ✅ NUOVO: icone a destra */
-.menu-option-icon {
-  width: 38px;
-  height: 38px;
-  margin-left: 15px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-@media only screen and (max-width: 600px) {
-  #menu-popup {
-    width: 90%;
-    padding: 20px;
+  #menu-popup.menu-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, visibility 0s linear 0s;
   }
 
   #menu-popup h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+    margin: 0 0 25px 0;
+    font-size: 26px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
 
   .menu-option {
-    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .menu-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
   }
 
   .menu-option-number {
-    font-size: 24px;
-    width: 40px;
+    font-size: 28px;
+    font-weight: bold;
+    width: 50px;
+    text-align: center;
+    color: #ffd700;
+  }
+
+  .menu-option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
   }
 
   .menu-option-title {
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
   }
 
   .menu-option-desc {
-    font-size: 12px;
+    font-size: 14px;
+    opacity: 0.8;
   }
 
-  /* opzionale: icone più piccole su mobile */
   .menu-option-icon {
-    width: 24px;
-    height: 24px;
+    width: 38px;
+    height: 38px;
+    margin-left: 15px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
-}
-  
-  
-  
-</style>
+
+  @media only screen and (max-width: 600px) {
+    #menu-popup {
+      width: 90%;
+      padding: 20px;
+    }
+
+    #menu-popup h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .menu-option {
+      padding: 12px 15px;
+    }
+
+    .menu-option-number {
+      font-size: 24px;
+      width: 40px;
+    }
+
+    .menu-option-title {
+      font-size: 16px;
+    }
+
+    .menu-option-desc {
+      font-size: 12px;
+    }
+
+    .menu-option-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  </style>
 
 </head>
 <body>
 
-
 <div id="background-overlay"></div>
 
-
-
+<img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001628-737e1737e3/Bry%20Animation%20hd.png?ph=7e11bb4538" alt="Logo" class="logo-overlay hidden" id="main-logo" />
 
 <div id="exit-menu-overlay" class="hidden" style="
     position: fixed;
@@ -767,23 +792,24 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
     <span>2</span>
 </div>
 
-
-
-
-
- <div id="channel-info-bar">
-        <div id="program-description">
-            <div id="program-time-title" class="loading">18:00 Caricamento...</div>
-            <div id="program-description-text" class="loading">
-                [Bambini] Caricamento della descrizione del programma in corso...
+<div id="channel-info-bar">
+    <div id="program-description">
+        <div id="program-description-inner">
+            <div id="program-description-text-wrapper">
+                <div id="program-time-title" class="loading">18:00 Caricamento...</div>
+                <div id="program-description-text" class="loading">
+                    [Bambini] Caricamento della descrizione del programma in corso...
+                </div>
+                <div class="continua-button">
+                    <div class="continua-icon">i</div>
+                    <span></span>
+                </div>
             </div>
-            <div class="continua-button">
-                <div class="continua-icon">i</div>
-                <span>Continua</span>
-            </div>
+            <img id="program-poster-img" src="" alt="Poster programma">
         </div>
+    </div>
 
-        <div id="channel-info-middle">
+       <div id="channel-info-middle">
             <div id="channel-left-info">
                 <div id="channel-number">403</div>
                 <div id="channel-title">HGTV HD</div>
@@ -802,87 +828,80 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
             <div id="current-time">Giovedì 05 Dic 18:12</div>
         </div>
 
-        <div id="timeline-section">
-            <div id="program-status"></div>
+    <div id="timeline-section">
+        <div id="program-status"></div>
 
-            <div id="timeline-container" style="display: none;">
-                <div id="timeline-bar">
-                    <div id="timeline-progress"></div>
-                </div>
-            </div>
-
-            <div id="program-timeline-container">
-                <div class="scroll-indicator left hidden" id="scroll-left">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                    </svg>
-                </div>
-
-                <div id="program-timeline-wrapper">
-                    <div id="program-timeline">
-                    </div>
-                </div>
-
-                <div class="scroll-indicator right" id="scroll-right">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                    </svg>
-                </div>
-            </div>
-
-             <div id="control-buttons">
-                <div class="control-group">
-                    <div class="control-button canale">
-                        <img src="https://i.ibb.co/p6ssKTbW/icona-frecce.webp" alt="Canale" class="icon"
-                            style="width: 44px; height: auto;" />
-                        <span>Canale</span>
-                    </div>
-                    <div class="control-button orario">
-                        <img src="https://i.ibb.co/vCmpmjbC/icona-frecce2.webp" alt="Canale" class="icon"
-                            style="width: 34px; height: auto;" />
-                        <span>Orario</span>
-                    </div>
-
-                    <div class="control-button canali-preferiti">
-                        <img src="https://i.ibb.co/q3gWf3Jj/System-Info-26218.webp" alt="Restart" class="icon"
-                            style="width: 25px; height: auto;" />
-                        <span>Info (4)</span>
-                    </div>
-
-
-  <div class="control-button registra">
-                        <img src="https://images.icon-icons.com/1880/PNG/512/iconfinder-settings-4341324_120534.png" alt="Restart" class="icon"
-                            style="width: 25px; height: auto;" />
-                        <span>Menu Video (2)</span>
-                    </div>
-
-
-
-<div class="control-button canali-preferiti-tv">
-                        <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon"
-                            style="width: 25px; height: auto;" />
-                        <span>Vocale (0)</span>
-                    </div>
-
-
-                  
-
-                    <div class="control-button canali-preferiti-tv">
-                        <img src="https://i.ibb.co/7Nx26QW5/1615996335-17290.png" alt="Restart" class="icon"
-                            style="width: 25px; height: auto;" />
-                        <span>Mosaico (6/7)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="next-program-info" class="loading" style="display: none;">
-                A seguire: Caricamento del prossimo programma...
+        <div id="timeline-container" style="display: none;">
+            <div id="timeline-bar">
+                <div id="timeline-progress"></div>
             </div>
         </div>
+
+        <div id="program-timeline-container">
+            <div class="scroll-indicator left hidden" id="scroll-left">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+            </div>
+
+            <div id="program-timeline-wrapper">
+                <div id="program-timeline">
+                </div>
+            </div>
+
+            <div class="scroll-indicator right" id="scroll-right">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </div>
+        </div>
+
+        <div id="control-buttons">
+            <div class="control-group">
+                <div class="control-button canale">
+                    <img src="https://i.ibb.co/p6ssKTbW/icona-frecce.webp" alt="Canale" class="icon"
+                        style="width: 44px; height: auto;" />
+                    <span>Canale</span>
+                </div>
+                <div class="control-button orario">
+                    <img src="https://i.ibb.co/vCmpmjbC/icona-frecce2.webp" alt="Canale" class="icon"
+                        style="width: 34px; height: auto;" />
+                    <span>Orario</span>
+                </div>
+
+                <div class="control-button canali-preferiti">
+                    <img src="https://i.ibb.co/q3gWf3Jj/System-Info-26218.webp" alt="Restart" class="icon"
+                        style="width: 25px; height: auto;" />
+                    <span>Info 4</span>
+                </div>
+
+                <div class="control-button registra">
+                    <img src="https://images.icon-icons.com/1880/PNG/512/iconfinder-settings-4341324_120534.png" alt="Restart" class="icon"
+                        style="width: 25px; height: auto;" />
+                    <span>Menu Video 2</span>
+                </div>
+
+                <div class="control-button canali-preferiti-tv">
+                    <img src="https://i.ibb.co/35xkYYgJ/1f534.png" alt="Restart" class="icon"
+                        style="width: 25px; height: auto;" />
+                    <span>Vocale 0</span>
+                </div>
+
+                <div class="control-button canali-preferiti-tv">
+                    <img src="https://i.ibb.co/7Nx26QW5/1615996335-17290.png" alt="Restart" class="icon"
+                        style="width: 25px; height: auto;" />
+                    <span>Mosaico 6-7</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="next-program-info" class="loading" style="display: none;">
+            A seguire: Caricamento del prossimo programma...
+        </div>
     </div>
+</div>
 
-
-  <div id="overlay-card" class="hidden">
+<div id="overlay-card" class="hidden">
   <img id="overlay-icon" src="" alt="Icona comando">
   <div id="overlay-animation" class="spinner-cubes">
     <div></div>
@@ -892,7 +911,8 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
   <p id="overlay-text"></p>
 </div>
 
-<div id="menu-popup" class="hidden">
+<!-- MENU POPUP: visibilità gestita SOLO via classe menu-visible (non .hidden) -->
+<div id="menu-popup">
   <h2>Azioni Disponibili</h2>
   <div class="menu-options">
 
@@ -945,133 +965,124 @@ src="https://cdn.jsdelivr.net/gh/clappr/clappr-level-selector-plugin@latest/dist
 </div>
 
 <div id="restart-message" class="hidden">
- Il contenuto non è attualmente in diretta. Per tornare alla live del canale, premi il tasto 2 e poi 7.
+  Il contenuto non è attualmente in diretta. Per tornare alla live del canale, premi il tasto 2 e poi 7.
 </div>
 
+<img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
 
-
-  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
-
- <div id="player"></div>
-
-
-  
-
+<div id="player"></div>
 
 <script>
-   var player = new Clappr.Player({
-            source: "https://d1tidto9vz737l.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-joaw4f4kh2en1/HGTV_IT.m3u8",
-            parentId: "#player",
-            width: '100%',
-            height: '100vh',
-            controls: false,
-            autoPlay: true, // Abilita l'auto-play
-            plugins: {
-                core: [LevelSelector]
-            },
-            levelSelectorConfig: {
-                //Optional : custom labels
-                title: 'QUALITÀ VOX OS',
-                labels: {
-                    0: 'Molto Bassa 360p',
-                    1: 'Bassa 360p ',
-                    2: 'Media 480p ',
-                    3: 'Standard 520p',
-                    4: 'Medio Alta 720p',
-                    5: 'Alta 720p',
-                    6: 'Molto Alta 1080p',
-                    7: 'Super Qualità 1080p '
-                },
-            },
-        });
+  var player = new Clappr.Player({
+        source: "https://wp3-s-anp31323132-live-ch-prod.prod.cdn.dmdsdp.com/live/disk1/SV09718/stb-dash-fhd-avc/SV09718.mpd",
+        parentId: "#player",
+        width: '100%',
+        height: '100vh',
+        controls: false,
+        autoPlay: true, // Abilita l'auto-play
+        plugins: [LevelSelector, ClapprPip.PipButton, ClapprPip.PipPlugin, DashShakaPlayback],
+        events: {onReady: function() {var plugin = this.getPlugin("click_to_pause"); plugin && plugin.disable();},},
+       shakaConfiguration: {
+          drm: {
+            clearKeys: {
+              '43c2773288314525ad6841356e9a5a21':'3b771dcd654e7b9f3bb62a7e24f6b733',
+              
+    '79f9fbec515b34d084bf6052052450bb':'bdd07074aa17ab44aad8ae57f9e5d1dc'
+            }
+          },
+        },
+      });
 </script>
 
-
 <script>
-var overlayCard = document.getElementById("overlay-card");
-var overlayIcon = document.getElementById("overlay-icon");
-var overlayText = document.getElementById("overlay-text");
+var overlayCard   = document.getElementById("overlay-card");
+var overlayIcon   = document.getElementById("overlay-icon");
+var overlayText   = document.getElementById("overlay-text");
 var restartMessage = document.getElementById("restart-message");
 var channelInfoBar = document.getElementById("channel-info-bar");
-var menuPopup = document.getElementById("menu-popup");
-var overlayTimer, restartTimer, channelInfoTimer, menuTimer;
+var menuPopup     = document.getElementById("menu-popup");
 
-// Controllo al caricamento della pagina: se viene da tasto 7, mostra l'overlay exit-menu-overlay
+var overlayTimer, restartTimer, channelInfoTimer;
+
+// ===== EXIT OVERLAY CHECK =====
 if (localStorage.getItem("showExitOverlayAfterLive") === "true") {
-    showExitMenuOverlay();
-    localStorage.removeItem("showExitOverlayAfterLive");
+  showExitMenuOverlay();
+  localStorage.removeItem("showExitOverlayAfterLive");
 }
 
+// ===== OVERLAY =====
 function showOverlay(state) {
   clearTimeout(overlayTimer);
   clearTimeout(restartTimer);
+
   overlayCard.classList.remove("hidden");
   overlayCard.style.display = 'block';
 
   if (state === "pause") {
     overlayIcon.src = "https://i.ibb.co/wrR8vdqG/pause-121328.webp";
     overlayText.innerHTML = "Per mettere in play la trasmissione, premi il tasto 6.";
-  } else if (state === "play") {
+  }
+  else if (state === "play") {
     overlayIcon.src = "https://i.ibb.co/FLpvXVgs/circularplaybutton-122036.png";
     overlayText.innerHTML = "";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-  } else if (state === "restart") {
+  }
+  else if (state === "restart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riportato indietro di 10 secondi.";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-    restartTimer = setTimeout(() => {
+    restartTimer = setTimeout(function() {
       restartMessage.classList.remove("hidden");
-      setTimeout(() => {
-        restartMessage.classList.add("hidden");
-      }, 15000);
+      setTimeout(function() { restartMessage.classList.add("hidden"); }, 15000);
     }, 5000);
-  } else if (state === "fromStart") {
+  }
+  else if (state === "fromStart") {
     overlayIcon.src = "https://i.ibb.co/vxPYMnNr/rewind-circular-button-1-icon-icons-com-53902.png";
     overlayText.innerHTML = "Video riavviato dall'inizio.";
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       overlayCard.classList.add("hidden");
       overlayCard.style.display = 'none';
     }, 2000);
-  } else if (state === "live") {
+  }
+  else if (state === "live") {
     overlayIcon.src = "https://i.ibb.co/mrKSv9Xh/circularplaybutton-122036.png";
     overlayText.innerHTML = "Ritorno alla diretta in corso...";
-    // Salva in localStorage per mostrare overlay exit-menu-overlay al reload
     localStorage.setItem("showExitOverlayAfterLive", "true");
-    overlayTimer = setTimeout(() => {
+    overlayTimer = setTimeout(function() {
       location.reload();
     }, 2000);
   }
 }
 
+// ===== EXIT OVERLAY =====
 function showExitMenuOverlay() {
-  const overlay = document.getElementById("exit-menu-overlay");
+  var overlay = document.getElementById("exit-menu-overlay");
   overlay.classList.remove("hidden");
   overlay.style.display = "flex";
-
-  setTimeout(() => {
+  setTimeout(function() {
     overlay.classList.add("hidden");
     overlay.style.display = "none";
   }, 50000);
 }
 
+// ===== MENU =====
+// Il menu usa visibility/opacity (classe menu-visible), NON .hidden,
+// così non c'è conflitto con display:none e il popup rimane stabile su TV.
 function showMenuPopup() {
-  clearTimeout(menuTimer);
-  menuPopup.classList.remove("hidden");
-  menuPopup.style.display = 'block';
+  menuPopup.classList.add("menu-visible");
 }
 
 function hideMenuPopup() {
-  menuPopup.classList.add("hidden");
-  menuPopup.style.display = 'none';
-  clearTimeout(menuTimer);
+  menuPopup.classList.remove("menu-visible");
 }
 
+// ===== CHANNEL INFO =====
 function hideChannelInfo() {
   channelInfoBar.style.display = "none";
   clearTimeout(channelInfoTimer);
@@ -1083,17 +1094,26 @@ function showChannelInfo() {
   channelInfoTimer = setTimeout(hideChannelInfo, 50000);
 }
 
-var defaultHideTimer = setTimeout(hideChannelInfo, 9000);
-
+// ===== AUTO HIDE INIT =====
+setTimeout(hideChannelInfo, 9000);
 document.addEventListener("mousemove", showChannelInfo);
 document.addEventListener("keypress", showChannelInfo);
 
-let isMenuOpen = false;
+// ===== MENU STATE =====
+var isMenuOpen = false;
 
-window.addEventListener("message", function (event) {
+// =====================================================
+// MESSAGE HANDLER
+// FIX PRINCIPALE: hideMenuPopup() è ora chiamato SOLO
+// dentro ciascun branch di azione (3-7), NON in modo
+// incondizionato. In questo modo, messaggi "spurii"
+// (es. il tasto "2" fisico inviato dal sito padre
+// subito dopo "openMenu") non chiudono il popup.
+// =====================================================
+window.addEventListener("message", function(event) {
   if (!event.data) return;
 
-  let key = null;
+  var key = null;
 
   if (typeof event.data === "object" && event.data.action === "key") {
     key = event.data.key;
@@ -1105,58 +1125,72 @@ window.addEventListener("message", function (event) {
 
   console.log("Messaggio ricevuto:", key);
 
-  if (key === "2" || key === "menu" || key === "openMenu") {
-    if (isMenuOpen) {
-      hideMenuPopup();
-      isMenuOpen = false;
-    } else {
-      showMenuPopup();
-      isMenuOpen = true;
-    }
+  // --- APERTURA / CHIUSURA MENU ---
+  if (key === "openMenu") {
+    isMenuOpen = true;
+    showMenuPopup();
     return;
   }
 
+  if (key === "closeMenu") {
+    isMenuOpen = false;
+    hideMenuPopup();
+    return;
+  }
+
+  // --- AZIONI DA MENU ---
+  // IMPORTANTE: hideMenuPopup() è dentro ogni singolo branch;
+  // qualsiasi altro tasto (incluso "2") viene ignorato
+  // e il menu rimane aperto.
   if (isMenuOpen) {
     if (key === "3") {
-      let current = player.getCurrentTime();
-      let t = Math.max(0, current - 10);
-      player.seek(t);
+      var current3 = player.getCurrentTime();
+      player.seek(Math.max(0, current3 - 10));
       showOverlay("restart");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "4") {
       player.seek(0);
       player.play();
       showOverlay("fromStart");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "5") {
       player.pause();
       showOverlay("pause");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "6") {
       player.play();
       showOverlay("play");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
     else if (key === "7") {
       showOverlay("live");
       showExitMenuOverlay();
+      hideMenuPopup();
+      isMenuOpen = false;
     }
-
-    hideMenuPopup();
-    isMenuOpen = false;
+    // Qualsiasi altro tasto mentre il menu è aperto: ignorato (menu rimane visibile)
     return;
   }
 
+  // --- NAVIGAZIONE CANALI ---
   if (key === "8") {
     hideChannelInfo();
     isNavigating = false;
     return;
   }
 
-  if (!allPrograms || allPrograms.length === 0) return;
+ if (!allPrograms || allPrograms.length === 0) return;
 
   if (key === "ArrowRight") {
     if (selectedProgramIndex < allPrograms.length - 1) {
@@ -1189,18 +1223,13 @@ window.addEventListener("message", function (event) {
   if (key === "4") {
     showChannelInfo(false);
     toggleDescription();
-
-    if (isDescriptionOpen && !isNavigating) {
-      isNavigating = true;
-      resetAutoResetTimer();
-    }
     return;
   }
 
+  // --- CONTROLLI DIRETTI PLAYER (fuori menu) ---
   if (key === "3") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    var current = player.getCurrentTime();
+    player.seek(Math.max(0, current - 10));
     showOverlay("restart");
   }
   else if (key === "5") {
@@ -1216,618 +1245,539 @@ window.addEventListener("message", function (event) {
   }
 
   if (key === "restart" || key === "rewind" || key === "indietro") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - 10);
-    player.seek(t);
+    var currentRew = player.getCurrentTime();
+    player.seek(Math.max(0, currentRew - 10));
     showOverlay("restart");
   }
   else if (key === "live") {
     showOverlay("live");
   }
   else if (typeof event.data === "object" && event.data.action === "rewind") {
-    let current = player.getCurrentTime();
-    let t = Math.max(0, current - event.data.seconds);
-    player.seek(t);
+    var currentRw = player.getCurrentTime();
+    player.seek(Math.max(0, currentRw - event.data.seconds));
     showOverlay("restart");
   }
 });
 
-document.querySelectorAll('.menu-option').forEach(option => {
+// ===== CLICK SU OPZIONI MENU =====
+document.querySelectorAll('.menu-option').forEach(function(option) {
   option.addEventListener('click', function() {
-    const action = this.getAttribute('data-action');
+    var action = this.getAttribute('data-action');
     window.postMessage(action, '*');
   });
 });
 </script>
 
 <script>
-        player.on(Clappr.Events.PLAYER_ERROR, function (err) {
-            document.getElementById("fallback-image").style.display = "block";
-            document.getElementById("player").style.display = "none";
-        });
+  player.on(Clappr.Events.PLAYER_ERROR, function(err) {
+    document.getElementById("fallback-image").style.display = "block";
+    document.getElementById("player").style.display = "none";
+  });
 
-        var logo = document.getElementById("logo");
-        var timer;
-        function hideLogo() {
-            if (logo) logo.style.display = "none";
-        }
-        function resetTimer() {
-            if (logo) {
-                logo.style.display = "block";
-                clearTimeout(timer);
-                timer = setTimeout(hideLogo, 6000);
-            }
-        }
-        document.addEventListener("mousemove", resetTimer);
-        document.addEventListener("keypress", resetTimer);
-        resetTimer();
-    </script>
+  var logo = document.getElementById("logo");
+  var timer;
+  function hideLogo() { if (logo) logo.style.display = "none"; }
+  function resetTimer() {
+    if (logo) {
+      logo.style.display = "block";
+      clearTimeout(timer);
+      timer = setTimeout(hideLogo, 6000);
+    }
+  }
+  document.addEventListener("mousemove", resetTimer);
+  document.addEventListener("keypress", resetTimer);
+  resetTimer();
+</script>
 
-    <script>
-        function updateSignal(percent) {
-            const bars = document.querySelectorAll('#signal-bars .bar');
-            const percentText = document.getElementById('signal-percent');
+<script>
+  function updateSignal(percent) {
+    var bars = document.querySelectorAll('#signal-bars .bar');
+    var percentText = document.getElementById('signal-percent');
+    var activeBars = Math.ceil((percent / 100) * bars.length);
+    bars.forEach(function(bar, index) {
+      bar.classList.toggle('active', index < activeBars);
+    });
+    percentText.textContent = percent + '%';
+  }
 
-            const activeBars = Math.ceil((percent / 100) * bars.length);
+  function getRandomSignal() { return Math.floor(Math.random() * 4) + 96; }
 
-            bars.forEach((bar, index) => {
-                bar.classList.toggle('active', index < activeBars);
-            });
+  setInterval(function() {
+    updateSignal(getRandomSignal());
+  }, 2000);
+</script>
 
-            percentText.textContent = `${percent}%`;
-        }
+<script>
+  var epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
+  var selectedChannelId = "home-and-garden-tv";
+  var customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
 
-        function getRandomSignal() {
-            return Math.floor(Math.random() * 4) + 96;
-        }
+  var currentProgramGlobal = null;
+  var allPrograms = [];
+  var selectedProgramIndex = 0;
+  var currentProgramIndexInAll = 0;
+  var scrollOffset = 0;
+  var autoResetTimer = null;
+  var isNavigating = false;
+  var isDescriptionOpen = false;
+  var AUTO_RESET_DELAY = 50000;
 
-        setInterval(() => {
-            const randomPercent = getRandomSignal();
-            updateSignal(randomPercent);
-        }, 2000);
-    </script>
+  function formatTime(date) {
+    return date.getHours().toString().padStart(2, '0') + ":" +
+      date.getMinutes().toString().padStart(2, '0');
+  }
 
-    <script>
-        const epgUrl = "https://brymeteo.github.io/tv/dati_programmi.json";
-        let selectedChannelId = "home-and-garden-tv";
-        const customLogoURL = "https://api.superguidatv.it/v1/channels/187/logo?width=320&theme=dark";
+  function isDST(date) {
+    var january = new Date(date.getFullYear(), 0, 1);
+    var july = new Date(date.getFullYear(), 6, 1);
+    return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+  }
 
-        let currentProgramGlobal = null;
-        let allPrograms = [];
-        let selectedProgramIndex = 0;
-        let currentProgramIndexInAll = 0;
-        let scrollOffset = 0;
-        let autoResetTimer = null;
-        let isNavigating = false;
-        let isDescriptionOpen = false;
-        const AUTO_RESET_DELAY = 50000;
+  function adjustTime(dateInput) {
+    var date = new Date(dateInput);
+    if (isDST(date)) { date.setHours(date.getHours() - 1); }
+    return date;
+  }
 
-        function formatTime(date) {
-            return date.getHours().toString().padStart(2, '0') + ":" +
-                date.getMinutes().toString().padStart(2, '0');
-        }
+  function truncateTitle(title, maxLength) {
+    maxLength = maxLength || 22;
+    if (title.length <= maxLength) return title;
+    return title.substring(0, maxLength) + '...';
+  }
 
-        function isDST(date) {
-            const january = new Date(date.getFullYear(), 0, 1);
-            const july = new Date(date.getFullYear(), 6, 1);
-            return date.getTimezoneOffset() < Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
-        }
+  function resetAutoResetTimer() {
+    if (isNavigating) {
+      clearTimeout(autoResetTimer);
+      autoResetTimer = setTimeout(function() {
+        isNavigating = false;
+        isDescriptionOpen = false;
+        document.getElementById('program-description').classList.remove('open');
+        hideChannelInfo();
+        scrollToCurrentProgram();
+      }, AUTO_RESET_DELAY);
+    }
+  }
 
-        function adjustTime(dateInput) {
-            const date = new Date(dateInput);
-            if (isDST(date)) {
-                date.setHours(date.getHours() - 1);
-            } else {
-                date.setHours(date.getHours() + 0);
-            }
-            return date;
-        }
+  function scrollToCurrentProgram() {
+    selectedProgramIndex = currentProgramIndexInAll;
+    scrollOffset = 0;
+    isNavigating = false;
+    isDescriptionOpen = false;
+    document.getElementById('program-description').classList.remove('open');
+    updateTimelinePosition();
+    updateProgramDescription(selectedProgramIndex);
+    updateScrollIndicators();
+  }
 
-        function truncateTitle(title, maxLength = 22) {
-            if (title.length <= maxLength) {
-                return title;
-            }
-            return title.substring(0, maxLength) + '...';
-        }
+  function toggleDescription() {
+    var descriptionEl = document.getElementById('program-description');
+    isDescriptionOpen = !isDescriptionOpen;
+    if (isDescriptionOpen) {
+      descriptionEl.classList.add('open');
+      resetAutoResetTimer();
+    } else {
+      descriptionEl.classList.remove('open');
+    }
+  }
 
-        function resetAutoResetTimer() {
-            if (isNavigating) {
-                clearTimeout(autoResetTimer);
-                autoResetTimer = setTimeout(() => {
-                    isNavigating = false;
-                    isDescriptionOpen = false;
-                    document.getElementById('program-description').classList.remove('open');
-                    hideChannelInfo();
-                    scrollToCurrentProgram();
-                }, AUTO_RESET_DELAY);
-            }
-        }
-
-        function scrollToCurrentProgram() {
-            selectedProgramIndex = currentProgramIndexInAll;
-            scrollOffset = 0;
-            isNavigating = false;
-            isDescriptionOpen = false;
-            document.getElementById('program-description').classList.remove('open');
-            updateTimelinePosition();
-            updateProgramDescription(selectedProgramIndex);
-            updateScrollIndicators();
-        }
-
-        function toggleDescription() {
-            const descriptionEl = document.getElementById('program-description');
-            isDescriptionOpen = !isDescriptionOpen;
-
-            if (isDescriptionOpen) {
-                descriptionEl.classList.add('open');
-            } else {
-                descriptionEl.classList.remove('open');
-            }
-
-            if (isDescriptionOpen) {
-                resetAutoResetTimer();
-            }
-        }
-
-        function renderProgramTimeline() {
-    const timeline = document.getElementById("program-timeline");
+  function renderProgramTimeline() {
+    var timeline = document.getElementById("program-timeline");
     timeline.innerHTML = '';
+    var now = new Date();
 
-    const now = new Date();
-
-    currentProgramIndexInAll = allPrograms.findIndex(program => {
-        const start = adjustTime(program.start);
-        const end = adjustTime(program.end);
-        return now >= start && now < end;
+    currentProgramIndexInAll = allPrograms.findIndex(function(program) {
+      var start = adjustTime(program.start);
+      var end = adjustTime(program.end);
+      return now >= start && now < end;
     });
 
-    const hasCurrentProgram = currentProgramIndexInAll !== -1;
-    const startIndex = hasCurrentProgram ? currentProgramIndexInAll : 0;
+    var hasCurrentProgram = currentProgramIndexInAll !== -1;
+    var startIndex = hasCurrentProgram ? currentProgramIndexInAll : 0;
 
-    for (let i = 0; i < 3; i++) {
-        const programIndex = startIndex + i;
+    for (var i = 0; i < 3; i++) {
+      var programIndex = startIndex + i;
 
-        const container = document.createElement('div');
-        container.className = 'program-slot-container';
-        container.id = `program-slot-${i}`;
+      var container = document.createElement('div');
+      container.className = 'program-slot-container';
+      container.id = 'program-slot-' + i;
 
-        const timeLabel = document.createElement('span');
-        timeLabel.className = 'program-time-label';
-        timeLabel.id = `time-label-${i}`;
+      var timeLabel = document.createElement('span');
+      timeLabel.className = 'program-time-label';
+      timeLabel.id = 'time-label-' + i;
 
-        const slot = document.createElement('div');
-        slot.className = `program-slot ${i === 0 ? 'active' : ''}`;
-        slot.id = `slot-${i}`;
+      var slot = document.createElement('div');
+      slot.className = 'program-slot' + (i === 0 ? ' active' : '');
+      slot.id = 'slot-' + i;
 
-        const titleSpan = document.createElement('span');
-        titleSpan.className = 'program-title';
-        titleSpan.id = `title-${i}`;
+      var titleSpan = document.createElement('span');
+      titleSpan.className = 'program-title';
+      titleSpan.id = 'title-' + i;
 
-        if (programIndex >= allPrograms.length) {
-            timeLabel.textContent = '--:--';
-            titleSpan.textContent = 'Nessuna informazione';
+      if (programIndex >= allPrograms.length) {
+        timeLabel.textContent = '--:--';
+        titleSpan.textContent = 'Nessuna informazione';
+      } else {
+        var program = allPrograms[programIndex];
+        var startTime = adjustTime(program.start);
+        if (i === 0 && !hasCurrentProgram) {
+          timeLabel.textContent = '--:--';
+          titleSpan.textContent = 'Nessun programma disponibile';
         } else {
-            const program = allPrograms[programIndex];
-            const startTime = adjustTime(program.start);
-
-            if (i === 0 && !hasCurrentProgram) {
-                timeLabel.textContent = '--:--';
-                titleSpan.textContent = 'Nessun programma disponibile';
-            } else {
-                timeLabel.textContent = formatTime(startTime);
-                const maxTitleLength = i === 0 ? 26 : 22;
-                titleSpan.textContent = truncateTitle(program.title, maxTitleLength);
-            }
+          timeLabel.textContent = formatTime(startTime);
+          titleSpan.textContent = truncateTitle(program.title, i === 0 ? 26 : 22);
         }
+      }
 
-        slot.appendChild(titleSpan);
-        container.appendChild(timeLabel);
-        container.appendChild(slot);
-        timeline.appendChild(container);
+      slot.appendChild(titleSpan);
+      container.appendChild(timeLabel);
+      container.appendChild(slot);
+      timeline.appendChild(container);
     }
 
     selectedProgramIndex = hasCurrentProgram ? currentProgramIndexInAll : 0;
     scrollOffset = 0;
-
     updateDisplayedPrograms();
     updateScrollIndicators();
     if (hasCurrentProgram) updateInlineTimeline();
-}
+  }
 
-        function updateTimelinePosition() {
-            updateDisplayedPrograms();
+  function updateTimelinePosition() { updateDisplayedPrograms(); }
+
+  function updateDisplayedPrograms() {
+    if (!allPrograms || allPrograms.length === 0) return;
+
+    for (var i = 0; i < 3; i++) {
+      var programIndex = currentProgramIndexInAll + scrollOffset + i;
+
+      var timeLabel = document.getElementById('time-label-' + i);
+      var titleSpan = document.getElementById('title-' + i);
+      var slot      = document.getElementById('slot-' + i);
+
+      if (!timeLabel || !titleSpan || !slot) continue;
+
+      if (programIndex >= allPrograms.length) {
+        timeLabel.style.opacity = '0';
+        (function(tl, ts, s) {
+          setTimeout(function() {
+            tl.textContent = '--:--';
+            tl.style.opacity = '1';
+            ts.textContent = 'Nessuna informazione';
+            ts.style.opacity = '1';
+            var ex = s.querySelector('.program-slot-timeline');
+            if (ex) ex.remove();
+          }, 175);
+        })(timeLabel, titleSpan, slot);
+        continue;
+      }
+
+      var program   = allPrograms[programIndex];
+      var startTime = adjustTime(program.start);
+      var isCurrentCard = (i === 0);
+      var isRealCurrent = (scrollOffset === 0 && i === 0);
+
+      if (isCurrentCard) {
+        slot.classList.add('active');
+        if (isRealCurrent && !isNavigating) {
+          var now2 = new Date();
+          var start2 = adjustTime(program.start);
+          var elapsedMin = Math.floor((now2 - start2) / (1000 * 60));
+          timeLabel.style.opacity = '0';
+          (function(tl, em) {
+            setTimeout(function() {
+              tl.textContent = 'Iniziato da ' + em + ' min';
+              tl.classList.add('now-label');
+              tl.style.opacity = '1';
+            }, 175);
+          })(timeLabel, elapsedMin);
+        } else {
+          timeLabel.style.opacity = '0';
+          (function(tl, st) {
+            setTimeout(function() {
+              tl.textContent = formatTime(st);
+              tl.classList.remove('now-label');
+              tl.style.opacity = '1';
+            }, 175);
+          })(timeLabel, startTime);
         }
+      } else {
+        slot.classList.remove('active');
+        timeLabel.style.opacity = '0';
+        (function(tl, st) {
+          setTimeout(function() {
+            tl.textContent = formatTime(st);
+            tl.classList.remove('now-label');
+            tl.style.opacity = '1';
+          }, 175);
+        })(timeLabel, startTime);
+      }
 
-        function updateDisplayedPrograms() {
-            if (!allPrograms || allPrograms.length === 0) return;
+      titleSpan.style.opacity = '0';
+      (function(ts, prog, icc) {
+        setTimeout(function() {
+          ts.textContent = truncateTitle(prog.title, icc ? 35 : 22);
+          ts.style.opacity = '1';
+        }, 175);
+      })(titleSpan, program, isCurrentCard);
 
-            for (let i = 0; i < 3; i++) {
-                const programIndex = currentProgramIndexInAll + scrollOffset + i;
+      var existingTimeline = slot.querySelector('.program-slot-timeline');
 
-                const timeLabel = document.getElementById(`time-label-${i}`);
-                const titleSpan = document.getElementById(`title-${i}`);
-                const slot = document.getElementById(`slot-${i}`);
+      if (isRealCurrent && !existingTimeline) {
+        var timelineWrapper = document.createElement('div');
+        timelineWrapper.className = 'program-slot-timeline';
+        timelineWrapper.innerHTML = '<div class="mini-timeline-container"><div class="mini-timeline-bar"><div class="mini-timeline-progress" id="inline-timeline-progress"></div></div></div>';
+        slot.appendChild(timelineWrapper);
+      } else if (!isRealCurrent && existingTimeline) {
+        existingTimeline.remove();
+      }
+    }
 
-                if (!timeLabel || !titleSpan || !slot) continue;
+    if (!isNavigating) updateInlineTimeline();
+  }
 
-                if (programIndex >= allPrograms.length) {
-                    timeLabel.style.opacity = '0';
-                    setTimeout(() => {
-                        timeLabel.textContent = '--:--';
-                        timeLabel.style.opacity = '1';
-                    }, 175);
+  function selectProgram(index) {
+    if (!allPrograms || allPrograms.length === 0) return;
+    if (index < 0 || index >= allPrograms.length) return;
 
-                    titleSpan.style.opacity = '0';
-                    setTimeout(() => {
-                        titleSpan.textContent = 'Nessuna informazione';
-                        titleSpan.style.opacity = '1';
-                    }, 175);
+    isNavigating = true;
+    selectedProgramIndex = index;
+    scrollOffset = selectedProgramIndex - currentProgramIndexInAll;
 
-                    const existingTimeline = slot.querySelector('.program-slot-timeline');
-                    if (existingTimeline) {
-                        existingTimeline.remove();
-                    }
-                    continue;
-                }
+    updateDisplayedPrograms();
 
-                const program = allPrograms[programIndex];
-                const startTime = adjustTime(program.start);
+    for (var i = 0; i < 3; i++) {
+      var slot = document.getElementById('slot-' + i);
+      if (slot) slot.classList.remove('selected');
+    }
 
-                const isCurrentCard = i === 0;
-                const isRealCurrent = scrollOffset === 0 && i === 0;
+    updateProgramDescription(selectedProgramIndex);
+    updateScrollIndicators();
+    resetAutoResetTimer();
+  }
 
-                if (isCurrentCard) {
-                    slot.classList.add('active');
+  function updateScrollIndicators() {
+    var leftIndicator  = document.getElementById("scroll-left");
+    var rightIndicator = document.getElementById("scroll-right");
 
-                    if (isRealCurrent && !isNavigating) {
-                        const now = new Date();
-                        const start = adjustTime(program.start);
-                        const elapsedMinutes = Math.floor((now - start) / (1000 * 60));
+    if (!allPrograms || allPrograms.length === 0) {
+      leftIndicator.classList.add('hidden');
+      rightIndicator.classList.add('hidden');
+      return;
+    }
 
-                        timeLabel.style.opacity = '0';
-                        setTimeout(() => {
-                            timeLabel.textContent = `Iniziato da ${elapsedMinutes} min`;
-                            timeLabel.classList.add('now-label');
-                            timeLabel.style.opacity = '1';
-                        }, 175);
-                    } else {
-                        timeLabel.style.opacity = '0';
-                        setTimeout(() => {
-                            timeLabel.textContent = formatTime(startTime);
-                            timeLabel.classList.remove('now-label');
-                            timeLabel.style.opacity = '1';
-                        }, 175);
-                    }
-                } else {
-                    timeLabel.style.opacity = '0';
-                    setTimeout(() => {
-                        timeLabel.textContent = formatTime(startTime);
-                        timeLabel.classList.remove('now-label');
-                        timeLabel.style.opacity = '1';
-                    }, 175);
-                    slot.classList.remove('active');
-                }
+    if (selectedProgramIndex <= currentProgramIndexInAll) {
+      leftIndicator.classList.add('hidden');
+    } else {
+      leftIndicator.classList.remove('hidden');
+    }
 
-                titleSpan.style.opacity = '0';
-                setTimeout(() => {
-                    titleSpan.textContent = truncateTitle(program.title, isCurrentCard ? 35 : 22);
-                    titleSpan.style.opacity = '1';
-                }, 175);
+    if (selectedProgramIndex >= allPrograms.length - 1) {
+      rightIndicator.classList.add('hidden');
+    } else {
+      rightIndicator.classList.remove('hidden');
+    }
+  }
 
-                const existingTimeline = slot.querySelector('.program-slot-timeline');
+  function updateProgramDescription(index) {
+    if (!allPrograms || allPrograms.length === 0) {
+      document.getElementById("program-time-title").textContent = "Nessun programma disponibile";
+      document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile.";
+      updatePosterImage(null);
+      return;
+    }
 
-                if (isRealCurrent && !existingTimeline) {
-                    const timelineWrapper = document.createElement('div');
-                    timelineWrapper.className = 'program-slot-timeline';
+    var selectedProgram = allPrograms[index];
+    if (selectedProgram) {
+      var startTime = adjustTime(selectedProgram.start);
+      var isCurrent = (index === currentProgramIndexInAll);
+      var timeDisplay = isCurrent ? 'Adesso' : formatTime(startTime);
+      document.getElementById("program-time-title").textContent = timeDisplay + " " + selectedProgram.title;
+      document.getElementById("program-description-text").textContent = selectedProgram.description || "Descrizione non disponibile.";
+      updatePosterImage(selectedProgram.poster || null);
+    }
+  }
 
-                    timelineWrapper.innerHTML = `
-                        <div class="mini-timeline-container">
-                            <div class="mini-timeline-bar">
-                                <div class="mini-timeline-progress" id="inline-timeline-progress"></div>
-                            </div>
-                        </div>
-                    `;
+  function updatePosterImage(posterUrl) {
+    var posterImg = document.getElementById("program-poster-img");
+    if (posterUrl) {
+      posterImg.src = posterUrl;
+      posterImg.style.display = "block";
+    } else {
+      posterImg.style.display = "none";
+      posterImg.src = "";
+    }
+  }
 
-                    slot.appendChild(timelineWrapper);
-                } else if (!isRealCurrent && existingTimeline) {
-                    existingTimeline.remove();
-                }
-            }
+  function updateProgressBar(currentProgram) {
+    var startTime = adjustTime(currentProgram.start);
+    var endTime   = adjustTime(currentProgram.end);
+    var now = new Date();
+    var totalDuration = endTime - startTime;
+    var elapsed = now - startTime;
+    var progressPercent = Math.max(0, Math.min((elapsed / totalDuration) * 100, 100));
 
-            if (!isNavigating) {
-                updateInlineTimeline();
-            }
-        }
+    var progressEl = document.getElementById("timeline-progress");
+    if (progressEl) progressEl.style.width = progressPercent + "%";
 
-        function selectProgram(index) {
-            if (!allPrograms || allPrograms.length === 0) return;
-            if (index < 0 || index >= allPrograms.length) return;
+    var startTimeEl = document.getElementById("program-start-time");
+    var endTimeEl   = document.getElementById("program-end-time");
+    var elapsedEl   = document.getElementById("elapsed-time");
 
-            isNavigating = true;
-            selectedProgramIndex = index;
-            scrollOffset = selectedProgramIndex - currentProgramIndexInAll;
+    if (startTimeEl) startTimeEl.textContent = formatTime(startTime);
+    if (endTimeEl)   endTimeEl.textContent   = formatTime(endTime);
+    if (elapsedEl)   elapsedEl.textContent   = Math.floor(elapsed / (1000 * 60)) + " minuti";
+  }
 
-            updateDisplayedPrograms();
+  function updateInlineTimeline() {
+    if (!currentProgramGlobal) return;
+    var inlineProgress = document.getElementById('inline-timeline-progress');
+    if (!inlineProgress) return;
 
-            for (let i = 0; i < 3; i++) {
-                const slot = document.getElementById(`slot-${i}`);
-                if (slot) {
-                    const programIndex = currentProgramIndexInAll + i;
-                    const isSelected = programIndex === selectedProgramIndex;
-                    const isCurrent = i === 0 && scrollOffset === 0;
+    var startTime = adjustTime(currentProgramGlobal.start);
+    var endTime   = adjustTime(currentProgramGlobal.end);
+    var now = new Date();
+    var totalDuration = endTime - startTime;
+    var elapsed = now - startTime;
+    var progressPercent = Math.max(0, Math.min((elapsed / totalDuration) * 100, 100));
+    inlineProgress.style.width = progressPercent + "%";
+  }
 
-                    if (isSelected && !isCurrent) {
-                        slot.classList.remove('selected');
-                    } else {
-                        slot.classList.remove('selected');
-                    }
-                }
-            }
+  function updateCurrentTime() {
+    var now = new Date();
+    var days   = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+    var months = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    var dayName = days[now.getDay()];
+    var day     = now.getDate().toString().padStart(2, '0');
+    var month   = months[now.getMonth()];
+    var hours   = now.getHours().toString().padStart(2, '0');
+    var minutes = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById("current-time").textContent = dayName + " " + day + " " + month + " " + hours + ":" + minutes;
+  }
 
-            updateProgramDescription(selectedProgramIndex);
-            updateScrollIndicators();
-            resetAutoResetTimer();
-        }
+  setInterval(function() {
+    updateCurrentTime();
+    if (window.currentProgramGlobal && !isNavigating) {
+      updateProgressBar(window.currentProgramGlobal);
+      updateInlineTimeline();
+      updateDisplayedPrograms();
+    }
+  }, 60000);
 
-        function updateScrollIndicators() {
-            const leftIndicator = document.getElementById("scroll-left");
-            const rightIndicator = document.getElementById("scroll-right");
-
-            if (!allPrograms || allPrograms.length === 0) {
-                leftIndicator.classList.add('hidden');
-                rightIndicator.classList.add('hidden');
-                return;
-            }
-
-            if (selectedProgramIndex <= currentProgramIndexInAll) {
-                leftIndicator.classList.add('hidden');
-            } else {
-                leftIndicator.classList.remove('hidden');
-            }
-
-            if (selectedProgramIndex >= allPrograms.length - 1) {
-                rightIndicator.classList.add('hidden');
-            } else {
-                rightIndicator.classList.remove('hidden');
-            }
-        }
-
-        function updateProgramDescription(index) {
-            if (!allPrograms || allPrograms.length === 0) {
-                document.getElementById("program-time-title").textContent = "Nessun programma disponibile";
-                document.getElementById("program-description-text").textContent = "Nessuna informazione disponibile.";
-                return;
-            }
-
-            const selectedProgram = allPrograms[index];
-
-            if (selectedProgram) {
-                const startTime = adjustTime(selectedProgram.start);
-                const isCurrent = index === currentProgramIndexInAll;
-
-                let timeDisplay = '';
-                if (isCurrent) {
-                    timeDisplay = 'Adesso';
-                } else {
-                    timeDisplay = formatTime(startTime);
-                }
-
-                document.getElementById("program-time-title").textContent =
-                    timeDisplay + " " + selectedProgram.title;
-
-                document.getElementById("program-description-text").textContent =
-                    selectedProgram.description || "Descrizione non disponibile.";
-            }
-        }
-
-        function updateProgressBar(currentProgram) {
-            const startTime = adjustTime(currentProgram.start);
-            const endTime = adjustTime(currentProgram.end);
-            const now = new Date();
-
-            const totalDuration = endTime - startTime;
-            const elapsed = now - startTime;
-
-            let progressPercent = (elapsed / totalDuration) * 100;
-            progressPercent = Math.max(0, Math.min(progressPercent, 100));
-
-            const progressEl = document.getElementById("timeline-progress");
-            if (progressEl) {
-                progressEl.style.width = progressPercent + "%";
-            }
-
-            const startTimeEl = document.getElementById("program-start-time");
-            const endTimeEl = document.getElementById("program-end-time");
-            const elapsedEl = document.getElementById("elapsed-time");
-
-            if (startTimeEl) startTimeEl.textContent = formatTime(startTime);
-            if (endTimeEl) endTimeEl.textContent = formatTime(endTime);
-
-            const elapsedMinutes = Math.floor(elapsed / (1000 * 60));
-            if (elapsedEl) elapsedEl.textContent = elapsedMinutes + " minuti";
-        }
-
-        function updateInlineTimeline() {
-            if (!currentProgramGlobal) return;
-
-            const inlineProgress = document.getElementById('inline-timeline-progress');
-            if (!inlineProgress) return;
-
-            const startTime = adjustTime(currentProgramGlobal.start);
-            const endTime = adjustTime(currentProgramGlobal.end);
-            const now = new Date();
-
-            const totalDuration = endTime - startTime;
-            const elapsed = now - startTime;
-
-            let progressPercent = (elapsed / totalDuration) * 100;
-            progressPercent = Math.max(0, Math.min(progressPercent, 100));
-
-            inlineProgress.style.width = progressPercent + "%";
-        }
-
-        function updateCurrentTime() {
-            const now = new Date();
-            const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-            const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
-
-            const dayName = days[now.getDay()];
-            const day = now.getDate().toString().padStart(2, '0');
-            const month = months[now.getMonth()];
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-
-            const timeString = `${dayName} ${day} ${month} ${hours}:${minutes}`;
-            document.getElementById("current-time").textContent = timeString;
-        }
-
-        setInterval(function () {
-            updateCurrentTime();
-            if (window.currentProgramGlobal && !isNavigating) {
-                updateProgressBar(window.currentProgramGlobal);
-                updateInlineTimeline();
-                updateDisplayedPrograms();
-            }
-        }, 60000);
-
-        function updateProgramName() {
+  function updateProgramName() {
     fetch(epgUrl)
-        .then(response => {
-            if (!response.ok) throw new Error("Errore nel recupero dei dati EPG");
-            return response.json();
-        })
-        .then(data => {
-            const channel = data.find(c => c.id === selectedChannelId);
+      .then(function(response) {
+        if (!response.ok) throw new Error("Errore nel recupero dei dati EPG");
+        return response.json();
+      })
+      .then(function(data) {
+        var channel = data.find(function(c) { return c.id === selectedChannelId; });
 
-            const timeTitleEl = document.getElementById("program-time-title");
-            const descEl = document.getElementById("program-description-text");
-            const nextInfoEl = document.getElementById("next-program-info");
+        var timeTitleEl = document.getElementById("program-time-title");
+        var descEl      = document.getElementById("program-description-text");
+        var nextInfoEl  = document.getElementById("next-program-info");
 
-            timeTitleEl.classList.remove("loading");
-            descEl.classList.remove("loading");
-            nextInfoEl.classList.remove("loading");
+        timeTitleEl.classList.remove("loading");
+        descEl.classList.remove("loading");
+        nextInfoEl.classList.remove("loading");
 
-            if (!channel || !channel.programs || channel.programs.length === 0) {
-                allPrograms = [];
-                currentProgramGlobal = null;
+        if (!channel || !channel.programs || channel.programs.length === 0) {
+          allPrograms = [];
+          currentProgramGlobal = null;
+          timeTitleEl.textContent = "Nessun programma disponibile";
+          descEl.textContent = "Nessuna informazione disponibile.";
+          nextInfoEl.textContent = "A seguire: Non disponibile";
+          updatePosterImage(null);
+          renderProgramTimeline();
+          return;
+        }
 
-                timeTitleEl.textContent = "Nessun programma disponibile";
-                descEl.textContent = "Nessuna informazione disponibile.";
-                nextInfoEl.textContent = "A seguire: Non disponibile";
+        allPrograms = channel.programs;
+        var now = new Date();
 
-                renderProgramTimeline();
-                return;
-            }
-
-            allPrograms = channel.programs;
-
-            const now = new Date();
-
-            const currentProgram = allPrograms.find(program => {
-                const start = adjustTime(program.start);
-                const end = adjustTime(program.end);
-                return now >= start && now < end;
-            });
-
-            currentProgramGlobal = currentProgram;
-
-            renderProgramTimeline();
-
-            if (currentProgram) {
-                currentProgramIndexInAll = allPrograms.indexOf(currentProgram);
-                selectedProgramIndex = currentProgramIndexInAll;
-                updateProgramDescription(selectedProgramIndex);
-
-                const upcomingProgram = allPrograms.find(program => adjustTime(program.start) > now);
-                if (upcomingProgram) {
-                    nextInfoEl.textContent =
-                        "A seguire: " + formatTime(adjustTime(upcomingProgram.start)) + " - " + upcomingProgram.title;
-                }
-                updateProgressBar(currentProgramGlobal);
-            } else {
-                timeTitleEl.textContent = "Nessun programma disponibile";
-                descEl.textContent = "Nessuna informazione disponibile per il programma corrente.";
-
-                const upcomingProgram = allPrograms.find(program => adjustTime(program.start) > now);
-                if (upcomingProgram) {
-                    nextInfoEl.textContent =
-                        "A seguire: " + formatTime(adjustTime(upcomingProgram.start)) + " - " + upcomingProgram.title;
-                } else {
-                    nextInfoEl.textContent = "A seguire: Non disponibile";
-                }
-            }
-        })
-        .catch(error => {
-            console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
-        });
-}
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                if (!allPrograms || allPrograms.length === 0) return;
-                if (selectedProgramIndex < allPrograms.length - 1) {
-                    showChannelInfo(true);
-                    if (!isNavigating) {
-                        isNavigating = true;
-                        resetAutoResetTimer();
-                    }
-                    selectProgram(selectedProgramIndex + 1);
-                }
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                if (!allPrograms || allPrograms.length === 0) return;
-                if (selectedProgramIndex > currentProgramIndexInAll) {
-                    showChannelInfo(true);
-                    if (!isNavigating) {
-                        isNavigating = true;
-                        resetAutoResetTimer();
-                    }
-                    selectProgram(selectedProgramIndex - 1);
-                }
-            } else if (e.key === '4') {
-                e.preventDefault();
-                showChannelInfo(false);
-                toggleDescription();
-                if (isDescriptionOpen && !isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-            }
+        var currentProgram = allPrograms.find(function(program) {
+          var start = adjustTime(program.start);
+          var end   = adjustTime(program.end);
+          return now >= start && now < end;
         });
 
-        document.getElementById('scroll-left').addEventListener('click', () => {
-            if (!allPrograms || allPrograms.length === 0) return;
-            if (selectedProgramIndex > currentProgramIndexInAll) {
-                showChannelInfo(true);
-                if (!isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-                selectProgram(selectedProgramIndex - 1);
-            }
-        });
+        currentProgramGlobal = currentProgram;
+        renderProgramTimeline();
 
-        document.getElementById('scroll-right').addEventListener('click', () => {
-            if (!allPrograms || allPrograms.length === 0) return;
-            if (selectedProgramIndex < allPrograms.length - 1) {
-                showChannelInfo(true);
-                if (!isNavigating) {
-                    isNavigating = true;
-                    resetAutoResetTimer();
-                }
-                selectProgram(selectedProgramIndex + 1);
-            }
-        });
+        if (currentProgram) {
+          currentProgramIndexInAll = allPrograms.indexOf(currentProgram);
+          selectedProgramIndex = currentProgramIndexInAll;
+          updateProgramDescription(selectedProgramIndex);
 
-        updateCurrentTime();
-        updateProgramName();
-        setInterval(updateProgramName, 60000);
-    </script>
+          var upcomingProgram = allPrograms.find(function(p) { return adjustTime(p.start) > now; });
+          if (upcomingProgram) {
+            nextInfoEl.textContent = "A seguire: " + formatTime(adjustTime(upcomingProgram.start)) + " - " + upcomingProgram.title;
+          }
+          updateProgressBar(currentProgramGlobal);
+        } else {
+          timeTitleEl.textContent = "Nessun programma disponibile";
+          descEl.textContent = "Nessuna informazione disponibile per il programma corrente.";
+          updatePosterImage(null);
+          var upcomingProgram2 = allPrograms.find(function(p) { return adjustTime(p.start) > now; });
+          if (upcomingProgram2) {
+            nextInfoEl.textContent = "A seguire: " + formatTime(adjustTime(upcomingProgram2.start)) + " - " + upcomingProgram2.title;
+          } else {
+            nextInfoEl.textContent = "A seguire: Non disponibile";
+          }
+        }
+      })
+      .catch(function(error) {
+        console.error("Errore nel recupero o elaborazione dei dati EPG:", error);
+      });
+  }
 
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (!allPrograms || allPrograms.length === 0) return;
+      if (selectedProgramIndex < allPrograms.length - 1) {
+        showChannelInfo(true);
+        if (!isNavigating) { isNavigating = true; resetAutoResetTimer(); }
+        selectProgram(selectedProgramIndex + 1);
+      }
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (!allPrograms || allPrograms.length === 0) return;
+      if (selectedProgramIndex > currentProgramIndexInAll) {
+        showChannelInfo(true);
+        if (!isNavigating) { isNavigating = true; resetAutoResetTimer(); }
+        selectProgram(selectedProgramIndex - 1);
+      }4
+    } else if (e.key === '4') {
+      e.preventDefault();
+      showChannelInfo(false);
+      toggleDescription();
+      if (isDescriptionOpen && !isNavigating) { isNavigating = true; resetAutoResetTimer(); }
+    }
+  });
 
-  <script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  document.getElementById('scroll-left').addEventListener('click', function() {
+    if (!allPrograms || allPrograms.length === 0) return;
+    if (selectedProgramIndex > currentProgramIndexInAll) {
+      showChannelInfo(true);
+      if (!isNavigating) { isNavigating = true; resetAutoResetTimer(); }
+      selectProgram(selectedProgramIndex - 1);
+    }
+  });
+
+  document.getElementById('scroll-right').addEventListener('click', function() {
+    if (!allPrograms || allPrograms.length === 0) return;
+    if (selectedProgramIndex < allPrograms.length - 1) {
+      showChannelInfo(true);
+      if (!isNavigating) { isNavigating = true; resetAutoResetTimer(); }
+      selectProgram(selectedProgramIndex + 1);
+    }
+  });
+
+  updateCurrentTime();
+  updateProgramName();
+  setInterval(updateProgramName, 60000);
+</script>
+
+<script src="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/timer-zapping.js"></script>
+
 </body>
 </html>
