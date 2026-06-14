@@ -2611,6 +2611,30 @@
           </div>
 
           <!-- Cinema -->
+          
+          <div class="channel-item" data-channel="video46.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/301-Bry-Cinema-Disney.html" data-number="301" data-category="cinema" data-epg-url="https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-bry-cinema-disney.json" data-epg-id="bry-cinema-disney">
+            <img src="https://i.ibb.co/V0bbK5Pc/logo-1.png" alt="Bry cinema disney" class="channel-logo">
+            <div class="channel-details">
+              <div class="channel-name-main">Bry Cinema Disney HD</div>
+              <div class="channel-number-main">Canale 301</div>
+            </div>
+            <div class="channel-status">HD</div>
+            <div class="favorite-star empty" onclick="toggleFavorite(this)">☆</div>
+          </div>
+          
+          
+          <div class="channel-item" data-channel="video46.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/302-Bry-Cinema-Disney+24.html" data-number="302" data-category="cinema" data-epg-url="https://brymeteo.github.io/player/Guida%20TV/tv/guidatv-bry-cinema-disney+24.json" data-epg-id="bry-cinema-disney+24">
+            <img src="https://i.ibb.co/krYx09h/logo-1.png" alt="Bry cinema disney" class="channel-logo">
+            <div class="channel-details">
+              <div class="channel-name-main">Bry Cinema Disney +24 HD</div>
+              <div class="channel-number-main">Canale 302</div>
+            </div>
+            <div class="channel-status">HD</div>
+            <div class="favorite-star empty" onclick="toggleFavorite(this)">☆</div>
+          </div>
+          
+          
+          
           <div class="channel-item" data-channel="video46.mp4" data-url="https://brymeteo.github.io/player/canali-tv-nazionali/versione-10/320-Rakuten-azione.html" data-number="320" data-category="cinema" data-epg-url="https://brymeteo.github.io/iptv-epg/output.json" data-epg-id="IT2600003FM">
             <img src="https://i.ibb.co/9W48qM4/logo-1.png" alt="Rakuten Azione" class="channel-logo">
             <div class="channel-details">
@@ -4232,10 +4256,10 @@
 
       getTimeOffset(channelNumber, channelData) {
         const specialChannels = ['200', '320', '112', '401', '321', '322', '323', '324', '328', '503', '611', '705', '706', '613'];
-        const flixAnimationChannels = ['111'];
+        const flixAnimationChannels = ['111', '301', '302'];
         if (specialChannels.includes(channelNumber)) return 0;
-        if (flixAnimationChannels.includes(channelNumber) || (channelData && channelData.id && channelData.id.includes('flix-animation'))) return -2;
-        return -1;
+        if (flixAnimationChannels.includes(channelNumber) || (channelData && channelData.id && channelData.id.includes('flix-animation'))) return -0;
+        return -0;
       }
 
       getCurrentProgram(channelData, channelNumber = null) {
@@ -4504,10 +4528,10 @@
 
       getTimeOffset(channelNumber, channelData) {
         const specialChannels = ['200', '320', '112', '401', '321', '322', '323', '324', '328', '503', '611', '705', '706', '613'];
-        const flixAnimationChannels = ['111', '300'];
+        const flixAnimationChannels = ['111', '301', '302'];
         if (specialChannels.includes(channelNumber)) return 0;
-        if (flixAnimationChannels.includes(channelNumber) || (channelData && channelData.id && channelData.id.includes('flix-animation'))) return -2;
-        return -1;
+        if (flixAnimationChannels.includes(channelNumber) || (channelData && channelData.id && channelData.id.includes('flix-animation'))) return -0;
+        return -0;
       }
 
       navigateTime(direction) {
@@ -5557,159 +5581,474 @@
     document.getElementById('scroll-down-btn').addEventListener('mouseup', () => clearInterval(scrollInterval));
     document.getElementById('scroll-down-btn').addEventListener('mouseleave', () => clearInterval(scrollInterval));
 
-    function sendToIframe(key) {
-      const iframe = document.getElementById("iframe-player");
-      if (!iframe || !iframe.contentWindow) return;
-      try {
-        iframe.contentWindow.postMessage({ action: "key", key: key }, "*");
-      } catch (err) {
-        console.warn("Errore postMessage:", err);
+ function sendToIframe(key) {
+  const iframe = document.getElementById("iframe-player");
+
+  if (!iframe || !iframe.contentWindow) return;
+
+  try {
+    iframe.contentWindow.postMessage(
+      {
+        action: "key",
+        key: key
+      },
+      "*"
+    );
+  } catch (err) {
+    console.warn("Errore postMessage:", err);
+  }
+}
+
+let isPopupMenuOpen = false;
+
+// ==========================================
+// LOCK INSERIMENTO CANALE
+// Quando attivo:
+// - accetta SOLO numeri
+// - blocca tutto il resto
+// ==========================================
+let channelInputLock = false;
+
+// =====================================================
+// OPT: Throttle keydown a 80ms per le frecce
+// =====================================================
+let _keyThrottle = false;
+
+const _throttledKeys = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight'
+]);
+
+document.addEventListener('keydown', (e) => {
+
+  // =====================================================
+  // THROTTLE FRECCE
+  // =====================================================
+  if (_throttledKeys.has(e.key)) {
+    if (_keyThrottle) {
+      e.preventDefault();
+      return;
+    }
+
+    _keyThrottle = true;
+
+    setTimeout(() => {
+      _keyThrottle = false;
+    }, 80);
+  }
+
+  // =====================================================
+  // LOCK INPUT CANALE
+  // =====================================================
+  if (channelInputLock) {
+
+    // Numeri
+    if (/^[0-9]$/.test(e.key)) {
+      numericSelector.addDigit(e.key);
+      e.preventDefault();
+      return;
+    }
+
+    // Backspace
+    if (e.key === 'Backspace') {
+      numericSelector.backspace();
+      e.preventDefault();
+      return;
+    }
+
+    // Conferma
+    if (e.key === 'Enter') {
+      numericSelector.forceChannelChange();
+
+      channelInputLock = false;
+
+      e.preventDefault();
+      return;
+    }
+
+    // Esci modalità
+    if (e.key === 'Escape') {
+
+      channelInputLock = false;
+
+      if (numericSelector.isActive) {
+        numericSelector.toggleMode();
+      }
+
+      e.preventDefault();
+      return;
+    }
+
+    // Blocca tutto il resto
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // TOGGLE MENU (TASTO 2)
+  // =====================================================
+  if (e.key === '2') {
+
+    e.preventDefault();
+
+    isPopupMenuOpen = !isPopupMenuOpen;
+
+    sendToIframe(
+      isPopupMenuOpen
+        ? "openMenu"
+        : "closeMenu"
+    );
+
+    return;
+  }
+
+  // =====================================================
+  // PRIORITÀ MENU POPUP
+  // =====================================================
+  if (isPopupMenuOpen) {
+
+    if (['3', '4', '5', '6', '7'].includes(e.key)) {
+      sendToIframe(e.key);
+    }
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // BLOCCO PIN
+  // =====================================================
+  if (
+    e.key === 'Enter' &&
+    skipTutorialVisible &&
+    !hasOpenElements()
+  ) {
+    skipToRai1();
+    e.preventDefault();
+    return;
+  }
+
+  if (isPinInputActive) {
+
+    const allowedKeys = [
+      '0','1','2','3','4',
+      '5','6','7','8','9',
+      'Backspace',
+      'Tab',
+      'Enter'
+    ];
+
+    if (!allowedKeys.includes(e.key)) {
+      e.preventDefault();
+      return;
+    }
+
+    if (e.key === 'Enter') return;
+
+    if (/^[0-9]$/.test(e.key)) return;
+
+    if (
+      e.key === 'Backspace' ||
+      e.key === 'Tab'
+    ) return;
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // NUMERIC SELECTOR
+  // =====================================================
+  if (
+    /^[0-9]$/.test(e.key) &&
+    numericSelector.isActive
+  ) {
+    if (numericSelector.addDigit(e.key)) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  if (
+    e.key === 'Backspace' &&
+    numericSelector.isActive
+  ) {
+    if (numericSelector.backspace()) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  if (
+    e.key === 'Enter' &&
+    numericSelector.isActive
+  ) {
+    if (numericSelector.forceChannelChange()) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // =====================================================
+  // FRECCE CANALI
+  // =====================================================
+  if (
+    e.key === 'ArrowUp' &&
+    !hasOpenElements()
+  ) {
+
+    favoritesMode
+      ? scrollFavorites('down')
+      : scrollChannels('down');
+
+    e.preventDefault();
+    return;
+  }
+
+  if (
+    e.key === 'ArrowDown' &&
+    !hasOpenElements()
+  ) {
+
+    favoritesMode
+      ? scrollFavorites('up')
+      : scrollChannels('up');
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // FRECCE IFRAME
+  // =====================================================
+  if (
+    e.key === 'ArrowRight' &&
+    !hasOpenElements()
+  ) {
+    sendToIframe("ArrowRight");
+    e.preventDefault();
+    return;
+  }
+
+  if (
+    e.key === 'ArrowLeft' &&
+    !hasOpenElements()
+  ) {
+    sendToIframe("ArrowLeft");
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // MOSAICO 6
+  // =====================================================
+  if (e.key === '6') {
+    mosaicSystem.toggleMosaic();
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // MOSAICO FILTRATO 7
+  // =====================================================
+  if (e.key === '7') {
+    filteredMosaicSystem.toggleMosaic();
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // MOSAICO
+  // =====================================================
+  if (mosaicSystem.isActive) {
+
+    if (e.key === 'ArrowLeft') {
+      mosaicSystem.navigateMosaic('left');
+    }
+    else if (e.key === 'ArrowRight') {
+      mosaicSystem.navigateMosaic('right');
+    }
+    else if (e.key === 'ArrowUp') {
+      mosaicSystem.navigateMosaic('up');
+    }
+    else if (e.key === 'ArrowDown') {
+      mosaicSystem.navigateMosaic('down');
+    }
+    else if (e.key === 'Enter') {
+      mosaicSystem.selectCurrentCard();
+    }
+    else if (e.key === 'Escape') {
+      mosaicSystem.closeMosaic();
+    }
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // MOSAICO FILTRATO
+  // =====================================================
+  if (filteredMosaicSystem.isActive) {
+
+    if (e.key === '4') {
+      filteredMosaicSystem.handleTimeNavigation('prev');
+      e.preventDefault();
+      return;
+    }
+
+    if (e.key === '5') {
+      filteredMosaicSystem.handleTimeNavigation('next');
+      e.preventDefault();
+      return;
+    }
+
+    if (e.key === 'ArrowLeft') {
+      filteredMosaicSystem.navigate('left');
+    }
+    else if (e.key === 'ArrowRight') {
+      filteredMosaicSystem.navigate('right');
+    }
+    else if (e.key === 'ArrowUp') {
+      filteredMosaicSystem.navigate('up');
+    }
+    else if (e.key === 'ArrowDown') {
+      filteredMosaicSystem.navigate('down');
+    }
+    else if (e.key === 'Enter') {
+      filteredMosaicSystem.selectCurrentItem();
+    }
+    else if (e.key === 'Escape') {
+      filteredMosaicSystem.closeMosaic();
+    }
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // COMANDI DIRETTI
+  // =====================================================
+  if (e.key === '8') {
+    sendToIframe("8");
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === '4') {
+    sendToIframe("4");
+    e.preventDefault();
+    return;
+  }
+
+  // ==========================================
+  // TASTO 5 = MODALITÀ INPUT CANALE
+  // ==========================================
+  if (e.key === '5') {
+
+    channelInputLock = true;
+
+    if (!numericSelector.isActive) {
+      numericSelector.toggleMode();
+    }
+
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === '3') {
+    toggleFavoritesMode();
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === '1') {
+    toggleCurrentChannelFavorite();
+    e.preventDefault();
+    return;
+  }
+
+  if (e.key === '9') {
+    toggleMenu();
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // VOCE
+  // =====================================================
+  if (
+    e.key === '0' &&
+    !numericSelector.isActive
+  ) {
+
+    if (recognition) {
+      startVoiceRecognition();
+    }
+
+    e.preventDefault();
+    return;
+  }
+
+  // =====================================================
+  // MENU INTERNO
+  // =====================================================
+  if (isMenuOpen) {
+
+    resetHideTimeout();
+
+    if (navigationMode === 'categories') {
+
+      if (e.key === 'ArrowRight') {
+        scrollCategories('right');
+      }
+      else if (e.key === 'ArrowLeft') {
+        scrollCategories('left');
+      }
+      else if (e.key === 'Enter') {
+        activateCategory();
       }
     }
 
-    let isPopupMenuOpen = false;
+    if (navigationMode === 'channels') {
 
-    // =====================================================
-    // OPT: Throttle keydown a 80ms per le frecce di navigazione.
-    // Su Smart TV vecchie il key-repeat può arrivare a 30-40
-    // eventi/sec — il throttle lo limita a ~12/sec che è
-    // più che sufficiente per navigazione fluida.
-    // I tasti "istantanei" (numeri, Enter, Escape) bypassano
-    // il throttle per non introdurre ritardi percepibili.
-    // =====================================================
-    let _keyThrottle = false;
-    const _throttledKeys = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
-
-    document.addEventListener('keydown', (e) => {
-
-      // Throttle solo sui tasti di navigazione (frecce)
-      if (_throttledKeys.has(e.key)) {
-        if (_keyThrottle) { e.preventDefault(); return; }
-        _keyThrottle = true;
-        setTimeout(() => { _keyThrottle = false; }, 80);
+      if (e.key === 'ArrowDown') {
+        scrollChannels('down');
       }
-
-      // ===== TOGGLE MENU (TASTO 2) =====
-      if (e.key === '2') {
-        e.preventDefault();
-        isPopupMenuOpen = !isPopupMenuOpen;
-        sendToIframe(isPopupMenuOpen ? "openMenu" : "closeMenu");
-        return;
+      else if (e.key === 'ArrowUp') {
+        scrollChannels('up');
       }
+      else if (e.key === 'ArrowLeft') {
 
-      // ===== PRIORITÀ MENU POPUP (iframe) =====
-      if (isPopupMenuOpen) {
-        if (['3','4','5','6','7'].includes(e.key)) sendToIframe(e.key);
-        e.preventDefault();
-        return;
-      }
+        navigationMode = 'categories';
 
-      // ===== BLOCCO PIN =====
-      if (e.key === 'Enter' && skipTutorialVisible && !hasOpenElements()) {
-        skipToRai1(); e.preventDefault(); return;
+        selectCategory(selectedCategoryIndex);
       }
+      else if (e.key === 'Enter') {
+        changeVideo(selectedChannelIndex);
+      }
+    }
 
-      if (isPinInputActive) {
-        const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Tab','Enter'];
-        if (!allowedKeys.includes(e.key)) { e.preventDefault(); return; }
-        if (e.key === 'Enter') return;
-        if (/^[0-9]$/.test(e.key)) return;
-        if (e.key === 'Backspace' || e.key === 'Tab') return;
-        e.preventDefault(); return;
-      }
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
 
-      // ===== NUMERIC SELECTOR =====
-      if (/^[0-9]$/.test(e.key) && numericSelector.isActive) {
-        if (numericSelector.addDigit(e.key)) { e.preventDefault(); return; }
-      }
-      if (e.key === 'Backspace' && numericSelector.isActive) {
-        if (numericSelector.backspace()) { e.preventDefault(); return; }
-      }
-      if (e.key === 'Enter' && numericSelector.isActive) {
-        if (numericSelector.forceChannelChange()) { e.preventDefault(); return; }
-      }
+    e.preventDefault();
+  }
 
-      // ===== FRECCE CANALI =====
-      if (e.key === 'ArrowUp' && !hasOpenElements()) {
-        favoritesMode ? scrollFavorites('down') : scrollChannels('down');
-        e.preventDefault(); return;
-      }
-      if (e.key === 'ArrowDown' && !hasOpenElements()) {
-        favoritesMode ? scrollFavorites('up') : scrollChannels('up');
-        e.preventDefault(); return;
-      }
+  // =====================================================
+  // FULLSCREEN
+  // =====================================================
+  if (
+    e.key === 'f' ||
+    e.key === 'F'
+  ) {
+    toggleFullScreen();
+    e.preventDefault();
+  }
 
-      // ===== FRECCE IFRAME =====
-      if (e.key === 'ArrowRight' && !hasOpenElements()) {
-        sendToIframe("ArrowRight"); e.preventDefault(); return;
-      }
-      if (e.key === 'ArrowLeft' && !hasOpenElements()) {
-        sendToIframe("ArrowLeft"); e.preventDefault(); return;
-      }
-
-      // ===== MOSAICO 6 =====
-      if (e.key === '6') { mosaicSystem.toggleMosaic(); e.preventDefault(); return; }
-
-      // ===== MOSAICO FILTRATO 7 =====
-      if (e.key === '7') { filteredMosaicSystem.toggleMosaic(); e.preventDefault(); return; }
-
-      if (mosaicSystem.isActive) {
-        if (e.key === 'ArrowLeft') mosaicSystem.navigateMosaic('left');
-        else if (e.key === 'ArrowRight') mosaicSystem.navigateMosaic('right');
-        else if (e.key === 'ArrowUp') mosaicSystem.navigateMosaic('up');
-        else if (e.key === 'ArrowDown') mosaicSystem.navigateMosaic('down');
-        else if (e.key === 'Enter') mosaicSystem.selectCurrentCard();
-        else if (e.key === 'Escape') mosaicSystem.closeMosaic();
-        e.preventDefault(); return;
-      }
-
-      if (filteredMosaicSystem.isActive) {
-        if (e.key === '4') { filteredMosaicSystem.handleTimeNavigation('prev'); e.preventDefault(); return; }
-        if (e.key === '5') { filteredMosaicSystem.handleTimeNavigation('next'); e.preventDefault(); return; }
-        if (e.key === 'ArrowLeft') filteredMosaicSystem.navigate('left');
-        else if (e.key === 'ArrowRight') filteredMosaicSystem.navigate('right');
-        else if (e.key === 'ArrowUp') filteredMosaicSystem.navigate('up');
-        else if (e.key === 'ArrowDown') filteredMosaicSystem.navigate('down');
-        else if (e.key === 'Enter') filteredMosaicSystem.selectCurrentItem();
-        else if (e.key === 'Escape') filteredMosaicSystem.closeMosaic();
-        e.preventDefault(); return;
-      }
-
-      // ===== COMANDI DIRETTI =====
-      if (e.key === '8') { sendToIframe("8"); e.preventDefault(); return; }
-      if (e.key === '4') { sendToIframe("4"); e.preventDefault(); return; }
-      if (e.key === '5') { numericSelector.toggleMode(); e.preventDefault(); return; }
-      if (e.key === '3') { toggleFavoritesMode(); e.preventDefault(); return; }
-      if (e.key === '1') { toggleCurrentChannelFavorite(); e.preventDefault(); return; }
-      if (e.key === '9') { toggleMenu(); e.preventDefault(); return; }
-
-      // ===== VOCE =====
-      if (e.key === '0' && !numericSelector.isActive) {
-        if (recognition) startVoiceRecognition();
-        e.preventDefault(); return;
-      }
-
-      // ===== MENU INTERNO =====
-      if (isMenuOpen) {
-        resetHideTimeout();
-        if (navigationMode === 'categories') {
-          if (e.key === 'ArrowRight') scrollCategories('right');
-          else if (e.key === 'ArrowLeft') scrollCategories('left');
-          else if (e.key === 'Enter') activateCategory();
-        }
-        if (navigationMode === 'channels') {
-          if (e.key === 'ArrowDown') scrollChannels('down');
-          else if (e.key === 'ArrowUp') scrollChannels('up');
-          else if (e.key === 'ArrowLeft') { navigationMode = 'categories'; selectCategory(selectedCategoryIndex); }
-          else if (e.key === 'Enter') changeVideo(selectedChannelIndex);
-        }
-        if (e.key === 'Escape') closeMenu();
-        e.preventDefault();
-      }
-
-      // ===== FULLSCREEN =====
-      if (e.key === 'f' || e.key === 'F') { toggleFullScreen(); e.preventDefault(); }
-    });
+});
 
     // Gestione modalità preferiti
     function toggleFavoritesMode() {
