@@ -765,8 +765,57 @@
     width: '100%',
     height: '100vh',
     autoPlay: true, // Abilita l'auto-play
-   
+    // playInline: su iPhone il video resta DENTRO la pagina (non passa al lettore nativo a schermo intero),
+    // così il logo e le altre scritte sovrapposte restano visibili.
+    playback: { playInline: true },
 });
+
+// ---------- Avvio automatico (iPhone/Safari bloccano l'avvio con audio senza un tocco) ----------
+// 1) si prova con l'audio (autoPlay); 2) se il browser rifiuta, si parte senza audio e compare
+// "Tocca per attivare l'audio"; 3) se rifiuta anche così, compare il pulsante "Guarda in diretta".
+var audioDaAttivare = false;
+
+function creaBtn(id, testo) {
+  var b = document.createElement('button');
+  b.id = id; b.type = 'button'; b.textContent = testo; b.hidden = true;
+  b.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);z-index:10000;border:0;border-radius:999px;' +
+    'background:rgba(20,28,45,.92);color:#fff;font:600 18px/1.2 sans-serif;padding:14px 22px;cursor:pointer;' +
+    'box-shadow:0 4px 18px rgba(0,0,0,.45);';
+  document.body.appendChild(b);
+  return b;
+}
+var btnAudio = creaBtn('btn-audio', '\uD83D\uDD0A Tocca per attivare l\'audio');
+btnAudio.style.bottom = '8%';
+var btnAvvia = creaBtn('btn-avvia', '\u25B6 Guarda in diretta');
+btnAvvia.style.top = '50%'; btnAvvia.style.transform = 'translate(-50%,-50%)'; btnAvvia.style.fontSize = '22px';
+
+function attivaAudio() {
+  if (!audioDaAttivare) return;
+  audioDaAttivare = false;
+  try { player.unmute(); player.setVolume(100); } catch (e) {}
+  btnAudio.hidden = true;
+}
+btnAudio.addEventListener('click', attivaAudio);
+document.addEventListener('pointerdown', attivaAudio, { passive: true }); // basta toccare un punto qualsiasi
+
+btnAvvia.addEventListener('click', function () {
+  btnAvvia.hidden = true;
+  try { player.unmute(); player.setVolume(100); } catch (e) {}
+  player.play();
+  setTimeout(function () { if (!player.isPlaying()) btnAvvia.hidden = false; }, 1500);
+});
+
+function controllaAvvio() {
+  if (player.isPlaying()) { btnAvvia.hidden = true; return; }
+  // l'avvio con audio è stato rifiutato: si riprova senza audio
+  try { player.mute(); } catch (e) {}
+  player.play();
+  setTimeout(function () {
+    if (player.isPlaying()) { audioDaAttivare = true; btnAudio.hidden = false; }
+    else { btnAvvia.hidden = false; }
+  }, 1500);
+}
+player.on(Clappr.Events.PLAYER_READY, function () { setTimeout(controllaAvvio, 2500); });
 </script>
 
 
