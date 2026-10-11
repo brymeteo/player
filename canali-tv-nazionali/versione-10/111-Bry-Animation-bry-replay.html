@@ -622,6 +622,8 @@
     id="videoPlayer"
     class="video-js vjs-default-skin"
     autoplay
+    playsinline
+    webkit-playsinline
     preload="auto"
     data-setup='{}'
   ></video>
@@ -13276,8 +13278,57 @@ const palinsesto = [
 
 
 const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0);
-const player = videojs("videoPlayer");
+// playsinline: su iPhone il video resta DENTRO la pagina (non passa al lettore nativo a schermo intero),
+// così il logo e le altre scritte sovrapposte restano visibili.
+const player = videojs("videoPlayer", { playsinline: true });
 let currentIndex;
+
+// ---------- Avvio automatico (iPhone/Safari bloccano l'avvio con audio senza un tocco) ----------
+// 1) si prova con l'audio; 2) se il browser rifiuta, si parte senza audio e compare "Tocca per attivare l'audio";
+// 3) se rifiuta anche così, compare il pulsante "Guarda in diretta".
+let audioDaAttivare = false;
+function creaBtnAvvio(id, testo) {
+  let b = document.getElementById(id);
+  if (b) return b;
+  b = document.createElement('button');
+  b.id = id; b.type = 'button'; b.textContent = testo; b.hidden = true;
+  b.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);z-index:10000;border:0;border-radius:999px;' +
+    'background:rgba(20,28,45,.92);color:#fff;font:600 18px/1.2 sans-serif;padding:14px 22px;cursor:pointer;' +
+    'box-shadow:0 4px 18px rgba(0,0,0,.45);';
+  document.body.appendChild(b);
+  return b;
+}
+const btnAudio = creaBtnAvvio('btn-audio', '🔊 Tocca per attivare l\'audio');
+btnAudio.style.bottom = '8%';
+const btnAvvia = creaBtnAvvio('btn-avvia', '▶ Guarda in diretta');
+btnAvvia.style.top = '50%'; btnAvvia.style.transform = 'translate(-50%,-50%)'; btnAvvia.style.fontSize = '22px';
+
+function attivaAudio() {
+  if (!audioDaAttivare) return;
+  audioDaAttivare = false;
+  try { player.muted(false); player.volume(1); } catch (e) {}
+  btnAudio.hidden = true;
+}
+btnAudio.addEventListener('click', attivaAudio);
+document.addEventListener('pointerdown', attivaAudio, { passive: true }); // basta toccare un punto qualsiasi
+
+btnAvvia.addEventListener('click', () => {
+  btnAvvia.hidden = true;
+  player.muted(false);
+  Promise.resolve(player.play()).catch(() => { btnAvvia.hidden = false; });
+});
+
+function avviaVideo() {
+  return Promise.resolve(player.play())
+    .catch(() => {
+      player.muted(true);
+      return Promise.resolve(player.play()).then(() => { audioDaAttivare = true; btnAudio.hidden = false; });
+    })
+    .catch(() => { btnAvvia.hidden = false; });
+}
+
+// Il logo compare appena il video parte (anche se è partito senza audio o dopo il tocco)
+player.on('playing', () => { document.getElementById('main-logo').classList.remove('hidden'); btnAvvia.hidden = true; });
 
 function caricaVideo(index, offset = 0) {
   const item = palinsesto[index];
@@ -13289,9 +13340,9 @@ function caricaVideo(index, offset = 0) {
     player.src({ src: item.url, type: "application/x-mpegURL" });
     player.ready(() => {
       player.currentTime(offset);
-      player.play().then(() => {
-        logo.classList.remove('hidden');
-      }).catch(e => console.warn(e));
+      // su iPhone la posizione impostata prima dei metadati viene ignorata: si ripete a metadati pronti
+      player.one('loadedmetadata', () => { try { player.currentTime(offset); } catch (e) {} });
+      avviaVideo();
     });
   } else if (Hls.isSupported()) {
     const video = document.getElementById('videoPlayer');
