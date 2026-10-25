@@ -1,0 +1,2911 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canale TV Live Simulato</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet" />
+<link href="https://brymeteo.github.io/player/canali-tv-nazionali/canali-zapping/versione-nuova/stile-barra.css" rel="stylesheet">
+
+
+  <style>
+
+
+
+        #logo {
+            position: absolute;
+            top: 71%;
+            left: 21%;
+            width: 57%;
+            height: auto;
+            opacity: 90%;
+            cursor: pointer;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+        }
+
+        #my-video {
+            width: 100%;
+            height: 100%;
+        }
+
+        #fallback-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        #player .media-control,
+        #player .player-controls,
+        #player .control-bar {
+            display: none !important;
+        }
+
+        #overlay-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(30 75 121 / 98%);
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+            z-index: 9999;
+            width: 500px;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+
+        #overlay-card img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #overlay-card {
+                width: 300px;
+                font-size: 14px;
+            }
+
+            #overlay-card img {
+                width: 50px;
+            }
+        }
+
+        .spinner-cubes {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .spinner-cubes div {
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            margin: 2px;
+            animation: spinner 1s infinite ease-in-out;
+        }
+
+        .spinner-cubes div:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .spinner-cubes div:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .spinner-cubes div:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes spinner {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.5);
+            }
+        }
+
+        #restart-message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgb(30 75 121 / 98%);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10000;
+            font-family: sans-serif;
+            font-size: 18px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #restart-message {
+                top: 5px;
+                font-size: 16px;
+            }
+        }
+
+        #next-program-name {
+            color: #c6ced3;
+            font-size: 18px;
+            margin-top: 4px;
+            opacity: 0.85;
+        }
+
+        #hd-indicator {
+            background: #efefef;
+            color: #18597a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        #program-timeline-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #program-timeline {
+            display: flex;
+            gap: 5px;
+            transition: none;
+            padding: 30px 0 10px 0;
+        }
+
+        .program-slot-container {
+            position: relative;
+            width: calc(28.4% - 10px);
+            flex-shrink: 0;
+        }
+
+        .program-slot-container:first-child {
+            width: calc(45% - 10px);
+        }
+
+        @media only screen and (max-width: 1200px) {
+            .program-slot-container {
+                width: calc(50% - 7.5px);
+            }
+
+            .program-slot-container:first-child {
+                width: calc(60% - 7.5px);
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .program-slot-container {
+                width: calc(100% - 0px);
+            }
+
+            .program-slot-container:first-child {
+                width: calc(100% - 0px);
+            }
+        }
+
+        .program-time-label {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            min-width: 60px;
+            height: 24px;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .program-time-label.now-label {
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .program-slot {
+            background: linear-gradient(135deg, #1e4b79 0%, #2d5a8a 100%);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 47px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: space-between;
+            padding: 4px 6px 0px 6px;
+        }
+
+        .program-slot.active::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), #ffffff1a);
+            pointer-events: none;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+        }
+
+        .program-slot.selected::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), #ffffff1a);
+            pointer-events: none;
+            border-top-left-radius: inherit;
+            border-top-right-radius: inherit;
+        }
+
+        .program-slot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .program-slot.active,
+        .program-slot.selected {
+            background: linear-gradient(90deg, #BF9F3D 0%, #d7ae2f 100%);
+            color: #000000;
+            font-weight: 600;
+            font-weight: bold;
+        }
+
+        .program-slot.active .program-title,
+        .program-slot.selected .program-title {
+            color: #000;
+        }
+
+        .program-title {
+            font-size: 17px;
+            line-height: 2.1;
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .program-slot.active .program-title,
+        .program-slot.selected .program-title {
+            color: #000;
+        }
+
+        .program-slot-timeline {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .program-slot-timeline .mini-timeline-container {
+            width: 100%;
+            background: rgb(0 0 0 / 8%);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .program-slot-timeline .mini-timeline-bar {
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .program-slot-timeline .mini-timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 900;
+        }
+
+        .scroll-indicator:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .scroll-indicator.left {
+            left: 5px;
+        }
+
+        .scroll-indicator.right {
+            right: 5px;
+        }
+
+        .scroll-indicator svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        #program-status {
+            font-size: 18px;
+            margin-bottom: 0px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #program-description {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.4s ease, margin-bottom 0.4s ease;
+            margin-bottom: 0;
+        }
+
+        #program-description.open {
+            max-height: 200px;
+            opacity: 1;
+            margin-bottom: 15px;
+        }
+
+
+ /* Layout interno del program-description con immagine a destra */
+        #program-description-inner {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        #program-description-text-wrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #program-poster-img {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        
+        .continua-button {
+    position: absolute;
+    right: 20px;
+    top: 80%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 500;
+    gap: 8px;
+}
+
+
+
+
+        @media only screen and (max-width: 760px) {
+            #channel-info-bar {
+                bottom: 15px;
+                left: 25px;
+                right: 175px;
+                zoom: 40%;
+            }
+
+            #channel-left-info {
+                gap: 12px;
+            }
+
+            #program-timeline {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .program-slot {
+                height: 24px;
+                font-size: 11px;
+            }
+
+            #control-buttons {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+
+
+  .video-js {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+.logo-overlay {
+      position: absolute;
+      top: 6%;
+      right: 7%;
+      width: 26vw;
+      max-width: 500px;
+      height: auto;
+      pointer-events: none;
+      z-index: 997;
+      opacity: 0.9;
+      image-rendering: auto;
+    }
+
+
+  .video-js .vjs-control-bar {
+    display: none !important;
+  }
+
+  .vjs-fullscreen-control {
+    z-index: 15;
+  }
+
+  #fallback-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
+
+  h1 {
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    z-index: 60;
+    color: white;
+    text-shadow: 0 0 5px black;
+  }
+
+    #overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(30 75 121 / 98%);
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  width: 500px;
+  font-family: sans-serif;
+  font-size: 20px;
+}
+
+#overlay-card img {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+
+  
+</style>
+
+</head>
+<body>
+
+
+<div id="background-overlay"></div>
+
+  <img src="https://7e11bb4538.cbaul-cdnwnd.com/873c19a2e1fe56e8793848f12717e9be/200001700-e8b5ae8b5d/bry%20cinema%20Halloween-24%20copia-8.webp?ph=7e11bb4538" alt="Logo" class="logo-overlay hidden" id="main-logo" />
+
+
+<div id="exit-menu-overlay" class="hidden" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.7);
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    z-index: 9999;">
+    <img src="https://i.ibb.co/5xYc0KB3/1f535.png" alt="icon" style="width:44px;height:44px;">
+    <span>2</span>
+</div>
+
+
+
+
+
+  <div id="overlay-card" class="hidden">
+  <img id="overlay-icon" src="" alt="Icona comando">
+  <div id="overlay-animation" class="spinner-cubes">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <p id="overlay-text"></p>
+</div>
+
+
+
+  <video
+    id="videoPlayer"
+    class="video-js vjs-default-skin"
+    autoplay
+    playsinline
+    webkit-playsinline
+    preload="auto"
+    data-setup='{}'
+  ></video>
+
+  <img id="fallback-image" src="https://brymeteo.github.io/player/decoder/immagini/avviso-sat-canali.webp" alt="Fallback Image">
+
+<script src="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+
+<script>
+const orarioInizioStreaming = new Date("2026-10-26T20:00:00");
+
+
+
+// Palinsesto Film - FAST Engine
+const palinsesto = [
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Piccoli brividi (2015)",
+    url: "https://2588ff75.movie-halloween.pages.dev/Piccoli%20brividi%20(2015)%201080p/output.m3u8",
+    category: "filmclassici",
+    duration: 6196,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania (2012)",
+    url: "https://9e57e120.movie-halloween.pages.dev/Hotel%20Transylvania%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5491,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream (1996)",
+    url: "https://25d70768.movie-halloween.pages.dev/Scream_(1996)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6661,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghostbusters (Acchiappafantasmi) (1984)",
+    url: "https://ba9f5aca.movie-halloween.pages.dev/Ghostbusters_Acchiappafantasmi_(1984)_1080p.m3u8",
+    category: "filmpicult",
+    duration: 6309,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghosthunters – Gli acchiappafantasmi (2015)",
+    url: "https://97d81ce8.movie-halloween.pages.dev/Ghosthunters_Gli_acchiappafantasmi_(2015)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5960,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Coco (2017)",
+    url: "https://a3c2afb6.movie-halloween.pages.dev/Coco_(2017)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 6270,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightbooks - Racconti di paura (2021)",
+    url: "https://7b5ba1bd.movie-halloween.pages.dev/Nightbooks_Racconti_di_paura_(2021)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6200,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghostbusters (Acchiappafantasmi) (1984)",
+    url: "https://ba9f5aca.movie-halloween.pages.dev/Ghostbusters_Acchiappafantasmi_(1984)_1080p.m3u8",
+    category: "filmpicult",
+    duration: 6309,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream (2022)",
+    url: "https://f663b1ba.movie-halloween.pages.dev/Scream_5_(2022)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6858,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Van Helsing (2004)",
+    url: "https://3be77791.movie-halloween.pages.dev/Van%20Helsing%20(2004)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 7890,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween",
+    url: "https://2c84593c.movie-halloween.pages.dev/pubblicit%C3%A0_halloween_2.m3u8",
+    category: "promo",
+    duration: 96,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightmare Before Christmas (1993)",
+    url: "https://3cf0db79.movie-halloween.pages.dev/Nightmare%20Before%20Christmas%20(1993)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4599,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Casper (1995)",
+    url: "https://a262fdc5.movie-halloween.pages.dev/Casper_(1995)_2k/output.m3u8",
+    category: "filmpicult",
+    duration: 5980,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Coraline e la porta magica (2009)",
+    url: "https://fa1b7b40.movie-halloween.pages.dev/Coraline%20e%20la%20porta%20magica%20(2009)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 6036,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Guida per babysitter a caccia di mostri (2020)",
+    url: "https://df8256e4.movie-halloween.pages.dev/Guida_per_babysitter_a_caccia_di_mostri_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5932,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania (2012)",
+    url: "https://9e57e120.movie-halloween.pages.dev/Hotel%20Transylvania%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5491,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La casa dei fantasmi (2003)",
+    url: "https://7bbf8594.movie-halloween.pages.dev/La%20casa%20dei%20fantasmi%20(2003)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 5276,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghostbusters - Legacy (2021)",
+    url: "https://698a7071.movie-halloween.pages.dev/Ghostbusters_Legacy_(2021)_1080p/output.m3u8",
+    category: "filmclassici",
+    duration: 7436,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream (1996)",
+    url: "https://25d70768.movie-halloween.pages.dev/Scream_(1996)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6661,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghostbusters (Acchiappafantasmi) (1984)",
+    url: "https://ba9f5aca.movie-halloween.pages.dev/Ghostbusters_Acchiappafantasmi_(1984)_1080p.m3u8",
+    category: "filmpicult",
+    duration: 6309,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La nona porta (1999)",
+    url: "https://6294f934.movie-halloween.pages.dev/La_nona_porta_(1999)_1080p.m3u8",
+    category: "filmdark",
+    duration: 8000,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Halloween Kills (2021)",
+    url: "https://c1382555.movie-halloween.pages.dev/Halloween%20Kills%20(2021)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 6307,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania - Uno scambio mostruoso (2022)",
+    url: "https://3b611f4f.movie-halloween.pages.dev/Hotel_Transylvania_Uno_scambio_mostruoso_(2018)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5498,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Casper (1995)",
+    url: "https://08f7f8c9.movie-halloween.pages.dev/Casper%20(1995)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 6008,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La casa dei fantasmi (2003)",
+    url: "https://7bbf8594.movie-halloween.pages.dev/La%20casa%20dei%20fantasmi%20(2003)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 5276,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Piccoli Brividi 2 - I fantasmi di Halloween (2018)",
+    url: "https://a49303d6.movie-halloween.pages.dev/Piccoli_Brividi_2_I_fantasmi_di_Halloween_(2018)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5392,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghostbusters (Acchiappafantasmi) (1984)",
+    url: "https://ba9f5aca.movie-halloween.pages.dev/Ghostbusters_Acchiappafantasmi_(1984)_1080p.m3u8",
+    category: "filmpicult",
+    duration: 6309,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Casper (1995)",
+    url: "https://08f7f8c9.movie-halloween.pages.dev/Casper%20(1995)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 6008,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "ParaNorman (2012)",
+    url: "https://1c1986dc.movie-halloween.pages.dev/ParaNorman%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5529,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Monster House (2006)",
+    url: "https://50cb43d8.movie-halloween.pages.dev/Monster_House_(2006)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5417,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Beetlejuice - Spiritello porcello (1988)",
+    url: "https://5c4fdc34.movie-halloween.pages.dev/Beetlejuice%20-%20Spiritello%20porcello%20(1988)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5526,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Sweeney Todd - Il diabolico barbiere di Fleet Street (2007)",
+    url: "https://34225b97.movie-halloween.pages.dev/Sweeney_Todd_Il_diabolico_barbiere_di_Fleet_Street_(2007)_1080p.m3u8",
+    category: "filmdark",
+    duration: 6981,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La nona porta (1999)",
+    url: "https://6294f934.movie-halloween.pages.dev/La_nona_porta_(1999)_1080p.m3u8",
+    category: "filmdark",
+    duration: 8000,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La casa dei fantasmi (2003)",
+    url: "https://7bbf8594.movie-halloween.pages.dev/La%20casa%20dei%20fantasmi%20(2003)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 5276,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Le streghe (2020)",
+    url: "https://9645fc1a.movie-halloween.pages.dev/Le_streghe_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6229,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams 2 (2021)",
+    url: "https://178f59c3.movie-halloween.pages.dev/La%20famiglia%20Addams%202%20(2021)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5590,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Piccoli brividi (2015)",
+    url: "https://2588ff75.movie-halloween.pages.dev/Piccoli%20brividi%20(2015)%201080p/output.m3u8",
+    category: "filmclassici",
+    duration: 6196,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Monster House (2006)",
+    url: "https://50cb43d8.movie-halloween.pages.dev/Monster_House_(2006)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5417,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams (1991)",
+    url: "https://8f6948e5.movie-halloween.pages.dev/La%20famiglia%20Addams%20(1991)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5995,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams (2019)",
+    url: "https://0bbc5d07.movie-halloween.pages.dev/La%20famiglia%20Addams%20(2019)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5228,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania 2 (2015)",
+    url: "https://b8a98366.movie-halloween.pages.dev/Hotel_Transylvania_2_(2015)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5358,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Le streghe (2020)",
+    url: "https://9645fc1a.movie-halloween.pages.dev/Le_streghe_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6229,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Wicked (2024)",
+    url: "https://4b4172c8.movie-halloween.pages.dev/Wicked_(2024)_1080p/output.m3u8",
+    category: "filmclassici",
+    duration: 9610,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Shining (1980)",
+    url: "https://f4b85036.movie-halloween.pages.dev/Shining%20(1980)%20(versione%20estesa%20rimasterizzata)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 8627,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Doctor Sleep (2019)",
+    url: "https://6198f0a3.movie-halloween.pages.dev/Doctor_Sleep_(2019)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 9061,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "It (2017)",
+    url: "https://384046b7.movie-halloween.pages.dev/It%20-%20Capitolo%20uno%20(2017)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 8082,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La nona porta (1999)",
+    url: "https://6294f934.movie-halloween.pages.dev/La_nona_porta_(1999)_1080p.m3u8",
+    category: "filmdark",
+    duration: 8000,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania (2012)",
+    url: "https://9e57e120.movie-halloween.pages.dev/Hotel%20Transylvania%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5491,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Coraline e la porta magica (2009)",
+    url: "https://fa1b7b40.movie-halloween.pages.dev/Coraline%20e%20la%20porta%20magica%20(2009)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 6036,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Guida per babysitter a caccia di mostri (2020)",
+    url: "https://df8256e4.movie-halloween.pages.dev/Guida_per_babysitter_a_caccia_di_mostri_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5932,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams 2 (1992)",
+    url: "https://afd95cd3.movie-halloween.pages.dev/La%20famiglia%20Addams%202%20(1992)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5652,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams 2 (2021)",
+    url: "https://178f59c3.movie-halloween.pages.dev/La%20famiglia%20Addams%202%20(2021)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5590,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Il mistero della casa del tempo (2018)",
+    url: "https://2806de5e.movie-halloween.pages.dev/Il%20mistero%20della%20casa%20del%20tempo%20(2018)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 6321,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Beetlejuice - Spiritello porcello (1988)",
+    url: "https://5c4fdc34.movie-halloween.pages.dev/Beetlejuice%20-%20Spiritello%20porcello%20(1988)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5526,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightmare - Dal profondo della notte (1984)",
+    url: "https://a4b76e08.movie-halloween.pages.dev/Nightmare%20-%20Dal%20profondo%20della%20notte%20(1984)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 5474,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "It (2017)",
+    url: "https://384046b7.movie-halloween.pages.dev/It%20-%20Capitolo%20uno%20(2017)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 8082,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scary Stories to Tell in the Dark (2019)",
+    url: "https://026a4b86.movie-halloween.pages.dev/Scary_Stories_to_Tell_in_the_Dark_(2019)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6251,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La nona porta (1999)",
+    url: "https://6294f934.movie-halloween.pages.dev/La_nona_porta_(1999)_1080p.m3u8",
+    category: "filmdark",
+    duration: 8000,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Vampiretto (2017)",
+    url: "https://88a7e80e.movie-halloween.pages.dev/Vampiretto%20(2017)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4772,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ghosthunters – Gli acchiappafantasmi (2015)",
+    url: "https://97d81ce8.movie-halloween.pages.dev/Ghosthunters_Gli_acchiappafantasmi_(2015)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5960,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hocus Pocus (1993)",
+    url: "https://0488f720.movie-halloween.pages.dev/Hocus%20Pocus%20(1993)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5768,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania 2 (2015)",
+    url: "https://b8a98366.movie-halloween.pages.dev/Hotel_Transylvania_2_(2015)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5358,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween",
+    url: "https://2c84593c.movie-halloween.pages.dev/pubblicit%C3%A0_halloween_2.m3u8",
+    category: "promo",
+    duration: 96,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Il mistero della casa del tempo (2018)",
+    url: "https://2806de5e.movie-halloween.pages.dev/Il%20mistero%20della%20casa%20del%20tempo%20(2018)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 6321,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania 3 - Una vacanza mostruosa (2018)",
+    url: "https://52680eab.movie-halloween.pages.dev/Hotel%20Transylvania%203%20-%20Una%20vacanza%20mostruosa%20(2018)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5843,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Un Fantasma Per Amico (2013)",
+    url: "https://f596ed0c.movie-halloween.pages.dev/Un%20Fantasma%20Per%20Amico%20[m1440p]%20[2K]%20(2014)/output.m3u8",
+    category: "filmclassici",
+    duration: 5287,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Frankenweenie (2012)",
+    url: "https://a48c89ba.movie-halloween.pages.dev/Frankenweenie%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5216,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Beetlejuice Beetlejuice (2024)",
+    url: "https://8a047675.movie-halloween.pages.dev/Beetlejuice_Beetlejuice_(2024)_1080p.m3u8",
+    category: "filmpicult",
+    duration: 6279,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Sweeney Todd - Il diabolico barbiere di Fleet Street (2007)",
+    url: "https://34225b97.movie-halloween.pages.dev/Sweeney_Todd_Il_diabolico_barbiere_di_Fleet_Street_(2007)_1080p.m3u8",
+    category: "filmdark",
+    duration: 6981,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "It - Capitolo due (2019)",
+    url: "https://7ec8f599.movie-halloween.pages.dev/It_Capitolo_due_(2019)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 10170,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream (1996)",
+    url: "https://25d70768.movie-halloween.pages.dev/Scream_(1996)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6661,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams (1991)",
+    url: "https://8f6948e5.movie-halloween.pages.dev/La%20famiglia%20Addams%20(1991)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5995,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Wicked (2024)",
+    url: "https://4b4172c8.movie-halloween.pages.dev/Wicked_(2024)_1080p/output.m3u8",
+    category: "filmclassici",
+    duration: 9610,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Coco (2017)",
+    url: "https://a3c2afb6.movie-halloween.pages.dev/Coco_(2017)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 6270,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Casper (1995)",
+    url: "https://a262fdc5.movie-halloween.pages.dev/Casper_(1995)_2k/output.m3u8",
+    category: "filmpicult",
+    duration: 5980,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Monster Family (2017)",
+    url: "https://c261e79d.movie-halloween.pages.dev/Monster_Family_(2017)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5593,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Coco (2017)",
+    url: "https://a3c2afb6.movie-halloween.pages.dev/Coco_(2017)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 6270,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La sposa cadavere (2005)",
+    url: "https://faa41435.movie-halloween.pages.dev/La%20sposa%20cadavere%20(2005)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4631,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightmare Before Christmas (1993)",
+    url: "https://3cf0db79.movie-halloween.pages.dev/Nightmare%20Before%20Christmas%20(1993)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4599,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween",
+    url: "https://2c84593c.movie-halloween.pages.dev/pubblicit%C3%A0_halloween_2.m3u8",
+    category: "promo",
+    duration: 96,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Hotel Transylvania - Uno scambio mostruoso (2022)",
+    url: "https://3b611f4f.movie-halloween.pages.dev/Hotel_Transylvania_Uno_scambio_mostruoso_(2018)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5498,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La casa dei fantasmi (2023) 4K",
+    url: "https://c62df3c3.movie-halloween.pages.dev/La%20casa%20dei%20fantasmi%20(2023)%204K/output.m3u8",
+    category: "filmpicult",
+    duration: 7378,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Il mistero di Sleepy Hollow (1999)",
+    url: "https://4380ca88.movie-halloween.pages.dev/Il%20mistero%20di%20Sleepy%20Hollow%20(1999)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 6330,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pay the Ghost (2015)",
+    url: "https://eeee6adf.movie-halloween.pages.dev/Pay_the_Ghost_(2014)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 5615,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream (2022)",
+    url: "https://f663b1ba.movie-halloween.pages.dev/Scream_5_(2022)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 6858,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Scream 6 (2023)",
+    url: "https://53b38bf3.movie-halloween.pages.dev/Scream_VI_(2023)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 7351,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Le streghe (2020)",
+    url: "https://9645fc1a.movie-halloween.pages.dev/Le_streghe_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6229,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Guida per babysitter a caccia di mostri (2020)",
+    url: "https://df8256e4.movie-halloween.pages.dev/Guida_per_babysitter_a_caccia_di_mostri_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5932,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween",
+    url: "https://2c84593c.movie-halloween.pages.dev/pubblicit%C3%A0_halloween_2.m3u8",
+    category: "promo",
+    duration: 96,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La maledizione di Bridge Hollow (2022)",
+    url: "https://e4ecb379.movie-halloween.pages.dev/La_maledizione_di_Bridge_Hollow_(2022)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 5506,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La famiglia Addams (1991)",
+    url: "https://8f6948e5.movie-halloween.pages.dev/La%20famiglia%20Addams%20(1991)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 5995,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Frankenweenie (2012)",
+    url: "https://a48c89ba.movie-halloween.pages.dev/Frankenweenie%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5216,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightbooks - Racconti di paura (2021)",
+    url: "https://7b5ba1bd.movie-halloween.pages.dev/Nightbooks_Racconti_di_paura_(2021)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6200,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Vampiretto (2017)",
+    url: "https://88a7e80e.movie-halloween.pages.dev/Vampiretto%20(2017)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4772,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Monster Family 2 (2021)",
+    url: "https://fe0b5c07.movie-halloween.pages.dev/Monster_Family_2_(2021)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 6192,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La casa dei fantasmi (2023) 4K",
+    url: "https://c62df3c3.movie-halloween.pages.dev/La%20casa%20dei%20fantasmi%20(2023)%204K/output.m3u8",
+    category: "filmpicult",
+    duration: 7378,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (BA)",
+    url: "https://ac40de85.movie-halloween.pages.dev/Bry_cinema_halloween_BA.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Van Helsing (2004)",
+    url: "https://3be77791.movie-halloween.pages.dev/Van%20Helsing%20(2004)%201080p/output.m3u8",
+    category: "filmdark",
+    duration: 7890,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Ident + Sponsor + promo halloween + IT",
+    url: "https://627ff8bd.movie-halloween.pages.dev/Promo_pubblicit%C3%A0_halloween.m3u8",
+    category: "promo",
+    duration: 171,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nope (2022)",
+    url: "https://1fc74089.movie-halloween.pages.dev/Nope_(2022)_1080p.m3u8",
+    category: "filmhorror",
+    duration: 7830,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Halloween (2018)",
+    url: "https://6f81cede.movie-halloween.pages.dev/Halloween%20(2018)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 6347,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (VT14)",
+    url: "https://aa08a578.movie-halloween.pages.dev/Bry_cinema_halloween_14.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Halloween Kills (2021)",
+    url: "https://c1382555.movie-halloween.pages.dev/Halloween%20Kills%20(2021)%201080p/output.m3u8",
+    category: "filmhorror",
+    duration: 6307,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "La sposa cadavere (2005)",
+    url: "https://faa41435.movie-halloween.pages.dev/La%20sposa%20cadavere%20(2005)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4631,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween",
+    url: "https://2c84593c.movie-halloween.pages.dev/pubblicit%C3%A0_halloween_2.m3u8",
+    category: "promo",
+    duration: 96,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Casper (1995)",
+    url: "https://08f7f8c9.movie-halloween.pages.dev/Casper%20(1995)%201080p/output.m3u8",
+    category: "filmpicult",
+    duration: 6008,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "ParaNorman (2012)",
+    url: "https://1c1986dc.movie-halloween.pages.dev/ParaNorman%20(2012)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 5529,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Promo cinema halloween dal 25 - 31 ottobre",
+    url: "https://86ee79a0.movie-halloween.pages.dev/promo%20bry%20cinema%20halloween.m3u8",
+    category: "promo",
+    duration: 26,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Monster House (2006)",
+    url: "https://50cb43d8.movie-halloween.pages.dev/Monster_House_(2006)_1080p.m3u8",
+    category: "animazionehalloween",
+    duration: 5417,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Le streghe (2020)",
+    url: "https://9645fc1a.movie-halloween.pages.dev/Le_streghe_(2020)_1080p.m3u8",
+    category: "filmclassici",
+    duration: 6229,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Pubblicità halloween 2",
+    url: "https://a274dcbd.movie-halloween.pages.dev/promo_pubblicit%C3%A0_3.m3u8",
+    category: "promo",
+    duration: 149,
+    isPromo: true,
+    isPrimaSerata: false
+  },
+  {
+    title: "Inizio film (PT)",
+    url: "https://fd3cfac3.movie-halloween.pages.dev/Bry_cinema_halloween_PT.m3u8",
+    category: "filmclassici",
+    duration: 36,
+    isPromo: false,
+    isPrimaSerata: false
+  },
+  {
+    title: "Nightmare Before Christmas (1993)",
+    url: "https://3cf0db79.movie-halloween.pages.dev/Nightmare%20Before%20Christmas%20(1993)%201080p/output.m3u8",
+    category: "animazionehalloween",
+    duration: 4599,
+    isPromo: false,
+    isPrimaSerata: false
+  }
+];
+
+
+
+
+const durataTotale = palinsesto.reduce((acc, item) => acc + item.duration, 0);
+// playsinline: su iPhone il video resta DENTRO la pagina (non passa al lettore nativo a schermo intero),
+// così il logo e le altre scritte sovrapposte restano visibili.
+const player = videojs("videoPlayer", { playsinline: true });
+let currentIndex;
+
+// ---------- Avvio automatico (iPhone/Safari bloccano l'avvio con audio senza un tocco) ----------
+// 1) si prova con l'audio; 2) se il browser rifiuta, si parte senza audio e compare "Tocca per attivare l'audio";
+// 3) se rifiuta anche così, compare il pulsante "Guarda in diretta".
+let audioDaAttivare = false;
+function creaBtnAvvio(id, testo) {
+  let b = document.getElementById(id);
+  if (b) return b;
+  b = document.createElement('button');
+  b.id = id; b.type = 'button'; b.textContent = testo; b.hidden = true;
+  b.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);z-index:10000;border:0;border-radius:999px;' +
+    'background:rgba(20,28,45,.92);color:#fff;font:600 18px/1.2 sans-serif;padding:14px 22px;cursor:pointer;' +
+    'box-shadow:0 4px 18px rgba(0,0,0,.45);';
+  document.body.appendChild(b);
+  return b;
+}
+const btnAudio = creaBtnAvvio('btn-audio', '🔊 Tocca per attivare l\'audio');
+btnAudio.style.bottom = '8%';
+const btnAvvia = creaBtnAvvio('btn-avvia', '▶ Guarda in diretta');
+btnAvvia.style.top = '50%'; btnAvvia.style.transform = 'translate(-50%,-50%)'; btnAvvia.style.fontSize = '22px';
+
+function attivaAudio() {
+  if (!audioDaAttivare) return;
+  audioDaAttivare = false;
+  try { player.muted(false); player.volume(1); } catch (e) {}
+  btnAudio.hidden = true;
+}
+btnAudio.addEventListener('click', attivaAudio);
+document.addEventListener('pointerdown', attivaAudio, { passive: true }); // basta toccare un punto qualsiasi
+
+btnAvvia.addEventListener('click', () => {
+  btnAvvia.hidden = true;
+  player.muted(false);
+  Promise.resolve(player.play()).catch(() => { btnAvvia.hidden = false; });
+});
+
+function avviaVideo() {
+  return Promise.resolve(player.play())
+    .catch(() => {
+      player.muted(true);
+      return Promise.resolve(player.play()).then(() => { audioDaAttivare = true; btnAudio.hidden = false; });
+    })
+    .catch(() => { btnAvvia.hidden = false; });
+}
+
+// Il logo compare appena il video parte (anche se è partito senza audio o dopo il tocco)
+player.on('playing', () => { document.getElementById('main-logo').classList.remove('hidden'); btnAvvia.hidden = true; });
+
+function caricaVideo(index, offset = 0) {
+  const item = palinsesto[index];
+  console.log(`Carico ${item.title} da ${offset.toFixed(1)}s`);
+
+  const logo = document.getElementById('main-logo');
+
+  if (player.canPlayType('application/vnd.apple.mpegURL')) {
+    player.src({ src: item.url, type: "application/x-mpegURL" });
+    player.ready(() => {
+      player.currentTime(offset);
+      // su iPhone la posizione impostata prima dei metadati viene ignorata: si ripete a metadati pronti
+      player.one('loadedmetadata', () => { try { player.currentTime(offset); } catch (e) {} });
+      avviaVideo();
+    });
+  } else if (Hls.isSupported()) {
+    const video = document.getElementById('videoPlayer');
+    const hls = new Hls();
+    hls.loadSource(item.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.currentTime = offset;
+      video.play().then(() => {
+        logo.classList.remove('hidden');
+      });
+    });
+  } else {
+    console.error("HLS non supportato da questo dispositivo.");
+    document.getElementById('fallback-image').style.display = 'block';
+  }
+
+  currentIndex = index;
+}
+
+player.on('ended', () => {
+  const next = (currentIndex + 1) % palinsesto.length;
+  caricaVideo(next, 0);
+});
+
+(function initLive() {
+  const now = new Date();
+  const secondsFromStart = Math.floor((now - orarioInizioStreaming) / 1000);
+
+  if (secondsFromStart < 0) {
+    console.log("Il palinsesto non è ancora iniziato.");
+    document.getElementById('fallback-image').style.display = 'block';
+    return;
+  }
+
+  const secondsInLoop = secondsFromStart % durataTotale;
+
+  let accumulated = 0;
+  let idx = 0;
+  for (; idx < palinsesto.length; idx++) {
+    if (secondsInLoop < accumulated + palinsesto[idx].duration) {
+      break;
+    }
+    accumulated += palinsesto[idx].duration;
+  }
+
+  const offset = secondsInLoop - accumulated;
+  caricaVideo(idx, offset);
+})();
+</script>
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.js"></script>
+</body>
+
+</html>
